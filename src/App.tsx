@@ -9,8 +9,16 @@ import {
   GlyphPros,
 } from "./Glyphs";
 import { NavAnnonces, NavTerritoire, NavPros, NavPublier } from "./NavGlyphs";
-import { usePath, routeAnnonce, annonceParId, baseUrl } from "./router";
+import {
+  usePath,
+  routeAnnonce,
+  annonceParId,
+  routeTerritoire,
+  territoireParSlug,
+  baseUrl,
+} from "./router";
 import { AnnonceDetail } from "./AnnonceDetail";
+import { TerritoireDetail } from "./TerritoireDetail";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -113,6 +121,7 @@ const B = baseUrl();
 export default function App() {
   const path = usePath();
   const annonce = annonceParId(routeAnnonce(path));
+  const territoire = territoireParSlug(routeTerritoire(path));
 
   return (
     <>
@@ -144,6 +153,8 @@ export default function App() {
 
       {annonce ? (
         <AnnonceDetail annonce={annonce} />
+      ) : territoire ? (
+        <TerritoireDetail territoire={territoire} />
       ) : (
         <>
           {/* Hero : le logo en grand, la promesse en dessous */}

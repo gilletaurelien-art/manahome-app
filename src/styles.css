@@ -380,6 +380,38 @@ html { background: var(--sand); }
 .fiche-pied { display: flex; gap: var(--sp-4); align-items: center; flex-wrap: wrap; }
 .fiche-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-2); max-width: 55ch; }
 
+/* ===== Page territoire : éditorial, quatre facettes ===== */
+.territoire-intro {
+  font-family: var(--serif);
+  font-size: var(--t-l);
+  line-height: 1.6;
+  max-width: 56ch;
+  margin: 0 0 var(--sp-6);
+  color: var(--ink);
+}
+.territoire-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--sp-4);
+}
+.territoire-bloc {
+  background: rgb(255 255 255 / 92%);
+  border: 1px solid var(--ecume);
+  border-radius: 12px;
+  padding: var(--sp-4);
+}
+.territoire-bloc-tete { border-bottom: 1px solid var(--or); padding-bottom: var(--sp-2); margin-bottom: var(--sp-2); }
+.territoire-bloc-tete h3 {
+  font-family: "Marelle Baton 2", var(--serif);
+  font-size: var(--t-l);
+  font-weight: 400;
+  margin: 0;
+  color: var(--primary);
+}
+.territoire-bloc-tete p { font-size: var(--t-xs); opacity: 0.6; margin: 4px 0 0; }
+.territoire-texte { margin: 0; line-height: 1.7; }
+.territoire-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-4); max-width: 60ch; }
+
 .site-footer { border-top: 1px solid var(--or); padding: var(--sp-6) 0; font-size: var(--t-xs); opacity: 0.65; }
 
 @media (prefers-reduced-motion: reduce) {
