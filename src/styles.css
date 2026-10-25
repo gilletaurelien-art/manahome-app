@@ -100,7 +100,9 @@ html { background: var(--sand); }
 .nav .nav-cta { color: var(--primary); }
 /* Mobile : icônes seules — le libellé passe en sr-only pour l'accessibilité */
 @media (max-width: 640px) {
-  .nav { gap: var(--sp-2); }
+  /* 5 items icônes seules : gap réduit pour tenir jusqu'à 320px */
+  .nav { gap: var(--sp-1); }
+  .site-header .wrap { padding-left: var(--sp-2); padding-right: var(--sp-2); }
   .nav a > span {
     position: absolute;
     width: 1px;
