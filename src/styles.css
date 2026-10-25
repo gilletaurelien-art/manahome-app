@@ -1,17 +1,18 @@
-/* ===== MANAhome — design system « Presqu'île » =====
-   Premium sobre : 80% sable, 15% encre, 5% couleur.
-   Budget < 15 Ko, aucune dépendance UI — la vitesse est un pilier. */
+/* ===== MANAhome — design system « Lumière » =====
+   Bleu nuit, blanc chaud, or discret. L'intelligence se voit dans le service,
+   pas dans les effets visuels. Budget < 15 Ko, zéro dépendance UI. */
 
 :root {
-  /* Palette territoire, désaturée — kaki au lieu de vert */
-  --ink: #23281f;
-  --primary: #5f6145;
-  --primary-deep: #43452f;
-  --sand: #f6f3ed;
-  --ecume: #e5e0d6;
+  /* Palette : bleu nuit + blanc chaud + touche dorée */
+  --ink: #1b2a4a;
+  --primary: #1e3a5f;
+  --primary-deep: #142942;
+  --sand: #faf8f3;
+  --blanc-chaud: #ffffff;
+  --ecume: #e9e5dc;
   --or: #c9a227;
   --alerte: #b0413e;
-  --shadow: 0 2px 24px rgb(26 46 42 / 8%);
+  --shadow: 0 4px 32px rgb(20 41 66 / 10%);
 
   /* Échelle typographique stricte (rem) */
   --t-xs: 0.875rem;
@@ -22,7 +23,6 @@
   --t-2xl: 2.5rem;
   --t-hero: 4rem;
 
-  /* Grille 8px, respiration premium */
   --sp-1: 8px;
   --sp-2: 16px;
   --sp-4: 32px;
@@ -47,10 +47,14 @@ body {
 
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--sp-4); }
 
-/* ===== Header : filet or, la signature ===== */
+/* ===== Header ===== */
 .site-header {
-  border-bottom: 1px solid var(--or);
-  background: var(--sand);
+  border-bottom: 1px solid var(--ecume);
+  background: rgb(250 248 243 / 92%);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 .site-header .wrap {
   display: flex;
@@ -63,55 +67,119 @@ body {
   font-family: var(--serif);
   font-size: var(--t-l);
   font-weight: 600;
-  color: var(--primary-deep);
+  color: var(--ink);
   margin: 0;
   text-decoration: none;
 }
 .brand em { color: var(--or); font-style: normal; }
-.nav { display: flex; gap: var(--sp-4); font-size: var(--t-xs); }
+.nav { display: flex; gap: var(--sp-4); font-size: var(--t-xs); align-items: baseline; }
 .nav a { color: var(--ink); text-decoration: none; }
 .nav a:hover { color: var(--primary); }
+.nav .nav-cta {
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  padding: 4px 14px;
+}
 
-/* ===== Hero : le luxe, c'est l'espace ===== */
-.hero { padding: var(--sp-12) 0; }
+/* ===== Hero : photo lumineuse (végétal, mur blanc) — texte à gauche,
+   l'image respire à droite. L'effet Gemini avec nos couleurs. ===== */
+.hero {
+  background:
+    linear-gradient(90deg, rgb(250 248 243 / 96%) 0%, rgb(250 248 243 / 88%) 34%, rgb(250 248 243 / 0%) 62%),
+    url("./assets/hero.jpg") center right / cover no-repeat,
+    var(--sand);
+  padding: var(--sp-12) 0;
+  position: relative;
+}
+.hero .wrap { position: relative; }
+.hero-label {
+  font-size: var(--t-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 var(--sp-2);
+}
 .hero h1 {
   font-family: var(--serif);
   font-size: var(--t-hero);
   line-height: 1.05;
   font-weight: 500;
   margin: 0 0 var(--sp-2);
-  max-width: 14ch;
+  max-width: 12ch;
+  color: var(--ink);
 }
-.hero h1 strong { color: var(--primary); font-weight: 500; }
-.hero p.lede {
+.hero .lede {
   font-size: var(--t-m);
-  max-width: 42ch;
-  margin: 0 0 var(--sp-6);
+  max-width: 44ch;
+  margin: 0 0 var(--sp-4);
   opacity: 0.85;
 }
-.filet-or { border: 0; border-top: 1px solid var(--or); width: 64px; margin: var(--sp-4) 0; }
+.hero-cta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin: 0; }
 
-/* ===== Grille d'annonces ===== */
+/* Carte centrale : les trois promesses, aérées, sans redite */
+.promesse-card {
+  background: var(--blanc-chaud);
+  border: 1px solid var(--ecume);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin: var(--sp-6) auto 0;
+  max-width: 860px;
+}
+.promesses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-4);
+  padding: var(--sp-6);
+}
+.promesse h3 {
+  font-family: var(--serif);
+  font-size: var(--t-m);
+  font-weight: 600;
+  margin: 0 0 var(--sp-1);
+  color: var(--primary);
+}
+.promesse p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
+
+/* ===== Sections ===== */
+.landing-section { padding: var(--sp-12) 0; }
+.landing-section.alt { background: var(--blanc-chaud); }
+.section-num {
+  font-family: var(--serif);
+  font-size: var(--t-xs);
+  color: var(--or);
+  letter-spacing: 0.2em;
+  margin: 0 0 var(--sp-1);
+}
 .section-title {
   font-family: var(--serif);
   font-size: var(--t-xl);
   font-weight: 500;
-  margin: var(--sp-6) 0 var(--sp-4);
+  margin: 0 0 var(--sp-2);
 }
+.section-accroche {
+  font-family: var(--serif);
+  font-size: var(--t-l);
+  color: var(--primary);
+  margin: 0 0 var(--sp-2);
+  max-width: 30ch;
+}
+.section-texte { max-width: 52ch; margin: 0 0 var(--sp-4); opacity: 0.85; }
+.catalogue-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-4); }
+
+/* ===== Cartes annonces ===== */
 .listings {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--sp-4);
-  padding: 0 0 var(--sp-12);
+  padding: 0;
   list-style: none;
-  margin: 0;
+  margin: 0 0 var(--sp-4);
 }
-
-/* ===== Carte annonce : la vitrine ===== */
 .card {
-  background: #fff;
+  background: var(--blanc-chaud);
   border: 1px solid var(--ecume);
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
   transition: box-shadow 180ms ease, transform 180ms ease;
 }
@@ -119,20 +187,16 @@ body {
 .card a { text-decoration: none; color: inherit; display: block; }
 .card .photo {
   aspect-ratio: 4 / 3;
-  background: linear-gradient(160deg, var(--ecume), var(--sand));
+  background: linear-gradient(160deg, #efe9dd, #f7f3ea);
   display: grid;
   place-items: center;
-  color: var(--primary-deep);
+  color: var(--primary);
   font-family: var(--serif);
   font-size: var(--t-m);
-  opacity: 0.55;
+  opacity: 0.5;
 }
 .card .body { padding: var(--sp-2) var(--sp-2) var(--sp-4); }
-.card .lieu {
-  font-size: var(--t-xs);
-  opacity: 0.65;
-  margin: 0 0 4px;
-}
+.card .lieu { font-size: var(--t-xs); opacity: 0.65; margin: 0 0 4px; }
 .card h3 {
   font-family: var(--serif);
   font-size: var(--t-m);
@@ -142,13 +206,12 @@ body {
 .card .prix {
   font-family: var(--serif);
   font-size: var(--t-l);
-  color: var(--ink);
   margin: 0;
+  color: var(--ink);
 }
 .meta { display: flex; gap: var(--sp-2); align-items: center; font-size: var(--t-xs); opacity: 0.75; }
 .meta .sep { color: var(--or); }
 
-/* Pastille DPE officielle */
 .dpe {
   display: inline-grid;
   place-items: center;
@@ -164,7 +227,6 @@ body {
 .dpe-E { background: #f9b233; color: var(--ink); } .dpe-F { background: #e8511a; }
 .dpe-G { background: #d02a2a; }
 
-/* Badge de source : présent, jamais dominant */
 .badge-source {
   display: inline-block;
   font-size: 11px;
@@ -178,10 +240,9 @@ body {
 /* ===== Boutons ===== */
 .btn {
   display: inline-block;
-  font-family: var(--sans);
   font-size: var(--t-s);
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 999px;
   border: 1px solid var(--primary);
   text-decoration: none;
   transition: background 150ms ease, color 150ms ease;
@@ -189,62 +250,14 @@ body {
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-deep); }
 .btn-ghost { color: var(--primary); }
-.btn-ghost:hover { background: rgb(42 111 107 / 8%); }
+.btn-ghost:hover { background: rgb(30 58 95 / 8%); }
 
-/* ===== Landing : promesses, sections, pilier IA ===== */
-.hero-label {
-  font-size: var(--t-xs);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--primary);
-  margin: 0 0 var(--sp-2);
-}
-.hero-cta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-2); }
-.hero-note { font-size: var(--t-xs); opacity: 0.6; margin: 0; }
-
-.promesses { border-top: 1px solid var(--ecume); border-bottom: 1px solid var(--ecume); }
-.promesses-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--sp-4);
-  padding-top: var(--sp-6);
-  padding-bottom: var(--sp-6);
-}
-.promesse h3 {
-  font-family: var(--serif);
-  font-size: var(--t-m);
-  font-weight: 600;
-  margin: 0 0 var(--sp-1);
-}
-.promesse p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
-
-.landing-section { padding: var(--sp-12) 0; border-top: 1px solid var(--ecume); }
-.landing-section:first-of-type { border-top: 0; }
-.section-num {
-  font-family: var(--serif);
-  font-size: var(--t-xs);
-  color: var(--or);
-  letter-spacing: 0.2em;
-  margin: 0 0 var(--sp-1);
-}
-.section-accroche {
-  font-family: var(--serif);
-  font-size: var(--t-l);
-  color: var(--primary-deep);
-  margin: 0 0 var(--sp-2);
-  max-width: 30ch;
-}
-.section-texte { max-width: 52ch; margin: 0 0 var(--sp-4); opacity: 0.85; }
-.catalogue-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-4); }
-
-/* Pilier IA : éditorial, démonstration, honnêteté */
-.section-ia .section-title { max-width: 22ch; }
+/* ===== Pilier IA : éditorial ===== */
 .ia-quote {
   font-family: var(--serif);
   font-size: var(--t-xl);
   font-weight: 400;
   font-style: italic;
-  color: var(--ink);
   border-left: 2px solid var(--or);
   margin: 0 0 var(--sp-4);
   padding-left: var(--sp-4);
@@ -263,7 +276,6 @@ body {
 
 .site-footer { border-top: 1px solid var(--or); padding: var(--sp-6) 0; font-size: var(--t-xs); opacity: 0.65; }
 
-/* ===== Respect du motion ===== */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
   .card:hover { transform: none; }
@@ -272,4 +284,5 @@ body {
 @media (max-width: 640px) {
   .hero h1 { font-size: var(--t-2xl); }
   :root { --sp-12: 64px; }
+  .promesses-grid { padding: var(--sp-4); }
 }
