@@ -193,6 +193,12 @@ html { background: var(--sand); }
   .bulle { padding: var(--sp-4); border-radius: 20px 28px 18px 26px; }
 }
 .bulle .section-num { margin-top: 0; }
+.bulle { text-align: center; }
+.bulle .section-accroche,
+.bulle .section-texte { margin-left: auto; margin-right: auto; }
+.bulle .glyphe { margin-left: auto; margin-right: auto; }
+.bulle .est-actions,
+.bulle .hero-cta { justify-content: center; }
 
 /* Carte centrale : les trois promesses, aérées, sans redite */
 .promesses { padding-bottom: var(--sp-12); }
@@ -240,8 +246,9 @@ html { background: var(--sand); }
   margin: 0 0 var(--sp-1);
   color: var(--primary);
 }
+.promesse { text-align: center; }
 .promesse p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
-.promesse .glyphe { margin-bottom: 0; }
+.promesse .glyphe { margin: 0 auto var(--sp-2); }
 
 /* ===== Sections ===== */
 .landing-section { padding: var(--sp-12) 0; }
@@ -380,8 +387,10 @@ html { background: var(--sand); }
     0 24px 56px rgb(27 42 74 / 14%);
   padding: var(--sp-4);
 }
+.ia-bloc { text-align: center; }
 .ia-bloc h3 { font-family: var(--serif); font-size: var(--t-m); font-weight: 600; margin: 0 0 var(--sp-1); }
 .ia-bloc p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
+.section-ia .ia-quote { margin-left: auto; margin-right: auto; }
 .ia-disclaimer { font-size: var(--t-xs); opacity: 0.55; max-width: 60ch; }
 
 /* ===== Fiche annonce : le pilier IA en scène ===== */
