@@ -60,20 +60,29 @@ html { background: var(--sand); }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--sp-4); }
 
 /* ===== Header ===== */
+/* Header ovale flottant : pilule centrée, posée en lévitation */
 .site-header {
-  border-bottom: 1px solid var(--ecume);
-  background: rgb(250 248 243 / 92%);
-  backdrop-filter: blur(8px);
   position: sticky;
-  top: 0;
+  top: var(--sp-2);
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--sp-2);
 }
 .site-header .wrap {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding-top: var(--sp-2);
-  padding-bottom: var(--sp-2);
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  background: rgb(250 248 243 / 92%);
+  border: 1px solid var(--ecume);
+  border-radius: 999px;
+  box-shadow:
+    0 2px 6px rgb(27 42 74 / 8%),
+    0 14px 36px rgb(27 42 74 / 12%);
+  padding: var(--sp-1) var(--sp-4);
+  max-width: 1080px;
+  width: fit-content;
 }
 .brand {
   font-family: "Marelle Baton 2", var(--serif);
@@ -95,9 +104,33 @@ html { background: var(--sand); }
   gap: 2px;
   font-size: var(--t-xs);
   text-align: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: box-shadow 160ms ease, transform 160ms ease, border-color 160ms ease;
 }
-.nav a:hover { color: var(--primary); }
-.nav .nav-cta { color: var(--primary); }
+.nav a:hover {
+  color: var(--primary);
+  border-color: var(--ecume);
+  box-shadow:
+    inset 0 1px 2px rgb(255 255 255 / 90%),
+    0 3px 8px rgb(27 42 74 / 12%);
+  transform: translateY(-1px);
+}
+.nav .nav-cta {
+  color: var(--primary);
+  background: rgb(255 255 255 / 70%);
+  border-color: var(--ecume);
+  box-shadow:
+    inset 0 1px 2px rgb(255 255 255 / 90%),
+    0 3px 10px rgb(27 42 74 / 14%);
+}
+.nav .nav-cta:hover {
+  box-shadow:
+    inset 0 1px 2px rgb(255 255 255 / 90%),
+    0 6px 16px rgb(27 42 74 / 20%);
+  transform: translateY(-1px);
+}
 /* Mobile : icônes seules — le libellé passe en sr-only pour l'accessibilité */
 @media (max-width: 640px) {
   /* 5 items icônes seules : gap réduit pour tenir jusqu'à 320px */
@@ -127,7 +160,7 @@ html { background: var(--sand); }
   content: "";
   position: fixed;
   inset: 0;
-  background: url("./assets/hero.jpg") center / cover no-repeat;
+  background: url("./assets/hero.jpg") 58% 40% / cover no-repeat;
   z-index: -2;
 }
 .hero .wrap {
