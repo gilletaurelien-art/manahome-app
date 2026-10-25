@@ -380,6 +380,89 @@ html { background: var(--sand); }
 .fiche-pied { display: flex; gap: var(--sp-4); align-items: center; flex-wrap: wrap; }
 .fiche-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-2); max-width: 55ch; }
 
+/* ===== Parcours vendeur : 3 étapes, zéro friction ===== */
+.publier { padding: var(--sp-6) 0 var(--sp-12); }
+.etapes {
+  display: flex;
+  gap: var(--sp-2);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--sp-4);
+  font-size: var(--t-xs);
+}
+.etapes li {
+  flex: 1;
+  padding: var(--sp-1) var(--sp-2);
+  border-bottom: 2px solid var(--ecume);
+  color: var(--ink);
+  opacity: 0.45;
+  transition: opacity 150ms ease, border-color 150ms ease;
+}
+.etapes li.on { opacity: 1; border-bottom-color: var(--primary); }
+.etapes li.done { opacity: 0.8; border-bottom-color: var(--or); }
+
+.publier-panel {
+  background: rgb(255 255 255 / 92%);
+  border: 1px solid var(--ecume);
+  border-radius: 12px;
+  padding: var(--sp-6);
+  max-width: 720px;
+}
+.champ { margin-bottom: var(--sp-4); }
+.champ label {
+  display: block;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  margin-bottom: var(--sp-1);
+  color: var(--ink);
+}
+.champ input, .champ select, .champ textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--ecume);
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: var(--t-s);
+  background: var(--blanc-chaud);
+  color: var(--ink);
+}
+.champ input:focus, .champ select:focus, .champ textarea:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -1px;
+}
+.champ-aide { font-size: var(--t-xs); opacity: 0.6; margin: var(--sp-1) 0 0; }
+.champ-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--sp-4);
+}
+.dpe-choix { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
+.dpe-btn {
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 4px;
+  cursor: pointer;
+}
+.dpe-btn.on { border-color: var(--primary); }
+.dpe-NC { background: var(--ecume); color: var(--ink); }
+.publier-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--sp-6);
+  gap: var(--sp-2);
+}
+.publier-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-4); max-width: 60ch; }
+.apercu-label {
+  font-size: var(--t-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 var(--sp-2);
+}
+.apercu { margin-bottom: var(--sp-6); }
+
 /* ===== Page territoire : éditorial, facettes, chiffres, prix, géorisk ===== */
 .territoire-chiffres {
   display: grid;
