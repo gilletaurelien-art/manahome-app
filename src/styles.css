@@ -278,10 +278,10 @@ body {
   text-decoration: none;
   transition: background 150ms ease, color 150ms ease;
 }
-.btn-primary { background: var(--primary); color: var(--ink); }
-.btn-primary:hover { background: var(--primary-deep); color: #fff; }
-.btn-ghost { color: var(--ink); }
-.btn-ghost:hover { background: rgb(27 42 74 / 8%); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-deep); }
+.btn-ghost { background: var(--blanc-chaud); color: var(--primary); }
+.btn-ghost:hover { background: var(--or); color: #fff; border-color: var(--primary-deep); }
 
 /* ===== Pilier IA : éditorial ===== */
 .ia-quote {
