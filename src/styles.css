@@ -138,7 +138,9 @@ html { background: var(--sand); }
   background: rgb(255 255 255 / 82%);
   border: 1px solid var(--ecume);
   border-radius: 96px 128px 88px 120px / 88px 110px 120px 96px;
-  box-shadow: 0 18px 60px rgb(27 42 74 / 12%);
+  box-shadow:
+    0 2px 6px rgb(27 42 74 / 6%),
+    0 28px 64px rgb(27 42 74 / 16%);
   padding: var(--sp-6) var(--sp-6) var(--sp-4);
 }
 @media (max-width: 720px) {
@@ -175,15 +177,31 @@ html { background: var(--sand); }
 .hero-cta { display: flex; gap: var(--sp-2); flex-wrap: wrap; justify-content: center; margin: 0 0 var(--sp-2); }
 .hero-note { font-size: var(--t-xs); opacity: 0.6; margin: 0; }
 
+/* ===== Bulle : cellule de texte unique de la landing =====
+   Épuré, futuriste, en lévitation : fond blanc chaud, coins bulle
+   légèrement asymétriques, ombre double (contact + halo). */
+.bulle {
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--ecume);
+  border-radius: 28px 40px 24px 36px;
+  box-shadow:
+    0 2px 6px rgb(27 42 74 / 6%),
+    0 24px 56px rgb(27 42 74 / 14%);
+  padding: var(--sp-6);
+}
+@media (max-width: 720px) {
+  .bulle { padding: var(--sp-4); border-radius: 20px 28px 18px 26px; }
+}
+.bulle .section-num { margin-top: 0; }
+
 /* Carte centrale : les trois promesses, aérées, sans redite */
 .promesses { padding-bottom: var(--sp-12); }
 .promesse-card {
-  background: rgb(255 255 255 / 85%);
-  border: 1px solid var(--ecume);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
+  background: none;
+  border: none;
+  box-shadow: none;
   margin: calc(-1 * var(--sp-12)) auto 0;
-  max-width: 860px;
+  max-width: 920px;
   position: relative;
   z-index: 2;
 }
@@ -206,6 +224,15 @@ html { background: var(--sand); }
 }
 .section-glyphe { margin-bottom: var(--sp-1); }
 
+.promesse {
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--ecume);
+  border-radius: 28px 36px 24px 32px;
+  box-shadow:
+    0 2px 6px rgb(27 42 74 / 6%),
+    0 24px 56px rgb(27 42 74 / 14%);
+  padding: var(--sp-4);
+}
 .promesse h3 {
   font-family: var(--serif);
   font-size: var(--t-m);
@@ -214,10 +241,11 @@ html { background: var(--sand); }
   color: var(--primary);
 }
 .promesse p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
+.promesse .glyphe { margin-bottom: 0; }
 
 /* ===== Sections ===== */
 .landing-section { padding: var(--sp-12) 0; }
-.landing-section.alt { background: rgb(255 255 255 / 60%); }
+.landing-section.alt { }
 .section-num {
   font-family: var(--serif);
   font-size: var(--t-xs);
@@ -343,7 +371,15 @@ html { background: var(--sand); }
   gap: var(--sp-4);
   margin-bottom: var(--sp-4);
 }
-.ia-bloc { border-top: 1px solid var(--or); padding-top: var(--sp-2); }
+.ia-bloc {
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--ecume);
+  border-radius: 28px 32px 24px 36px;
+  box-shadow:
+    0 2px 6px rgb(27 42 74 / 6%),
+    0 24px 56px rgb(27 42 74 / 14%);
+  padding: var(--sp-4);
+}
 .ia-bloc h3 { font-family: var(--serif); font-size: var(--t-m); font-weight: 600; margin: 0 0 var(--sp-1); }
 .ia-bloc p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
 .ia-disclaimer { font-size: var(--t-xs); opacity: 0.55; max-width: 60ch; }

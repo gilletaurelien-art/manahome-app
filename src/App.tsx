@@ -251,7 +251,7 @@ export default function App() {
 
           <main className="wrap">
             {/* 01 — Catalogue : état « démarrage » assumé, qualité > volume */}
-            <section className="landing-section">
+            <section className="landing-section bulle">
               <span className="glyphe section-glyphe">
                 <GlyphCompas />
               </span>
@@ -274,7 +274,7 @@ export default function App() {
             {SECTIONS.slice(1).map((s) => {
               const G = s.glyphe;
               return (
-                <section key={s.num} className="landing-section alt">
+                <section key={s.num} className="landing-section alt bulle">
                   <span className="glyphe section-glyphe">
                     <G />
                   </span>
@@ -297,7 +297,7 @@ export default function App() {
             })}
 
             {/* Promesse IA : section éditoriale avec démonstration, pas un slogan */}
-            <section className="landing-section section-ia">
+            <section className="landing-section section-ia bulle">
               <h2 className="section-title">
                 Demain, on cherchera aussi un logement en parlant à une IA.
               </h2>
