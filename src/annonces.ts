@@ -11,6 +11,9 @@ export interface Annonce {
   description: string;
   datePublication: string;
   source: Source;
+  // Démo locale : photos compressées côté client (dataURL). En prod : objets
+  // S3 (OVH/RustFS) + clés serveur, jamais de binaire en base.
+  photos?: string[];
 }
 
 // Fixtures de démonstration (is_demo=true en base) — jamais de donnée réelle.

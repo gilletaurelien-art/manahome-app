@@ -8,9 +8,15 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
   return (
     <li className="card">
       <a href={`${baseUrl()}/annonce/${annonce.id}`}>
-        <div className="photo" aria-hidden="true">
-          photo du bien
-        </div>
+        {annonce.photos && annonce.photos.length > 0 ? (
+          <div className="photo pleine" aria-hidden="true">
+            <img src={annonce.photos[0]} alt="" loading="lazy" />
+          </div>
+        ) : (
+          <div className="photo" aria-hidden="true">
+            photo du bien
+          </div>
+        )}
         <div className="body">
           <p className="lieu">{lieu}</p>
           <h3>{annonce.titre}</h3>

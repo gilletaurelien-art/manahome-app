@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { baseUrl } from "./router";
 import { enregistrerAnnonceLocale } from "./annoncesLocales";
+import { compresserPhoto, LIMITE_PHOTOS } from "./photos";
 
 // Pré-remplissage depuis /estimation (et liens profonds) : /publier?type=…&lieu=…
 function paramsPublier(): Partial<FormBien> {
@@ -49,6 +50,25 @@ export function Publier() {
   } as FormBien);
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [photoErreur, setPhotoErreur] = useState("");
+
+  const ajouterPhotos = async (fichiers: FileList | null) => {
+    if (!fichiers) return;
+    setPhotoErreur("");
+    const restant = LIMITE_PHOTOS - photos.length;
+    if (restant <= 0) {
+      setPhotoErreur(`Jusqu'à ${LIMITE_PHOTOS} photos par annonce.`);
+      return;
+    }
+    const aTraiter = Array.from(fichiers).slice(0, restant);
+    try {
+      const compressees = await Promise.all(aTraiter.map(compresserPhoto));
+      setPhotos((p) => [...p, ...compressees]);
+    } catch {
+      setPhotoErreur("Certaines photos n'ont pas pu être lues. Réessayez.");
+    }
+  };
 
   // La rédaction assistée (Mistral) arrive avec le backend : le bouton
   // est présent dès maintenant, l'API se branchera derrière.
@@ -79,6 +99,7 @@ export function Publier() {
       pieces: bien.pieces ? Number(bien.pieces) : undefined,
       dpe: bien.dpe && bien.dpe !== "NC" ? bien.dpe : undefined,
       description,
+      photos: photos.length ? photos : undefined,
     });
     window.location.assign(`${baseUrl()}/mes-annonces?publiee=${a.id}`);
   };
@@ -197,6 +218,44 @@ export function Publier() {
         {etape === 2 && (
           <section className="publier-panel">
             <div className="champ">
+              <label htmlFor="photos">Les photos de votre bien</label>
+              <input
+                id="photos"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  ajouterPhotos(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              <p className="champ-aide">
+                Jusqu'à {LIMITE_PHOTOS} photos, compressées dans votre
+                navigateur avant tout envoi. La première fera la vitrine de
+                l'annonce. (Démo locale : rien ne quitte votre appareil.)
+              </p>
+              {photoErreur && <p className="est-erreur">{photoErreur}</p>}
+              {photos.length > 0 && (
+                <ul className="photos-apercu">
+                  {photos.map((p, i) => (
+                    <li key={i}>
+                      <img src={p} alt={`Photo ${i + 1}`} />
+                      {i === 0 && <span className="photos-vitrine">Vitrine</span>}
+                      <button
+                        type="button"
+                        aria-label={`Retirer la photo ${i + 1}`}
+                        onClick={() =>
+                          setPhotos((tab) => tab.filter((_, j) => j !== i))
+                        }
+                      >
+                        ×
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="champ">
               <label htmlFor="desc">Décrivez votre bien, comme vous le raconteriez</label>
               <textarea
                 id="desc"
@@ -224,6 +283,11 @@ export function Publier() {
         {etape === 3 && (
           <section className="publier-panel">
             <p className="apercu-label">Aperçu de votre annonce</p>
+            {photos.length > 0 && (
+              <div className="apercu-photo">
+                <img src={photos[0]} alt="Photo principale" />
+              </div>
+            )}
             <div className="fiche-corps apercu">
               <p className="fiche-lieu">{bien.lieu}</p>
               <h2 className="fiche-titre">{apercu.titre}</h2>

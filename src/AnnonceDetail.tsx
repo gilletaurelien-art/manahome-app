@@ -48,6 +48,7 @@ function JsonLd({ annonce }: { annonce: Annonce }) {
 export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
   const [premierMessage, setPremierMessage] = useState("");
   const [lienCopie, setLienCopie] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const locale = annonceLocaleParId(annonce.id);
 
   useEffect(() => {
@@ -100,8 +101,33 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           ← Toutes les annonces
         </a>
 
-        <div className="fiche-photos" aria-hidden="true">
-          photo du bien
+        <div className="fiche-galerie">
+          {annonce.photos && annonce.photos.length > 0 ? (
+            <>
+              <div className="fiche-photo-principale">
+                <img src={annonce.photos[photoIndex]} alt={`Photo ${photoIndex + 1}`} />
+              </div>
+              {annonce.photos.length > 1 && (
+                <div className="fiche-miniatures">
+                  {annonce.photos.map((p, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className={`fiche-miniature ${i === photoIndex ? "on" : ""}`}
+                      onClick={() => setPhotoIndex(i)}
+                      aria-label={`Photo ${i + 1}`}
+                    >
+                      <img src={p} alt="" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="fiche-photos" aria-hidden="true">
+              photo du bien
+            </div>
+          )}
         </div>
 
         <div className="fiche-corps">

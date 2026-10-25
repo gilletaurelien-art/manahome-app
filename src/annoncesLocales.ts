@@ -19,6 +19,7 @@ export interface AnnonceLocale {
   datePublication: string;
   source: Source;
   statut: StatutAnnonce;
+  photos?: string[];
 }
 
 const CLE = "manahome-annonces-demo";
