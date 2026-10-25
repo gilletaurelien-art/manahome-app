@@ -1,4 +1,5 @@
 import { ANNONCES_DEMO } from "./annonces";
+import { annoncesPublieesLocales, annonceLocaleParId, enAnnonce } from "./annoncesLocales";
 import { AnnonceCard } from "./AnnonceCard";
 import {
   GlyphMaison,
@@ -33,10 +34,14 @@ import { Approche } from "./Approche";
 import { Pros } from "./Pros";
 import { Messagerie } from "./Messagerie";
 import { EspacePro } from "./EspacePro";
+import { MesAnnonces } from "./MesAnnonces";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
-const directes = ANNONCES_DEMO.filter((a) => a.source === "directe_particulier");
+const directes = [
+  ...annoncesPublieesLocales().map(enAnnonce),
+  ...ANNONCES_DEMO.filter((a) => a.source === "directe_particulier"),
+];
 const importees = ANNONCES_DEMO.filter((a) => a.source === "import_pro");
 const triees = [...directes, ...importees];
 
@@ -135,7 +140,12 @@ const B = baseUrl();
 
 export default function App() {
   const path = usePath();
-  const annonce = annonceParId(routeAnnonce(path));
+  const annonce =
+    annonceParId(routeAnnonce(path)) ??
+    (() => {
+      const locale = annonceLocaleParId(routeAnnonce(path));
+      return locale ? enAnnonce(locale) : null;
+    })();
   const territoire = territoireParSlug(routeTerritoire(path));
   const listeSlug = routeAnnonces(path);
 
@@ -187,6 +197,8 @@ export default function App() {
         <Messagerie />
       ) : path === "/espace-pro" ? (
         <EspacePro />
+      ) : path === "/mes-annonces" ? (
+        <MesAnnonces />
       ) : territoire ? (
         <TerritoireDetail territoire={territoire} />
       ) : (
@@ -335,6 +347,7 @@ export default function App() {
             <a href={`${B}/pros`}>Professionnels</a>
             <a href={`${B}/espace-pro`}>Rejoindre le référentiel</a>
             <a href={`${B}/messagerie`}>Ma messagerie</a>
+            <a href={`${B}/mes-annonces`}>Mes annonces</a>
           </nav>
         </div>
         <div className="wrap footer-bas">

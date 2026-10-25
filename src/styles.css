@@ -671,3 +671,26 @@ html { background: var(--sand); }
   .messagerie-grille { grid-template-columns: 1fr; }
   .msg { max-width: 90%; }
 }
+
+/* Fiche : partage + gestion */
+.fiche-partage { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-4); }
+.fiche-partage .btn { font-size: var(--t-xs); }
+.est-resultat { font-size: var(--t-m); color: var(--primary-deep); margin: 0 0 var(--sp-2); }
+
+/* Mes annonces (démo locale) */
+.annonce-vendeur {
+  list-style: none;
+  background: var(--blanc-chaud);
+  border: 1px solid var(--ecume);
+  border-radius: 14px;
+  padding: var(--sp-2) var(--sp-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.annonce-vendeur-titre { font-family: var(--serif); font-size: var(--t-l); margin: 0.2rem 0; }
+.annonce-vendeur-meta { font-size: var(--t-xs); opacity: 0.7; margin: 0; }
+.annonce-vendeur-actions { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
+.annonce-vendeur-actions .btn { font-size: var(--t-xs); }

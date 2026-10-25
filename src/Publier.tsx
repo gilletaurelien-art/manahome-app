@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { baseUrl } from "./router";
+import { enregistrerAnnonceLocale } from "./annoncesLocales";
 
 // Pré-remplissage depuis /estimation (et liens profonds) : /publier?type=…&lieu=…
 function paramsPublier(): Partial<FormBien> {
@@ -66,6 +67,21 @@ export function Publier() {
   );
 
   const etape1Valide = bien.type && bien.lieu && bien.prix;
+
+  // Démo locale : l'annonce est enregistrée dans ce navigateur (miroir du
+  // dépôt direct de particulier). En prod : auth + API + S3 pour les photos.
+  const publier = () => {
+    const a = enregistrerAnnonceLocale({
+      titre: apercu.titre,
+      lieu: bien.lieu,
+      prix: Number(bien.prix),
+      surface: bien.surface ? Number(bien.surface) : undefined,
+      pieces: bien.pieces ? Number(bien.pieces) : undefined,
+      dpe: bien.dpe && bien.dpe !== "NC" ? bien.dpe : undefined,
+      description,
+    });
+    window.location.assign(`${baseUrl()}/mes-annonces?publiee=${a.id}`);
+  };
 
   return (
     <main className="publier">
@@ -262,9 +278,9 @@ export function Publier() {
               <button
                 className="btn btn-primary"
                 disabled={!email.includes("@")}
-                onClick={() => alert("Backend à brancher : sauvegarde du brouillon")}
+                onClick={publier}
               >
-                Enregistrer le brouillon — gratuit
+                Publier mon annonce — gratuit
               </button>
             </div>
           </section>

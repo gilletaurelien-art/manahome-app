@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ANNONCES_DEMO, Annonce } from "./annonces";
+import { annoncesPublieesLocales, enAnnonce } from "./annoncesLocales";
 import { AnnonceCard } from "./AnnonceCard";
 import { territoireParSlug } from "./router";
 import { baseUrl } from "./router";
@@ -55,9 +56,10 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   const territoire = territoireParSlug(slug);
 
   const annonces = useMemo(() => {
-    const directes = ANNONCES_DEMO.filter(
-      (a) => a.source === "directe_particulier"
-    );
+    const directes = [
+      ...annoncesPublieesLocales().map(enAnnonce),
+      ...ANNONCES_DEMO.filter((a) => a.source === "directe_particulier"),
+    ];
     const importees = ANNONCES_DEMO.filter((a) => a.source === "import_pro");
     const triees = [...directes, ...importees];
     return filtre === "tous" ? triees : triees.filter((a) => typeDe(a) === filtre);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Annonce } from "./annonces";
 import { baseUrl } from "./router";
 import { ouvrirConversation } from "./messagerie";
+import { annonceLocaleParId } from "./annoncesLocales";
 
 // JSON-LD RealEstateListing (schema.org) : le cœur du pilier « Lisible
 // par les IA ». Données structurées sur chaque fiche, URL stable.
@@ -46,12 +47,50 @@ function JsonLd({ annonce }: { annonce: Annonce }) {
 
 export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
   const [premierMessage, setPremierMessage] = useState("");
+  const [lienCopie, setLienCopie] = useState(false);
+  const locale = annonceLocaleParId(annonce.id);
+
   useEffect(() => {
     document.title = `${annonce.titre} — MANAhome`;
+    // Meta de partage (OG) injectées dynamiquement : SPA statique, une
+    // seule page servie — chaque fiche façonne son propre aperçu social.
+    const url = `${window.location.origin}${baseUrl()}/annonce/${annonce.id}`;
+    const metas: [string, string, string][] = [
+      ["property", "og:title", `${annonce.titre} — MANAhome`],
+      [
+        "property",
+        "og:description",
+        `${annonce.lieu} — ${annonce.prix.toLocaleString("fr-FR")} €${
+          annonce.surface ? `, ${annonce.surface} m²` : ""
+        }. Annonce directe de particulier, gratuite, sur le portail territorial MANAhome.`,
+      ],
+      ["property", "og:url", url],
+      ["name", "twitter:card", "summary"],
+    ];
+    const crees = metas.map(([attr, cle, val]) => {
+      const m = document.createElement("meta");
+      m.setAttribute(attr, cle);
+      m.setAttribute("content", val);
+      document.head.appendChild(m);
+      return m;
+    });
     return () => {
       document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
+      crees.forEach((m) => m.remove());
     };
   }, [annonce]);
+
+  const copierLien = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `${window.location.origin}${baseUrl()}/annonce/${annonce.id}`
+      );
+      setLienCopie(true);
+      setTimeout(() => setLienCopie(false), 2500);
+    } catch {
+      setLienCopie(false);
+    }
+  };
 
   return (
     <>
@@ -144,6 +183,20 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
               </a>
             </div>
           </section>
+          <div className="fiche-partage">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={copierLien}
+            >
+              {lienCopie ? "Lien copié ✓" : "Copier le lien de l'annonce"}
+            </button>
+            {locale && (
+              <a className="btn btn-ghost" href={`${baseUrl()}/mes-annonces`}>
+                Gérer mon annonce
+              </a>
+            )}
+          </div>
           <p className="fiche-note">
             La mise en relation se fait par messagerie interne : les
             coordonnées du vendeur ne sont jamais publiées.
