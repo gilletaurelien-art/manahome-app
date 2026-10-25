@@ -84,14 +84,36 @@ html { background: var(--sand); }
   text-decoration: none;
 }
 .brand em { color: var(--or); font-style: normal; }
-.nav { display: flex; gap: var(--sp-4); font-size: var(--t-xs); align-items: baseline; }
-.nav a { color: var(--ink); text-decoration: none; }
+/* Nav : icône AU-DESSUS du libellé (desktop/tablette), empilées */
+.nav { display: flex; gap: var(--sp-4); align-items: flex-end; }
+.nav a {
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--t-xs);
+  text-align: center;
+}
 .nav a:hover { color: var(--primary); }
 .nav .nav-cta {
   color: var(--primary);
   border: 1px solid var(--primary);
   border-radius: 999px;
-  padding: 4px 14px;
+  padding: 6px 14px 4px;
+}
+/* Mobile : icônes seules — le libellé passe en sr-only pour l'accessibilité */
+@media (max-width: 640px) {
+  .nav { gap: var(--sp-2); }
+  .nav a > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .nav .nav-cta { padding: 8px; }
 }
 
 /* ===== Hero : image brute SANS retouche, fixe au scroll via un calque
