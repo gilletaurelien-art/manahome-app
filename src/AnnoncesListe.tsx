@@ -23,6 +23,24 @@ function typeDe(annonce: Annonce): string {
   return "maison";
 }
 
+// JSON-LD ItemList : le catalogue est compréhensible par les moteurs et
+// assistants — miroir de ce que la vue annonces_publiques expose en prod.
+function JsonLd({ annonces, slug }: { annonces: Annonce[]; slug: string }) {
+  const origin = window.location.origin;
+  const B = baseUrl();
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: annonces.map((a, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${origin}${B}/annonce/${a.id}`,
+      name: a.titre,
+    })),
+  };
+  return <script type="application/ld+json">{JSON.stringify(data)}</script>;
+}
+
 export function AnnoncesListe({ slug }: { slug: string }) {
   const [filtre, setFiltre] = useState("tous");
 
@@ -48,7 +66,9 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   const B = baseUrl();
 
   return (
-    <main className="publier">
+    <>
+      <JsonLd annonces={annonces} slug={slug} />
+      <main className="publier">
       <div className="wrap">
         <p className="hero-label">Pilote {territoire ? territoire.nom : "Crozon"}</p>
         <h1 className="fiche-titre">
@@ -106,6 +126,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
           </a>
         </div>
       </div>
-    </main>
+      </main>
+    </>
   );
 }

@@ -1,0 +1,104 @@
+import { useEffect } from "react";
+import { baseUrl } from "./router";
+
+// Page /pros — présentation publique de la porte d'entrée professionnelle.
+// Volontairement sans espace ni abonnement (non tranché). Règle gravée :
+// « vérifié » exige une preuve ; aucun acte loi Hoguet.
+
+const ETATS = [
+  {
+    titre: "Référencé",
+    texte:
+      "Identité vérifiée côté annuaire : le pro apparaît publiquement rattaché à ses annonces.",
+  },
+  {
+    titre: "Actif",
+    texte:
+      "Le pro publie et maintient ses annonces sur le territoire du pilote.",
+  },
+  {
+    titre: "Vérifié",
+    texte:
+      "Statut le plus exigeant : il exige une preuve documentaire. Sans preuve, pas de badge.",
+  },
+];
+
+export function Pros() {
+  useEffect(() => {
+    document.title = "Pour les professionnels — MANAhome";
+    return () => {
+      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
+    };
+  }, []);
+
+  const B = baseUrl();
+
+  return (
+    <main className="publier">
+      <div className="wrap">
+        <p className="hero-label">Professionnels</p>
+        <h1 className="fiche-titre">
+          Une autre façon de diffuser vos biens
+        </h1>
+        <p className="territoire-intro">
+          MANAhome ouvre aux agences et mandataires une diffusion complémentaire,
+          structurée, sur un territoire pilote. Sans promesse de classement
+          garanti — et sans vendre vos données.
+        </p>
+
+        <div className="ia-grid">
+          <div className="ia-bloc">
+            <h3>Vos annonces, structurées</h3>
+            <p>
+              Chaque fiche respecte le même format lisible : les 4 chiffres
+              canon, le DPE, les données structurées. Vos biens sont présentés
+              aussi proprement que ceux des particuliers.
+            </p>
+          </div>
+          <div className="ia-bloc">
+            <h3>Transparence de la source</h3>
+            <p>
+              Une annonce professionnelle est toujours badgeée. Elle n'apparaît
+              jamais devant un dépôt direct à adéquation égale — c'est un choix
+              assumé, inscrit dans notre règle de tri.
+            </p>
+          </div>
+          <div className="ia-bloc">
+            <h3>Ce que MANAhome n'est pas</h3>
+            <p>
+              Ni mandataire, ni négociateur, ni place de transaction : aucun acte
+              relevant de la loi Hoguet n'est réalisé par la plateforme.
+            </p>
+          </div>
+        </div>
+
+        <section className="publier-panel">
+          <p className="apercu-label">Référentiel à 3 états</p>
+          <div className="ia-grid">
+            {ETATS.map((e, i) => (
+              <div key={e.titre} className="ia-bloc">
+                <h3>
+                  {i + 1}. {e.titre}
+                </h3>
+                <p>{e.texte}</p>
+              </div>
+            ))}
+          </div>
+          <p className="ia-disclaimer">
+            « Vérifié » exige une preuve documentaire. Aucune donnée ni lead n'est
+            revendu ; les échanges passent par la messagerie interne.
+          </p>
+        </section>
+
+        <div className="est-actions">
+          <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
+            Voir les annonces du pilote
+          </a>
+          <a className="btn btn-ghost" href={`${B}/approche`}>
+            Notre approche
+          </a>
+        </div>
+      </div>
+    </main>
+  );
+}
