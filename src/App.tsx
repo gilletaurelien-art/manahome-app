@@ -149,7 +149,7 @@ export default function App() {
           <div className="promesses-grid">
             {PROMESSES.map((p) => (
               <div key={p.titre} className="promesse">
-                <span className="glyphe"><p.glyphe /></span>
+                <span className="glyphe">{(() => { const G = p.glyphe; return <G />; })()}</span>
                 <h3>{p.titre}</h3>
                 <p>{p.texte}</p>
               </div>
@@ -161,7 +161,7 @@ export default function App() {
       <main className="wrap">
         {/* 01 — Catalogue : état « démarrage » assumé, qualité > volume */}
         <section className="landing-section">
-          <span className="glyphe section-glyphe"><SECTIONS[0].glyphe /></span>
+          <span className="glyphe section-glyphe">{(() => { const G = SECTIONS[0].glyphe; return <G />; })()}</span>
           <p className="section-num">{SECTIONS[0].num}</p>
           <h2 className="section-title">{SECTIONS[0].titre}</h2>
           <p className="section-accroche">{SECTIONS[0].accroche}</p>
@@ -180,7 +180,7 @@ export default function App() {
         {/* 02 → 05 */}
         {SECTIONS.slice(1).map((s) => (
           <section key={s.num} className="landing-section">
-            <span className="glyphe section-glyphe"><s.glyphe /></span>
+            <span className="glyphe section-glyphe">{(() => { const G = s.glyphe; return <G />; })()}</span>
             <p className="section-num">{s.num}</p>
             <h2 className="section-title">{s.titre}</h2>
             <p className="section-accroche">{s.accroche}</p>
