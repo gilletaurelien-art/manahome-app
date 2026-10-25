@@ -1,0 +1,17 @@
+# Infra-agnostique : le domaine est fourni par variable d'environnement, jamais hardcodé.
+{$DOMAIN:localhost}
+
+encode gzip zstd
+
+# Pages publiques pré-rendues : servies directement, vitesse maximale (SEO + IA).
+root * /srv/site
+try_files {path} {path}/index.html {path}.html
+
+# API applicative
+handle /api/* {
+	reverse_proxy app:3000
+}
+
+handle_errors {
+	rewrite * /404.html
+}

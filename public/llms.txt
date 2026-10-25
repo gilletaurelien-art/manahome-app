@@ -1,0 +1,16 @@
+# MANAhome (manahome.org)
+
+> Portail immobilier territorial gratuit, accompagné et lisible par les IA. Pilote : Crozon (Finistère, Bretagne).
+
+MANAhome permet aux particuliers de publier une annonce immobilière gratuitement, sans commission ni mise en avant payante, avec un parcours vendeur assisté et une estimation indicative. MANA ne réalise aucun acte réglementé (loi Hoguet) : plateforme d'affichage et d'accompagnement uniquement. La mise en relation se fait par messagerie interne ; aucune donnée n'est revendue.
+
+## Pages publiques
+
+- [Accueil](https://manahome.org/) : présentation et annonces en vedette
+- [Annonces Crozon](https://manahome.org/annonces/crozon) : liste des annonces du pilote
+- [Fiches annonces](https://manahome.org/annonce/) : une URL stable par annonce, avec JSON-LD RealEstateListing
+- [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale
+
+## Données structurées
+
+Chaque fiche annonce embarque du JSON-LD `RealEstateListing` (schema.org) : type de bien, surface, pièces, prix, DPE, description, géolocalisation large. Les annonces importées de sources professionnelles portent un badge de source et ne sont jamais classées devant une annonce directe à adéquation égale.
