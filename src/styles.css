@@ -50,9 +50,12 @@ body {
   font-size: var(--t-s);
   line-height: 1.6;
   color: var(--ink);
-  background: var(--sand);
+  background: transparent;
   hyphens: auto;
 }
+/* L'image vit derrière TOUTE la page : les sections deviennent
+   des panneaux translucides, plus des aplats opaques. */
+html { background: var(--sand); }
 
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--sp-4); }
 
@@ -91,16 +94,23 @@ body {
   padding: 4px 14px;
 }
 
-/* ===== Hero : image brute SANS retouche, fixe au scroll (attachment).
-   La lisibilité du texte passe par un panneau discret, pas par un voile sur l'image. ===== */
+/* ===== Hero : image brute SANS retouche, fixe au scroll via un calque
+   fixed plein écran — aucun voile crème, la photo vit derrière, partout. ===== */
 .hero {
-  background: url("./assets/hero.jpg") center / cover no-repeat fixed;
   min-height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   position: relative;
+  background: transparent;
+}
+.hero::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("./assets/hero.jpg") center / cover no-repeat;
+  z-index: -2;
 }
 .hero .wrap {
   position: relative;
@@ -135,7 +145,7 @@ body {
 /* Carte centrale : les trois promesses, aérées, sans redite */
 .promesses { padding-bottom: var(--sp-12); }
 .promesse-card {
-  background: var(--blanc-chaud);
+  background: rgb(255 255 255 / 85%);
   border: 1px solid var(--ecume);
   border-radius: 12px;
   box-shadow: var(--shadow);
@@ -174,7 +184,7 @@ body {
 
 /* ===== Sections ===== */
 .landing-section { padding: var(--sp-12) 0; }
-.landing-section.alt { background: var(--blanc-chaud); }
+.landing-section.alt { background: rgb(255 255 255 / 60%); }
 .section-num {
   font-family: var(--serif);
   font-size: var(--t-xs);
@@ -208,7 +218,7 @@ body {
   margin: 0 0 var(--sp-4);
 }
 .card {
-  background: var(--blanc-chaud);
+  background: rgb(255 255 255 / 92%);
   border: 1px solid var(--ecume);
   border-radius: 10px;
   overflow: hidden;
