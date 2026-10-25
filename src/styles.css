@@ -535,3 +535,17 @@ html { background: var(--sand); }
   /* background-attachment: fixed est ignoré ou buggy sur mobile */
   .hero { background-attachment: scroll; }
 }
+
+/* ===== Estimation ===== */
+.est-fourchette {
+  font-family: "Marelle Baton 2", var(--serif);
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  color: var(--ink);
+  margin: var(--sp-2) 0 4px;
+}
+.est-mediane { font-size: var(--t-m); margin: 0 0 var(--sp-2); }
+.est-source { font-size: var(--t-xs); opacity: 0.6; max-width: 60ch; margin: 0 0 var(--sp-3); }
+.est-erreur { font-size: var(--t-m); color: var(--primary); margin: 0 0 var(--sp-2); }
+.est-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin: 0 0 var(--sp-3); }
+.champ-lien { color: var(--primary); text-decoration: underline; }
+.champ-lien:hover { color: var(--or); }

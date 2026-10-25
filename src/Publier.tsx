@@ -1,6 +1,20 @@
 import { useMemo, useState } from "react";
 import { baseUrl } from "./router";
 
+// Pré-remplissage depuis /estimation (et liens profonds) : /publier?type=…&lieu=…
+function paramsPublier(): Partial<FormBien> {
+  const p = new URLSearchParams(window.location.search);
+  const get = (k: string) => p.get(k) ?? "";
+  const prix = get("prix");
+  return {
+    type: get("type"),
+    lieu: get("lieu"),
+    surface: get("surface"),
+    pieces: get("pieces"),
+    prix: prix && Number(prix) > 0 ? String(Math.round(Number(prix))) : "",
+  };
+}
+
 // Parcours vendeur : dépôt GRATUIT, aucune friction inutile (doctrine :
 // « aucun champ obligatoire inutile »). 3 étapes max, ton chaleureux.
 // Le backend branchera : auth particuliers, sauvegarde brouillon,
@@ -29,13 +43,9 @@ const DPES = ["A", "B", "C", "D", "E", "F", "G", "NC"];
 export function Publier() {
   const [etape, setEtape] = useState<Etape>(1);
   const [bien, setBien] = useState<FormBien>({
-    type: "",
-    surface: "",
-    pieces: "",
-    prix: "",
+    ...paramsPublier(),
     dpe: "",
-    lieu: "",
-  });
+  } as FormBien);
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
 
@@ -112,7 +122,11 @@ export function Publier() {
                   onChange={(e) => setBien({ ...bien, prix: e.target.value })}
                 />
                 <p className="champ-aide">
-                  Une estimation indicative vous sera proposée à l'étape suivante.
+                  Pas d'idée ?{" "}
+                  <a className="champ-lien" href={`${baseUrl()}/estimation`}>
+                    Estimation indicative
+                  </a>{" "}
+                  — gratuite, sans compte.
                 </p>
               </div>
               <div className="champ">

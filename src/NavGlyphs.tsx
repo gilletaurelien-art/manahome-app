@@ -53,3 +53,15 @@ export function NavPublier({ size = 20 }: GlyphProps) {
     </svg>
   );
 }
+
+export function NavEstimation({ size = 20 }: GlyphProps) {
+  return (
+    <svg {...base} width={size} height={size} aria-hidden="true">
+      <path d="M12 3v18" />
+      <path d="M4 6h16" />
+      <path d="M6 6l-3 6a3.2 3.2 0 0 0 6 0z" />
+      <path d="M18 6l-3 6a3.2 3.2 0 0 0 6 0z" />
+      <path d="M8 21h8" />
+    </svg>
+  );
+}

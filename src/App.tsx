@@ -8,7 +8,13 @@ import {
   GlyphTerritoire,
   GlyphPros,
 } from "./Glyphs";
-import { NavAnnonces, NavTerritoire, NavPros, NavPublier } from "./NavGlyphs";
+import {
+  NavAnnonces,
+  NavTerritoire,
+  NavPros,
+  NavPublier,
+  NavEstimation,
+} from "./NavGlyphs";
 import {
   usePath,
   routeAnnonce,
@@ -20,6 +26,7 @@ import {
 import { AnnonceDetail } from "./AnnonceDetail";
 import { TerritoireDetail } from "./TerritoireDetail";
 import { Publier } from "./Publier";
+import { Estimation } from "./Estimation";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -65,6 +72,7 @@ const SECTIONS = [
     texte:
       "Estimation indicative, préparation de l'annonce, documents à prévoir, compréhension du prix net vendeur et prochaines étapes. Le particulier reste maître de son projet.",
     cta: { label: "Préparer la vente de mon bien", href: "/publier" },
+    cta2: { label: "Estimer mon bien", href: "/estimation" },
   },
   {
     glyphe: GlyphStructure,
@@ -136,6 +144,10 @@ export default function App() {
               <NavAnnonces />
               <span>Annonces</span>
             </a>
+            <a href={`${B}/estimation`}>
+              <NavEstimation />
+              <span>Estimation</span>
+            </a>
             <a href={`${B}/territoire/crozon`}>
               <NavTerritoire />
               <span>Territoire</span>
@@ -156,6 +168,8 @@ export default function App() {
         <AnnonceDetail annonce={annonce} />
       ) : path === "/publier" ? (
         <Publier />
+      ) : path === "/estimation" ? (
+        <Estimation />
       ) : territoire ? (
         <TerritoireDetail territoire={territoire} />
       ) : (
@@ -242,6 +256,11 @@ export default function App() {
                   {s.cta && (
                     <a className="btn btn-ghost" href={`${B}${s.cta.href}`}>
                       {s.cta.label}
+                    </a>
+                  )}
+                  {s.cta2 && (
+                    <a className="btn btn-primary" href={`${B}${s.cta2.href}`}>
+                      {s.cta2.label}
                     </a>
                   )}
                 </section>
