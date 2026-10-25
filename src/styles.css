@@ -104,13 +104,7 @@ body {
 }
 .hero .wrap {
   position: relative;
-  max-width: 680px;
-  background: rgb(250 248 243 / 82%);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--ecume);
-  border-radius: 16px;
-  padding: var(--sp-6);
-  box-shadow: var(--shadow);
+  max-width: 720px;
 }
 .hero-label {
   font-size: var(--t-xs);
@@ -119,15 +113,16 @@ body {
   color: var(--primary);
   margin: 0 0 var(--sp-2);
 }
-.hero h1 {
+/* Grand logo hero : identique au header, MANA bleu marine + home or */
+.hero h1.brand-grand {
   font-family: "Marelle Baton 2", var(--serif);
-  font-size: 3.4rem;
-  line-height: 1.2;
+  font-size: clamp(3.4rem, 9vw, 6.5rem);
+  line-height: 1.1;
   font-weight: 400;
   margin: 0 auto var(--sp-2);
-  max-width: 18ch;
   color: var(--ink);
 }
+.hero h1.brand-grand em { color: var(--or); font-style: normal; }
 .hero .lede {
   font-size: var(--t-m);
   max-width: 40ch;
@@ -321,7 +316,6 @@ body {
   .hero h1 { font-size: var(--t-2xl); }
   :root { --sp-12: 64px; }
   .promesses-grid { padding: var(--sp-4); }
-  /* background-attachment: fixed est ignoré ou buggy sur mobile : dégradé propre */
+  /* background-attachment: fixed est ignoré ou buggy sur mobile */
   .hero { background-attachment: scroll; }
-  .hero .wrap { background: rgb(250 248 243 / 92%); padding: var(--sp-4); }
 }

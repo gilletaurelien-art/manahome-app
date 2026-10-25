@@ -123,7 +123,9 @@ export default function App() {
       <section className="hero">
         <div className="wrap">
           <p className="hero-label">L'immobilier, autrement</p>
-          <h1>Votre bien mérite mieux qu'une annonce.</h1>
+          <h1 className="brand-grand">
+            MANA<em>home</em>
+          </h1>
           <p className="lede">
             Publiez gratuitement. Soyez accompagné. Préparez votre annonce à
             l'ère des intelligences artificielles.
