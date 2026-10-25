@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { baseUrl } from "./router";
+import { PROS } from "./pros";
 
 // Page /pros — présentation publique de la porte d'entrée professionnelle.
 // Volontairement sans espace ni abonnement (non tranché). Règle gravée :
@@ -71,6 +72,42 @@ export function Pros() {
             </p>
           </div>
         </div>
+
+        <section className="publier-panel">
+          <p className="apercu-label">Les pros et notaires du pilote Crozon</p>
+          <p className="territoire-intro">
+            Référencés depuis l'annuaire officiel des entreprises (source :
+            recherche-entreprises.api.gouv.fr) — statut « référencé » : aucune
+            de ces fiches n'est une recommandation, et le statut « vérifié »
+            exigerait une preuve documentaire fournie par le pro lui-même.
+          </p>
+          <div className="ia-grid">
+            {PROS.filter((p) => p.categorie === "agence").map((p) => (
+              <div key={p.siren} className="ia-bloc">
+                <h3>{p.raisonSociale}</h3>
+                <p>
+                  Agence immobilière · {p.commune}
+                  <br />
+                  {p.adressePublique}
+                  <br />
+                  SIREN {p.siren} · statut : {p.statut}
+                </p>
+              </div>
+            ))}
+            {PROS.filter((p) => p.categorie === "notaire").map((p) => (
+              <div key={p.siren} className="ia-bloc">
+                <h3>{p.raisonSociale}</h3>
+                <p>
+                  Office notarial · {p.commune}
+                  <br />
+                  {p.adressePublique}
+                  <br />
+                  SIREN {p.siren} · statut : {p.statut}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section className="publier-panel">
           <p className="apercu-label">Référentiel à 3 états</p>
