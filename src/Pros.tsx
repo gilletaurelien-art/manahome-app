@@ -128,6 +128,9 @@ export function Pros() {
         </section>
 
         <div className="est-actions">
+          <a className="btn btn-primary" href={`${B}/espace-pro`}>
+            Rejoindre le référentiel
+          </a>
           <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
             Voir les annonces du pilote
           </a>

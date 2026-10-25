@@ -32,6 +32,7 @@ import { AnnoncesListe } from "./AnnoncesListe";
 import { Approche } from "./Approche";
 import { Pros } from "./Pros";
 import { Messagerie } from "./Messagerie";
+import { EspacePro } from "./EspacePro";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -184,6 +185,8 @@ export default function App() {
         <Pros />
       ) : path === "/messagerie" ? (
         <Messagerie />
+      ) : path === "/espace-pro" ? (
+        <EspacePro />
       ) : territoire ? (
         <TerritoireDetail territoire={territoire} />
       ) : (
