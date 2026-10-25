@@ -1,1 +1,0 @@
-:root{--mana: #2a6f6b;--ink: #1c2321}body{font-family:system-ui,sans-serif;color:var(--ink);margin:0;min-height:100vh;display:grid;place-items:center;background:#f7f9f8}main{text-align:center}h1{color:var(--mana);margin-bottom:.25rem}.tagline{font-size:1.15rem;margin:.25rem 0}.pilote{opacity:.7;font-size:.95rem}
