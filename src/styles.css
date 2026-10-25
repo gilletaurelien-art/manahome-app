@@ -3,10 +3,10 @@
    Budget < 15 Ko, aucune dépendance UI — la vitesse est un pilier. */
 
 :root {
-  /* Palette territoire, désaturée */
-  --ink: #1a2e2a;
-  --primary: #2a6f6b;
-  --primary-deep: #1c4d4a;
+  /* Palette territoire, désaturée — kaki au lieu de vert */
+  --ink: #23281f;
+  --primary: #5f6145;
+  --primary-deep: #43452f;
   --sand: #f6f3ed;
   --ecume: #e5e0d6;
   --or: #c9a227;
