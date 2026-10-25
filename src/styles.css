@@ -127,18 +127,6 @@ html { background: var(--sand); }
   inset: 0;
   background: url("./assets/hero.jpg") center / cover no-repeat;
   z-index: -2;
-  /* Effet filigrane : image atténuée, comme imprimée en fond de page */
-  filter: grayscale(0.55) saturate(0.8) contrast(0.92) brightness(1.06);
-  opacity: 0.6;
-}
-.hero::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: var(--blanc-chaud);
-  opacity: 0.28;
-  z-index: -1;
-  pointer-events: none;
 }
 .hero .wrap {
   position: relative;
