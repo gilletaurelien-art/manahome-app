@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Annonce } from "./annonces";
 import { baseUrl } from "./router";
+import { ouvrirConversation } from "./messagerie";
 
 // JSON-LD RealEstateListing (schema.org) : le cœur du pilier « Lisible
 // par les IA ». Données structurées sur chaque fiche, URL stable.
@@ -44,6 +45,7 @@ function JsonLd({ annonce }: { annonce: Annonce }) {
 }
 
 export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
+  const [premierMessage, setPremierMessage] = useState("");
   useEffect(() => {
     document.title = `${annonce.titre} — MANAhome`;
     return () => {
@@ -107,10 +109,41 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
             ) : (
               <span className="badge-source">Annonce directe de particulier</span>
             )}
-            <a className="btn btn-primary" href="#contacter">
-              Contacter le vendeur
-            </a>
           </div>
+          <section
+            id="contacter"
+            className="publier-panel fiche-contacter"
+            aria-label="Contacter le vendeur"
+          >
+            <p className="apercu-label">Contacter le vendeur</p>
+            <div className="champ">
+              <label htmlFor="premier-message">Votre premier message</label>
+              <textarea
+                id="premier-message"
+                rows={3}
+                placeholder="Bonjour, votre bien m'intéresse, serait-il possible de visiter ?"
+                value={premierMessage}
+                onChange={(e) => setPremierMessage(e.target.value)}
+              />
+              <p className="champ-aide">
+                Aucune coordonnée échangée : la discussion se poursuit dans
+                votre messagerie interne MANAhome.
+              </p>
+            </div>
+            <div className="est-actions">
+              <a
+                className="btn btn-primary"
+                href={`${baseUrl()}/messagerie?annonce=${annonce.id}`}
+                onClick={() => {
+                  if (premierMessage.trim()) {
+                    ouvrirConversation(annonce.id, annonce.titre, premierMessage);
+                  }
+                }}
+              >
+                Ouvrir la conversation
+              </a>
+            </div>
+          </section>
           <p className="fiche-note">
             La mise en relation se fait par messagerie interne : les
             coordonnées du vendeur ne sont jamais publiées.

@@ -592,3 +592,82 @@ html { background: var(--sand); }
 .footer-bas p { margin: 0; max-width: 60ch; }
 .footer-bas a { color: var(--ink); }
 .footer-bas a:hover { color: var(--or); }
+
+/* ===== Messagerie interne ===== */
+.messagerie-grille {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 3fr;
+  gap: var(--sp-3);
+  align-items: start;
+}
+.messagerie-liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.messagerie-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--blanc-chaud);
+  border: 1px solid var(--sand);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: var(--t-xs);
+  text-align: left;
+}
+.messagerie-item.on { border-color: var(--primary); background: #fff; }
+.messagerie-item-titre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+.messagerie-item-date { opacity: 0.55; white-space: nowrap; }
+.messagerie-messages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-3);
+}
+.msg {
+  max-width: 75%;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: 14px;
+  font-size: var(--t-s);
+}
+.msg-moi {
+  align-self: flex-end;
+  background: var(--primary);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.msg-vendeur {
+  align-self: flex-start;
+  background: var(--sand);
+  color: var(--ink);
+  border-bottom-left-radius: 4px;
+}
+.messagerie-envoi {
+  display: flex;
+  gap: var(--sp-2);
+}
+.messagerie-envoi input {
+  flex: 1;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--sand);
+  border-radius: 999px;
+  font: inherit;
+  background: #fff;
+}
+.messagerie-envoi input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.fiche-contacter { margin-top: var(--sp-4); }
+@media (max-width: 720px) {
+  .messagerie-grille { grid-template-columns: 1fr; }
+  .msg { max-width: 90%; }
+}
