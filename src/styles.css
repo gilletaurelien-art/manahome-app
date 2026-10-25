@@ -82,17 +82,20 @@ body {
   padding: 4px 14px;
 }
 
-/* ===== Hero : photo lumineuse (végétal, mur blanc) — texte à gauche,
-   l'image respire à droite. L'effet Gemini avec nos couleurs. ===== */
+/* ===== Hero façon Gemini : image PLEINE LARGEUR en fond, texte CENTRÉ,
+   overlay lumineux pour la lisibilité. ===== */
 .hero {
   background:
-    linear-gradient(90deg, rgb(250 248 243 / 96%) 0%, rgb(250 248 243 / 88%) 34%, rgb(250 248 243 / 0%) 62%),
-    url("./assets/hero.jpg") center right / cover no-repeat,
-    var(--sand);
-  padding: var(--sp-12) 0;
+    linear-gradient(180deg, rgb(250 248 243 / 82%) 0%, rgb(250 248 243 / 62%) 45%, rgb(250 248 243 / 85%) 100%),
+    url("./assets/hero.jpg") center / cover no-repeat;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   position: relative;
 }
-.hero .wrap { position: relative; }
+.hero .wrap { position: relative; max-width: 720px; }
 .hero-label {
   font-size: var(--t-xs);
   letter-spacing: 0.18em;
@@ -105,26 +108,30 @@ body {
   font-size: var(--t-hero);
   line-height: 1.05;
   font-weight: 500;
-  margin: 0 0 var(--sp-2);
-  max-width: 12ch;
+  margin: 0 auto var(--sp-2);
+  max-width: 14ch;
   color: var(--ink);
 }
 .hero .lede {
   font-size: var(--t-m);
-  max-width: 44ch;
-  margin: 0 0 var(--sp-4);
-  opacity: 0.85;
+  max-width: 40ch;
+  margin: 0 auto var(--sp-4);
+  opacity: 0.9;
 }
-.hero-cta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin: 0; }
+.hero-cta { display: flex; gap: var(--sp-2); flex-wrap: wrap; justify-content: center; margin: 0 0 var(--sp-2); }
+.hero-note { font-size: var(--t-xs); opacity: 0.6; margin: 0; }
 
 /* Carte centrale : les trois promesses, aérées, sans redite */
+.promesses { padding-bottom: var(--sp-12); }
 .promesse-card {
   background: var(--blanc-chaud);
   border: 1px solid var(--ecume);
   border-radius: 12px;
   box-shadow: var(--shadow);
-  margin: var(--sp-6) auto 0;
+  margin: calc(-1 * var(--sp-12)) auto 0;
   max-width: 860px;
+  position: relative;
+  z-index: 2;
 }
 .promesses-grid {
   display: grid;

@@ -104,38 +104,40 @@ export default function App() {
 
       {/* Hero : la promesse. « Lu par les IA » n'est pas en titre —
           la motivation première du vendeur reste de vendre dans de bonnes conditions. */}
-      <section className="hero wrap">
-        <p className="hero-label">L'immobilier, autrement</p>
-        <h1>
-          Votre bien mérite mieux qu'une annonce.
-        </h1>
-        <p className="lede">
-          Publiez gratuitement. Soyez accompagné. Préparez votre annonce à
-          l'ère des intelligences artificielles.
-        </p>
-        <div className="hero-cta">
-          <a className="btn btn-primary" href="/publier">
-            Je souhaite vendre
-          </a>
-          <a className="btn btn-ghost" href="/annonces/crozon">
-            Je cherche un bien
-          </a>
+      <section className="hero">
+        <div className="wrap">
+          <p className="hero-label">L'immobilier, autrement</p>
+          <h1>Votre bien mérite mieux qu'une annonce.</h1>
+          <p className="lede">
+            Publiez gratuitement. Soyez accompagné. Préparez votre annonce à
+            l'ère des intelligences artificielles.
+          </p>
+          <div className="hero-cta">
+            <a className="btn btn-primary" href="/publier">
+              Je souhaite vendre
+            </a>
+            <a className="btn btn-ghost" href="/annonces/crozon">
+              Je cherche un bien
+            </a>
+          </div>
+          <p className="hero-note">
+            Particuliers : publication gratuite, sans commission de vente
+            prélevée par MANAhome.
+          </p>
         </div>
-        <p className="hero-note">
-          Particuliers : publication gratuite, sans commission de vente
-          prélevée par MANAhome.
-        </p>
       </section>
 
-      {/* Les trois différences, évidentes dès les premières secondes */}
-      <section className="promesses">
-        <div className="wrap promesses-grid">
-          {PROMESSES.map((p) => (
-            <div key={p.titre} className="promesse">
-              <h3>{p.titre}</h3>
-              <p>{p.texte}</p>
-            </div>
-          ))}
+      {/* Les trois promesses : carte blanche centrale qui chevauche le hero */}
+      <section className="promesses wrap">
+        <div className="promesse-card">
+          <div className="promesses-grid">
+            {PROMESSES.map((p) => (
+              <div key={p.titre} className="promesse">
+                <h3>{p.titre}</h3>
+                <p>{p.texte}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
