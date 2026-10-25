@@ -224,10 +224,7 @@ export default function App() {
 
       <footer className="site-footer">
         <div className="wrap">
-          <p>
-            MANAhome — pilote Crozon (Finistère). Gratuit, accompagné, lisible
-            par les IA. MANA ne réalise aucun acte réglementé (loi Hoguet).
-          </p>
+          <p>MANAhome — gratuit, accompagné, lisible par les IA.</p>
         </div>
       </footer>
     </>

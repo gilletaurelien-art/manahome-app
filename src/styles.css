@@ -35,6 +35,15 @@
 
 * { box-sizing: border-box; }
 
+/* Marelle Bâton 2 : cursive libre (OFL, Éducation nationale) — le titre
+   MANAhome s'écrit à la main : chaleureux, accompagné, humain. */
+@font-face {
+  font-family: "Marelle Baton 2";
+  src: url("./fonts/MarelleBaton2-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
 body {
   margin: 0;
   font-family: var(--sans);
@@ -64,9 +73,9 @@ body {
   padding-bottom: var(--sp-2);
 }
 .brand {
-  font-family: var(--serif);
-  font-size: var(--t-l);
-  font-weight: 600;
+  font-family: "Marelle Baton 2", var(--serif);
+  font-size: var(--t-xl);
+  font-weight: 400;
   color: var(--ink);
   margin: 0;
   text-decoration: none;
@@ -82,12 +91,10 @@ body {
   padding: 4px 14px;
 }
 
-/* ===== Hero façon Gemini : image PLEINE LARGEUR en fond, texte CENTRÉ,
-   overlay lumineux pour la lisibilité. ===== */
+/* ===== Hero : image brute SANS retouche, fixe au scroll (attachment).
+   La lisibilité du texte passe par un panneau discret, pas par un voile sur l'image. ===== */
 .hero {
-  background:
-    linear-gradient(180deg, rgb(250 248 243 / 82%) 0%, rgb(250 248 243 / 62%) 45%, rgb(250 248 243 / 85%) 100%),
-    url("./assets/hero.jpg") center / cover no-repeat;
+  background: url("./assets/hero.jpg") center / cover no-repeat fixed;
   min-height: 92vh;
   display: flex;
   align-items: center;
@@ -95,7 +102,16 @@ body {
   text-align: center;
   position: relative;
 }
-.hero .wrap { position: relative; max-width: 720px; }
+.hero .wrap {
+  position: relative;
+  max-width: 680px;
+  background: rgb(250 248 243 / 82%);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--ecume);
+  border-radius: 16px;
+  padding: var(--sp-6);
+  box-shadow: var(--shadow);
+}
 .hero-label {
   font-size: var(--t-xs);
   letter-spacing: 0.18em;
@@ -104,12 +120,12 @@ body {
   margin: 0 0 var(--sp-2);
 }
 .hero h1 {
-  font-family: var(--serif);
-  font-size: var(--t-hero);
-  line-height: 1.05;
-  font-weight: 500;
+  font-family: "Marelle Baton 2", var(--serif);
+  font-size: 3.4rem;
+  line-height: 1.2;
+  font-weight: 400;
   margin: 0 auto var(--sp-2);
-  max-width: 14ch;
+  max-width: 18ch;
   color: var(--ink);
 }
 .hero .lede {
@@ -305,4 +321,7 @@ body {
   .hero h1 { font-size: var(--t-2xl); }
   :root { --sp-12: 64px; }
   .promesses-grid { padding: var(--sp-4); }
+  /* background-attachment: fixed est ignoré ou buggy sur mobile : dégradé propre */
+  .hero { background-attachment: scroll; }
+  .hero .wrap { background: rgb(250 248 243 / 92%); padding: var(--sp-4); }
 }
