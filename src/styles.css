@@ -77,7 +77,7 @@ html { background: var(--sand); }
 }
 .brand {
   font-family: "Marelle Baton 2", var(--serif);
-  font-size: var(--t-xl);
+  font-size: var(--t-m);
   font-weight: 400;
   color: var(--ink);
   margin: 0;
@@ -126,7 +126,9 @@ html { background: var(--sand); }
 /* Grand logo hero : identique au header, MANA bleu marine + home or */
 .hero h1.brand-grand {
   font-family: "Marelle Baton 2", var(--serif);
-  font-size: clamp(3.4rem, 9vw, 6.5rem);
+  /* Fige sur 1 ligne partout : la cursive ne doit jamais se replier */
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  white-space: nowrap;
   line-height: 1.1;
   font-weight: 400;
   margin: 0 auto var(--sp-2);

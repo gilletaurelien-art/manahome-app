@@ -8,6 +8,7 @@ import {
   GlyphTerritoire,
   GlyphPros,
 } from "./Glyphs";
+import { NavAnnonces, NavTerritoire, NavPros, NavPublier } from "./NavGlyphs";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -110,10 +111,22 @@ export default function App() {
             MANA<em>home</em>
           </a>
           <nav className="nav">
-            <a href="/annonces/crozon">Annonces</a>
-            <a href="/territoire/crozon">Territoire</a>
-            <a href="/pros">Professionnels</a>
-            <a href="/publier">Publier — gratuit</a>
+            <a href="/annonces/crozon">
+              <NavAnnonces />
+              <span>Annonces</span>
+            </a>
+            <a href="/territoire/crozon">
+              <NavTerritoire />
+              <span>Territoire</span>
+            </a>
+            <a href="/pros">
+              <NavPros />
+              <span>Professionnels</span>
+            </a>
+            <a href="/publier" className="nav-cta">
+              <NavPublier />
+              <span>Publier — gratuit</span>
+            </a>
           </nav>
         </div>
       </header>
