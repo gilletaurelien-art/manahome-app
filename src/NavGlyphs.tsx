@@ -17,9 +17,10 @@ const base = {
 export function NavAnnonces({ size = 20 }: GlyphProps) {
   return (
     <svg {...base} width={size} height={size} aria-hidden="true">
-      <rect x="3" y="8" width="18" height="12" rx="2" />
-      <path d="M5 8V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" />
-      <path d="M3 14h18" />
+      <rect x="3" y="4" width="8" height="7" rx="1.5" />
+      <rect x="13" y="4" width="8" height="7" rx="1.5" />
+      <rect x="3" y="13" width="8" height="7" rx="1.5" />
+      <rect x="13" y="13" width="8" height="7" rx="1.5" />
     </svg>
   );
 }
