@@ -61,7 +61,8 @@ export const TERRITOIRES: Territoire[] = [
       url: "https://www.georisques.gouv.fr/mes-risques/connaitre-mes-risques/commune/29160",
     },
     chiffres: {
-      habitants: "7 900",
+      // Population officielle : geo.api.gouv.fr (INSEE), code 29042
+      habitants: "7 499",
       commerces: "180+",
       associations: "120+",
     },
@@ -70,7 +71,7 @@ export const TERRITOIRES: Territoire[] = [
     servicesPublics:
       "Mairie, pôle emploi, CAF, trésorerie, poste, médiathèque, gendarmerie, centre de secours — la plupart des services publics de première nécessité présents sur place.",
     communauteCommunes:
-      "Communauté de communes de la Presqu'île de Crozon (CCPC) : Crozon et ses 6 communes voisines mutualisent transports, déchets, tourisme et développement économique.",
+      "Communauté de communes Presqu'île de Crozon-Aulne maritime (EPCI 200066868) : Crozon et ses voisines mutualisent transports, déchets, tourisme et développement économique.",
   },
 ];
 
