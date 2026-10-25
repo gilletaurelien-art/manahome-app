@@ -226,6 +226,31 @@ html { background: var(--sand); }
   .bulle { padding: var(--sp-4); border-radius: 20px 28px 18px 26px; }
 }
 .bulle .section-num { margin-top: 0; }
+/* Sections landing : pas de panneau global — chaque élément
+   devient sa propre petite bulle, posée directement sur la photo. */
+.bulle.landing-section,
+.bulle.section-ia {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+.bulle.landing-section > *:not(.listings),
+.bulle.section-ia > * {
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--ecume);
+  border-radius: 22px 30px 18px 26px;
+  box-shadow:
+    0 2px 6px rgb(27 42 74 / 6%),
+    0 16px 36px rgb(27 42 74 / 12%);
+  padding: var(--sp-1) var(--sp-4);
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  max-width: 72ch;
+}
+.bulle.section-ia .ia-quote { width: fit-content; }
 .bulle { text-align: center; }
 .bulle .section-accroche,
 .bulle .section-texte { margin-left: auto; margin-right: auto; }
