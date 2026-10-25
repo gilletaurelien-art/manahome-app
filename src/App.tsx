@@ -333,6 +333,8 @@ export default function App() {
             <a href={`${B}/publier`}>Publier — gratuit</a>
             <a href={`${B}/approche`}>Notre approche</a>
             <a href={`${B}/pros`}>Professionnels</a>
+            <a href={`${B}/espace-pro`}>Rejoindre le référentiel</a>
+            <a href={`${B}/messagerie`}>Ma messagerie</a>
           </nav>
         </div>
         <div className="wrap footer-bas">
