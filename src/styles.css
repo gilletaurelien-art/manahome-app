@@ -380,6 +380,32 @@ html { background: var(--sand); }
 .fiche-pied { display: flex; gap: var(--sp-4); align-items: center; flex-wrap: wrap; }
 .fiche-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-2); max-width: 55ch; }
 
+/* ===== Page territoire : éditorial, facettes, chiffres, prix, géorisk ===== */
+.territoire-chiffres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-top: 1px solid var(--or);
+  border-bottom: 1px solid var(--ecume);
+  margin: 0 0 var(--sp-6);
+}
+.territoire-chiffres dt { font-size: var(--t-xs); opacity: 0.6; margin-bottom: 4px; }
+.territoire-chiffres dd { font-family: var(--serif); font-size: var(--t-xl); margin: 0; color: var(--primary); }
+
+.territoire-prix {
+  background: rgb(255 255 255 / 92%);
+  border: 1px solid var(--ecume);
+  border-radius: 12px;
+  padding: var(--sp-4);
+  margin-top: var(--sp-4);
+}
+.prix-chart { width: 100%; height: auto; display: block; margin: var(--sp-2) 0; }
+.chart-label { font-size: 11px; fill: var(--ink); opacity: 0.65; }
+.chart-val { fill: var(--primary); opacity: 1; font-weight: 600; }
+.georisk { margin-top: var(--sp-4); }
+.georisk .btn { margin-top: var(--sp-4); }
+
 /* ===== Page territoire : éditorial, quatre facettes ===== */
 .territoire-intro {
   font-family: var(--serif);
