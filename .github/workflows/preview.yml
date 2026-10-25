@@ -24,7 +24,8 @@ jobs:
 
       # Les runners GitHub ont les libs système que la sandbox n'a pas :
       # le rendu headless devient possible ici.
-      - run: npx playwright install --with-deps chromium
+      - run: npm i --no-save playwright-core
+      - run: npx playwright-core install --with-deps chromium
 
       - name: Capture desktop + mobile
         run: |
