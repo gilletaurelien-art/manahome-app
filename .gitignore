@@ -8,3 +8,4 @@ uploads/
 data/
 .DS_Store
 tsconfig.tsbuildinfo
+__pycache__/
