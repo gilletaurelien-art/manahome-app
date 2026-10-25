@@ -133,6 +133,19 @@ html { background: var(--sand); }
 .hero .wrap {
   position: relative;
   max-width: 720px;
+  /* Nuage : panneau translucide à grands rayons asymétriques —
+     blanc chaud, bordure écume, ombre douce. Lisible sur toute photo. */
+  background: rgb(255 255 255 / 82%);
+  border: 1px solid var(--ecume);
+  border-radius: 96px 128px 88px 120px / 88px 110px 120px 96px;
+  box-shadow: 0 18px 60px rgb(27 42 74 / 12%);
+  padding: var(--sp-6) var(--sp-6) var(--sp-4);
+}
+@media (max-width: 720px) {
+  .hero .wrap {
+    padding: var(--sp-4) var(--sp-2) var(--sp-2);
+    border-radius: 48px 64px 44px 60px / 44px 56px 60px 48px;
+  }
 }
 .hero-label {
   font-size: var(--t-xs);
