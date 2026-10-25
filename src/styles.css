@@ -4,9 +4,9 @@
 
 :root {
   /* Palette : bleu nuit + blanc chaud + touche dorée */
-  --ink: #2c2f21;
-  --primary: #4a4d33;
-  --primary-deep: #35381f;
+  --ink: #1b2a4a;
+  --primary: #b08a2e;
+  --primary-deep: #8f6d1f;
   --sand: #faf8f3;
   --blanc-chaud: #ffffff;
   --ecume: #e9e5dc;
@@ -254,10 +254,10 @@ body {
   text-decoration: none;
   transition: background 150ms ease, color 150ms ease;
 }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-deep); }
-.btn-ghost { color: var(--primary); }
-.btn-ghost:hover { background: rgb(74 77 51 / 8%); }
+.btn-primary { background: var(--primary); color: var(--ink); }
+.btn-primary:hover { background: var(--primary-deep); color: #fff; }
+.btn-ghost { color: var(--ink); }
+.btn-ghost:hover { background: rgb(27 42 74 / 8%); }
 
 /* ===== Pilier IA : éditorial ===== */
 .ia-quote {
