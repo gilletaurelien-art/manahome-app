@@ -1,5 +1,13 @@
 import { ANNONCES_DEMO, type Annonce } from "./annonces";
 import { AnnonceCard } from "./AnnonceCard";
+import {
+  GlyphMaison,
+  GlyphCompas,
+  GlyphStructure,
+  GlyphAccompagnement,
+  GlyphTerritoire,
+  GlyphPros,
+} from "./Glyphs";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -9,16 +17,19 @@ const triees = [...directes, ...importees];
 
 const PROMESSES = [
   {
+    glyphe: GlyphMaison,
     titre: "Gratuit pour les particuliers",
     texte:
       "Publication gratuite, sans commission de vente prélevée par MANAhome.",
   },
   {
+    glyphe: GlyphAccompagnement,
     titre: "Un accompagnement à chaque étape",
     texte:
       "Estimation indicative, annonce, documents : vous avancez sans être seul.",
   },
   {
+    glyphe: GlyphStructure,
     titre: "Des annonces conçues pour être comprises par les IA",
     texte:
       "Une fiche structurée, prête pour une nouvelle manière de chercher un logement.",
@@ -27,6 +38,7 @@ const PROMESSES = [
 
 const SECTIONS = [
   {
+    glyphe: GlyphCompas,
     num: "01",
     titre: "Découvrez les biens",
     accroche: "Les annonces disponibles près de chez vous",
@@ -34,6 +46,7 @@ const SECTIONS = [
       "Un accès direct aux biens, sans obliger le visiteur à créer un compte. En démarrage de pilote, nous assumons un catalogue volontairement restreint et soigné.",
   },
   {
+    glyphe: GlyphAccompagnement,
     num: "02",
     titre: "Vendre sans être seul",
     accroche: "Vous gardez la main. MANA vous accompagne.",
@@ -42,6 +55,7 @@ const SECTIONS = [
     cta: { label: "Préparer la vente de mon bien", href: "/publier" },
   },
   {
+    glyphe: GlyphStructure,
     num: "03",
     titre: "Une annonce prête pour les IA",
     accroche: "Votre bien ne devrait pas être invisible parce que son annonce est mal structurée.",
@@ -50,6 +64,7 @@ const SECTIONS = [
     cta: { label: "Comprendre notre approche", href: "/approche" },
   },
   {
+    glyphe: GlyphTerritoire,
     num: "04",
     titre: "Choisir un lieu, pas seulement un logement",
     accroche: "Le bien compte. La vie autour aussi.",
@@ -58,6 +73,7 @@ const SECTIONS = [
     cta: { label: "Découvrir le territoire de Crozon", href: "/territoire/crozon" },
   },
   {
+    glyphe: GlyphPros,
     num: "05",
     titre: "Pour les professionnels",
     accroche: "Une autre façon de diffuser vos biens.",
@@ -133,6 +149,7 @@ export default function App() {
           <div className="promesses-grid">
             {PROMESSES.map((p) => (
               <div key={p.titre} className="promesse">
+                <span className="glyphe"><p.glyphe /></span>
                 <h3>{p.titre}</h3>
                 <p>{p.texte}</p>
               </div>
@@ -144,6 +161,7 @@ export default function App() {
       <main className="wrap">
         {/* 01 — Catalogue : état « démarrage » assumé, qualité > volume */}
         <section className="landing-section">
+          <span className="glyphe section-glyphe"><SECTIONS[0].glyphe /></span>
           <p className="section-num">{SECTIONS[0].num}</p>
           <h2 className="section-title">{SECTIONS[0].titre}</h2>
           <p className="section-accroche">{SECTIONS[0].accroche}</p>
@@ -162,6 +180,7 @@ export default function App() {
         {/* 02 → 05 */}
         {SECTIONS.slice(1).map((s) => (
           <section key={s.num} className="landing-section">
+            <span className="glyphe section-glyphe"><s.glyphe /></span>
             <p className="section-num">{s.num}</p>
             <h2 className="section-title">{s.titre}</h2>
             <p className="section-accroche">{s.accroche}</p>
