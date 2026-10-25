@@ -21,12 +21,14 @@ import {
   annonceParId,
   routeTerritoire,
   territoireParSlug,
+  routeAnnonces,
   baseUrl,
 } from "./router";
 import { AnnonceDetail } from "./AnnonceDetail";
 import { TerritoireDetail } from "./TerritoireDetail";
 import { Publier } from "./Publier";
 import { Estimation } from "./Estimation";
+import { AnnoncesListe } from "./AnnoncesListe";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -131,6 +133,7 @@ export default function App() {
   const path = usePath();
   const annonce = annonceParId(routeAnnonce(path));
   const territoire = territoireParSlug(routeTerritoire(path));
+  const listeSlug = routeAnnonces(path);
 
   return (
     <>
@@ -170,6 +173,8 @@ export default function App() {
         <Publier />
       ) : path === "/estimation" ? (
         <Estimation />
+      ) : listeSlug ? (
+        <AnnoncesListe slug={listeSlug} />
       ) : territoire ? (
         <TerritoireDetail territoire={territoire} />
       ) : (

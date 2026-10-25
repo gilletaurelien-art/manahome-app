@@ -551,3 +551,12 @@ html { background: var(--sand); }
 .est-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin: 0 0 var(--sp-3); }
 .champ-lien { color: var(--primary); text-decoration: underline; }
 .champ-lien:hover { color: var(--or); }
+
+/* ===== Catalogue annonces ===== */
+.annonces-filtres { display: flex; gap: var(--sp-1); flex-wrap: wrap; margin: 0 0 var(--sp-4); }
+.annonces-filtres .btn.on {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary-deep);
+}
+.annonces-filtres .btn { padding: 6px 14px; font-size: var(--t-xs); }

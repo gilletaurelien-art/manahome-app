@@ -35,3 +35,8 @@ export function territoireParSlug(slug: string | null) {
 export function baseUrl(): string {
   return import.meta.env.BASE_URL.replace(/\/$/, "");
 }
+
+export function routeAnnonces(path: string): string | null {
+  const m = path.match(/^\/annonces\/([\w-]+)\/?$/);
+  return m ? m[1] : null;
+}
