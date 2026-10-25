@@ -33,8 +33,10 @@ jobs:
 
       # Pages attend un dossier unique ; on pousse le build Vite complet
       - run: mv site _page
-        # ^ pourquoi : vite.config.ts sort dans site/ pour Caddy ;
-        #   Pages veut la racine du site, pas la convention site/
+
+      # Hack liens profonds : 404.html = copie d'index ; le JS lit l'URL
+      # et rend la bonne page (fiche annonce etc.)
+      - run: cp _page/index.html _page/404.html
 
       - uses: actions/configure-pages@v5
         with:

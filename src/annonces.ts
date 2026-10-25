@@ -8,6 +8,8 @@ export interface Annonce {
   surface?: number;
   pieces?: number;
   dpe?: string;
+  description: string;
+  datePublication: string;
   source: Source;
 }
 
@@ -21,6 +23,9 @@ export const ANNONCES_DEMO: Annonce[] = [
     surface: 98,
     pieces: 4,
     dpe: "C",
+    description:
+      "Maison de ville lumineuse à deux pas du port, jardin clos, cuisine ouverte. Coup de cœur assuré pour la vue sur la rade depuis le séjour.",
+    datePublication: "2026-10-25",
     source: "directe_particulier",
   },
   {
@@ -31,6 +36,9 @@ export const ANNONCES_DEMO: Annonce[] = [
     surface: 62,
     pieces: 3,
     dpe: "D",
+    description:
+      "Appartement en dernier étage avec balcon plein sud, proche des commerces et de la plage de Pen-Hat.",
+    datePublication: "2026-10-25",
     source: "directe_particulier",
   },
   {
@@ -40,6 +48,9 @@ export const ANNONCES_DEMO: Annonce[] = [
     prix: 89000,
     surface: 720,
     dpe: undefined,
+    description:
+      "Terrain viabilisé au calme, en lisière du hameau, idéal maison de famille. Bornage à jour.",
+    datePublication: "2026-10-25",
     source: "directe_particulier",
   },
   {
@@ -50,6 +61,9 @@ export const ANNONCES_DEMO: Annonce[] = [
     surface: 145,
     pieces: 5,
     dpe: "B",
+    description:
+      "[DÉMO] Longère rénovée avec dépendance, panorama mer, à 10 min des plages.",
+    datePublication: "2026-10-24",
     source: "import_pro",
   },
 ];

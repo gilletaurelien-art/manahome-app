@@ -1,4 +1,5 @@
 import type { Annonce } from "./annonces";
+import { baseUrl } from "./router";
 
 // Carte annonce : la vitrine du produit — prix en serif, DPE officiel,
 // badge de source présent mais jamais dominant (règle anti-marketplace).
@@ -6,7 +7,7 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
   const lieu = annonce.lieu;
   return (
     <li className="card">
-      <a href={`/annonce/${annonce.id}`}>
+      <a href={`${baseUrl()}/annonce/${annonce.id}`}>
         <div className="photo" aria-hidden="true">
           photo du bien
         </div>

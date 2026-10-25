@@ -1,4 +1,4 @@
-import { ANNONCES_DEMO, type Annonce } from "./annonces";
+import { ANNONCES_DEMO } from "./annonces";
 import { AnnonceCard } from "./AnnonceCard";
 import {
   GlyphMaison,
@@ -9,6 +9,8 @@ import {
   GlyphPros,
 } from "./Glyphs";
 import { NavAnnonces, NavTerritoire, NavPros, NavPublier } from "./NavGlyphs";
+import { usePath, routeAnnonce, annonceParId, baseUrl } from "./router";
+import { AnnonceDetail } from "./AnnonceDetail";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -59,7 +61,8 @@ const SECTIONS = [
     glyphe: GlyphStructure,
     num: "03",
     titre: "Une annonce prête pour les IA",
-    accroche: "Votre bien ne devrait pas être invisible parce que son annonce est mal structurée.",
+    accroche:
+      "Votre bien ne devrait pas être invisible parce que son annonce est mal structurée.",
     texte:
       "MANA aide à organiser les caractéristiques, préciser les informations utiles et produire une page publique techniquement accessible aux moteurs et assistants compatibles.",
     cta: { label: "Comprendre notre approche", href: "/approche" },
@@ -80,7 +83,10 @@ const SECTIONS = [
     accroche: "Une autre façon de diffuser vos biens.",
     texte:
       "Une porte d'entrée dédiée aux agences et mandataires : diffusion complémentaire, annonces structurées. Sans promesse de classement garanti.",
-    cta: { label: "Découvrir MANAhome pour les professionnels", href: "/pros" },
+    cta: {
+      label: "Découvrir MANAhome pour les professionnels",
+      href: "/pros",
+    },
   },
 ];
 
@@ -102,28 +108,33 @@ const PILIER_IA = [
   },
 ];
 
+const B = baseUrl();
+
 export default function App() {
+  const path = usePath();
+  const annonce = annonceParId(routeAnnonce(path));
+
   return (
     <>
       <header className="site-header">
         <div className="wrap">
-          <a className="brand" href="/">
+          <a className="brand" href={`${B}/`}>
             MANA<em>home</em>
           </a>
           <nav className="nav">
-            <a href="/annonces/crozon">
+            <a href={`${B}/annonces/crozon`}>
               <NavAnnonces />
               <span>Annonces</span>
             </a>
-            <a href="/territoire/crozon">
+            <a href={`${B}/territoire/crozon`}>
               <NavTerritoire />
               <span>Territoire</span>
             </a>
-            <a href="/pros">
+            <a href={`${B}/pros`}>
               <NavPros />
               <span>Professionnels</span>
             </a>
-            <a href="/publier" className="nav-cta">
+            <a href={`${B}/publier`} className="nav-cta">
               <NavPublier />
               <span>Publier — gratuit</span>
             </a>
@@ -131,111 +142,128 @@ export default function App() {
         </div>
       </header>
 
-      {/* Hero : la promesse. « Lu par les IA » n'est pas en titre —
-          la motivation première du vendeur reste de vendre dans de bonnes conditions. */}
-      <section className="hero">
-        <div className="wrap">
-          <p className="hero-label">L'immobilier, autrement</p>
-          <h1 className="brand-grand">
-            MANA<em>home</em>
-          </h1>
-          <p className="lede">
-            Publiez gratuitement. Soyez accompagné. Préparez votre annonce à
-            l'ère des intelligences artificielles.
-          </p>
-          <div className="hero-cta">
-            <a className="btn btn-primary" href="/publier">
-              Je souhaite vendre
-            </a>
-            <a className="btn btn-ghost" href="/annonces/crozon">
-              Je cherche un bien
-            </a>
-          </div>
-          <p className="hero-note">
-            Particuliers : publication gratuite, sans commission de vente
-            prélevée par MANAhome.
-          </p>
-        </div>
-      </section>
-
-      {/* Les trois promesses : carte blanche centrale qui chevauche le hero */}
-      <section className="promesses wrap">
-        <div className="promesse-card">
-          <div className="promesses-grid">
-            {PROMESSES.map((p) => (
-              <div key={p.titre} className="promesse">
-                <span className="glyphe">{(() => { const G = p.glyphe; return <G />; })()}</span>
-                <h3>{p.titre}</h3>
-                <p>{p.texte}</p>
+      {annonce ? (
+        <AnnonceDetail annonce={annonce} />
+      ) : (
+        <>
+          {/* Hero : le logo en grand, la promesse en dessous */}
+          <section className="hero">
+            <div className="wrap">
+              <p className="hero-label">L'immobilier, autrement</p>
+              <h1 className="brand-grand">
+                MANA<em>home</em>
+              </h1>
+              <p className="lede">
+                Publiez gratuitement. Soyez accompagné. Préparez votre annonce
+                à l'ère des intelligences artificielles.
+              </p>
+              <div className="hero-cta">
+                <a className="btn btn-primary" href={`${B}/publier`}>
+                  Je souhaite vendre
+                </a>
+                <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
+                  Je cherche un bien
+                </a>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <main className="wrap">
-        {/* 01 — Catalogue : état « démarrage » assumé, qualité > volume */}
-        <section className="landing-section">
-          <span className="glyphe section-glyphe">{(() => { const G = SECTIONS[0].glyphe; return <G />; })()}</span>
-          <p className="section-num">{SECTIONS[0].num}</p>
-          <h2 className="section-title">{SECTIONS[0].titre}</h2>
-          <p className="section-accroche">{SECTIONS[0].accroche}</p>
-          <p className="section-texte">{SECTIONS[0].texte}</p>
-          <ul className="listings">
-            {triees.map((a: Annonce) => (
-              <AnnonceCard key={a.id} annonce={a} />
-            ))}
-          </ul>
-          <p className="catalogue-note">
-            Pilote Crozon — premières annonces de démonstration. Les annonces
-            réelles arriveront avec les premiers vendeurs.
-          </p>
-        </section>
-
-        {/* 02 → 05 */}
-        {SECTIONS.slice(1).map((s) => (
-          <section key={s.num} className="landing-section">
-            <span className="glyphe section-glyphe">{(() => { const G = s.glyphe; return <G />; })()}</span>
-            <p className="section-num">{s.num}</p>
-            <h2 className="section-title">{s.titre}</h2>
-            <p className="section-accroche">{s.accroche}</p>
-            <p className="section-texte">{s.texte}</p>
-            {s.cta && (
-              <a className="btn btn-ghost" href={s.cta.href}>
-                {s.cta.label}
-              </a>
-            )}
+              <p className="hero-note">
+                Particuliers : publication gratuite, sans commission de vente
+                prélevée par MANAhome.
+              </p>
+            </div>
           </section>
-        ))}
 
-        {/* Promesse IA : section éditoriale avec démonstration, pas un slogan */}
-        <section className="landing-section section-ia">
-          <h2 className="section-title">
-            Demain, on cherchera aussi un logement en parlant à une IA.
-          </h2>
-          <blockquote className="ia-quote">
-            « Je cherche une maison avec jardin, près de la mer, à moins de 15
-            minutes des commerces, dans un secteur calme. »
-          </blockquote>
-          <p className="section-texte">
-            MANAhome structure les informations des annonces pour faciliter
-            leur compréhension par les outils compatibles.
-          </p>
-          <div className="ia-grid">
-            {PILIER_IA.map((b) => (
-              <div key={b.titre} className="ia-bloc">
-                <h3>{b.titre}</h3>
-                <p>{b.texte}</p>
+          {/* Les trois promesses : carte blanche centrale qui chevauche le hero */}
+          <section className="promesses wrap">
+            <div className="promesse-card">
+              <div className="promesses-grid">
+                {PROMESSES.map((p) => {
+                  const G = p.glyphe;
+                  return (
+                    <div key={p.titre} className="promesse">
+                      <span className="glyphe">
+                        <G />
+                      </span>
+                      <h3>{p.titre}</h3>
+                      <p>{p.texte}</p>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-          <p className="ia-disclaimer">
-            La structuration améliore les chances de compréhension et de
-            découverte ; elle ne garantit pas qu'un assistant IA indexera,
-            recommandera ou citera une annonce.
-          </p>
-        </section>
-      </main>
+            </div>
+          </section>
+
+          <main className="wrap">
+            {/* 01 — Catalogue : état « démarrage » assumé, qualité > volume */}
+            <section className="landing-section">
+              <span className="glyphe section-glyphe">
+                <GlyphCompas />
+              </span>
+              <p className="section-num">{SECTIONS[0].num}</p>
+              <h2 className="section-title">{SECTIONS[0].titre}</h2>
+              <p className="section-accroche">{SECTIONS[0].accroche}</p>
+              <p className="section-texte">{SECTIONS[0].texte}</p>
+              <ul className="listings">
+                {triees.map((a) => (
+                  <AnnonceCard key={a.id} annonce={a} />
+                ))}
+              </ul>
+              <p className="catalogue-note">
+                Pilote Crozon — annonces de démonstration. Les annonces
+                réelles arriveront avec les premiers vendeurs.
+              </p>
+            </section>
+
+            {/* 02 → 05 */}
+            {SECTIONS.slice(1).map((s) => {
+              const G = s.glyphe;
+              return (
+                <section key={s.num} className="landing-section alt">
+                  <span className="glyphe section-glyphe">
+                    <G />
+                  </span>
+                  <p className="section-num">{s.num}</p>
+                  <h2 className="section-title">{s.titre}</h2>
+                  <p className="section-accroche">{s.accroche}</p>
+                  <p className="section-texte">{s.texte}</p>
+                  {s.cta && (
+                    <a className="btn btn-ghost" href={`${B}${s.cta.href}`}>
+                      {s.cta.label}
+                    </a>
+                  )}
+                </section>
+              );
+            })}
+
+            {/* Promesse IA : section éditoriale avec démonstration, pas un slogan */}
+            <section className="landing-section section-ia">
+              <h2 className="section-title">
+                Demain, on cherchera aussi un logement en parlant à une IA.
+              </h2>
+              <blockquote className="ia-quote">
+                « Je cherche une maison avec jardin, près de la mer, à moins de
+                15 minutes des commerces, dans un secteur calme. »
+              </blockquote>
+              <p className="section-texte">
+                MANAhome structure les informations des annonces pour faciliter
+                leur compréhension par les outils compatibles.
+              </p>
+              <div className="ia-grid">
+                {PILIER_IA.map((b) => (
+                  <div key={b.titre} className="ia-bloc">
+                    <h3>{b.titre}</h3>
+                    <p>{b.texte}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="ia-disclaimer">
+                La structuration améliore les chances de compréhension et de
+                découverte ; elle ne garantit pas qu'un assistant IA indexera,
+                recommandera ou citera une annonce.
+              </p>
+            </section>
+          </main>
+        </>
+      )}
 
       <footer className="site-footer">
         <div className="wrap">
