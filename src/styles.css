@@ -4,15 +4,15 @@
 
 :root {
   /* Palette : bleu nuit + blanc chaud + touche dorée */
-  --ink: #1b2a4a;
-  --primary: #1e3a5f;
-  --primary-deep: #142942;
+  --ink: #2c2f21;
+  --primary: #4a4d33;
+  --primary-deep: #35381f;
   --sand: #faf8f3;
   --blanc-chaud: #ffffff;
   --ecume: #e9e5dc;
   --or: #c9a227;
   --alerte: #b0413e;
-  --shadow: 0 4px 32px rgb(20 41 66 / 10%);
+  --shadow: 0 4px 32px rgb(44 47 33 / 10%);
 
   /* Échelle typographique stricte (rem) */
   --t-xs: 0.875rem;
@@ -250,7 +250,7 @@ body {
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-deep); }
 .btn-ghost { color: var(--primary); }
-.btn-ghost:hover { background: rgb(30 58 95 / 8%); }
+.btn-ghost:hover { background: rgb(74 77 51 / 8%); }
 
 /* ===== Pilier IA : éditorial ===== */
 .ia-quote {
