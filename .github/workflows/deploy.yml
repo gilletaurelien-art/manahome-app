@@ -37,6 +37,8 @@ jobs:
         #   Pages veut la racine du site, pas la convention site/
 
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
