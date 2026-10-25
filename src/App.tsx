@@ -310,8 +310,39 @@ export default function App() {
       )}
 
       <footer className="site-footer">
-        <div className="wrap">
-          <p>MANAhome — gratuit, accompagné, lisible par les IA.</p>
+        <div className="wrap footer-colonnes">
+          <div>
+            <p className="brand">
+              MANA<em>home</em>
+            </p>
+            <p className="footer-note">
+              Portail immobilier territorial — pilote Crozon, presqu'île du
+              Finistère. Gratuit, accompagné, lisible par les IA.
+            </p>
+          </div>
+          <nav className="footer-nav" aria-label="Pied de page">
+            <a href={`${B}/annonces/crozon`}>Annonces</a>
+            <a href={`${B}/estimation`}>Estimation indicative</a>
+            <a href={`${B}/territoire/crozon`}>Territoire</a>
+            <a href={`${B}/publier`}>Publier — gratuit</a>
+            <a href={`${B}/approche`}>Notre approche</a>
+            <a href={`${B}/pros`}>Professionnels</a>
+          </nav>
+        </div>
+        <div className="wrap footer-bas">
+          <p>
+            MANAhome ne réalise aucun acte réglementé (loi Hoguet) : pas de
+            mandat, pas de négociation, pas de transaction. Estimations
+            indicatives, sans valeur contractuelle.
+          </p>
+          <p>
+            Écosystème MANA —{" "}
+            <a href="https://mana.bzh" rel="noopener">mana.bzh</a>
+            {" · "}
+            <a href="https://mana.love" rel="noopener">mana.love</a>
+            {" · "}
+            <a href="https://manafrance.org" rel="noopener">manafrance.org</a>
+          </p>
         </div>
       </footer>
     </>

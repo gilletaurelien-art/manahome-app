@@ -560,3 +560,35 @@ html { background: var(--sand); }
   border-color: var(--primary-deep);
 }
 .annonces-filtres .btn { padding: 6px 14px; font-size: var(--t-xs); }
+
+/* ===== Footer ===== */
+.site-footer { opacity: 1; }
+.footer-colonnes {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  flex-wrap: wrap;
+  padding-bottom: var(--sp-4);
+}
+.footer-colonnes .brand { font-size: var(--t-m); margin: 0 0 var(--sp-1); }
+.footer-note { max-width: 44ch; margin: 0; }
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.footer-nav a { color: var(--ink); text-decoration: none; }
+.footer-nav a:hover { color: var(--or); text-decoration: underline; }
+.footer-bas {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  border-top: 1px solid var(--ecume);
+  padding-top: var(--sp-2);
+  font-size: var(--t-xs);
+  opacity: 0.65;
+}
+.footer-bas p { margin: 0; max-width: 60ch; }
+.footer-bas a { color: var(--ink); }
+.footer-bas a:hover { color: var(--or); }

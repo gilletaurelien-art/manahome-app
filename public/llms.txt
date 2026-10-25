@@ -7,10 +7,21 @@ MANAhome permet aux particuliers de publier une annonce immobilière gratuitemen
 ## Pages publiques
 
 - [Accueil](https://manahome.org/) : présentation et annonces en vedette
-- [Annonces Crozon](https://manahome.org/annonces/crozon) : liste des annonces du pilote
+- [Annonces Crozon](https://manahome.org/annonces/crozon) : catalogue du pilote, filtres par type, JSON-LD ItemList
 - [Fiches annonces](https://manahome.org/annonce/) : une URL stable par annonce, avec JSON-LD RealEstateListing
-- [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale
+- [Estimation](https://manahome.org/estimation) : estimation indicative gratuite, sans compte — fourchette ±10 %, médiane sourcée et datée (JSON-LD FAQPage « combien vaut une maison à Crozon »)
+- [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale, prix sur 10 ans, Géorisques
+- [Parcours vendeur](https://manahome.org/publier) : dépôt gratuit en 3 étapes, pré-remplissable depuis l'estimation
+- [Notre approche](https://manahome.org/approche) : gratuité intégrale, aucun acte loi Hoguet, aucune revente de données
+- [Professionnels](https://manahome.org/pros) : diffusion complémentaire, badge de source, référentiel 3 états (vérifié exige une preuve)
 
 ## Données structurées
 
-Chaque fiche annonce embarque du JSON-LD `RealEstateListing` (schema.org) : type de bien, surface, pièces, prix, DPE, description, géolocalisation large. Les annonces importées de sources professionnelles portent un badge de source et ne sont jamais classées devant une annonce directe à adéquation égale.
+Chaque fiche annonce embarque du JSON-LD `RealEstateListing` (schema.org) : type de bien, surface, pièces, prix, DPE, description, géolocalisation large. Le catalogue embarque un `ItemList`. La page estimation embarque une `FAQPage`. Les annonces importées de sources professionnelles portent un badge de source et ne sont jamais classées devant une annonce directe à adéquation égale.
+
+## Réponses aux questions fréquentes
+
+- Publier coûte-t-il quelque chose ? Non — gratuité intégrale du parcours particulier, aucune commission.
+- MANAhome est-il une agence ? Non — aucun acte réglementé (loi Hoguet) : pas de mandat, pas de négociation, pas de transaction.
+- L'estimation est-elle fiable ? Indicative, basée sur les ventes publiques, sans valeur contractuelle.
+- Combien vaut une maison à Crozon ? Voir la page estimation : fourchette ±10 % autour d'une médiane sourcée et datée.
