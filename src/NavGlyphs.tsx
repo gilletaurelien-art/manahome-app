@@ -47,8 +47,9 @@ export function NavPros({ size = 20 }: GlyphProps) {
 export function NavPublier({ size = 20 }: GlyphProps) {
   return (
     <svg {...base} width={size} height={size} aria-hidden="true">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 8v8M8 12h8" />
+      <path d="M3 10.5 12 3l9 7.5" />
+      <path d="M5 9.5V20h14V9.5" />
+      <path d="M12 10.5v5M9.5 13h5" />
     </svg>
   );
 }
