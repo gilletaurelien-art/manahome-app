@@ -614,7 +614,25 @@ html { background: var(--sand); }
 .territoire-texte { margin: 0; line-height: 1.7; }
 .territoire-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-4); max-width: 60ch; }
 
-.site-footer { border-top: 1px solid var(--or); padding: var(--sp-6) 0; font-size: var(--t-xs); opacity: 0.65; }
+/* Footer bulle : posé sur la photo fixe, lisible partout */
+.site-footer {
+  border-top: none;
+  padding: var(--sp-4) 0 var(--sp-6);
+  font-size: var(--t-xs);
+  opacity: 1;
+}
+.site-footer > .wrap {
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--ecume);
+  border-radius: 28px 36px 24px 32px;
+  box-shadow:
+    0 2px 6px rgb(27 42 74 / 6%),
+    0 24px 56px rgb(27 42 74 / 14%);
+  padding: var(--sp-4) var(--sp-6);
+}
+@media (max-width: 720px) {
+  .site-footer > .wrap { padding: var(--sp-4); border-radius: 20px 28px 18px 26px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
@@ -657,9 +675,17 @@ html { background: var(--sand); }
 .footer-colonnes {
   display: flex;
   justify-content: space-between;
-  gap: var(--sp-6);
+  gap: var(--sp-4);
   flex-wrap: wrap;
   padding-bottom: var(--sp-4);
+  color: var(--ink);
+}
+.footer-colonnes > div,
+.footer-colonnes .footer-nav {
+  background: rgb(250 248 243 / 70%);
+  border: 1px solid var(--ecume);
+  border-radius: 18px 24px 16px 20px;
+  padding: var(--sp-2) var(--sp-4);
 }
 .footer-colonnes .brand { font-size: var(--t-m); margin: 0 0 var(--sp-1); }
 .footer-note { max-width: 44ch; margin: 0; }
