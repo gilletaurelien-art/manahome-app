@@ -11,8 +11,14 @@ RETURNS void LANGUAGE sql AS $$
     jsonb_build_object(
       'chiffres', jsonb_build_object(
         'habitants', g.population::text,
-        'commerces', NULL,
-        'associations', NULL
+        'commerces', (
+          SELECT c.commerces::text FROM import_comptages c
+          WHERE c.code_insee = g.code_insee
+        ),
+        'associations', (
+          SELECT c.associations::text FROM import_comptages c
+          WHERE c.code_insee = g.code_insee
+        )
       ),
       'intercommunalite', g.nom_epci,
       'georisk', (
@@ -42,6 +48,5 @@ RETURNS void LANGUAGE sql AS $$
         nom = EXCLUDED.nom;
 $$;
 
--- Le comptage commerces/associations viendra de la consolidation SIRENE
--- (catégories NAF 47.x/55.x/56.x pour commerces, association=true pour
--- assos) — branchée quand l'import SIRENE du référentiel pros tournera.
+-- Comptages commerces/associations : branchés sur import_comptages
+-- (migration 006, alimentée par moissons/pros.py).

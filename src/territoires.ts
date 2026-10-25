@@ -61,10 +61,12 @@ export const TERRITOIRES: Territoire[] = [
       url: "https://www.georisques.gouv.fr/mes-risques/connaitre-mes-risques/commune/29160",
     },
     chiffres: {
-      // Population officielle : geo.api.gouv.fr (INSEE), code 29042
+      // Population : geo.api.gouv.fr (INSEE) · commerces/services (NAF
+      // 47.x/55.x/56.x actifs) et associations : annuaire officiel des
+      // entreprises — compteurs réels du 25/10/2026
       habitants: "7 499",
-      commerces: "180+",
-      associations: "120+",
+      commerces: "301",
+      associations: "192",
     },
     parcsNaturels:
       "Au cœur du Parc naturel régional d'Armorique (PNRA) : le cap de la Chèvre et la pointe de Pen-Hir classés en espace remarquable, les dunes de Camaret et l'anse de Dinan protégées par le Conservatoire du littoral.",
