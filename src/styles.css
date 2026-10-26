@@ -109,18 +109,18 @@ html { background: var(--sand); }
 }
 .brand em { color: var(--or); font-style: normal; }
 /* Nav : icône AU-DESSUS du libellé (desktop/tablette), empilées */
-.nav { display: flex; gap: var(--sp-4); align-items: flex-end; }
+.nav { display: flex; gap: var(--sp-1); align-items: center; }
 .nav a {
   color: var(--ink);
   text-decoration: none;
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
   font-size: var(--t-xs);
   text-align: center;
   white-space: nowrap;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
   border: 1px solid transparent;
   transition: box-shadow 160ms ease, transform 160ms ease, border-color 160ms ease;
