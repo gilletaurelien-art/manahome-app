@@ -290,8 +290,8 @@ export default function App() {
                     autoComplete="off"
                     placeholder={
                       moteurCategorie === "acheter" || moteurCategorie === "louer"
-                        ? "Commune ou code postal — ex : Crozon, 29160"
-                        : "Commune, métier ou besoin — ex : plombier, Crozon"
+                        ? "Commune ou code postal"
+                        : "Commune, métier ou besoin"
                     }
                     value={moteurLieu}
                     onChange={(e) => setMoteurLieu(e.target.value)}

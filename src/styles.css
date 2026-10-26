@@ -1023,11 +1023,10 @@ html { background: var(--sand); }
 }
 
 @media (max-width: 720px) {
-  .moteur-barre { flex-wrap: wrap; border-radius: 28px; padding: 10px; }
+  .moteur-barre { flex-wrap: nowrap; border-radius: 999px; padding: 6px; }
   .moteur-loupe { display: none; }
-  .moteur-barre input { flex: 1 1 100%; border-bottom: 1px solid var(--ecume); border-radius: 0; padding: 12px 8px; }
-  .moteur-barre select { flex: 1 1 50%; }
-  .moteur-bouton { flex: 1 1 100%; }
+  .moteur-barre input { flex: 1 1 auto; min-width: 0; font-size: var(--t-s); padding: 10px 10px; border: none; }
+  .moteur-fleche { width: 44px; height: 44px; flex: 0 0 44px; }
 }
 
 /* Panneau de recherche du catalogue */
