@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { ANNONCES_DEMO } from "./annonces";
-import { annoncesPublieesLocales, annonceLocaleParId, enAnnonce } from "./annoncesLocales";
-import { AnnonceCard } from "./AnnonceCard";
+import { annonceLocaleParId, enAnnonce } from "./annoncesLocales";
 import {
   GlyphMaison,
   GlyphCompas,
@@ -39,12 +37,6 @@ import { MesAnnonces } from "./MesAnnonces";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
-const directes = [
-  ...annoncesPublieesLocales().map(enAnnonce),
-  ...ANNONCES_DEMO.filter((a) => a.source === "directe_particulier"),
-];
-const importees = ANNONCES_DEMO.filter((a) => a.source === "import_pro");
-const triees = [...directes, ...importees];
 
 const PROMESSES = [
   {
@@ -72,9 +64,9 @@ const SECTIONS = [
     glyphe: GlyphCompas,
     num: "01",
     titre: "Découvrez les biens",
-    accroche: "Les annonces disponibles près de chez vous",
+    accroche: "Vente et location, près de chez vous",
     texte:
-      "Un accès direct aux biens, sans obliger le visiteur à créer un compte. En démarrage de pilote, nous assumons un catalogue volontairement restreint et soigné.",
+      "Un accès direct aux biens, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête.",
   },
   {
     glyphe: GlyphAccompagnement,
@@ -328,20 +320,16 @@ export default function App() {
           </section>
 
           <main className="wrap">
-            {/* 01 — Catalogue : état « démarrage » assumé, qualité > volume */}
+            {/* 01 — Catalogue : bulle courte, les résultats vivent dans la recherche */}
             <section className="landing-section bulle">
               <h2 className="section-title">{SECTIONS[0].titre}</h2>
               <p className="section-accroche">{SECTIONS[0].accroche}</p>
               <p className="section-texte">{SECTIONS[0].texte}</p>
-              <ul className="listings">
-                {triees.map((a) => (
-                  <AnnonceCard key={a.id} annonce={a} />
-                ))}
-              </ul>
-              <p className="catalogue-note">
-                Pilote Crozon — annonces de démonstration. Les annonces
-                réelles arriveront avec les premiers vendeurs.
-              </p>
+              <div className="est-actions">
+                <a className="btn btn-primary" href={`${B}/annonces/crozon`}>
+                  Parcourir le catalogue du pilote
+                </a>
+              </div>
             </section>
 
             {/* 02 → 05 */}
