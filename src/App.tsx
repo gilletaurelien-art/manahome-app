@@ -205,7 +205,7 @@ export default function App() {
         <>
           {/* Hero : le logo en grand, la promesse en dessous */}
           <section className="hero">
-            <div className="wrap">
+            <div className="wrap bulle-xl">
               <p className="hero-label">L'immobilier, autrement</p>
               <h1 className="brand-grand">
                 MANA<em>home</em>
