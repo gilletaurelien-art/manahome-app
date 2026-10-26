@@ -1117,3 +1117,32 @@ html { background: var(--sand); }
   padding: 8px 14px 2px;
   list-style: none;
 }
+
+/* Bouton Services : menu déroulant des catégories de l'habitat */
+.moteur-services-wrap { position: relative; }
+.moteur-services-wrap .chevron { margin-left: 6px; font-size: 10px; }
+.moteur-services-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 260px;
+  z-index: 6;
+  text-align: left;
+  margin: 0;
+}
+.moteur-services-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 9px 14px;
+  border-radius: 12px;
+  font: inherit;
+  font-size: var(--t-s);
+  color: var(--ink);
+  cursor: pointer;
+}
+.moteur-services-menu button:hover { background: var(--sand); color: var(--primary); }
+.moteur-services-menu li[aria-selected="true"] button { color: var(--primary); font-weight: 700; }

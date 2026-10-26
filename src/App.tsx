@@ -122,9 +122,20 @@ const SECTIONS = [
 const MOTEUR_CATEGORIES = [
   { v: "acheter", l: "Acheter" },
   { v: "louer", l: "Louer" },
-  { v: "pro", l: "Agence" },
-  { v: "notaire", l: "Notaire" },
   { v: "service", l: "Services" },
+];
+
+// Sous le bouton Services : tout ce qui fait vivre l'habitat —
+// l'immobilier pro ET les services à la personne autour du logement.
+const SERVICES_CATEGORIES_MOTEUR = [
+  { v: "pro", l: "Agence immobilière / mandataire" },
+  { v: "notaire", l: "Notaire" },
+  { v: "reparation", l: "Réparation & travaux" },
+  { v: "menage", l: "Ménage & nettoyage" },
+  { v: "jardinage", l: "Jardin & extérieur" },
+  { v: "garde", l: "Garde de logement" },
+  { v: "diagnostic", l: "Diagnostics & expertise" },
+  { v: "autonomie", l: "Autonomie & adaptation" },
 ];
 
 const B = baseUrl();
@@ -132,6 +143,7 @@ const B = baseUrl();
 export default function App() {
   const path = usePath();
   const [moteurCategorie, setMoteurCategorie] = useState("acheter");
+  const [servicesOuvert, setServicesOuvert] = useState(false);
   const [moteurLieu, setMoteurLieu] = useState("");
   const [moteurRayon, setMoteurRayon] = useState("10");
 
@@ -226,17 +238,49 @@ export default function App() {
               </p>
               <div className="moteur">
                 <div className="moteur-categories" role="group" aria-label="Je cherche">
-                  {MOTEUR_CATEGORIES.map((c) => (
-                    <button
-                      key={c.v}
-                      type="button"
-                      className={`moteur-categorie-btn ${moteurCategorie === c.v ? "on" : ""}`}
-                      aria-pressed={moteurCategorie === c.v}
-                      onClick={() => setMoteurCategorie(c.v)}
-                    >
-                      {c.l}
-                    </button>
-                  ))}
+                  {MOTEUR_CATEGORIES.map((c) =>
+                    c.v === "service" ? (
+                      <div key={c.v} className="moteur-services-wrap">
+                        <button
+                          type="button"
+                          className={`moteur-categorie-btn ${servicesOuvert || (moteurCategorie !== "acheter" && moteurCategorie !== "louer") ? "on" : ""}`}
+                          aria-expanded={servicesOuvert}
+                          aria-haspopup="listbox"
+                          onClick={() => setServicesOuvert((o) => !o)}
+                        >
+                          {SERVICES_CATEGORIES_MOTEUR.find((sv) => sv.v === moteurCategorie)?.l ?? c.l}
+                          <span className="chevron" aria-hidden="true">▾</span>
+                        </button>
+                        {servicesOuvert && (
+                          <ul className="suggestions moteur-services-menu" role="listbox">
+                            {SERVICES_CATEGORIES_MOTEUR.map((sv) => (
+                              <li key={sv.v} role="option" aria-selected={moteurCategorie === sv.v}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setMoteurCategorie(sv.v);
+                                    setServicesOuvert(false);
+                                  }}
+                                >
+                                  {sv.l}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ) : (
+                      <button
+                        key={c.v}
+                        type="button"
+                        className={`moteur-categorie-btn ${moteurCategorie === c.v ? "on" : ""}`}
+                        aria-pressed={moteurCategorie === c.v}
+                        onClick={() => setMoteurCategorie(c.v)}
+                      >
+                        {c.l}
+                      </button>
+                    )
+                  )}
                 </div>
 
                 <div className="moteur-barre">
