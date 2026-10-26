@@ -1,20 +1,17 @@
 import { useState } from "react";
 import { annonceLocaleParId, enAnnonce } from "./annoncesLocales";
 import {
-  GlyphMaison,
   GlyphCompas,
   GlyphStructure,
   GlyphAccompagnement,
   GlyphTerritoire,
-  GlyphPros,
-} from "./Glyphs";
+  GlyphPros } from "./Glyphs";
 import {
   NavAnnonces,
   NavTerritoire,
   NavPros,
   NavPublier,
-  NavEstimation,
-} from "./NavGlyphs";
+  NavEstimation } from "./NavGlyphs";
 import {
   usePath,
   routeAnnonce,
@@ -22,8 +19,7 @@ import {
   routeTerritoire,
   territoireParSlug,
   routeAnnonces,
-  baseUrl,
-} from "./router";
+  baseUrl } from "./router";
 import { AnnonceDetail } from "./AnnonceDetail";
 import { TerritoireDetail } from "./TerritoireDetail";
 import { Publier } from "./Publier";
@@ -38,27 +34,6 @@ import { MesAnnonces } from "./MesAnnonces";
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
 
-const PROMESSES = [
-  {
-    glyphe: GlyphMaison,
-    titre: "Gratuit, pour tous",
-    texte:
-      "Vendre, louer, trouver un service : aucun frais caché, aucune commission prélevée par MANAhome.",
-  },
-  {
-    glyphe: GlyphAccompagnement,
-    titre: "Accompagné à chaque étape",
-    texte:
-      "Estimation indicative, annonce structurée, documents : vous avancez sans être seul.",
-  },
-  {
-    glyphe: GlyphStructure,
-    titre: "Lisible par les IA",
-    texte:
-      "Des fiches structurées, prêtes pour une nouvelle manière de chercher un logement.",
-  },
-];
-
 const SECTIONS = [
   {
     glyphe: GlyphCompas,
@@ -66,8 +41,7 @@ const SECTIONS = [
     titre: "Découvrez les biens",
     accroche: "Vente et location, près de chez vous",
     texte:
-      "Un accès direct aux biens, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête.",
-  },
+      "Un accès direct aux biens, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête." },
   {
     glyphe: GlyphAccompagnement,
     num: "02",
@@ -76,8 +50,7 @@ const SECTIONS = [
     texte:
       "Estimation indicative, préparation de l'annonce, documents à prévoir, compréhension du prix ou du loyer : le particulier reste maître de son projet.",
     cta: { label: "Publier mon annonce", href: "/publier" },
-    cta2: { label: "Estimer mon bien", href: "/estimation" },
-  },
+    cta2: { label: "Estimer mon bien", href: "/estimation" } },
   {
     glyphe: GlyphStructure,
     num: "03",
@@ -85,8 +58,7 @@ const SECTIONS = [
     accroche: "Votre bien mérite d'être trouvé, pas noyé.",
     texte:
       "Caractéristiques organisées, informations utiles, page publique accessible aux moteurs et assistants compatibles.",
-    cta: { label: "Comprendre notre approche", href: "/approche" },
-  },
+    cta: { label: "Comprendre notre approche", href: "/approche" } },
   {
     glyphe: GlyphTerritoire,
     num: "04",
@@ -94,8 +66,7 @@ const SECTIONS = [
     accroche: "Le bien compte. La vie autour aussi.",
     texte:
       "Transports, commerces, écoles, services, nature : le territoire présenté honnêtement, avec des informations vérifiées lorsque c'est possible.",
-    cta: { label: "Découvrir le territoire de Crozon", href: "/territoire/crozon" },
-  },
+    cta: { label: "Découvrir le territoire de Crozon", href: "/territoire/crozon" } },
   {
     glyphe: GlyphPros,
     num: "05",
@@ -105,9 +76,7 @@ const SECTIONS = [
       "Agences, notaires, réparateurs, diagnostics : un seul référentiel, factuel, sans recommandation.",
     cta: {
       label: "Découvrir les pros & services du territoire",
-      href: "/pros",
-    },
-  },
+      href: "/pros" } },
 ];
 
 const MOTEUR_CATEGORIES = [
@@ -305,19 +274,6 @@ export default function App() {
             </div>
           </section>
 
-          {/* Les trois promesses : carte blanche centrale qui chevauche le hero */}
-          <section className="promesses wrap">
-            <div className="promesse-card">
-              <div className="promesses-grid">
-                {PROMESSES.map((p) => (
-                  <div key={p.titre} className="promesse">
-                    <h3>{p.titre}</h3>
-                    <p>{p.texte}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
 
           <main className="wrap">
             {/* 01 — Catalogue : bulle courte, les résultats vivent dans la recherche */}
