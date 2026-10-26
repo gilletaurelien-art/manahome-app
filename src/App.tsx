@@ -35,7 +35,6 @@ import { Pros } from "./Pros";
 import { Messagerie } from "./Messagerie";
 import { EspacePro } from "./EspacePro";
 import { MesAnnonces } from "./MesAnnonces";
-import { Services } from "./Services";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -108,12 +107,12 @@ const SECTIONS = [
   {
     glyphe: GlyphPros,
     num: "05",
-    titre: "Pour les professionnels",
-    accroche: "Une autre façon de diffuser vos biens.",
+    titre: "Professionnels & services de l'habitat",
+    accroche: "Ceux qui vendent, louent… et ceux qui prennent soin des logements.",
     texte:
-      "Une porte d'entrée dédiée aux agences et mandataires : diffusion complémentaire, annonces structurées. Sans promesse de classement garanti.",
+      "Agences et mandataires diffusent leurs biens ; réparateurs, ménage, jardins, diagnostics s'occupent de l'habitat. Un seul référentiel, factuel, sans recommandation.",
     cta: {
-      label: "Découvrir MANAhome pour les professionnels",
+      label: "Découvrir les pros & services du territoire",
       href: "/pros",
     },
   },
@@ -154,11 +153,7 @@ export default function App() {
             </a>
             <a href={`${B}/pros`}>
               <NavPros />
-              <span>Professionnels</span>
-            </a>
-            <a href={`${B}/services`}>
-              <GlyphAccompagnement size={20} />
-              <span>Services</span>
+              <span>Pros &amp; services</span>
             </a>
             <a href={`${B}/publier`} className="nav-cta">
               <NavPublier />
@@ -187,7 +182,7 @@ export default function App() {
       ) : path === "/mes-annonces" ? (
         <MesAnnonces />
       ) : path === "/services" ? (
-        <Services />
+        window.location.replace(`${baseUrl()}/pros`)
       ) : territoire ? (
         <TerritoireDetail territoire={territoire} />
       ) : (
@@ -293,10 +288,9 @@ export default function App() {
             <a href={`${B}/territoire/crozon`}>Territoire</a>
             <a href={`${B}/publier`}>Publier — gratuit</a>
             <a href={`${B}/approche`}>Notre approche</a>
-            <a href={`${B}/pros`}>Professionnels</a>
+            <a href={`${B}/pros`}>Professionnels & services de l'habitat</a>
             <a href={`${B}/espace-pro`}>Rejoindre le référentiel</a>
             <a href={`${B}/messagerie`}>Ma messagerie</a>
-            <a href={`${B}/services`}>Services à l'habitat</a>
             <a href={`${B}/mes-annonces`}>Mes annonces</a>
           </nav>
         </div>

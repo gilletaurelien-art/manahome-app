@@ -1,8 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { baseUrl } from "./router";
 import { PROS } from "./pros";
+import {
+  CATEGORIES_SERVICE,
+  SERVICES_DEMO,
+  CategorieService,
+} from "./servicesHabitat";
 
-// Page /pros — présentation publique de la porte d'entrée professionnelle.
+// Page /pros — la porte professionnelle ET les services à l'habitat :
+// vendre, louer, réparer, entretenir — un seul référentiel de l'habitat.
 // Volontairement sans espace ni abonnement (non tranché). Règle gravée :
 // « vérifié » exige une preuve ; aucun acte loi Hoguet.
 
@@ -25,8 +31,10 @@ const ETATS = [
 ];
 
 export function Pros() {
+  const [categorie, setCategorie] = useState<CategorieService | "tous">("tous");
+
   useEffect(() => {
-    document.title = "Pour les professionnels — MANAhome";
+    document.title = "Professionnels & services de l'habitat — MANAhome";
     return () => {
       document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
     };
@@ -37,14 +45,15 @@ export function Pros() {
   return (
     <main className="publier">
       <div className="wrap">
-        <p className="hero-label">Professionnels</p>
+        <p className="hero-label">Professionnels & services</p>
         <h1 className="fiche-titre">
-          Une autre façon de diffuser vos biens
+          Tous ceux qui font vivre l'habitat du territoire
         </h1>
         <p className="territoire-intro">
-          MANAhome ouvre aux agences et mandataires une diffusion complémentaire,
-          structurée, sur un territoire pilote. Sans promesse de classement
-          garanti — et sans vendre vos données.
+          Agences et mandataires diffusent leurs biens ; réparateurs, aides
+          à domicile, diagnostiqueurs et autres services prennent soin des
+          logements. Un seul référentiel, une même règle : référencement
+          factuel, aucune recommandation, aucune donnée revendue.
         </p>
 
         <div className="ia-grid">
@@ -72,6 +81,54 @@ export function Pros() {
             </p>
           </div>
         </div>
+
+        <section className="publier-panel">
+          <p className="apercu-label">Services à l'habitat — prendre soin du logement</p>
+          <p className="territoire-intro">
+            Propriétaire ou locataire : trouver qui peut réparer, entretenir,
+            garder ou adapter un logement.
+          </p>
+          <div className="annonces-filtres" role="group" aria-label="Filtrer les services">
+            <button
+              type="button"
+              className={`btn btn-ghost ${categorie === "tous" ? "on" : ""}`}
+              aria-pressed={categorie === "tous"}
+              onClick={() => setCategorie("tous")}
+            >
+              Tous
+            </button>
+            {CATEGORIES_SERVICE.map((c) => (
+              <button
+                key={c.v}
+                type="button"
+                className={`btn btn-ghost ${categorie === c.v ? "on" : ""}`}
+                aria-pressed={categorie === c.v}
+                onClick={() => setCategorie(c.v)}
+              >
+                {c.l}
+              </button>
+            ))}
+          </div>
+          <div className="ia-grid">
+            {(categorie === "tous"
+              ? SERVICES_DEMO
+              : SERVICES_DEMO.filter((sv) => sv.categorie === categorie)
+            ).map((sv) => (
+              <div key={sv.id} className="ia-bloc">
+                <h3>{sv.nom}</h3>
+                <p>
+                  {sv.commune}
+                  <br />
+                  {sv.resume}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="ia-disclaimer">
+            Services de démonstration — le référencement réel des pros de
+            l'habitat se fait via l'inscription ci-dessous.
+          </p>
+        </section>
 
         <section className="publier-panel">
           <p className="apercu-label">Les pros et notaires du pilote Crozon</p>
