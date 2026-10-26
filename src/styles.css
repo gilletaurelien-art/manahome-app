@@ -78,8 +78,8 @@ html { background: var(--sand); }
   border: 1px solid var(--ecume);
   border-radius: 999px;
   box-shadow:
-    0 2px 6px rgb(27 42 74 / 8%),
-    0 14px 36px rgb(27 42 74 / 12%);
+    0 4px 12px rgb(27 42 74 / 10%),
+    0 36px 80px rgb(27 42 74 / 26%);
   padding: var(--sp-1) var(--sp-4);
   max-width: 1080px;
   width: fit-content;
@@ -165,7 +165,7 @@ html { background: var(--sand); }
 }
 .hero .wrap {
   position: relative;
-  max-width: 720px;
+  max-width: 860px;
 }
 .hero-label {
   font-size: var(--t-xs);
@@ -195,37 +195,44 @@ html { background: var(--sand); }
 .hero-cta { display: flex; gap: var(--sp-2); flex-wrap: wrap; justify-content: center; margin: 0 0 var(--sp-2); }
 .hero-note { font-size: var(--t-xs); opacity: 0.6; margin: 0; }
 
-/* ===== Systeme bulle : une bulle = un groupe de sens =====
-   Trois tailles, un meme langage : blanc chaud translucide,
-   bordure ecume, coins organiques legerement asymetriques,
-   ombre double (contact + halo de levitation).
-   - bulle-xl : hero (et blur admis seulement ici, disparu sinon)
-   - bulle    : une section entiere, un bloc promesse, un bloc IA
-   - bulle-sm : elements isoles (CTA seuls, notes)
-   Le contenu d'une bulle est centre, le texte long garde sa mesure. */
+/* ===== Systeme bulle : UNE seule bulle, identique partout =====
+   Meme fond, meme rayons, meme ombre marque, du hero au footer.
+   Largeur : jamais plus large que le header (max 1080px), et les
+   bulles de contenu partagent une largeur commune de 860px. */
 .bulle,
 .bulle-xl,
 .bulle-sm {
-  background: rgb(255 255 255 / 88%);
+  background: rgb(255 255 255 / 90%);
   border: 1px solid var(--ecume);
+  border-radius: 28px 40px 24px 36px;
   box-shadow:
-    0 2px 6px rgb(27 42 74 / 6%),
-    0 24px 56px rgb(27 42 74 / 14%);
+    0 4px 12px rgb(27 42 74 / 10%),
+    0 36px 80px rgb(27 42 74 / 26%);
+  padding: var(--sp-6);
   text-align: center;
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.bulle-xl { border-radius: 64px 84px 56px 76px; padding: var(--sp-6); }
-.bulle    { border-radius: 32px 44px 28px 40px; padding: var(--sp-6); }
-.bulle-sm {
-  border-radius: 18px 24px 16px 22px;
-  padding: var(--sp-1) var(--sp-4);
+.promesse,
+.ia-bloc {
+  background: rgb(255 255 255 / 90%);
+  border: 1px solid var(--ecume);
+  border-radius: 28px 40px 24px 36px;
   box-shadow:
-    0 2px 6px rgb(27 42 74 / 5%),
-    0 12px 28px rgb(27 42 74 / 10%);
+    0 4px 12px rgb(27 42 74 / 10%),
+    0 36px 80px rgb(27 42 74 / 26%);
+  padding: var(--sp-4);
+  text-align: center;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
 }
 @media (max-width: 720px) {
-  .bulle-xl { border-radius: 36px 48px 32px 44px; padding: var(--sp-4); }
-  .bulle    { border-radius: 24px 32px 20px 28px; padding: var(--sp-4); }
-  .bulle-sm { border-radius: 14px 18px 12px 16px; }
+  .bulle, .bulle-xl, .bulle-sm, .promesse, .ia-bloc {
+    border-radius: 20px 28px 18px 26px;
+    padding: var(--sp-4);
+  }
 }
 
 /* Mesure de lecture : le texte long ne file pas sur toute la largeur */
@@ -243,8 +250,7 @@ html { background: var(--sand); }
 .bulle .section-num { margin-top: 0; }
 .bulle .est-actions,
 .bulle .hero-cta { justify-content: center; }
-.bulle.landing-section { max-width: 860px; margin-left: auto; margin-right: auto; }
-.bulle.section-ia { max-width: 860px; margin-left: auto; margin-right: auto; }
+.bulle.landing-section > *:not(.listings),
 .bulle.landing-section > *:not(.listings),
 .bulle.section-ia > * {
   background: none;
@@ -256,6 +262,7 @@ html { background: var(--sand); }
   width: auto;
   max-width: none;
 }
+
 .bulle .section-accroche,
 .bulle .section-texte { margin-left: auto; margin-right: auto; }
 .bulle .glyphe { margin-left: auto; margin-right: auto; }
@@ -292,16 +299,7 @@ html { background: var(--sand); }
 }
 .section-glyphe { margin-bottom: var(--sp-1); }
 
-.promesse {
-  background: rgb(255 255 255 / 88%);
-  border: 1px solid var(--ecume);
-  border-radius: 22px 30px 18px 26px;
-  box-shadow:
-    0 2px 6px rgb(27 42 74 / 5%),
-    0 12px 28px rgb(27 42 74 / 10%);
-  padding: var(--sp-4);
-  text-align: center;
-}
+
 .promesse h3 {
   font-family: var(--serif);
   font-size: var(--t-m);
@@ -309,7 +307,6 @@ html { background: var(--sand); }
   margin: 0 0 var(--sp-1);
   color: var(--primary);
 }
-.promesse { text-align: center; }
 .promesse p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
 .promesse .glyphe { margin: 0 auto var(--sp-2); }
 
@@ -441,17 +438,7 @@ html { background: var(--sand); }
   gap: var(--sp-4);
   margin-bottom: var(--sp-4);
 }
-.ia-bloc {
-  background: rgb(255 255 255 / 88%);
-  border: 1px solid var(--ecume);
-  border-radius: 22px 30px 18px 26px;
-  box-shadow:
-    0 2px 6px rgb(27 42 74 / 5%),
-    0 12px 28px rgb(27 42 74 / 10%);
-  padding: var(--sp-4);
-  text-align: center;
-}
-.ia-bloc { text-align: center; }
+
 .ia-bloc h3 { font-family: var(--serif); font-size: var(--t-m); font-weight: 600; margin: 0 0 var(--sp-1); }
 .ia-bloc p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
 .section-ia .ia-quote { margin-left: auto; margin-right: auto; }
@@ -655,11 +642,12 @@ html { background: var(--sand); }
 .site-footer > .wrap {
   background: rgb(255 255 255 / 88%);
   border: 1px solid var(--ecume);
-  border-radius: 28px 36px 24px 32px;
+  border-radius: 28px 40px 24px 36px;
   box-shadow:
-    0 2px 6px rgb(27 42 74 / 6%),
-    0 24px 56px rgb(27 42 74 / 14%);
+    0 4px 12px rgb(27 42 74 / 10%),
+    0 36px 80px rgb(27 42 74 / 26%);
   padding: var(--sp-4) var(--sp-6);
+  max-width: 1080px;
 }
 @media (max-width: 720px) {
   .site-footer > .wrap { padding: var(--sp-4); border-radius: 20px 28px 18px 26px; }
