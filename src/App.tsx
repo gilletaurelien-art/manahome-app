@@ -120,10 +120,10 @@ const SECTIONS = [
 ];
 
 const MOTEUR_CATEGORIES = [
+  { v: "service", l: "Services" },
   { v: "acheter", l: "Acheter" },
   { v: "louer", l: "Louer" },
   { v: "vendre", l: "Vendre" },
-  { v: "service", l: "Services" },
 ];
 
 // Sous le bouton Services : tout ce qui fait vivre l'habitat —
