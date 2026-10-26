@@ -451,19 +451,56 @@ html { background: var(--sand); }
 .badge-source.pro { background: var(--ink); color: var(--sand); }
 
 /* ===== Boutons ===== */
+/* Boutons : pilules lisses, famille bulle — reflet, ombre douce,
+   encre pour l'action, or pour l'accent, écume pour le discret. */
 .btn {
   display: inline-block;
+  font-family: var(--sans);
+  font-weight: 500;
   font-size: var(--t-s);
-  padding: 12px 24px;
+  padding: 12px 26px;
   border-radius: 999px;
   border: 1px solid var(--primary);
   text-decoration: none;
-  transition: background 150ms ease, color 150ms ease;
+  cursor: pointer;
+  box-shadow: inset 0 1px 2px rgb(255 255 255 / 25%);
+  transition: all 170ms ease;
 }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-deep); }
-.btn-ghost { background: var(--blanc-chaud); color: var(--primary); }
-.btn-ghost:hover { background: var(--or); color: #fff; border-color: var(--primary-deep); }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  background: var(--ink);
+  color: var(--sand);
+  border-color: var(--ink);
+  box-shadow:
+    inset 0 1px 2px rgb(255 255 255 / 18%),
+    0 6px 18px rgb(27 42 74 / 22%);
+}
+.btn-primary:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow:
+    inset 0 1px 2px rgb(255 255 255 / 18%),
+    0 8px 22px rgb(27 42 74 / 28%);
+}
+.btn-ghost {
+  background: rgb(255 255 255 / 75%);
+  color: var(--primary);
+  border-color: var(--ecume);
+  box-shadow: inset 0 1px 2px rgb(255 255 255 / 85%);
+}
+.btn-ghost:hover {
+  background: var(--or);
+  color: #fff;
+  border-color: var(--or);
+  box-shadow:
+    inset 0 1px 2px rgb(255 255 255 / 25%),
+    0 6px 18px rgb(201 162 39 / 35%);
+}
+.btn-ghost.on {
+  background: var(--ink);
+  color: var(--sand);
+  border-color: var(--ink);
+}
 
 /* ===== Pilier IA : éditorial ===== */
 .ia-quote {
