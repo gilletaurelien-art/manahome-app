@@ -227,7 +227,7 @@ html { background: var(--sand); }
     0 4px 12px rgb(27 42 74 / 10%),
     0 0 0 4px rgb(201 162 39 / 14%),
     0 36px 80px rgb(27 42 74 / 26%);
-  padding: var(--sp-4) var(--sp-6) var(--sp-6);
+  padding: var(--sp-2) var(--sp-4) var(--sp-2);
   text-align: center;
   max-width: 720px;
   margin-left: auto;
@@ -348,7 +348,7 @@ html { background: var(--sand); }
 .promesse .glyphe { margin: 0 auto var(--sp-2); }
 
 /* ===== Sections ===== */
-.landing-section { padding: var(--sp-12) 0; }
+.landing-section { padding: var(--sp-4) 0; }
 .landing-section + .landing-section { margin-top: var(--sp-6); }
 .landing-section.alt { }
 .section-num {
@@ -1255,7 +1255,7 @@ html { background: var(--sand); }
     inset 0 1px 3px rgb(255 255 255 / 12%),
     0 3px 10px rgb(27 42 74 / 14%);
   padding: var(--sp-4);
-  margin: 0 auto var(--sp-4);
+  margin: 0 auto;
   max-width: 60ch;
 }
 .sous-bulle .section-accroche {
