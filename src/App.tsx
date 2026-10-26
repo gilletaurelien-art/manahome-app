@@ -225,14 +225,6 @@ export default function App() {
                 du territoire.
               </p>
               <div className="moteur">
-                <svg className="moteur-orbite" viewBox="0 0 120 44" aria-hidden="true">
-                  <ellipse cx="60" cy="22" rx="54" ry="16" />
-                  <circle cx="6" cy="22" r="2.2" />
-                  <circle cx="60" cy="6" r="1.4" />
-                  <circle cx="114" cy="22" r="2.2" />
-                  <path d="M60 6c8 2 12 8 12 16" />
-                </svg>
-
                 <div className="moteur-categories" role="group" aria-label="Je cherche">
                   {MOTEUR_CATEGORIES.map((c) => (
                     <button

@@ -937,29 +937,8 @@ html { background: var(--sand); }
 .recherche-panel { margin-bottom: var(--sp-4); }
 .recherche-panel .champ-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-2); }
 
-/* Hero-moteur : épuré, il respire l'intelligence — une orbite fine,
-   des segments sobres, une grande barre calme. */
+/* Hero-moteur : épuré — segments sobres, grande barre calme. */
 .moteur { max-width: 680px; margin: 0 auto var(--sp-2); }
-
-/* Illustration orbitale : filet d'or, respiration lente */
-.moteur-orbite {
-  display: block;
-  width: 132px;
-  margin: 0 auto var(--sp-1);
-  fill: none;
-  stroke: var(--or);
-  stroke-width: 0.9;
-  opacity: 0.55;
-  stroke-linecap: round;
-}
-.moteur-orbite ellipse { stroke-dasharray: 3 5; animation: orbite-filet 14s linear infinite; }
-.moteur-orbite circle { fill: var(--or); stroke: none; }
-.moteur-orbite circle:nth-of-type(2), .moteur-orbite circle:nth-of-type(3) { animation: orbite-pulse 3.2s ease-in-out infinite; }
-@keyframes orbite-filet { to { stroke-dashoffset: 160; } }
-@keyframes orbite-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) {
-  .moteur-orbite ellipse, .moteur-orbite circle { animation: none; }
-}
 
 /* Segments de catégorie : pilules discrètes, sélection encre */
 .moteur-categories {
