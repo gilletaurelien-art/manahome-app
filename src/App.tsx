@@ -119,24 +119,6 @@ const SECTIONS = [
   },
 ];
 
-const PILIER_IA = [
-  {
-    titre: "Des données structurées",
-    texte:
-      "Prix, surface, pièces, localisation, caractéristiques et informations énergétiques.",
-  },
-  {
-    titre: "Une page accessible",
-    texte:
-      "Contenu public lisible, URL stable et indexation permise lorsque les conditions le permettent.",
-  },
-  {
-    titre: "Des informations plus utiles",
-    texte:
-      "Distinction claire entre données vérifiées, déclarations du vendeur et informations territoriales.",
-  },
-];
-
 const B = baseUrl();
 
 export default function App() {
@@ -304,33 +286,6 @@ export default function App() {
               );
             })}
 
-            {/* Promesse IA : section éditoriale avec démonstration, pas un slogan */}
-            <section className="landing-section section-ia bulle">
-              <h2 className="section-title">
-                Demain, on cherchera aussi un logement en parlant à une IA.
-              </h2>
-              <blockquote className="ia-quote">
-                « Je cherche une maison avec jardin, près de la mer, à moins de
-                15 minutes des commerces, dans un secteur calme. »
-              </blockquote>
-              <p className="section-texte">
-                MANAhome structure les informations des annonces pour faciliter
-                leur compréhension par les outils compatibles.
-              </p>
-              <div className="ia-grid">
-                {PILIER_IA.map((b) => (
-                  <div key={b.titre} className="ia-bloc">
-                    <h3>{b.titre}</h3>
-                    <p>{b.texte}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="ia-disclaimer">
-                La structuration améliore les chances de compréhension et de
-                découverte ; elle ne garantit pas qu'un assistant IA indexera,
-                recommandera ou citera une annonce.
-              </p>
-            </section>
           </main>
         </>
       )}
@@ -344,6 +299,9 @@ export default function App() {
             <p className="footer-note">
               Portail immobilier territorial — pilote Crozon, presqu'île du
               Finistère. Gratuit, accompagné, lisible par les IA.
+              La structuration améliore les chances de compréhension et de
+              découverte ; elle ne garantit pas qu'un assistant IA indexera,
+              recommandera ou citera une annonce.
             </p>
           </div>
           <nav className="footer-nav" aria-label="Pied de page">
