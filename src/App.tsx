@@ -119,6 +119,14 @@ const SECTIONS = [
   },
 ];
 
+const MOTEUR_CATEGORIES = [
+  { v: "acheter", l: "Acheter" },
+  { v: "louer", l: "Louer" },
+  { v: "pro", l: "Agence" },
+  { v: "notaire", l: "Notaire" },
+  { v: "service", l: "Services" },
+];
+
 const B = baseUrl();
 
 export default function App() {
@@ -217,46 +225,58 @@ export default function App() {
                 du territoire.
               </p>
               <div className="moteur">
-                <div className="moteur-champs">
-                  <div className="moteur-champ moteur-categorie">
-                    <label htmlFor="moteur-categorie" className="sr-only">Je cherche</label>
-                    <select
-                      id="moteur-categorie"
-                      value={moteurCategorie}
-                      onChange={(e) => setMoteurCategorie(e.target.value)}
+                <svg className="moteur-orbite" viewBox="0 0 120 44" aria-hidden="true">
+                  <ellipse cx="60" cy="22" rx="54" ry="16" />
+                  <circle cx="6" cy="22" r="2.2" />
+                  <circle cx="60" cy="6" r="1.4" />
+                  <circle cx="114" cy="22" r="2.2" />
+                  <path d="M60 6c8 2 12 8 12 16" />
+                </svg>
+
+                <div className="moteur-categories" role="group" aria-label="Je cherche">
+                  {MOTEUR_CATEGORIES.map((c) => (
+                    <button
+                      key={c.v}
+                      type="button"
+                      className={`moteur-categorie-btn ${moteurCategorie === c.v ? "on" : ""}`}
+                      aria-pressed={moteurCategorie === c.v}
+                      onClick={() => setMoteurCategorie(c.v)}
                     >
-                      <option value="acheter">Acheter un logement</option>
-                      <option value="louer">Louer un logement</option>
-                      <option value="pro">Agent immobilier / mandataire</option>
-                      <option value="notaire">Notaire</option>
-                      <option value="service">Un service (artisan, ménage, jardin…)</option>
-                    </select>
-                  </div>
-                  <div className="moteur-champ moteur-lieu">
-                    <label htmlFor="moteur-lieu" className="sr-only">Commune ou code postal</label>
-                    <input
-                      id="moteur-lieu"
-                      type="search"
-                      autoComplete="off"
-                      placeholder="Commune ou code postal (ex : Crozon, 29160)"
-                      value={moteurLieu}
-                      onChange={(e) => setMoteurLieu(e.target.value)}
-                    />
-                  </div>
-                  <div className="moteur-champ moteur-rayon">
-                    <label htmlFor="moteur-rayon" className="sr-only">Rayon</label>
-                    <select
-                      id="moteur-rayon"
-                      value={moteurRayon}
-                      onChange={(e) => setMoteurRayon(e.target.value)}
-                    >
-                      <option value="tous">Tout le territoire</option>
-                      <option value="5">5 km</option>
-                      <option value="10">10 km</option>
-                      <option value="20">20 km</option>
-                      <option value="30">30 km</option>
-                    </select>
-                  </div>
+                      {c.l}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="moteur-barre">
+                  <svg className="moteur-loupe" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="10.5" cy="10.5" r="6.5" />
+                    <path d="m15.5 15.5 4.5 4.5" />
+                  </svg>
+                  <input
+                    id="moteur-lieu"
+                    type="search"
+                    autoComplete="off"
+                    placeholder={
+                      moteurCategorie === "acheter" || moteurCategorie === "louer"
+                        ? "Commune ou code postal — ex : Crozon, 29160"
+                        : "Commune, métier ou besoin — ex : plombier, Crozon"
+                    }
+                    value={moteurLieu}
+                    onChange={(e) => setMoteurLieu(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && moteurRechercher()}
+                  />
+                  <select
+                    id="moteur-rayon"
+                    aria-label="Rayon autour de la commune"
+                    value={moteurRayon}
+                    onChange={(e) => setMoteurRayon(e.target.value)}
+                  >
+                    <option value="tous">Tout le territoire</option>
+                    <option value="5">5 km</option>
+                    <option value="10">10 km</option>
+                    <option value="20">20 km</option>
+                    <option value="30">30 km</option>
+                  </select>
                   <button
                     type="button"
                     className="btn btn-primary moteur-bouton"
@@ -265,6 +285,11 @@ export default function App() {
                     Rechercher
                   </button>
                 </div>
+
+                <p className="moteur-note">
+                  Acheter, louer, faire soigner son logement : un seul champ,
+                  tout l'habitat du territoire.
+                </p>
               </div>
               <p className="hero-note">
                 Particuliers, propriétaires et locataires : publication
