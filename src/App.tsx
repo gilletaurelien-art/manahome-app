@@ -146,12 +146,10 @@ export default function App() {
   const [moteurCategorie, setMoteurCategorie] = useState("acheter");
   const [servicesOuvert, setServicesOuvert] = useState(false);
   const [moteurLieu, setMoteurLieu] = useState("");
-  const [moteurRayon, setMoteurRayon] = useState("10");
 
   const moteurRechercher = () => {
     const params = new URLSearchParams();
     if (moteurLieu.trim()) params.set("q", moteurLieu.trim());
-    if (moteurRayon !== "tous") params.set("rayon", moteurRayon);
     if (moteurCategorie === "acheter" || moteurCategorie === "louer") {
       params.set("tx", moteurCategorie === "louer" ? "location" : "vente");
       window.location.assign(`${B}/annonces/crozon?${params}`);
@@ -310,19 +308,6 @@ export default function App() {
                       <path d="m13 6 6 6-6 6" />
                     </svg>
                   </button>
-                  <select
-                    id="moteur-rayon"
-                    aria-label="Rayon autour de la commune"
-                    value={moteurRayon}
-                    onChange={(e) => setMoteurRayon(e.target.value)}
-                  >
-                    <option value="0">0 km (dans la commune)</option>
-                    <option value="5">5 km</option>
-                    <option value="10">10 km</option>
-                    <option value="20">20 km</option>
-                    <option value="30">30 km</option>
-                    <option value="tous">Tout le territoire</option>
-                  </select>
                 </div>
 
               </div>

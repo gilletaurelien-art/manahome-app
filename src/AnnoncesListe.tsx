@@ -53,7 +53,6 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   const [filtre, setFiltre] = useState("tous");
   const params = new URLSearchParams(window.location.search);
   const [recherche, setRecherche] = useState(params.get("q") ?? "");
-  const [rayon, setRayon] = useState(params.get("rayon") ?? "tous");
   const [prixMax, setPrixMax] = useState("");
   const txInitial = params.get("tx");
   const [filtreTx, setFiltreTx] = useState(
@@ -95,10 +94,8 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     const parPrix = budget
       ? parTexte.filter((a) => a.prix <= budget)
       : parTexte;
-    // Rayon autour de la commune pilote : les fixtures n'ont pas encore de
-    // coordonnées — en prod, filtre haversine sur lat/lng de l'annonce.
-    return rayon === "tous" ? parPrix : parPrix;
-  }, [filtre, filtreTx, recherche, rayon, prixMax]);
+    return parPrix;
+  }, [filtre, filtreTx, recherche, prixMax]);
 
   const B = baseUrl();
 
@@ -127,21 +124,6 @@ export function AnnoncesListe({ slug }: { slug: string }) {
                 value={recherche}
                 onChange={(e) => setRecherche(e.target.value)}
               />
-            </div>
-            <div className="champ">
-              <label htmlFor="rayon">Rayon autour de la commune</label>
-              <select
-                id="rayon"
-                value={rayon}
-                onChange={(e) => setRayon(e.target.value)}
-              >
-                <option value="0">0 km (dans la commune)</option>
-                <option value="5">5 km</option>
-                <option value="10">10 km</option>
-                <option value="20">20 km</option>
-                <option value="30">30 km</option>
-                <option value="tous">Tout le territoire</option>
-              </select>
             </div>
             <div className="champ">
               <label htmlFor="prix-max">
