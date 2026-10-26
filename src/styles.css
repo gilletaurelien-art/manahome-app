@@ -782,13 +782,28 @@ html { background: var(--sand); }
 
 /* ===== Footer ===== */
 .site-footer { opacity: 1; }
+/* Desktop : deux colonnes 50/50 — présentation+contact à gauche, liens à droite */
+@media (min-width: 721px) {
+  .footer-colonnes > div:first-child {
+    flex: 1 1 50%;
+    max-width: 50%;
+  }
+  .footer-colonnes .footer-nav {
+    flex: 1 1 40%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    align-content: start;
+  }
+}
 .footer-colonnes {
   display: flex;
   justify-content: space-between;
-  gap: var(--sp-4);
+  gap: var(--sp-6);
   flex-wrap: wrap;
   padding-bottom: var(--sp-4);
   color: var(--sand);
+  align-items: flex-start;
 }
 .footer-colonnes > div,
 .footer-colonnes .footer-nav {
