@@ -49,21 +49,21 @@ const triees = [...directes, ...importees];
 const PROMESSES = [
   {
     glyphe: GlyphMaison,
-    titre: "Gratuit pour les particuliers",
+    titre: "Gratuit, pour tous",
     texte:
-      "Publication gratuite, sans commission de vente prélevée par MANAhome.",
+      "Vendre, louer, trouver un service : aucun frais caché, aucune commission prélevée par MANAhome.",
   },
   {
     glyphe: GlyphAccompagnement,
-    titre: "Un accompagnement à chaque étape",
+    titre: "Accompagné à chaque étape",
     texte:
-      "Estimation indicative, annonce, documents : vous avancez sans être seul.",
+      "Estimation indicative, annonce structurée, documents : vous avancez sans être seul.",
   },
   {
     glyphe: GlyphStructure,
-    titre: "Des annonces conçues pour être comprises par les IA",
+    titre: "Lisible par les IA",
     texte:
-      "Une fiche structurée, prête pour une nouvelle manière de chercher un logement.",
+      "Des fiches structurées, prêtes pour une nouvelle manière de chercher un logement.",
   },
 ];
 
@@ -79,21 +79,20 @@ const SECTIONS = [
   {
     glyphe: GlyphAccompagnement,
     num: "02",
-    titre: "Vendre sans être seul",
+    titre: "Vendre ou louer sans être seul",
     accroche: "Vous gardez la main. MANA vous accompagne.",
     texte:
-      "Estimation indicative, préparation de l'annonce, documents à prévoir, compréhension du prix net vendeur et prochaines étapes. Le particulier reste maître de son projet.",
-    cta: { label: "Préparer la vente de mon bien", href: "/publier" },
+      "Estimation indicative, préparation de l'annonce, documents à prévoir, compréhension du prix ou du loyer : le particulier reste maître de son projet.",
+    cta: { label: "Publier mon annonce", href: "/publier" },
     cta2: { label: "Estimer mon bien", href: "/estimation" },
   },
   {
     glyphe: GlyphStructure,
     num: "03",
     titre: "Une annonce prête pour les IA",
-    accroche:
-      "Votre bien ne devrait pas être invisible parce que son annonce est mal structurée.",
+    accroche: "Votre bien mérite d'être trouvé, pas noyé.",
     texte:
-      "MANA aide à organiser les caractéristiques, préciser les informations utiles et produire une page publique techniquement accessible aux moteurs et assistants compatibles.",
+      "Caractéristiques organisées, informations utiles, page publique accessible aux moteurs et assistants compatibles.",
     cta: { label: "Comprendre notre approche", href: "/approche" },
   },
   {
@@ -109,9 +108,9 @@ const SECTIONS = [
     glyphe: GlyphPros,
     num: "05",
     titre: "Professionnels & services de l'habitat",
-    accroche: "Ceux qui vendent, louent… et ceux qui prennent soin des logements.",
+    accroche: "Ceux qui vendent, louent… et ceux qui soignent les logements.",
     texte:
-      "Agences et mandataires diffusent leurs biens ; réparateurs, ménage, jardins, diagnostics s'occupent de l'habitat. Un seul référentiel, factuel, sans recommandation.",
+      "Agences, notaires, réparateurs, diagnostics : un seul référentiel, factuel, sans recommandation.",
     cta: {
       label: "Découvrir les pros & services du territoire",
       href: "/pros",
