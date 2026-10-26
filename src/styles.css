@@ -29,8 +29,8 @@
   --sp-6: 48px;
   --sp-12: 96px;
 
-  --serif: "Fraunces", Georgia, "Times New Roman", serif;
-  --sans: "Inter", "Marianne", system-ui, sans-serif;
+  --serif: "Marelle Baton 2", Georgia, serif;
+  --sans: "Rubik", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -41,6 +41,19 @@
   font-family: "Marelle Baton 2";
   src: url("./fonts/MarelleBaton2-Regular.woff2") format("woff2");
   font-weight: 400;
+  font-display: swap;
+}
+/* Rubik (OFL) : sous-titres en gras + texte courant */
+@font-face {
+  font-family: "Rubik";
+  src: url("./fonts/Rubik-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Rubik";
+  src: url("./fonts/Rubik-Bold.ttf") format("truetype");
+  font-weight: 700;
   font-display: swap;
 }
 
@@ -325,7 +338,7 @@ html { background: var(--sand); }
 
 
 .promesse h3 {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: var(--t-m);
   font-weight: 600;
   margin: 0 0 var(--sp-1);
@@ -338,20 +351,21 @@ html { background: var(--sand); }
 .landing-section { padding: var(--sp-12) 0; }
 .landing-section.alt { }
 .section-num {
-  font-family: var(--serif);
+  font-family: var(--sans);
+  font-weight: 700;
   font-size: var(--t-xs);
   color: var(--or);
   letter-spacing: 0.2em;
   margin: 0 0 var(--sp-1);
 }
 .section-title {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: var(--t-xl);
   font-weight: 500;
   margin: 0 0 var(--sp-2);
 }
 .section-accroche {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: var(--t-l);
   color: var(--primary);
   margin: 0 0 var(--sp-2);
@@ -384,20 +398,22 @@ html { background: var(--sand); }
   display: grid;
   place-items: center;
   color: var(--primary);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: var(--t-m);
   opacity: 0.5;
 }
 .card .body { padding: var(--sp-2) var(--sp-2) var(--sp-4); }
 .card .lieu { font-size: var(--t-xs); opacity: 0.65; margin: 0 0 4px; }
 .card h3 {
-  font-family: var(--serif);
+  font-family: var(--sans);
+  font-weight: 700;
   font-size: var(--t-m);
   font-weight: 600;
   margin: 0 0 var(--sp-2);
 }
 .card .prix {
-  font-family: var(--serif);
+  font-family: var(--sans);
+  font-weight: 700;
   font-size: var(--t-l);
   margin: 0;
   color: var(--ink);
@@ -447,7 +463,8 @@ html { background: var(--sand); }
 
 /* ===== Pilier IA : éditorial ===== */
 .ia-quote {
-  font-family: var(--serif);
+  font-family: var(--sans);
+  font-weight: 500;
   font-size: var(--t-xl);
   font-weight: 400;
   font-style: italic;
@@ -463,7 +480,7 @@ html { background: var(--sand); }
   margin-bottom: var(--sp-4);
 }
 
-.ia-bloc h3 { font-family: var(--serif); font-size: var(--t-m); font-weight: 600; margin: 0 0 var(--sp-1); }
+.ia-bloc h3 { font-family: var(--sans); font-size: var(--t-m); font-weight: 600; margin: 0 0 var(--sp-1); }
 .ia-bloc p { margin: 0; font-size: var(--t-s); opacity: 0.8; }
 .section-ia .ia-quote { margin-left: auto; margin-right: auto; }
 .ia-disclaimer { font-size: var(--t-xs); opacity: 0.55; max-width: 60ch; }
@@ -479,7 +496,7 @@ html { background: var(--sand); }
   display: grid;
   place-items: center;
   color: var(--primary);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: var(--t-m);
   opacity: 0.55;
   margin-bottom: var(--sp-4);
@@ -492,7 +509,7 @@ html { background: var(--sand); }
 }
 .fiche-lieu { font-size: var(--t-xs); opacity: 0.65; margin: 0 0 4px; letter-spacing: 0.08em; text-transform: uppercase; }
 .fiche-titre {
-  font-family: "Marelle Baton 2", var(--serif);
+  font-family: var(--sans);
   font-size: var(--t-2xl);
   font-weight: 400;
   line-height: 1.15;
@@ -509,7 +526,8 @@ html { background: var(--sand); }
   margin: 0 0 var(--sp-4);
 }
 .fiche-chiffres dt { font-size: var(--t-xs); opacity: 0.6; margin-bottom: 4px; }
-.fiche-chiffres dd { font-family: var(--serif); font-size: var(--t-xl); margin: 0; color: var(--ink); }
+.fiche-chiffres dd { font-family: var(--sans);
+  font-weight: 700; font-size: var(--t-xl); margin: 0; color: var(--ink); }
 .fiche-chiffres .canon { color: var(--primary); }
 .fiche-description { font-size: var(--t-m); line-height: 1.7; max-width: 60ch; margin: 0 0 var(--sp-6); }
 .fiche-pied { display: flex; gap: var(--sp-4); align-items: center; flex-wrap: wrap; }
@@ -609,7 +627,8 @@ html { background: var(--sand); }
   margin: 0 0 var(--sp-6);
 }
 .territoire-chiffres dt { font-size: var(--t-xs); opacity: 0.6; margin-bottom: 4px; }
-.territoire-chiffres dd { font-family: var(--serif); font-size: var(--t-xl); margin: 0; color: var(--primary); }
+.territoire-chiffres dd { font-family: var(--sans);
+  font-weight: 700; font-size: var(--t-xl); margin: 0; color: var(--primary); }
 
 .territoire-prix {
   background: rgb(255 255 255 / 92%);
@@ -626,7 +645,7 @@ html { background: var(--sand); }
 
 /* ===== Page territoire : éditorial, quatre facettes ===== */
 .territoire-intro {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: var(--t-l);
   line-height: 1.6;
   max-width: 56ch;
@@ -646,7 +665,8 @@ html { background: var(--sand); }
 }
 .territoire-bloc-tete { border-bottom: 1px solid var(--or); padding-bottom: var(--sp-2); margin-bottom: var(--sp-2); }
 .territoire-bloc-tete h3 {
-  font-family: "Marelle Baton 2", var(--serif);
+  font-family: var(--sans);
+  font-weight: 700;
   font-size: var(--t-l);
   font-weight: 400;
   margin: 0;
@@ -694,7 +714,8 @@ html { background: var(--sand); }
 
 /* ===== Estimation ===== */
 .est-fourchette {
-  font-family: "Marelle Baton 2", var(--serif);
+  font-family: var(--sans);
+  font-weight: 700;
   font-size: clamp(2rem, 6vw, 3.4rem);
   color: var(--ink);
   margin: var(--sp-2) 0 4px;
@@ -852,7 +873,8 @@ html { background: var(--sand); }
   gap: var(--sp-2);
   flex-wrap: wrap;
 }
-.annonce-vendeur-titre { font-family: var(--serif); font-size: var(--t-l); margin: 0.2rem 0; }
+.annonce-vendeur-titre { font-family: var(--sans);
+  font-weight: 700; font-size: var(--t-l); margin: 0.2rem 0; }
 .annonce-vendeur-meta { font-size: var(--t-xs); opacity: 0.7; margin: 0; }
 .annonce-vendeur-actions { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
 .annonce-vendeur-actions .btn { font-size: var(--t-xs); }
