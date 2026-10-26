@@ -153,11 +153,11 @@ export default function App() {
             </a>
             <a href={`${B}/pros`}>
               <NavPros />
-              <span>Pros &amp; services</span>
+              <span>Pros</span>
             </a>
             <a href={`${B}/publier`} className="nav-cta">
               <NavPublier />
-              <span>Publier — gratuit</span>
+              <span>Publier</span>
             </a>
           </nav>
         </div>
