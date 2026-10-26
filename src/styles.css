@@ -1268,3 +1268,28 @@ html { background: var(--sand); }
   color: #fff;
   opacity: 0.92;
 }
+
+/* Boutons dans la sous-bulle encre : blanc plein et blanc contour */
+.btn-clair {
+  background: var(--blanc-chaud);
+  color: var(--ink);
+  border-color: var(--blanc-chaud);
+  box-shadow:
+    inset 0 1px 2px rgb(255 255 255 / 90%),
+    0 6px 18px rgb(27 42 74 / 25%);
+}
+.btn-clair:hover {
+  background: var(--sand);
+  color: var(--primary);
+  border-color: var(--sand);
+}
+.btn-clair-ghost {
+  background: transparent;
+  color: var(--sand);
+  border-color: rgb(255 255 255 / 45%);
+}
+.btn-clair-ghost:hover {
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+  border-color: rgb(255 255 255 / 70%);
+}

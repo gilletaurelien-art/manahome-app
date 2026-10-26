@@ -285,11 +285,11 @@ export default function App() {
               <div className="sous-bulle">
                 <p className="section-accroche">{SECTIONS[0].accroche}</p>
                 <p className="section-texte">{SECTIONS[0].texte}</p>
-              </div>
-              <div className="est-actions">
-                <a className="btn btn-primary" href={`${B}/annonces/crozon`}>
-                  Parcourir le catalogue du pilote
-                </a>
+                <div className="est-actions">
+                  <a className="btn btn-clair" href={`${B}/annonces/crozon`}>
+                    Parcourir le catalogue du pilote
+                  </a>
+                </div>
               </div>
             </section>
 
@@ -300,18 +300,18 @@ export default function App() {
                   <div className="sous-bulle">
                     <p className="section-accroche">{s.accroche}</p>
                     <p className="section-texte">{s.texte}</p>
-                  </div>
-                  <div className="est-actions">
-                    {s.cta && (
-                      <a className="btn btn-primary" href={`${B}${s.cta.href}`}>
-                        {s.cta.label}
-                      </a>
-                    )}
-                    {s.cta2 && (
-                      <a className="btn btn-ghost" href={`${B}${s.cta2.href}`}>
-                        {s.cta2.label}
-                      </a>
-                    )}
+                    <div className="est-actions">
+                      {s.cta && (
+                        <a className="btn btn-clair" href={`${B}${s.cta.href}`}>
+                          {s.cta.label}
+                        </a>
+                      )}
+                      {s.cta2 && (
+                        <a className="btn btn-clair-ghost" href={`${B}${s.cta2.href}`}>
+                          {s.cta2.label}
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </section>
             ))}
