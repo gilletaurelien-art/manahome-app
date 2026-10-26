@@ -123,7 +123,7 @@ const MOTEUR_CATEGORIES = [
   { v: "acheter", l: "Acheter" },
   { v: "vendre", l: "Vendre" },
   { v: "louer", l: "Louer" },
-  { v: "entretenir", l: "Entretenir" },
+  { v: "entretenir", l: "Services" },
 ];
 
 // Sous le bouton Services : tout ce qui fait vivre l'habitat —
@@ -305,11 +305,12 @@ export default function App() {
                     value={moteurRayon}
                     onChange={(e) => setMoteurRayon(e.target.value)}
                   >
-                    <option value="tous">Tout le territoire</option>
+                    <option value="0">0 km (dans la commune)</option>
                     <option value="5">5 km</option>
                     <option value="10">10 km</option>
                     <option value="20">20 km</option>
                     <option value="30">30 km</option>
+                    <option value="tous">Tout le territoire</option>
                   </select>
                   <button
                     type="button"

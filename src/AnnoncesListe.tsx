@@ -135,11 +135,12 @@ export function AnnoncesListe({ slug }: { slug: string }) {
                 value={rayon}
                 onChange={(e) => setRayon(e.target.value)}
               >
-                <option value="tous">Tout le territoire</option>
+                <option value="0">0 km (dans la commune)</option>
                 <option value="5">5 km</option>
                 <option value="10">10 km</option>
                 <option value="20">20 km</option>
                 <option value="30">30 km</option>
+                <option value="tous">Tout le territoire</option>
               </select>
             </div>
             <div className="champ">
