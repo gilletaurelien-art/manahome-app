@@ -54,6 +54,23 @@ export function Publier() {
   const [email, setEmail] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
   const [photoErreur, setPhotoErreur] = useState("");
+  const [typeRecherche, setTypeRecherche] = useState(
+    TYPES.find((t) => t.v === bien.type)?.l ?? ""
+  );
+  const [typeOuvert, setTypeOuvert] = useState(false);
+
+  const suggestionsType = TYPES.filter(
+    (t) =>
+      !typeRecherche.trim() ||
+      t.l.toLowerCase().includes(typeRecherche.trim().toLowerCase()) ||
+      t.v.includes(typeRecherche.trim().toLowerCase())
+  );
+
+  const choisirType = (t: { v: string; l: string }) => {
+    setBien({ ...bien, type: t.v });
+    setTypeRecherche(t.l);
+    setTypeOuvert(false);
+  };
 
   const ajouterPhotos = async (fichiers: FileList | null) => {
     if (!fichiers) return;
@@ -145,20 +162,45 @@ export function Publier() {
                 </button>
               </div>
             </div>
-            <div className="champ">
+            <div className="champ champ-recherche">
               <label htmlFor="type">Type de bien *</label>
-              <select
+              <input
                 id="type"
-                value={bien.type}
-                onChange={(e) => setBien({ ...bien, type: e.target.value })}
-              >
-                <option value="">Choisir…</option>
-                {TYPES.map((t) => (
-                  <option key={t.v} value={t.v}>
-                    {t.l}
-                  </option>
-                ))}
-              </select>
+                type="text"
+                role="combobox"
+                aria-expanded={typeOuvert}
+                aria-controls="type-suggestions"
+                autoComplete="off"
+                placeholder="Rechercher : maison, appartement, terrain…"
+                value={typeRecherche}
+                onChange={(e) => {
+                  setTypeRecherche(e.target.value);
+                  setTypeOuvert(true);
+                }}
+                onFocus={() => setTypeOuvert(true)}
+                onBlur={() =>
+                  setTimeout(() => setTypeOuvert(false), 120)
+                }
+              />
+              {typeOuvert && suggestionsType.length > 0 && (
+                <ul id="type-suggestions" className="suggestions" role="listbox">
+                  {suggestionsType.map((t) => (
+                    <li key={t.v} role="option" aria-selected={bien.type === t.v}>
+                      <button
+                        type="button"
+                        onClick={() => choisirType(t)}
+                      >
+                        {t.l}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {bien.type && !typeOuvert && (
+                <p className="champ-aide">
+                  Sélection : {TYPES.find((t) => t.v === bien.type)?.l}
+                </p>
+              )}
             </div>
             <div className="champ">
               <label htmlFor="lieu">Commune ou secteur *</label>

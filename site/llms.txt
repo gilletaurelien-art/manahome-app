@@ -13,9 +13,8 @@ MANAhome permet aux particuliers de publier une annonce immobilière gratuite (v
 - [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale, prix sur 10 ans, Géorisques
 - [Parcours vendeur](https://manahome.org/publier) : dépôt gratuit en 3 étapes (vente ou location), pré-remplissable depuis l'estimation
 - [Notre approche](https://manahome.org/approche) : gratuité intégrale, aucun acte loi Hoguet, aucune revente de données
-- [Professionnels](https://manahome.org/pros) : diffusion complémentaire, badge de source, référentiel 3 états (vérifié exige une preuve) — agences et notaires du pilote référencés depuis l'annuaire officiel des entreprises
+- [Professionnels](https://manahome.org/pros) : porte pro ET services à l'habitat (réparation, ménage, jardin, garde, diagnostics, autonomie) — badge de source, référentiel 3 états (vérifié exige une preuve), agences et notaires du pilote référencés depuis l'annuaire officiel des entreprises
 - [Espace pro](https://manahome.org/espace-pro) : inscription gratuite au référentiel (SIREN vérifié, aucune coordonnée publiée) — agences, notaires et services à l'habitat
-- [Services à l'habitat](https://manahome.org/services) : trouver qui prend soin du logement — réparation, ménage, jardin, garde, diagnostics, autonomie — ouvert aux propriétaires et aux locataires
 - [Messagerie](https://manahome.org/messagerie) : boîte de réception de la messagerie interne — aucune coordonnée n'est jamais publiée, la mise en relation se fait uniquement ici
 - [Mes annonces](https://manahome.org/mes-annonces) : espace vendeur de démonstration (démo locale, sans compte) — publier, dépublier, supprimer définitivement
 

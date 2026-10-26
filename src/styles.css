@@ -898,3 +898,37 @@ html { background: var(--sand); }
 
 /* Location : loyer /mois + badge */
 .prix-mois { font-size: var(--t-xs); font-weight: 400; opacity: 0.7; margin-left: 2px; }
+
+/* Champ de recherche à suggestions (type de bien) */
+.champ-recherche { position: relative; }
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: var(--sp-1);
+  background: var(--blanc-chaud);
+  border: 1px solid var(--ecume);
+  border-radius: 18px 24px 16px 22px;
+  box-shadow:
+    0 4px 12px rgb(27 42 74 / 10%),
+    0 24px 56px rgb(27 42 74 / 18%);
+  text-align: left;
+}
+.suggestions button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+}
+.suggestions button:hover { background: var(--sand); color: var(--primary); }
+.suggestions li[aria-selected="true"] button { color: var(--primary); font-weight: 700; }
