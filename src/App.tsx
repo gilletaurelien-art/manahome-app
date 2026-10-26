@@ -223,18 +223,12 @@ export default function App() {
           <section className="promesses wrap">
             <div className="promesse-card">
               <div className="promesses-grid">
-                {PROMESSES.map((p) => {
-                  const G = p.glyphe;
-                  return (
-                    <div key={p.titre} className="promesse">
-                      <span className="glyphe">
-                        <G />
-                      </span>
-                      <h3>{p.titre}</h3>
-                      <p>{p.texte}</p>
-                    </div>
-                  );
-                })}
+                {PROMESSES.map((p) => (
+                  <div key={p.titre} className="promesse">
+                    <h3>{p.titre}</h3>
+                    <p>{p.texte}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -242,10 +236,6 @@ export default function App() {
           <main className="wrap">
             {/* 01 — Catalogue : état « démarrage » assumé, qualité > volume */}
             <section className="landing-section bulle">
-              <span className="glyphe section-glyphe">
-                <GlyphCompas />
-              </span>
-              <p className="section-num">{SECTIONS[0].num}</p>
               <h2 className="section-title">{SECTIONS[0].titre}</h2>
               <p className="section-accroche">{SECTIONS[0].accroche}</p>
               <p className="section-texte">{SECTIONS[0].texte}</p>
@@ -261,14 +251,8 @@ export default function App() {
             </section>
 
             {/* 02 → 05 */}
-            {SECTIONS.slice(1).map((s) => {
-              const G = s.glyphe;
-              return (
+            {SECTIONS.slice(1).map((s) => (
                 <section key={s.num} className="landing-section alt bulle">
-                  <span className="glyphe section-glyphe">
-                    <G />
-                  </span>
-                  <p className="section-num">{s.num}</p>
                   <h2 className="section-title">{s.titre}</h2>
                   <p className="section-accroche">{s.accroche}</p>
                   <p className="section-texte">{s.texte}</p>
@@ -283,8 +267,7 @@ export default function App() {
                     </a>
                   )}
                 </section>
-              );
-            })}
+            ))}
 
           </main>
         </>
