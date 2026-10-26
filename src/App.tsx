@@ -35,6 +35,7 @@ import { Pros } from "./Pros";
 import { Messagerie } from "./Messagerie";
 import { EspacePro } from "./EspacePro";
 import { MesAnnonces } from "./MesAnnonces";
+import { Services } from "./Services";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -173,6 +174,10 @@ export default function App() {
               <NavPros />
               <span>Professionnels</span>
             </a>
+            <a href={`${B}/services`}>
+              <GlyphAccompagnement size={20} />
+              <span>Services</span>
+            </a>
             <a href={`${B}/publier`} className="nav-cta">
               <NavPublier />
               <span>Publier — gratuit</span>
@@ -199,6 +204,8 @@ export default function App() {
         <EspacePro />
       ) : path === "/mes-annonces" ? (
         <MesAnnonces />
+      ) : path === "/services" ? (
+        <Services />
       ) : territoire ? (
         <TerritoireDetail territoire={territoire} />
       ) : (
@@ -348,6 +355,7 @@ export default function App() {
             <a href={`${B}/pros`}>Professionnels</a>
             <a href={`${B}/espace-pro`}>Rejoindre le référentiel</a>
             <a href={`${B}/messagerie`}>Ma messagerie</a>
+            <a href={`${B}/services`}>Services à l'habitat</a>
             <a href={`${B}/mes-annonces`}>Mes annonces</a>
           </nav>
         </div>
