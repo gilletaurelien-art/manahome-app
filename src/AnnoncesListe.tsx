@@ -51,10 +51,14 @@ function JsonLd({ annonces, slug }: { annonces: Annonce[]; slug: string }) {
 
 export function AnnoncesListe({ slug }: { slug: string }) {
   const [filtre, setFiltre] = useState("tous");
-  const [filtreTx, setFiltreTx] = useState("tous");
-  const [recherche, setRecherche] = useState("");
-  const [rayon, setRayon] = useState("tous");
+  const params = new URLSearchParams(window.location.search);
+  const [recherche, setRecherche] = useState(params.get("q") ?? "");
+  const [rayon, setRayon] = useState(params.get("rayon") ?? "tous");
   const [prixMax, setPrixMax] = useState("");
+  const txInitial = params.get("tx");
+  const [filtreTx, setFiltreTx] = useState(
+    txInitial === "location" || txInitial === "vente" ? txInitial : "tous"
+  );
 
   useEffect(() => {
     const t = territoireParSlug(slug);

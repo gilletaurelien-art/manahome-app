@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { ANNONCES_DEMO } from "./annonces";
 import { annoncesPublieesLocales, annonceLocaleParId, enAnnonce } from "./annoncesLocales";
-import { PROS } from "./pros";
-import { SERVICES_DEMO, CATEGORIES_SERVICE } from "./servicesHabitat";
 import { AnnonceCard } from "./AnnonceCard";
 import {
   GlyphMaison,
@@ -125,23 +123,22 @@ const B = baseUrl();
 
 export default function App() {
   const path = usePath();
-  const [moteurQ, setMoteurQ] = useState("");
-  const [moteurOuvert, setMoteurOuvert] = useState(false);
+  const [moteurCategorie, setMoteurCategorie] = useState("acheter");
+  const [moteurLieu, setMoteurLieu] = useState("");
+  const [moteurRayon, setMoteurRayon] = useState("10");
 
-  const q = moteurQ.trim().toLowerCase();
-  const dans = (...textes: (string | undefined)[]) =>
-    textes.some((t) => !!t && t.toLowerCase().includes(q));
-  const annoncesMoteur = q
-    ? triees.filter((a) => dans(a.titre, a.lieu, a.transaction)).slice(0, 4)
-    : [];
-  const prosMoteur = q
-    ? PROS.filter((p) => dans(p.raisonSociale, p.commune, p.categorie)).slice(0, 3)
-    : [];
-  const servicesMoteur = q
-    ? SERVICES_DEMO.filter((sv) =>
-        dans(sv.nom, sv.commune, sv.resume, sv.categorie)
-      ).slice(0, 3)
-    : [];
+  const moteurRechercher = () => {
+    const params = new URLSearchParams();
+    if (moteurLieu.trim()) params.set("q", moteurLieu.trim());
+    if (moteurRayon !== "tous") params.set("rayon", moteurRayon);
+    if (moteurCategorie === "acheter" || moteurCategorie === "louer") {
+      params.set("tx", moteurCategorie === "louer" ? "location" : "vente");
+      window.location.assign(`${B}/annonces/crozon?${params}`);
+    } else {
+      // pro / notaire / service : la page /pros regroupe le référentiel
+      window.location.assign(`${B}/pros?${params}`);
+    }
+  };
   const annonce =
     annonceParId(routeAnnonce(path)) ??
     (() => {
@@ -220,66 +217,54 @@ export default function App() {
                 du territoire.
               </p>
               <div className="moteur">
-                <input
-                  id="moteur-input"
-                  type="search"
-                  role="combobox"
-                  aria-expanded={moteurOuvert}
-                  aria-controls="moteur-suggestions"
-                  autoComplete="off"
-                  placeholder="Rechercher : maison à Crozon, location, plombier, notaire…"
-                  value={moteurQ}
-                  onChange={(e) => {
-                    setMoteurQ(e.target.value);
-                    setMoteurOuvert(true);
-                  }}
-                  onFocus={() => setMoteurOuvert(true)}
-                  onBlur={() => setTimeout(() => setMoteurOuvert(false), 150)}
-                />
-                {moteurOuvert && (annoncesMoteur.length > 0 || prosMoteur.length > 0 || servicesMoteur.length > 0) && (
-                  <ul id="moteur-suggestions" className="suggestions moteur-suggestions" role="listbox">
-                    {annoncesMoteur.length > 0 && (
-                      <li className="suggestions-groupe" role="presentation">Logements</li>
-                    )}
-                    {annoncesMoteur.map((a) => (
-                      <li key={a.id} role="option" aria-selected={false}>
-                        <a href={`${B}/annonce/${a.id}`}>
-                          {a.titre}
-                          <span className="suggestion-meta">
-                            {a.lieu} · {a.prix.toLocaleString("fr-FR")} €
-                            {a.transaction === "location" ? "/mois" : ""}
-                          </span>
-                        </a>
-                      </li>
-                    ))}
-                    {prosMoteur.length > 0 && (
-                      <li className="suggestions-groupe" role="presentation">Professionnels</li>
-                    )}
-                    {prosMoteur.map((pr) => (
-                      <li key={pr.siren} role="option" aria-selected={false}>
-                        <a href={`${B}/pros`}>
-                          {pr.raisonSociale}
-                          <span className="suggestion-meta">
-                            {pr.categorie === "notaire" ? "Office notarial" : "Agence"} · {pr.commune}
-                          </span>
-                        </a>
-                      </li>
-                    ))}
-                    {servicesMoteur.length > 0 && (
-                      <li className="suggestions-groupe" role="presentation">Services à l'habitat</li>
-                    )}
-                    {servicesMoteur.map((sv) => (
-                      <li key={sv.id} role="option" aria-selected={false}>
-                        <a href={`${B}/pros`}>
-                          {sv.nom}
-                          <span className="suggestion-meta">
-                            {CATEGORIES_SERVICE.find((c) => c.v === sv.categorie)?.l} · {sv.commune}
-                          </span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <div className="moteur-champs">
+                  <div className="moteur-champ moteur-categorie">
+                    <label htmlFor="moteur-categorie" className="sr-only">Je cherche</label>
+                    <select
+                      id="moteur-categorie"
+                      value={moteurCategorie}
+                      onChange={(e) => setMoteurCategorie(e.target.value)}
+                    >
+                      <option value="acheter">Acheter un logement</option>
+                      <option value="louer">Louer un logement</option>
+                      <option value="pro">Agent immobilier / mandataire</option>
+                      <option value="notaire">Notaire</option>
+                      <option value="service">Un service (artisan, ménage, jardin…)</option>
+                    </select>
+                  </div>
+                  <div className="moteur-champ moteur-lieu">
+                    <label htmlFor="moteur-lieu" className="sr-only">Commune ou code postal</label>
+                    <input
+                      id="moteur-lieu"
+                      type="search"
+                      autoComplete="off"
+                      placeholder="Commune ou code postal (ex : Crozon, 29160)"
+                      value={moteurLieu}
+                      onChange={(e) => setMoteurLieu(e.target.value)}
+                    />
+                  </div>
+                  <div className="moteur-champ moteur-rayon">
+                    <label htmlFor="moteur-rayon" className="sr-only">Rayon</label>
+                    <select
+                      id="moteur-rayon"
+                      value={moteurRayon}
+                      onChange={(e) => setMoteurRayon(e.target.value)}
+                    >
+                      <option value="tous">Tout le territoire</option>
+                      <option value="5">5 km</option>
+                      <option value="10">10 km</option>
+                      <option value="20">20 km</option>
+                      <option value="30">30 km</option>
+                    </select>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-primary moteur-bouton"
+                    onClick={moteurRechercher}
+                  >
+                    Rechercher
+                  </button>
+                </div>
               </div>
               <p className="hero-note">
                 Particuliers, propriétaires et locataires : publication
@@ -337,7 +322,6 @@ export default function App() {
                   )}
                 </section>
             ))}
-
           </main>
         </>
       )}
