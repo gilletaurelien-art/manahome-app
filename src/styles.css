@@ -233,6 +233,22 @@ html { background: var(--sand); }
     border-radius: 20px 28px 18px 26px;
     padding: var(--sp-4);
   }
+  /* Mobile : le header redevient l'element le plus large de la page.
+     Les bulles (hero, footer, sections) restent plus etroites que lui. */
+  .site-header .wrap {
+    width: calc(100vw - 32px);
+    max-width: 100%;
+    justify-content: space-between;
+    gap: var(--sp-1);
+  }
+  .site-header { padding: 0; }
+  .hero .wrap,
+  .site-footer > .wrap,
+  .bulle,
+  .bulle-xl {
+    max-width: calc(100vw - 48px);
+    width: 100%;
+  }
 }
 
 /* Mesure de lecture : le texte long ne file pas sur toute la largeur */
