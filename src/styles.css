@@ -287,8 +287,7 @@ html { background: var(--sand); }
 .bulle .section-num { margin-top: 0; }
 .bulle .est-actions,
 .bulle .hero-cta { justify-content: center; }
-.bulle.landing-section > *:not(.listings),
-.bulle.landing-section > *:not(.listings),
+.bulle.landing-section > *:not(.listings):not(.sous-bulle),
 .bulle.section-ia > * {
   background: none;
   border: none;
