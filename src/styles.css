@@ -1146,3 +1146,16 @@ html { background: var(--sand); }
 }
 .moteur-services-menu button:hover { background: var(--sand); color: var(--primary); }
 .moteur-services-menu li[aria-selected="true"] button { color: var(--primary); font-weight: 700; }
+
+/* Bouton Entretenir : accent doré */
+.moteur-btn-or {
+  color: var(--primary);
+  border-color: var(--or);
+  background: rgb(201 162 39 / 8%);
+}
+.moteur-btn-or:hover { background: rgb(201 162 39 / 16%); }
+.moteur-btn-or.on {
+  background: var(--or);
+  color: #fff;
+  border-color: var(--or);
+}

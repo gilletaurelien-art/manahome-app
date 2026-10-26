@@ -120,10 +120,10 @@ const SECTIONS = [
 ];
 
 const MOTEUR_CATEGORIES = [
-  { v: "service", l: "Services" },
   { v: "acheter", l: "Acheter" },
-  { v: "louer", l: "Louer" },
   { v: "vendre", l: "Vendre" },
+  { v: "louer", l: "Louer" },
+  { v: "entretenir", l: "Entretenir" },
 ];
 
 // Sous le bouton Services : tout ce qui fait vivre l'habitat —
@@ -234,18 +234,14 @@ export default function App() {
               <h1 className="brand-grand">
                 MANA<em>home</em>
               </h1>
-              <p className="lede">
-                Vendez, louez, entretenez : tout l'habitat du territoire,
-                en une recherche.
-              </p>
               <div className="moteur">
                 <div className="moteur-categories" role="group" aria-label="Je cherche">
                   {MOTEUR_CATEGORIES.map((c) =>
-                    c.v === "service" ? (
+                    c.v === "entretenir" ? (
                       <div key={c.v} className="moteur-services-wrap">
                         <button
                           type="button"
-                          className={`moteur-categorie-btn ${servicesOuvert || (moteurCategorie !== "acheter" && moteurCategorie !== "louer") ? "on" : ""}`}
+                          className={`moteur-categorie-btn moteur-btn-or ${servicesOuvert || (moteurCategorie !== "acheter" && moteurCategorie !== "louer") ? "on" : ""}`}
                           aria-expanded={servicesOuvert}
                           aria-haspopup="listbox"
                           onClick={() => setServicesOuvert((o) => !o)}
