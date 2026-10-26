@@ -122,6 +122,7 @@ const SECTIONS = [
 const MOTEUR_CATEGORIES = [
   { v: "acheter", l: "Acheter" },
   { v: "louer", l: "Louer" },
+  { v: "vendre", l: "Vendre" },
   { v: "service", l: "Services" },
 ];
 
@@ -154,6 +155,8 @@ export default function App() {
     if (moteurCategorie === "acheter" || moteurCategorie === "louer") {
       params.set("tx", moteurCategorie === "louer" ? "location" : "vente");
       window.location.assign(`${B}/annonces/crozon?${params}`);
+    } else if (moteurCategorie === "vendre") {
+      window.location.assign(`${B}/publier?tx=${params.get("tx") ?? "vente"}${params.get("q") ? `&lieu=${encodeURIComponent(params.get("q")!)}` : ""}`);
     } else {
       // pro / notaire / service : la page /pros regroupe le référentiel
       window.location.assign(`${B}/pros?${params}`);
@@ -322,15 +325,7 @@ export default function App() {
                   </button>
                 </div>
 
-                <p className="moteur-note">
-                  Acheter, louer, faire soigner son logement : un seul champ,
-                  tout l'habitat du territoire.
-                </p>
               </div>
-              <p className="hero-note">
-                Particuliers, propriétaires et locataires : publication
-                gratuite, sans commission prélevée par MANAhome.
-              </p>
             </div>
           </section>
 
