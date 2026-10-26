@@ -932,3 +932,7 @@ html { background: var(--sand); }
 }
 .suggestions button:hover { background: var(--sand); color: var(--primary); }
 .suggestions li[aria-selected="true"] button { color: var(--primary); font-weight: 700; }
+
+/* Panneau de recherche du catalogue */
+.recherche-panel { margin-bottom: var(--sp-4); }
+.recherche-panel .champ-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-2); }

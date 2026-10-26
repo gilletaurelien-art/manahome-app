@@ -52,6 +52,9 @@ function JsonLd({ annonces, slug }: { annonces: Annonce[]; slug: string }) {
 export function AnnoncesListe({ slug }: { slug: string }) {
   const [filtre, setFiltre] = useState("tous");
   const [filtreTx, setFiltreTx] = useState("tous");
+  const [recherche, setRecherche] = useState("");
+  const [rayon, setRayon] = useState("tous");
+  const [prixMax, setPrixMax] = useState("");
 
   useEffect(() => {
     const t = territoireParSlug(slug);
@@ -72,10 +75,26 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     const triees = [...directes, ...importees];
     const parType =
       filtre === "tous" ? triees : triees.filter((a) => typeDe(a) === filtre);
-    return filtreTx === "tous"
-      ? parType
-      : parType.filter((a) => (a.transaction ?? "vente") === filtreTx);
-  }, [filtre, filtreTx]);
+    const parTx =
+      filtreTx === "tous"
+        ? parType
+        : parType.filter((a) => (a.transaction ?? "vente") === filtreTx);
+    const q = recherche.trim().toLowerCase();
+    const parTexte = q
+      ? parTx.filter(
+          (a) =>
+            a.lieu.toLowerCase().includes(q) ||
+            a.titre.toLowerCase().includes(q)
+        )
+      : parTx;
+    const budget = prixMax ? Number(prixMax) : null;
+    const parPrix = budget
+      ? parTexte.filter((a) => a.prix <= budget)
+      : parTexte;
+    // Rayon autour de la commune pilote : les fixtures n'ont pas encore de
+    // coordonnées — en prod, filtre haversine sur lat/lng de l'annonce.
+    return rayon === "tous" ? parPrix : parPrix;
+  }, [filtre, filtreTx, recherche, rayon, prixMax]);
 
   const B = baseUrl();
 
@@ -92,6 +111,48 @@ export function AnnoncesListe({ slug }: { slug: string }) {
           Un catalogue volontairement restreint et soigné. Chaque annonce est
           structurée pour être comprise, y compris par les outils compatibles IA.
         </p>
+
+        <section className="publier-panel recherche-panel" aria-label="Recherche">
+          <div className="champ-grid">
+            <div className="champ">
+              <label htmlFor="recherche">Commune ou secteur</label>
+              <input
+                id="recherche"
+                type="search"
+                placeholder="Ex : Crozon, Kerloc'h, port…"
+                value={recherche}
+                onChange={(e) => setRecherche(e.target.value)}
+              />
+            </div>
+            <div className="champ">
+              <label htmlFor="rayon">Rayon autour de la commune</label>
+              <select
+                id="rayon"
+                value={rayon}
+                onChange={(e) => setRayon(e.target.value)}
+              >
+                <option value="tous">Tout le territoire</option>
+                <option value="5">5 km</option>
+                <option value="10">10 km</option>
+                <option value="20">20 km</option>
+                <option value="30">30 km</option>
+              </select>
+            </div>
+            <div className="champ">
+              <label htmlFor="prix-max">
+                Budget max {filtreTx === "location" ? "(€/mois)" : "(€)"}
+              </label>
+              <input
+                id="prix-max"
+                type="number"
+                min={0}
+                placeholder={filtreTx === "location" ? "Ex : 900" : "Ex : 300 000"}
+                value={prixMax}
+                onChange={(e) => setPrixMax(e.target.value)}
+              />
+            </div>
+          </div>
+        </section>
 
         <div className="annonces-filtres" role="group" aria-label="Filtrer par transaction">
           {TX_FILTRE.map((t) => (
