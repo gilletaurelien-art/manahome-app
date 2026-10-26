@@ -299,6 +299,17 @@ export default function App() {
                     onChange={(e) => setMoteurLieu(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && moteurRechercher()}
                   />
+                  <button
+                    type="button"
+                    className="moteur-fleche"
+                    aria-label="Rechercher"
+                    onClick={moteurRechercher}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M4 12h15" />
+                      <path d="m13 6 6 6-6 6" />
+                    </svg>
+                  </button>
                   <select
                     id="moteur-rayon"
                     aria-label="Rayon autour de la commune"
@@ -312,13 +323,6 @@ export default function App() {
                     <option value="30">30 km</option>
                     <option value="tous">Tout le territoire</option>
                   </select>
-                  <button
-                    type="button"
-                    className="btn btn-primary moteur-bouton"
-                    onClick={moteurRechercher}
-                  >
-                    Rechercher
-                  </button>
                 </div>
 
               </div>

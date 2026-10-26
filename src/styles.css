@@ -1159,3 +1159,30 @@ html { background: var(--sand); }
   color: #fff;
   border-color: var(--or);
 }
+
+/* Flèche de recherche : pilule or ronde, dans la barre après le champ */
+.moteur-fleche {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: var(--or);
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.moteur-fleche svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.moteur-fleche:hover {
+  transform: translateX(2px);
+  box-shadow: 0 4px 14px rgb(201 162 39 / 45%);
+}
