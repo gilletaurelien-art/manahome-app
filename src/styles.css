@@ -363,7 +363,7 @@ html { background: var(--sand); }
 .section-title {
   font-family: "Marelle Baton 2", var(--serif);
   font-weight: 400;
-  font-size: var(--t-2xl);
+  font-size: var(--t-xl);
   line-height: 1.2;
   text-transform: uppercase;
   letter-spacing: 0.04em;
