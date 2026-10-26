@@ -276,11 +276,13 @@ export default function App() {
 
 
           <main className="wrap">
-            {/* 01 — Catalogue : bulle courte, les résultats vivent dans la recherche */}
+            {/* 01 — Catalogue : bulle avec sous-bulle, résultats dans la recherche */}
             <section className="landing-section bulle">
               <h2 className="section-title">{SECTIONS[0].titre}</h2>
-              <p className="section-accroche">{SECTIONS[0].accroche}</p>
-              <p className="section-texte">{SECTIONS[0].texte}</p>
+              <div className="sous-bulle">
+                <p className="section-accroche">{SECTIONS[0].accroche}</p>
+                <p className="section-texte">{SECTIONS[0].texte}</p>
+              </div>
               <div className="est-actions">
                 <a className="btn btn-primary" href={`${B}/annonces/crozon`}>
                   Parcourir le catalogue du pilote
@@ -292,18 +294,22 @@ export default function App() {
             {SECTIONS.slice(1).map((s) => (
                 <section key={s.num} className="landing-section alt bulle">
                   <h2 className="section-title">{s.titre}</h2>
-                  <p className="section-accroche">{s.accroche}</p>
-                  <p className="section-texte">{s.texte}</p>
-                  {s.cta && (
-                    <a className="btn btn-ghost" href={`${B}${s.cta.href}`}>
-                      {s.cta.label}
-                    </a>
-                  )}
-                  {s.cta2 && (
-                    <a className="btn btn-primary" href={`${B}${s.cta2.href}`}>
-                      {s.cta2.label}
-                    </a>
-                  )}
+                  <div className="sous-bulle">
+                    <p className="section-accroche">{s.accroche}</p>
+                    <p className="section-texte">{s.texte}</p>
+                  </div>
+                  <div className="est-actions">
+                    {s.cta && (
+                      <a className="btn btn-primary" href={`${B}${s.cta.href}`}>
+                        {s.cta.label}
+                      </a>
+                    )}
+                    {s.cta2 && (
+                      <a className="btn btn-ghost" href={`${B}${s.cta2.href}`}>
+                        {s.cta2.label}
+                      </a>
+                    )}
+                  </div>
                 </section>
             ))}
           </main>
