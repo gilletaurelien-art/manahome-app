@@ -45,7 +45,7 @@ const SECTIONS = [
   {
     glyphe: GlyphAccompagnement,
     num: "02",
-    titre: "Vendre ou louer sans être seul",
+    titre: "Vendre ou louer avec MANA",
     accroche: "Vous gardez la main. MANA vous accompagne.",
     texte:
       "Estimation indicative, préparation de l'annonce, documents à prévoir, compréhension du prix ou du loyer : le particulier reste maître de son projet.",
@@ -54,7 +54,7 @@ const SECTIONS = [
   {
     glyphe: GlyphStructure,
     num: "03",
-    titre: "Une annonce prête pour les IA",
+    titre: "Annonces pour les IA",
     accroche: "Votre bien mérite d'être trouvé, pas noyé.",
     texte:
       "Caractéristiques organisées, informations utiles, page publique accessible aux moteurs et assistants compatibles.",
@@ -62,10 +62,10 @@ const SECTIONS = [
   {
     glyphe: GlyphTerritoire,
     num: "04",
-    titre: "Choisir un lieu, pas seulement un logement",
-    accroche: "Le bien compte. La vie autour aussi.",
+    titre: "L'index des communes",
+    accroche: "Un lieu, une fiche : la vie autour du bien.",
     texte:
-      "Transports, commerces, écoles, services, nature : le territoire présenté honnêtement, avec des informations vérifiées lorsque c'est possible.",
+      "Transports, commerces, écoles, services, nature : chaque commune du territoire présentée honnêtement, avec des informations vérifiées lorsque c'est possible.",
     cta: { label: "Découvrir le territoire de Crozon", href: "/territoire/crozon" } },
   {
     glyphe: GlyphPros,
