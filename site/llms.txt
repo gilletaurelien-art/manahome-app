@@ -1,20 +1,21 @@
 # MANAhome (manahome.org)
 
-> Portail immobilier territorial gratuit, accompagné et lisible par les IA. Pilote : Crozon (Finistère, Bretagne).
+> Portail immobilier territorial gratuit, accompagné et lisible par les IA — vente, location et services à l'habitat. Pilote : Crozon (Finistère, Bretagne).
 
-MANAhome permet aux particuliers de publier une annonce immobilière gratuitement, sans commission ni mise en avant payante, avec un parcours vendeur assisté et une estimation indicative. MANA ne réalise aucun acte réglementé (loi Hoguet) : plateforme d'affichage et d'accompagnement uniquement. La mise en relation se fait par messagerie interne ; aucune donnée n'est revendue.
+MANAhome permet aux particuliers de publier une annonce immobilière gratuite (vente ou location), sans commission ni mise en avant payante, avec un parcours vendeur/bailleur assisté et une estimation indicative. Le portail couvre aussi les services à l'habitat : réparation, ménage, jardinage, garde de logement, diagnostics, autonomie — pour propriétaires comme locataires. MANA ne réalise aucun acte réglementé (loi Hoguet) : plateforme d'affichage et d'accompagnement uniquement. La mise en relation se fait par messagerie interne ; aucune donnée n'est revendue.
 
 ## Pages publiques
 
 - [Accueil](https://manahome.org/) : présentation et annonces en vedette
-- [Annonces Crozon](https://manahome.org/annonces/crozon) : catalogue du pilote, filtres par type, JSON-LD ItemList
+- [Annonces Crozon](https://manahome.org/annonces/crozon) : catalogue du pilote, filtres par type et par transaction (vente/location), JSON-LD ItemList
 - [Fiches annonces](https://manahome.org/annonce/) : une URL stable par annonce, avec JSON-LD RealEstateListing
 - [Estimation](https://manahome.org/estimation) : estimation indicative gratuite, sans compte — fourchette ±10 %, médiane sourcée et datée (JSON-LD FAQPage « combien vaut une maison à Crozon »)
 - [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale, prix sur 10 ans, Géorisques
-- [Parcours vendeur](https://manahome.org/publier) : dépôt gratuit en 3 étapes, pré-remplissable depuis l'estimation
+- [Parcours vendeur](https://manahome.org/publier) : dépôt gratuit en 3 étapes (vente ou location), pré-remplissable depuis l'estimation
 - [Notre approche](https://manahome.org/approche) : gratuité intégrale, aucun acte loi Hoguet, aucune revente de données
 - [Professionnels](https://manahome.org/pros) : diffusion complémentaire, badge de source, référentiel 3 états (vérifié exige une preuve) — agences et notaires du pilote référencés depuis l'annuaire officiel des entreprises
-- [Espace pro](https://manahome.org/espace-pro) : inscription gratuite au référentiel (SIREN vérifié, aucune coordonnée publiée)
+- [Espace pro](https://manahome.org/espace-pro) : inscription gratuite au référentiel (SIREN vérifié, aucune coordonnée publiée) — agences, notaires et services à l'habitat
+- [Services à l'habitat](https://manahome.org/services) : trouver qui prend soin du logement — réparation, ménage, jardin, garde, diagnostics, autonomie — ouvert aux propriétaires et aux locataires
 - [Messagerie](https://manahome.org/messagerie) : boîte de réception de la messagerie interne — aucune coordonnée n'est jamais publiée, la mise en relation se fait uniquement ici
 - [Mes annonces](https://manahome.org/mes-annonces) : espace vendeur de démonstration (démo locale, sans compte) — publier, dépublier, supprimer définitivement
 

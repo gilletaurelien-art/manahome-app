@@ -1,10 +1,13 @@
 export type Source = "directe_particulier" | "import_pro";
+// Vente OU location — MANAhome couvre l'habitat, pas que la vente.
+export type Transaction = "vente" | "location";
 
 export interface Annonce {
   id: string;
   titre: string;
   lieu: string;
   prix: number;
+  transaction: Transaction;
   surface?: number;
   pieces?: number;
   dpe?: string;
@@ -23,6 +26,7 @@ export const ANNONCES_DEMO: Annonce[] = [
     titre: "Maison de ville lumineuse, jardin clos",
     lieu: "Crozon · à deux pas du port",
     prix: 245000,
+    transaction: "vente",
     surface: 98,
     pieces: 4,
     dpe: "C",
@@ -36,6 +40,7 @@ export const ANNONCES_DEMO: Annonce[] = [
     titre: "Dernier étage, balcon plein sud",
     lieu: "Crozon · proche plage de Pen-Hat",
     prix: 168000,
+    transaction: "vente",
     surface: 62,
     pieces: 3,
     dpe: "D",
@@ -49,6 +54,7 @@ export const ANNONCES_DEMO: Annonce[] = [
     titre: "Terrain viabilisé au calme, en lisière",
     lieu: "Crozon · hameau de Kerloc'h",
     prix: 89000,
+    transaction: "vente",
     surface: 720,
     dpe: undefined,
     description:
@@ -61,6 +67,7 @@ export const ANNONCES_DEMO: Annonce[] = [
     titre: "Longère rénovée avec dépendance, panorama mer",
     lieu: "Crozon · 10 min des plages",
     prix: 410000,
+    transaction: "vente",
     surface: 145,
     pieces: 5,
     dpe: "B",
@@ -68,5 +75,47 @@ export const ANNONCES_DEMO: Annonce[] = [
       "[DÉMO] Longère rénovée avec dépendance, panorama mer, à 10 min des plages.",
     datePublication: "2026-10-24",
     source: "import_pro",
+  },
+  {
+    id: "demo-crozon-location-1",
+    titre: "T3 lumineux avec vue sur la rade",
+    lieu: "Crozon · centre",
+    prix: 780,
+    transaction: "location",
+    surface: 64,
+    pieces: 3,
+    dpe: "D",
+    description:
+      "[DEMO] T3 lumineux au calme, vue sur la rade, cave et garage. Disponible immédiatement.",
+    datePublication: "2026-10-25",
+    source: "import_pro",
+  },
+  {
+    id: "demo-crozon-location-2",
+    titre: "Maison neuve F4 avec jardin",
+    lieu: "Crozon · Kerloc'h",
+    prix: 1150,
+    transaction: "location",
+    surface: 92,
+    pieces: 4,
+    dpe: "A",
+    description:
+      "[DEMO] Maison neuve F4, jardin clos, garage double. Proche écoles et plage.",
+    datePublication: "2026-10-25",
+    source: "import_pro",
+  },
+  {
+    id: "demo-crozon-location-3",
+    titre: "Studio meublé, proximité port",
+    lieu: "Crozon · port",
+    prix: 520,
+    transaction: "location",
+    surface: 28,
+    pieces: 1,
+    dpe: "C",
+    description:
+      "[DEMO] Studio meublé entièrement équipé, à deux pas du port. Charges comprises.",
+    datePublication: "2026-10-25",
+    source: "directe_particulier",
   },
 ];

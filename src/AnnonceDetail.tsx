@@ -62,6 +62,8 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
         "property",
         "og:description",
         `${annonce.lieu} — ${annonce.prix.toLocaleString("fr-FR")} €${
+          annonce.transaction === "location" ? "/mois" : ""
+        }${
           annonce.surface ? `, ${annonce.surface} m²` : ""
         }. Annonce directe de particulier, gratuite, sur le portail territorial MANAhome.`,
       ],
@@ -138,7 +140,8 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           <dl className="fiche-chiffres">
             <div>
               <dt>Prix</dt>
-              <dd className="canon">{annonce.prix.toLocaleString("fr-FR")} €</dd>
+              <dd className="canon">{annonce.prix.toLocaleString("fr-FR")} €{annonce.transaction === "location" &&
+                <span className="prix-mois">/mois</span>}</dd>
             </div>
             {annonce.surface && (
               <div>

@@ -211,8 +211,9 @@ export default function App() {
                 MANA<em>home</em>
               </h1>
               <p className="lede">
-                Publiez gratuitement. Soyez accompagné. Préparez votre annonce
-                à l'ère des intelligences artificielles.
+                Vendre, louer, faire réparer, faire entretenir : publiez
+                gratuitement, soyez accompagné, à l'ère des intelligences
+                artificielles.
               </p>
               <div className="hero-cta">
                 <a className="btn btn-primary" href={`${B}/publier`}>
@@ -223,8 +224,8 @@ export default function App() {
                 </a>
               </div>
               <p className="hero-note">
-                Particuliers : publication gratuite, sans commission de vente
-                prélevée par MANAhome.
+                Particuliers, propriétaires et locataires : publication
+                gratuite, sans commission prélevée par MANAhome.
               </p>
             </div>
           </section>

@@ -5,6 +5,7 @@ import { baseUrl } from "./router";
 // badge de source présent mais jamais dominant (règle anti-marketplace).
 export function AnnonceCard({ annonce }: { annonce: Annonce }) {
   const lieu = annonce.lieu;
+  const location = annonce.transaction === "location";
   return (
     <li className="card">
       <a href={`${baseUrl()}/annonce/${annonce.id}`}>
@@ -20,7 +21,11 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
         <div className="body">
           <p className="lieu">{lieu}</p>
           <h3>{annonce.titre}</h3>
-          <p className="prix">{annonce.prix.toLocaleString("fr-FR")} €</p>
+          <p className="prix">
+            {annonce.prix.toLocaleString("fr-FR")} €{location &&
+              <span className="prix-mois">/mois</span>}
+          </p>
+          {location && <p className="meta"><span className="badge-source">Location</span></p>}
           <div className="meta">
             {annonce.surface && <span>{annonce.surface} m²</span>}
             {annonce.pieces != null && (

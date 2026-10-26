@@ -16,6 +16,13 @@ const TYPES_FILTRE = [
   { v: "terrain", l: "Terrains" },
 ];
 
+// Vente / location : le portail couvre l'habitat entier, pas que la vente.
+const TX_FILTRE = [
+  { v: "tous", l: "Vente & location" },
+  { v: "vente", l: "À vendre" },
+  { v: "location", l: "À louer" },
+];
+
 function typeDe(annonce: Annonce): string {
   const t = annonce.titre.toLowerCase();
   if (t.includes("terrain")) return "terrain";
@@ -44,6 +51,7 @@ function JsonLd({ annonces, slug }: { annonces: Annonce[]; slug: string }) {
 
 export function AnnoncesListe({ slug }: { slug: string }) {
   const [filtre, setFiltre] = useState("tous");
+  const [filtreTx, setFiltreTx] = useState("tous");
 
   useEffect(() => {
     const t = territoireParSlug(slug);
@@ -62,8 +70,12 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     ];
     const importees = ANNONCES_DEMO.filter((a) => a.source === "import_pro");
     const triees = [...directes, ...importees];
-    return filtre === "tous" ? triees : triees.filter((a) => typeDe(a) === filtre);
-  }, [filtre]);
+    const parType =
+      filtre === "tous" ? triees : triees.filter((a) => typeDe(a) === filtre);
+    return filtreTx === "tous"
+      ? parType
+      : parType.filter((a) => (a.transaction ?? "vente") === filtreTx);
+  }, [filtre, filtreTx]);
 
   const B = baseUrl();
 
@@ -81,6 +93,19 @@ export function AnnoncesListe({ slug }: { slug: string }) {
           structurée pour être comprise, y compris par les outils compatibles IA.
         </p>
 
+        <div className="annonces-filtres" role="group" aria-label="Filtrer par transaction">
+          {TX_FILTRE.map((t) => (
+            <button
+              key={t.v}
+              type="button"
+              className={`btn btn-ghost ${filtreTx === t.v ? "on" : ""}`}
+              aria-pressed={filtreTx === t.v}
+              onClick={() => setFiltreTx(t.v)}
+            >
+              {t.l}
+            </button>
+          ))}
+        </div>
         <div className="annonces-filtres" role="group" aria-label="Filtrer par type">
           {TYPES_FILTRE.map((t) => (
             <button

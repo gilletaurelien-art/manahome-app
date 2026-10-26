@@ -12,7 +12,7 @@ import { PROS } from "./pros";
 interface FormPro {
   raisonSociale: string;
   siren: string;
-  categorie: "agence" | "mandataire" | "notaire";
+  categorie: "agence" | "mandataire" | "notaire" | "service_habitat";
   commune: string;
   email: string;
 }
@@ -21,6 +21,7 @@ const CATEGORIES = [
   { v: "agence", l: "Agence immobilière" },
   { v: "mandataire", l: "Mandataire (carte T ou carte B)" },
   { v: "notaire", l: "Office notarial" },
+  { v: "service_habitat", l: "Service à l'habitat (réparation, ménage, jardin, diagnostics…)" },
 ];
 
 const DEMANDES_CLE = "manahome-demandes-pro-demo";

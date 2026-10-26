@@ -26,6 +26,7 @@ type Etape = 1 | 2 | 3;
 
 interface FormBien {
   type: string;
+  transaction: string;
   surface: string;
   pieces: string;
   prix: string;
@@ -46,6 +47,7 @@ export function Publier() {
   const [etape, setEtape] = useState<Etape>(1);
   const [bien, setBien] = useState<FormBien>({
     ...paramsPublier(),
+    transaction: "vente",
     dpe: "",
   } as FormBien);
   const [description, setDescription] = useState("");
@@ -92,6 +94,7 @@ export function Publier() {
   // dépôt direct de particulier). En prod : auth + API + S3 pour les photos.
   const publier = () => {
     const a = enregistrerAnnonceLocale({
+      transaction: bien.transaction === "location" ? "location" : "vente",
       titre: apercu.titre,
       lieu: bien.lieu,
       prix: Number(bien.prix),
@@ -124,6 +127,25 @@ export function Publier() {
         {etape === 1 && (
           <section className="publier-panel">
             <div className="champ">
+              <label>Je souhaite…</label>
+              <div className="dpe-choix">
+                <button
+                  type="button"
+                  className={`dpe-btn ${bien.transaction !== "location" ? "on" : ""}`}
+                  onClick={() => setBien({ ...bien, transaction: "vente" })}
+                >
+                  Vendre mon bien
+                </button>
+                <button
+                  type="button"
+                  className={`dpe-btn ${bien.transaction === "location" ? "on" : ""}`}
+                  onClick={() => setBien({ ...bien, transaction: "location" })}
+                >
+                  Mettre en location
+                </button>
+              </div>
+            </div>
+            <div className="champ">
               <label htmlFor="type">Type de bien *</label>
               <select
                 id="type"
@@ -149,7 +171,7 @@ export function Publier() {
             </div>
             <div className="champ-grid">
               <div className="champ">
-                <label htmlFor="prix">Prix de vente *</label>
+                <label htmlFor="prix">{bien.transaction === "location" ? "Loyer mensuel *" : "Prix de vente *"}</label>
                 <input
                   id="prix"
                   type="number"

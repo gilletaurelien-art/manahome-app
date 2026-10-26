@@ -1,4 +1,4 @@
-import type { Annonce, Source } from "./annonces";
+import type { Annonce, Source, Transaction } from "./annonces";
 
 // Annonces déposées localement (démo) — miroir front des tables du back :
 // dépôt direct de particulier, statut de publication, suppression = exclusion.
@@ -19,6 +19,7 @@ export interface AnnonceLocale {
   datePublication: string;
   source: Source;
   statut: StatutAnnonce;
+  transaction: Transaction;
   photos?: string[];
 }
 
@@ -56,6 +57,7 @@ export function enregistrerAnnonceLocale(
     datePublication: new Date().toISOString().slice(0, 10),
     source: "directe_particulier",
     statut: "publiee",
+    transaction: data.transaction,
   };
   annonces.push(annonce);
   ecrire(annonces);
@@ -86,5 +88,6 @@ export function enAnnonce(a: AnnonceLocale): Annonce {
     description: a.description,
     datePublication: a.datePublication,
     source: a.source,
+    transaction: a.transaction,
   };
 }
