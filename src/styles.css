@@ -160,7 +160,7 @@ html { background: var(--sand); }
   content: "";
   position: fixed;
   inset: 0;
-  background: url("./assets/hero.jpg") 58% 40% / cover no-repeat;
+  background: url("./assets/hero.jpg") center / cover no-repeat;
   z-index: -2;
 }
 .hero .wrap {
