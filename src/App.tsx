@@ -30,6 +30,7 @@ import { Pros } from "./Pros";
 import { Messagerie } from "./Messagerie";
 import { EspacePro } from "./EspacePro";
 import { MesAnnonces } from "./MesAnnonces";
+import { MentionsLegales } from "./MentionsLegales";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -179,6 +180,8 @@ export default function App() {
         <EspacePro />
       ) : path === "/mes-annonces" ? (
         <MesAnnonces />
+      ) : path === "/mentions-legales" ? (
+        <MentionsLegales />
       ) : path === "/services" ? (
         window.location.replace(`${baseUrl()}/pros`)
       ) : territoire ? (
@@ -340,22 +343,9 @@ export default function App() {
             <a href={`${B}/espace-pro`}>Rejoindre le référentiel</a>
             <a href={`${B}/messagerie`}>Ma messagerie</a>
             <a href={`${B}/mes-annonces`}>Mes annonces</a>
+            <a href={`${B}/approche`}>À propos</a>
+            <a href={`${B}/mentions-legales`}>Mentions légales</a>
           </nav>
-        </div>
-        <div className="wrap footer-bas">
-          <p>
-            MANAhome ne réalise aucun acte réglementé (loi Hoguet) : pas de
-            mandat, pas de négociation, pas de transaction. Estimations
-            indicatives, sans valeur contractuelle.
-          </p>
-          <p>
-            Écosystème MANA —{" "}
-            <a href="https://mana.bzh" rel="noopener">mana.bzh</a>
-            {" · "}
-            <a href="https://mana.love" rel="noopener">mana.love</a>
-            {" · "}
-            <a href="https://manafrance.org" rel="noopener">manafrance.org</a>
-          </p>
         </div>
       </footer>
     </>
