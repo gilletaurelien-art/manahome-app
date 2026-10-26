@@ -1342,3 +1342,6 @@ html { background: var(--sand); }
   padding: var(--sp-2) var(--sp-4);
 }
 .contact-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-2); }
+
+/* Brand du footer : MANA blanc, home or — sur fond encre */
+.site-footer .brand { color: #fff; }
