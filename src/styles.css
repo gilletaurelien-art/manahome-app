@@ -728,7 +728,7 @@ html { background: var(--sand); }
   opacity: 1;
 }
 .site-footer > .wrap {
-  background: rgb(255 255 255 / 88%);
+  background: var(--ink);
   border: 1px solid var(--ecume);
   border-radius: 44px 56px 40px 52px / 52px 42px 56px 46px;
   box-shadow:
@@ -788,37 +788,36 @@ html { background: var(--sand); }
   gap: var(--sp-4);
   flex-wrap: wrap;
   padding-bottom: var(--sp-4);
-  color: var(--ink);
+  color: var(--sand);
 }
 .footer-colonnes > div,
 .footer-colonnes .footer-nav {
-  background: rgb(250 248 243 / 70%);
-  border: 1px solid var(--ecume);
-  border-radius: 18px 24px 16px 20px;
-  padding: var(--sp-2) var(--sp-4);
+  background: none;
+  border: none;
+  padding: 0;
 }
 .footer-colonnes .brand { font-size: var(--t-m); margin: 0 0 var(--sp-1); }
-.footer-note { max-width: 44ch; margin: 0; }
+.footer-note { font-size: var(--t-xs); opacity: 0.8; margin-top: var(--sp-1); max-width: 55ch; }
 .footer-nav {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 .footer-nav a {
-  color: var(--ink);
+  color: var(--sand);
   text-decoration: none;
   display: inline-block;
-  background: rgb(233 229 220 / 55%);
-  border: 1px solid rgb(27 42 74 / 12%);
+  background: rgb(255 255 255 / 8%);
+  border: 1px solid rgb(255 255 255 / 25%);
   border-radius: 14px 18px 12px 16px;
   padding: 6px 14px;
   font-size: var(--t-xs);
   transition: all 160ms ease;
 }
 .footer-nav a:hover {
-  background: var(--ink);
-  color: var(--sand);
-  border-color: var(--ink);
+  background: var(--sand);
+  color: var(--ink);
+  border-color: var(--sand);
   transform: translateY(-1px);
 }
 .footer-bas {
@@ -1316,7 +1315,7 @@ html { background: var(--sand); }
   display: block;
   font-size: var(--t-xs);
   font-weight: 700;
-  color: var(--ink);
+  color: var(--sand);
   margin-bottom: 4px;
 }
 .contact-form .champ input,
