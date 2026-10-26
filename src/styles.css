@@ -936,3 +936,47 @@ html { background: var(--sand); }
 /* Panneau de recherche du catalogue */
 .recherche-panel { margin-bottom: var(--sp-4); }
 .recherche-panel .champ-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-2); }
+
+/* Hero-moteur : la recherche EST le produit */
+.moteur { position: relative; max-width: 560px; margin: 0 auto var(--sp-2); }
+.moteur input {
+  width: 100%;
+  font: inherit;
+  font-size: var(--t-m);
+  padding: 14px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--ecume);
+  background: var(--blanc-chaud);
+  box-shadow:
+    inset 0 2px 6px rgb(255 255 255 / 85%),
+    0 4px 12px rgb(27 42 74 / 10%);
+}
+.moteur input:focus {
+  outline: 2px solid var(--or);
+  outline-offset: 2px;
+}
+.moteur-suggestions {
+  text-align: left;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.suggestions a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: 12px;
+}
+.suggestions a:hover { background: var(--sand); color: var(--primary); }
+.suggestion-meta { font-size: var(--t-xs); opacity: 0.65; }
+.suggestions-groupe {
+  font-size: var(--t-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  padding: 8px 14px 2px;
+  list-style: none;
+}

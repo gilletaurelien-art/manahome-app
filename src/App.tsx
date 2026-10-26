@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { ANNONCES_DEMO } from "./annonces";
 import { annoncesPublieesLocales, annonceLocaleParId, enAnnonce } from "./annoncesLocales";
+import { PROS } from "./pros";
+import { SERVICES_DEMO, CATEGORIES_SERVICE } from "./servicesHabitat";
 import { AnnonceCard } from "./AnnonceCard";
 import {
   GlyphMaison,
@@ -122,6 +125,23 @@ const B = baseUrl();
 
 export default function App() {
   const path = usePath();
+  const [moteurQ, setMoteurQ] = useState("");
+  const [moteurOuvert, setMoteurOuvert] = useState(false);
+
+  const q = moteurQ.trim().toLowerCase();
+  const dans = (...textes: (string | undefined)[]) =>
+    textes.some((t) => !!t && t.toLowerCase().includes(q));
+  const annoncesMoteur = q
+    ? triees.filter((a) => dans(a.titre, a.lieu, a.transaction)).slice(0, 4)
+    : [];
+  const prosMoteur = q
+    ? PROS.filter((p) => dans(p.raisonSociale, p.commune, p.categorie)).slice(0, 3)
+    : [];
+  const servicesMoteur = q
+    ? SERVICES_DEMO.filter((sv) =>
+        dans(sv.nom, sv.commune, sv.resume, sv.categorie)
+      ).slice(0, 3)
+    : [];
   const annonce =
     annonceParId(routeAnnonce(path)) ??
     (() => {
@@ -189,23 +209,77 @@ export default function App() {
         <>
           {/* Hero : le logo en grand, la promesse en dessous */}
           <section className="hero">
-            <div className="wrap bulle-xl">
+            <div className="wrap bulle-xl hero-moteur">
               <p className="hero-label">L'immobilier, autrement</p>
               <h1 className="brand-grand">
                 MANA<em>home</em>
               </h1>
               <p className="lede">
-                Vendre, louer, faire réparer, faire entretenir : publiez
-                gratuitement, soyez accompagné, à l'ère des intelligences
-                artificielles.
+                Un logement à vendre ou à louer, un notaire, un artisan, une
+                aide à domicile : cherchez tout ce qui fait vivre l'habitat
+                du territoire.
               </p>
-              <div className="hero-cta">
-                <a className="btn btn-primary" href={`${B}/publier`}>
-                  Je souhaite vendre
-                </a>
-                <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
-                  Je cherche un bien
-                </a>
+              <div className="moteur">
+                <input
+                  id="moteur-input"
+                  type="search"
+                  role="combobox"
+                  aria-expanded={moteurOuvert}
+                  aria-controls="moteur-suggestions"
+                  autoComplete="off"
+                  placeholder="Rechercher : maison à Crozon, location, plombier, notaire…"
+                  value={moteurQ}
+                  onChange={(e) => {
+                    setMoteurQ(e.target.value);
+                    setMoteurOuvert(true);
+                  }}
+                  onFocus={() => setMoteurOuvert(true)}
+                  onBlur={() => setTimeout(() => setMoteurOuvert(false), 150)}
+                />
+                {moteurOuvert && (annoncesMoteur.length > 0 || prosMoteur.length > 0 || servicesMoteur.length > 0) && (
+                  <ul id="moteur-suggestions" className="suggestions moteur-suggestions" role="listbox">
+                    {annoncesMoteur.length > 0 && (
+                      <li className="suggestions-groupe" role="presentation">Logements</li>
+                    )}
+                    {annoncesMoteur.map((a) => (
+                      <li key={a.id} role="option" aria-selected={false}>
+                        <a href={`${B}/annonce/${a.id}`}>
+                          {a.titre}
+                          <span className="suggestion-meta">
+                            {a.lieu} · {a.prix.toLocaleString("fr-FR")} €
+                            {a.transaction === "location" ? "/mois" : ""}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                    {prosMoteur.length > 0 && (
+                      <li className="suggestions-groupe" role="presentation">Professionnels</li>
+                    )}
+                    {prosMoteur.map((pr) => (
+                      <li key={pr.siren} role="option" aria-selected={false}>
+                        <a href={`${B}/pros`}>
+                          {pr.raisonSociale}
+                          <span className="suggestion-meta">
+                            {pr.categorie === "notaire" ? "Office notarial" : "Agence"} · {pr.commune}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                    {servicesMoteur.length > 0 && (
+                      <li className="suggestions-groupe" role="presentation">Services à l'habitat</li>
+                    )}
+                    {servicesMoteur.map((sv) => (
+                      <li key={sv.id} role="option" aria-selected={false}>
+                        <a href={`${B}/pros`}>
+                          {sv.nom}
+                          <span className="suggestion-meta">
+                            {CATEGORIES_SERVICE.find((c) => c.v === sv.categorie)?.l} · {sv.commune}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
               <p className="hero-note">
                 Particuliers, propriétaires et locataires : publication
