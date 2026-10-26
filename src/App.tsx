@@ -235,9 +235,8 @@ export default function App() {
                 MANA<em>home</em>
               </h1>
               <p className="lede">
-                Un logement à vendre ou à louer, un notaire, un artisan, une
-                aide à domicile : cherchez tout ce qui fait vivre l'habitat
-                du territoire.
+                Vendez, louez, entretenez : tout l'habitat du territoire,
+                en une recherche.
               </p>
               <div className="moteur">
                 <div className="moteur-categories" role="group" aria-label="Je cherche">
