@@ -5,8 +5,11 @@ import {
   PAGES_PRIVEES,
   REDIRIGEES,
   ROUTES_PLATES,
+  TOUTES_LES_PAGES,
+  TITRE_GENERIQUE,
   canonique,
   construireSitemap,
+  titreDeLaRoute,
 } from "./canonique";
 
 const app = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
@@ -41,6 +44,56 @@ describe("la carte des routes est la source unique", () => {
         `https://manahome.org/${cible}`,
       );
     }
+  });
+
+  // ── LES TITRES ──────────────────────────────────────────────────────────
+  // Le défaut du 28/10 : les titres étaient posés en JS, donc absents du HTML
+  // livré. Les aperçus de lien (Slack, WhatsApp, LinkedIn…) n'exécutent pas le
+  // JS : chaque lien partagé montrait la vignette de l'accueil.
+  it("chaque route plate a un titre, aucune n'est oubliée", () => {
+    const sans = ROUTES_PLATES.filter((s) => !titreDeLaRoute(`/${s}`));
+    expect(sans).toEqual([]);
+  });
+
+  it("aucun titre vide dans la table", () => {
+    expect(TOUTES_LES_PAGES.filter((p) => !p.titre.trim()).map((p) => p.slug)).toEqual([]);
+  });
+
+  it("deux pages ne partagent JAMAIS le même titre", () => {
+    const vus = new Map<string, string[]>();
+    for (const p of TOUTES_LES_PAGES) {
+      vus.set(p.titre, [...(vus.get(p.titre) ?? []), p.slug]);
+    }
+    expect([...vus.entries()].filter(([, s]) => s.length > 1)).toEqual([]);
+  });
+
+  it("chaque titre est suffixé par la marque, et diffère du générique", () => {
+    for (const p of TOUTES_LES_PAGES) {
+      const t = titreDeLaRoute(`/${p.slug}`);
+      expect(t).toMatch(/ — MANAhome$/);
+      expect(t).not.toBe(TITRE_GENERIQUE);
+    }
+    expect(titreDeLaRoute("/")).toBe(TITRE_GENERIQUE);
+  });
+
+  // ⚠️ Une redirection porte le titre de sa destination, comme sa canonique.
+  it("une redirection porte le titre de sa DESTINATION", () => {
+    for (const [ancienne, cible] of Object.entries(REDIRIGEES)) {
+      expect(titreDeLaRoute(`/${ancienne}`)).toBe(titreDeLaRoute(`/${cible}`));
+    }
+  });
+
+  it("une route inconnue n'a pas de titre de page", () => {
+    expect(titreDeLaRoute("/inexistant-xyz")).toBeNull();
+  });
+
+  // ⛔ Aucune description par page dans ce dépôt : en écrire serait inventer.
+  it("aucun composant ne pose plus de titre fixe — une seule source", () => {
+    const fixes = ["Approche", "Pros", "Estimation", "MentionsLegales", "Messagerie", "EspacePro", "MesAnnonces"]
+      .map((n) => [n, readFileSync(new URL(`./${n}.tsx`, import.meta.url), "utf8")] as const)
+      .filter(([, src]) => /document\.title = "/.test(src))
+      .map(([n]) => n);
+    expect(fixes).toEqual([]);
   });
 
   it("une route inconnue n'a PAS de canonique", () => {

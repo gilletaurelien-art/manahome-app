@@ -7,12 +7,6 @@ import { baseUrl } from "./router";
 // avec la structure définitive de l'association/entreprise MANA.
 
 export function MentionsLegales() {
-  useEffect(() => {
-    document.title = "Mentions légales — MANAhome";
-    return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-    };
-  }, []);
 
   const B = baseUrl();
 

@@ -27,12 +27,6 @@ const CATEGORIES = [
 const DEMANDES_CLE = "manahome-demandes-pro-demo";
 
 export function EspacePro() {
-  useEffect(() => {
-    document.title = "Espace professionnels — MANAhome";
-    return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-    };
-  }, []);
 
   const [form, setForm] = useState<FormPro>({
     raisonSociale: "",

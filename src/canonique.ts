@@ -17,15 +17,57 @@
 // émise par le build (voir vite.config.ts). Cette table en est la source unique :
 // le plan de site et les tests y lisent, ils ne recopient rien.
 
+export interface Page {
+  slug: string;
+  titre: string;
+}
+
+/**
+ * Les pages avec LEUR TITRE. Ordre du sitemap pour les publiques.
+ *
+ * 🔴 POURQUOI LE TITRE VIT ICI (28/10/2026). Il était posé en JS, par un
+ * `document.title` dans chaque composant — donc ABSENT du HTML livré, où les
+ * dix routes portaient le `<title>` et l'`og:title` de l'accueil.
+ * ⭐ ET LE COÛT N'EST PAS L'INDEXATION. Un titre posé en JS répare ce que
+ * Google voit ; il ne répare PAS ce que les gens voient en PARTAGEANT un lien.
+ * Les aperçus de Slack, WhatsApp, LinkedIn, iMessage et Signal lisent
+ * l'`og:title` du HTML et n'exécutent aucun JS : chaque lien partagé affichait
+ * la vignette de l'accueil. Ça se constate sans outil — on colle un lien dans
+ * une conversation.
+ *
+ * ⚠️ Les textes sont ceux DÉJÀ ÉCRITS dans l'app, aucun inventé. Celui de
+ * `publier` vient de son `<h1>` (« Publier mon annonce ») : la seule page dont
+ * le titre n'était pas déjà posé en JS.
+ * ⛔ Et AUCUNE `description` par page : contrairement à manatimebank, il n'en
+ * existe nulle part ici, pas même en JS. En écrire serait inventer — la
+ * générique reste en place, c'est un arbitrage d'Aurélien.
+ */
+export const PAGES_PUBLIQUES_T: readonly Page[] = [
+  { slug: "approche", titre: "Notre approche" },
+  { slug: "pros", titre: "Professionnels & services de l'habitat" },
+  { slug: "publier", titre: "Publier mon annonce" },
+  { slug: "estimation", titre: "Estimer mon bien" },
+  { slug: "mentions-legales", titre: "Mentions légales" },
+];
+
+export const PAGES_PRIVEES_T: readonly Page[] = [
+  { slug: "messagerie", titre: "Ma messagerie" },
+  { slug: "espace-pro", titre: "Espace professionnels" },
+  { slug: "mes-annonces", titre: "Mes annonces" },
+];
+
+/** Le titre générique : l'accueil, et les pages d'erreur. */
+export const TITRE_GENERIQUE = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
+
 /** Les pages publiques, indexables. Elles seules entrent au plan de site. */
-export const PAGES_PUBLIQUES = ["approche", "pros", "publier", "estimation", "mentions-legales"] as const;
+export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p.slug);
 
 /**
  * Les écrans d'application : une coquille leur est servie (pour ne pas répondre
  * 404 à un utilisateur connecté qui recharge), mais ils ne sont PAS au plan de
  * site et robots.txt les écarte. Ils n'ont rien à offrir à un moteur.
  */
-export const PAGES_PRIVEES = ["messagerie", "espace-pro", "mes-annonces"] as const;
+export const PAGES_PRIVEES: readonly string[] = PAGES_PRIVEES_T.map((p) => p.slug);
 
 /** Anciennes routes : elles redirigent, et se canonicalisent vers leur DESTINATION. */
 export const REDIRIGEES: Record<string, string> = { services: "pros" };
@@ -78,7 +120,41 @@ export function canonique(path: string, siteUrl = SITE_URL, base = "/"): string 
   return null;
 }
 
-/** Pose (ou retire) la canonique et og:url du document selon le chemin courant. */
+/** Toutes les pages titrées, publiques et privées. */
+export const TOUTES_LES_PAGES: readonly Page[] = [...PAGES_PUBLIQUES_T, ...PAGES_PRIVEES_T];
+
+/**
+ * Le titre complet d'un chemin, ou `null` pour une route inconnue — une page
+ * d'erreur porte le générique, comme elle ne porte pas de canonique.
+ * ⚠️ Une route qui REDIRIGE porte le titre de sa destination, exactement comme
+ * elle en porte la canonique : les deux doivent raconter la même chose.
+ */
+export function titreDeLaRoute(path: string): string | null {
+  const nu = path.replace(/\/$/, "") || "/";
+  if (nu === "/") return TITRE_GENERIQUE;
+  const slug = nu.match(/^\/([\w-]+)$/)?.[1];
+  if (!slug) return null;
+  const cible = REDIRIGEES[slug] ?? slug;
+  const page = TOUTES_LES_PAGES.find((p) => p.slug === cible);
+  return page ? `${page.titre} — MANAhome` : null;
+}
+
+function poserMeta(cle: "name" | "property", nom: string, valeur: string): void {
+  let m = document.querySelector<HTMLMetaElement>(`meta[${cle}="${nom}"]`);
+  if (!m) {
+    m = document.createElement("meta");
+    m.setAttribute(cle, nom);
+    document.head.appendChild(m);
+  }
+  m.content = valeur;
+}
+
+/**
+ * Pose titre, canonique, og:url et og:title selon le chemin courant.
+ * ⚠️ `og:title` AUTANT que `<title>` : c'est l'og qui décide de l'aperçu d'un
+ * lien partagé. Le HTML livré les porte déjà (vite.config.ts) ; ceci tient la
+ * navigation côté client.
+ */
 export function poserCanonique(path: string): void {
   const base = (import.meta.env.BASE_URL ?? "/") as string;
   const url = canonique(path, SITE_URL, base);
@@ -100,6 +176,10 @@ export function poserCanonique(path: string): void {
     document.head.appendChild(og);
   }
   og.content = url;
+
+  const titre = titreDeLaRoute(path) ?? TITRE_GENERIQUE;
+  document.title = titre;
+  poserMeta("property", "og:title", titre);
 }
 
 /**

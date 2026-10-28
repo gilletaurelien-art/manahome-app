@@ -88,12 +88,6 @@ function JsonLd() {
 }
 
 export function Estimation() {
-  useEffect(() => {
-    document.title = "Estimer mon bien — MANAhome";
-    return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-    };
-  }, []);
 
   const [form, setForm] = useState<FormEstimation>({
     commune: "",

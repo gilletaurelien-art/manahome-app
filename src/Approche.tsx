@@ -38,12 +38,6 @@ const PILIERS = [
 ];
 
 export function Approche() {
-  useEffect(() => {
-    document.title = "Notre approche — MANAhome";
-    return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-    };
-  }, []);
 
   const B = baseUrl();
 

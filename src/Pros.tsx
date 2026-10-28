@@ -33,12 +33,6 @@ const ETATS = [
 export function Pros() {
   const [categorie, setCategorie] = useState<CategorieService | "tous">("tous");
 
-  useEffect(() => {
-    document.title = "Professionnels & services de l'habitat — MANAhome";
-    return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-    };
-  }, []);
 
   const B = baseUrl();
 

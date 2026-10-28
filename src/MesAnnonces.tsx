@@ -20,14 +20,13 @@ export function MesAnnonces() {
   const [annonces, setAnnonces] = useState<AnnonceLocale[] | null>(null);
   const [publieeId, setPublieeId] = useState<string | null>(null);
 
+  // Le titre est posé par App depuis la table de routes (src/canonique.ts) —
+  // plus ici : il doit aussi être injecté dans le HTML livré, et deux copies de
+  // la même phrase divergent tôt ou tard.
   useEffect(() => {
-    document.title = "Mes annonces — MANAhome";
     const p = new URLSearchParams(window.location.search);
     setPublieeId(p.get("publiee"));
     setAnnonces(lireTout());
-    return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-    };
   }, []);
 
   if (annonces === null) return null;

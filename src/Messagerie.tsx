@@ -13,12 +13,6 @@ import {
 // mise en relation passe uniquement par ici.
 
 export function Messagerie() {
-  useEffect(() => {
-    document.title = "Ma messagerie — MANAhome";
-    return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-    };
-  }, []);
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [active, setActive] = useState<string | null>(null);
