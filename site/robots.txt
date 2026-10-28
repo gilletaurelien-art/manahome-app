@@ -1,6 +1,10 @@
 # Les moteurs de recherche et assistants de découverte sont bienvenus (pilier « Lisible par les IA »).
 User-agent: *
 Allow: /
+# Les écrans d'application n'ont rien à offrir à un moteur.
+Disallow: /messagerie
+Disallow: /espace-pro
+Disallow: /mes-annonces
 
 # Blocage des crawlers non autorisés ; jamais Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot.
 User-agent: AhrefsBot
@@ -15,4 +19,4 @@ Disallow: /
 User-agent: DotBot
 Disallow: /
 
-Sitemap: https://manahome.org/sitemap.xml
+Sitemap: https://gilletaurelien-art.github.io/manahome-app/sitemap.xml

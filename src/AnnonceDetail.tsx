@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Annonce } from "./annonces";
 import { baseUrl } from "./router";
-import { ouvrirConversation } from "./messagerie";
+import { ouvrirConversation } from "./messagerieDonnees";
 import { annonceLocaleParId } from "./annoncesLocales";
 
 // JSON-LD RealEstateListing (schema.org) : le cœur du pilier « Lisible

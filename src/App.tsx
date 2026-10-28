@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { poserCanonique } from "./canonique";
 import { annonceLocaleParId, enAnnonce } from "./annoncesLocales";
 import {
   GlyphCompas,
@@ -26,6 +27,17 @@ import { Publier } from "./Publier";
 import { Estimation } from "./Estimation";
 import { AnnoncesListe } from "./AnnoncesListe";
 import { Approche } from "./Approche";
+// ⚠️ `pros.ts` et `messagerie.ts` ont été RENOMMÉS en `prosDonnees.ts` et
+// `messagerieDonnees.ts` le 28/10/2026, et ce n'est pas un goût de nommage.
+// Ils ne différaient de `Pros.tsx` / `Messagerie.tsx` que par la casse du
+// radical. Le résolveur essaie `./Pros.ts` AVANT `./Pros.tsx` : sur un système
+// de fichiers insensible à la casse (macOS par défaut) il tombait sur le module
+// de DONNÉES, et le build échouait sur « "Pros" is not exported ».
+// ⭐ Le dépôt ne se construisait donc que sur un système sensible à la casse —
+// la CI Linux, et nulle part ailleurs. Mesuré en voulant construire pour le
+// domaine depuis le Mac. ⚠️ Et le premier correctif essayé (extension `.tsx`
+// explicite dans l'import) réparait rollup et CASSAIT `tsc` : la CI enchaîne
+// les deux. Renommer traite la cause, pas le symptôme.
 import { Pros } from "./Pros";
 import { Messagerie } from "./Messagerie";
 import { EspacePro } from "./EspacePro";
@@ -105,6 +117,11 @@ const B = baseUrl();
 
 export default function App() {
   const path = usePath();
+  // La canonique suit la route. Les coquilles livrées la portent déjà dans le
+  // HTML (vite.config.ts) ; ceci tient la navigation côté client.
+  useEffect(() => {
+    poserCanonique(path);
+  }, [path]);
   const [moteurCategorie, setMoteurCategorie] = useState("acheter");
   const [servicesOuvert, setServicesOuvert] = useState(false);
   const [moteurLieu, setMoteurLieu] = useState("");

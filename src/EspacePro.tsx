@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { baseUrl } from "./router";
-import { PROS } from "./pros";
+import { PROS } from "./prosDonnees";
 
 // Espace pro — inscription au référentiel (3 états) et dépôt de candidature
 // d'annonce pro. Périmètre volontairement MINIMAL : pas d'abonnement, pas de

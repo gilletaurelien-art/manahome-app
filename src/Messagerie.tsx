@@ -6,7 +6,7 @@ import {
   envoyer,
   lireConversations,
   reponseSimulee,
-} from "./messagerie";
+} from "./messagerieDonnees";
 
 // Page /messagerie — boîte de réception de l'acheteur (démo : stockage
 // local, aucun compte). Règle gravée : coordonnées jamais publiées, la
