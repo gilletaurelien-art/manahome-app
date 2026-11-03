@@ -50,6 +50,21 @@ function lireTout(): Record<string, string[]> {
   }
 }
 
+// Les deux gestes du stockage, isolés pour que bloquerPlage/libererMois
+// écrivent EXACTEMENT comme basculerNuit — trois chemins d'écriture, c'est
+// deux de trop pour une même clé localStorage.
+function lireToutStockage(): Record<string, string[]> {
+  return lireTout();
+}
+function ecrireStockage(tout: Record<string, string[]>): void {
+  try {
+    localStorage.setItem(CLE, JSON.stringify(tout));
+  } catch {
+    // quota dépassé : la démo continue en lecture (même doctrine que
+    // basculerNuit — l'UI reverra l'état précédent au remontage).
+  }
+}
+
 /** Les nuitées bloquées d'une annonce, triées. */
 export function lireIndispos(id: string): string[] {
   return [...(lireTout()[id] ?? [])].sort();
@@ -87,4 +102,100 @@ export function nuiteesDe(arrivee: string, depart: string): string[] {
     sortie.push(nuitIso(d));
   }
   return sortie;
+}
+
+// ===== Import iCal : les nuitées d'un .ics deviennent des blocages =====
+//
+// ⭐ POURQUOI PAR TEXTE COLLÉ, PAS PAR URL (V2 démo). L'import vise le flux
+// réel du propriétaire : il exporte son calendrier Airbnb/Booking (.ics) et
+// le colle ici. Un fetch direct vers ces URLs se heurterait au CORS et
+// exigerait un proxy serveur — en production seulement. Le parseur, lui,
+// est déjà le bon : DATE ou DATE-TIME, lignes repliées, bord exclu.
+//
+// 🛑 AUCUN évènement ne devient une « réservation » : tout devient cause
+// 'blocage' (nuitée indisponible), miroir exact de `annonces_ical` en 007 —
+// l'iCal dit « occupé », il ne dit pas pour qui ni pour combien.
+
+/** Déplie les lignes iCal (RFC 5545 : une continuation commence par une espace). */
+function deplierLignes(texte: string): string[] {
+  const lignes: string[] = [];
+  for (const brute of texte.split(/\r?\n/)) {
+    if (/^[ \t]/.test(brute) && lignes.length) {
+      lignes[lignes.length - 1] += brute.slice(1);
+    } else {
+      lignes.push(brute);
+    }
+  }
+  return lignes;
+}
+
+/** La partie date d'une valeur DTSTART/DTEND : DATE ou DATE-TIME (Z ignoré). */
+function dateDeValeur(valeur: string): string | null {
+  const m = valeur.match(/^(\d{4})(\d{2})(\d{2})(?:T\d{6}Z?)?$/);
+  if (!m) return null;
+  const iso = `${m[1]}-${m[2]}-${m[3]}`;
+  return estNuitValide(iso) ? iso : null;
+}
+
+/**
+ * Les nuitées bloquées d'un contenu iCal, et le nombre d'évènements
+ * ignorés (mal formés) — cacher une erreur de parse transformerait un
+ * import « silencieusement faux » en confiance de façade.
+ */
+export function nuiteesDepuisIcs(texte: string): { nuits: string[]; ignores: number } {
+  const dansEvenement = texte.includes("BEGIN:VEVENT");
+  if (!dansEvenement) return { nuits: [], ignores: 0 };
+  const lignes = deplierLignes(texte);
+  const nuits = new Set<string>();
+  let ignores = 0;
+  let debut: string | null = null;
+  let fin: string | null = null;
+  let vevent = false;
+  const clore = () => {
+    if (debut && fin && fin > debut) {
+      for (const n of nuiteesDe(debut, fin)) nuits.add(n);
+    } else if (debut && !fin) {
+      // pas de DTEND : une seule nuitée (séjour d'une nuit)
+      nuits.add(debut);
+    } else if (vevent && (!debut || !fin)) {
+      ignores += 1;
+    }
+    debut = null;
+    fin = null;
+  };
+  for (const ligne of lignes) {
+    if (/^BEGIN:VEVENT$/i.test(ligne)) {
+      vevent = true;
+      debut = null;
+      fin = null;
+    } else if (/^END:VEVENT$/i.test(ligne)) {
+      clore();
+      vevent = false;
+    } else if (/^DTSTART[;:]/i.test(ligne)) {
+      debut = dateDeValeur(ligne.split(":").slice(1).join(":").trim());
+    } else if (/^DTEND[;:]/i.test(ligne)) {
+      fin = dateDeValeur(ligne.split(":").slice(1).join(":").trim());
+    }
+  }
+  return { nuits: [...nuits].sort(), ignores };
+}
+
+/** Bloque une plage de nuitées d'un coup — retourne l'état trié. */
+export function bloquerPlage(id: string, nuits: string[]): string[] {
+  const valides = new Set([...lireIndispos(id), ...nuits.filter(estNuitValide)]);
+  const tout = lireToutStockage();
+  if (valides.size === 0) return [];
+  tout[id] = [...valides].sort();
+  ecrireStockage(tout);
+  return tout[id];
+}
+
+/** Libère toutes les nuitées bloquées d'un mois donné (YYYY-MM). */
+export function libererMois(id: string, anMois: string): string[] {
+  const restantes = lireIndispos(id).filter((n) => !n.startsWith(anMois));
+  const tout = lireToutStockage();
+  if (restantes.length === 0) delete tout[id];
+  else tout[id] = restantes;
+  ecrireStockage(tout);
+  return restantes;
 }

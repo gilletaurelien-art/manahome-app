@@ -1378,6 +1378,9 @@ html { background: var(--sand); }
 .calendrier-nuit.bloquee { background: rgba(0,0,0,0.78); color: #fff; border-color: transparent; }
 .calendrier-auj { position: absolute; inset: 2px; border: 1px dashed currentColor; border-radius: 6px; opacity: 0.5; pointer-events: none; }
 .calendrier-note { font-size: var(--t-xs); opacity: 0.65; margin: var(--sp-3) 0 0; }
+.calendrier-outils { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
+.calendrier-ics { margin-top: var(--sp-4); }
+.calendrier-ics summary { cursor: pointer; font-size: var(--t-s); opacity: 0.8; }
 .annonce-vendeur-calendrier { margin-top: var(--sp-4); }
 @media (prefers-color-scheme: dark) {
   .calendrier-nuit { border-color: rgba(255,255,255,0.2); }

@@ -116,6 +116,18 @@ const DICO_EN: Record<string, string> = {
   "juillet": "July", "août": "August", "septembre": "September",
   "octobre": "October", "novembre": "November", "décembre": "December",
   "bloquée": "blocked", "disponible": "available",
+  "Mois précédent": "Previous month", "Mois suivant": "Next month",
+  "Bloquer une plage": "Block a range",
+  "Cliquez la nuit de fin…": "Click the end night…",
+  "Libérer ce mois": "Release this month",
+  "Importer un calendrier externe (iCal)": "Import an external calendar (iCal)",
+  "Collez le contenu de votre fichier .ics (Airbnb, Booking…)":
+    "Paste the contents of your .ics file (Airbnb, Booking…)",
+  "Importer les nuitées occupées": "Import busy nights",
+  "Aucune nuitée lisible dans ce calendrier.": "No readable nights in this calendar.",
+  "{n} nuitées bloquées, {i} évènement(s) illisible(s) ignoré(s).":
+    "{n} nights blocked, {i} unreadable event(s) skipped.",
+  "{n} nuitées bloquées.": "{n} nights blocked.",
   "Calendrier de mes nuitées": "My nights calendar",
   "Cliquez une nuitée pour la bloquer ou la libérer. Bloquer n'est pas réserver : MANAhome n'encaisse aucun paiement, et une nuitée non bloquée reste disponible partout où vous diffusez.":
     "Click a night to block or release it. Blocking is not booking: MANAhome never takes a payment, and a night that isn't blocked stays available wherever you list.",

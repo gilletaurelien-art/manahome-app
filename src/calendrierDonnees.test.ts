@@ -5,6 +5,9 @@ import {
   lireIndispos,
   basculerNuit,
   nuiteesDe,
+  nuiteesDepuisIcs,
+  bloquerPlage,
+  libererMois,
 } from "./calendrierDonnees";
 
 // localStorage n'existe pas sous Node : un doublon minimal, fidèle au
@@ -78,5 +81,57 @@ describe("la plage de nuitées exclut le départ", () => {
   it("bornes invalides : aucune nuitée", () => {
     expect(nuiteesDe("x", "2026-11-07")).toEqual([]);
     expect(nuiteesDe("2026-11-04", "2026-11-04")).toEqual([]);
+  });
+});
+
+describe("l'import iCal : occupé devient bloqué, jamais réservé", () => {
+  beforeEach(() => stock.clear());
+
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "PRODID:-//Airbnb//EN",
+    "BEGIN:VEVENT",
+    "DTSTART;VALUE=DATE:20261218",
+    "DTEND;VALUE=DATE:20261222",
+    "SUMMARY:Reserved",
+    "END:VEVENT",
+    "BEGIN:VEVENT",
+    "DTSTART:20261228T170000Z",
+    "DTEND:20261230T100000Z",
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+
+  it("les évènements deviennent des nuitées bloquées, bord de départ exclu", () => {
+    const { nuits, ignores } = nuiteesDepuisIcs(ics);
+    expect(ignores).toBe(0);
+    expect(nuits).toEqual(["2026-12-18", "2026-12-19", "2026-12-20", "2026-12-21",
+                           "2026-12-28", "2026-12-29"]);
+  });
+
+  it("un évènement sans DTEND bloque sa nuitée unique", () => {
+    const uneNuit = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE:20270102\r\nEND:VEVENT";
+    expect(nuiteesDepuisIcs(uneNuit).nuits).toEqual(["2027-01-02"]);
+  });
+
+  it("un évènement illisible est compté ignoré — jamais silencieux", () => {
+    const buggue = "BEGIN:VEVENT\r\nSUMMARY:pas de dates\r\nEND:VEVENT\r\n" + ics;
+    const { nuits, ignores } = nuiteesDepuisIcs(buggue);
+    expect(ignores).toBe(1);
+    expect(nuits.length).toBe(6);
+  });
+
+  it("sans aucun VEVENT, rien ne se passe", () => {
+    expect(nuiteesDepuisIcs("BEGIN:VCALENDAR\r\nEND:VCALENDAR")).toEqual({ nuits: [], ignores: 0 });
+  });
+
+  it("bloquerPlage additionne sans dupliquer, libererMois ne touche qu'au mois affiché", () => {
+    bloquerPlage("a1", nuiteesDe("2026-12-18", "2026-12-22"));
+    bloquerPlage("a1", nuiteesDe("2026-12-20", "2026-12-24"));
+    expect(lireIndispos("a1")).toEqual(nuiteesDe("2026-12-18", "2026-12-24"));
+    bloquerPlage("a1", ["2027-01-05"]);
+    const restantes = libererMois("a1", "2026-12");
+    expect(restantes).toEqual(["2027-01-05"]);
+    expect(lireIndispos("a1")).toEqual(["2027-01-05"]);
   });
 });
