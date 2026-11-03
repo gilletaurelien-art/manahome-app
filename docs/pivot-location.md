@@ -80,6 +80,11 @@ Séquencement :
    le voyageur — MANAhome reste hors du circuit. Garde éthique : l'option
    s'affiche neutre, elle ne se pousse jamais (le BNPL est du crédit à la
    consommation ; aucun encouragement).
+4. **V4 (à étudier) — caution par préautorisation** : uniquement sur le PSP
+   de l'hôte (le marchand capture, jamais nous). Une caution **détenue par
+   MANAhome** reste interdite dans tous les scénarios ; l'option n'existe
+   qu'entre l'hôte, son PSP et le voyageur, avec les objets de preuve comme
+   dossier de contestation.
 
 Objets de preuve (archivage horodaté, exploitables en litige ou par une
 assurance) : contrat signé, états des lieux d'entrée/sortie photo-datés
@@ -103,8 +108,16 @@ de lucrativité (voir `docs/modele-economique.md`).
 
 ## Explicitement hors périmètre
 
-- Caution, garantie, remboursement — jamais : l'hôte encaisse chez son PSP,
-  les litiges se règlent avec les objets de preuve, pas avec nos fonds.
+- Caution **détenue par MANAhome**, garantie, remboursement — jamais :
+  l'hôte encaisse chez son PSP, les litiges se règlent avec les objets de
+  preuve, pas avec nos fonds (préautorisation chez le PSP de l'hôte : V4,
+  affaire de l'hôte).
+- Marketplace de services (ménage, linge, diagnostics, activités) : pas de
+  rémunération partenaire, pas d'apport d'affaires — annuaire local gratuit,
+  sans commission, sans mise en avant achetable.
+- Vente de données territoriales, même agrégées : règle « jamais de revente
+  de données » inchangée — les indicateurs vivent dans les conventions
+  institutionnelles, sous seuil d'anonymisation.
 - Channel manager vers Airbnb/Booking (API partenaires = convention commerciale ;
   l'export **iCal** standard pourra venir plus tard, sans convention).
 - Mandat, négociation, transaction — loi Hoguet, inchangé.
