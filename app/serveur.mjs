@@ -24,7 +24,7 @@ import {
 } from "./session.mjs";
 import { inscrire, connecter, validerIdentifiants } from "./auth.mjs";
 import { trierNuits, delta } from "./indispos.mjs";
-import { validerDemande, traduireErreurSejour, traduireTransition } from "./sejours.mjs";
+import { validerDemande, traduireErreurSejour, traduireTransition, sqlDuGeste } from "./sejours.mjs";
 import { plageValide as plageValideRequete } from "./requetes.mjs";
 
 const PORT = Number(process.env.PORT ?? 3000);
@@ -329,42 +329,8 @@ export function creerServeur() {
           // chaque geste est UN UPDATE verrouillé par le statut courant et
           // par la propriété (hôte pour accepter/confirmer/clôturer, l'une ou
           // l'autre partie pour annuler) : zéro ligne affectée = 409
-          let sql;
-          if (geste === "accepter") {
-            sql = `UPDATE sejours SET statut = 'acceptee'
-                   RETURNING statut
-                   WHERE id = $1 AND statut = 'demande_envoyee'
-                     AND EXISTS (SELECT 1 FROM annonces a
-                                 WHERE a.id = sejours.annonce_id
-                                   AND a.proprietaire = auth.uid())`;
-          } else if (geste === "confirmer") {
-            // le trigger de la 007 bloque les nuitées ici — ou refuse :
-            // c'est LUI le garant anti-double-réservation
-            sql = `UPDATE sejours SET statut = 'confirmee',
-                      conditions = conditions || jsonb_build_object('confirme_le', now()::text)
-                   RETURNING statut
-                   WHERE id = $1 AND statut IN ('acceptee', 'paiement_attendu')
-                     AND EXISTS (SELECT 1 FROM annonces a
-                                 WHERE a.id = sejours.annonce_id
-                                   AND a.proprietaire = auth.uid())`;
-          } else if (geste === "annuler") {
-            // le trigger libère les nuitées posées par ce séjour (cause
-            // ciblée) — les blocages manuels de l'hôte restent
-            sql = `UPDATE sejours SET statut = 'annulee'
-                   RETURNING statut
-                   WHERE id = $1 AND statut NOT IN ('annulee', 'cloturee')
-                     AND (voyageur = auth.uid()
-                          OR EXISTS (SELECT 1 FROM annonces a
-                                     WHERE a.id = sejours.annonce_id
-                                       AND a.proprietaire = auth.uid()))`;
-          } else {
-            sql = `UPDATE sejours SET statut = 'cloturee'
-                   RETURNING statut
-                   WHERE id = $1 AND statut = 'confirmee'
-                     AND EXISTS (SELECT 1 FROM annonces a
-                                 WHERE a.id = sejours.annonce_id
-                                   AND a.proprietaire = auth.uid())`;
-          }
+          const gesteSql = sqlDuGeste(geste);
+          const sql = gesteSql?.sql;
           const r = await c.query(sql, [sejourId]);
           const transition = traduireTransition(r.rowCount);
           if (transition) {

@@ -54,3 +54,53 @@ export function traduireTransition(rowCount) {
   }
   return null;
 }
+
+/**
+ * Le SQL d'un geste du cycle. Pure et testée : l'ordre WHERE puis RETURNING
+ * est une contrainte de grammaire PostgreSQL — la première version de ces
+ * UPDATE plaçait RETURNING AVANT le WHERE, syntaxe invalide que la fumée
+ * sans base ne voyait pas. Depuis, le test garantit l'ordre.
+ */
+export function sqlDuGeste(geste) {
+  const PROPRIETAIRE = `EXISTS (SELECT 1 FROM annonces a
+                                 WHERE a.id = sejours.annonce_id
+                                   AND a.proprietaire = auth.uid())`;
+  if (geste === "accepter") {
+    return {
+      sql: `UPDATE sejours SET statut = 'acceptee'
+            WHERE id = $1 AND statut = 'demande_envoyee'
+              AND ${PROPRIETAIRE}
+            RETURNING statut`,
+    };
+  }
+  if (geste === "confirmer") {
+    // le trigger de la 007 bloque les nuitées ici — ou refuse :
+    // c'est LUI le garant anti-double-réservation
+    return {
+      sql: `UPDATE sejours SET statut = 'confirmee',
+                 conditions = conditions || jsonb_build_object('confirme_le', now()::text)
+            WHERE id = $1 AND statut IN ('acceptee', 'paiement_attendu')
+              AND ${PROPRIETAIRE}
+            RETURNING statut`,
+    };
+  }
+  if (geste === "annuler") {
+    // le trigger libère les nuitées posées par ce séjour (cause ciblée) —
+    // les blocages manuels de l'hôte restent
+    return {
+      sql: `UPDATE sejours SET statut = 'annulee'
+            WHERE id = $1 AND statut NOT IN ('annulee', 'cloturee')
+              AND (voyageur = auth.uid() OR ${PROPRIETAIRE})
+            RETURNING statut`,
+    };
+  }
+  if (geste === "cloturer") {
+    return {
+      sql: `UPDATE sejours SET statut = 'cloturee'
+            WHERE id = $1 AND statut = 'confirmee'
+              AND ${PROPRIETAIRE}
+            RETURNING statut`,
+    };
+  }
+  return null;
+}
