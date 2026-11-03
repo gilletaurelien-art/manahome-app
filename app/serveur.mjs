@@ -16,8 +16,16 @@
 // - aucun endpoint de paiement, aucun montant n'est écrit.
 
 import http from "node:http";
+import {
+  creerSession,
+  uidDepuisRequete,
+  NOM_COOKIE,
+  TTL_SESSION_MS,
+} from "./session.mjs";
+import { inscrire, connecter, validerIdentifiants } from "./auth.mjs";
 
 const PORT = Number(process.env.PORT ?? 3000);
+const AUTH_SECRET = process.env.AUTH_SECRET ?? "";
 
 async function corps(req) {
   let brut = "";
@@ -44,9 +52,34 @@ async function db() {
   return pool;
 }
 
-export function creerServeur({ requetes = null } = {}) {
-  // requetes injectable pour les tests d'intégration futurs ; en prod,
-  // le vrai bâtisseur de requêtes (app/requetes.mjs).
+/** L'uid de la requête, ou null — le secret absent refuse tout (fail closed). */
+function uidCourant(req) {
+  if (!AUTH_SECRET) return null;
+  return uidDepuisRequete(req.headers.cookie, AUTH_SECRET);
+}
+
+/** Le Set-Cookie de session, HttpOnly + SameSite=Lax — jamais Secure=false en dur. */
+function enteteSession(uid) {
+  return `${NOM_COOKIE}=${creerSession(uid, AUTH_SECRET)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${Math.floor(TTL_SESSION_MS / 1000)}`;
+}
+
+function effaceSession() {
+  return `${NOM_COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`;
+}
+
+function reponseAvecCookie(res, statut, donnees, cookie) {
+  const texte = JSON.stringify(donnees);
+  const entetes = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Content-Length": Buffer.byteLength(texte),
+    "Cache-Control": "no-store",
+  };
+  if (cookie) entetes["Set-Cookie"] = cookie;
+  res.writeHead(statut, entetes);
+  res.end(texte);
+}
+
+export function creerServeur() {
   return http.createServer(async (req, res) => {
     const url = new URL(req.url, `http://${req.headers.host ?? "localhost"}`);
     try {
@@ -78,6 +111,55 @@ export function creerServeur({ requetes = null } = {}) {
         } finally {
           client.release();
         }
+      }
+
+      // ===== Authentification =====
+      // ⚠️ Sans AUTH_SECRET, le service REFUSE toute auth : fail closed —
+      // un secret vide qui accepterait des sessions signerait avec rien.
+      if (url.pathname.startsWith("/api/auth/")) {
+        if (!AUTH_SECRET) return json(res, 503, { erreur: "authentification non configurée" });
+
+        if (req.method === "POST" && url.pathname === "/api/auth/inscription") {
+          const corpsRequ = await corps(req);
+          const email = String(corpsRequ.email ?? "");
+          const mdp = String(corpsRequ.mot_de_passe ?? "");
+          const invalide = validerIdentifiants(email, mdp);
+          if (invalide) return json(res, 400, { erreur: invalide });
+          const r = await inscrire(await db(), email, mdp);
+          if (!r.ok) return json(res, 409, { erreur: r.erreur });
+          return reponseAvecCookie(res, 201, { email: r.utilisateur.email }, enteteSession(r.utilisateur.id));
+        }
+
+        if (req.method === "POST" && url.pathname === "/api/auth/connexion") {
+          const corpsRequ = await corps(req);
+          const r = await connecter(await db(), String(corpsRequ.email ?? ""), String(corpsRequ.mot_de_passe ?? ""));
+          if (!r.ok) return json(res, 401, { erreur: r.erreur });
+          return reponseAvecCookie(res, 200, { email: r.utilisateur.email }, enteteSession(r.utilisateur.id));
+        }
+
+        if (req.method === "POST" && url.pathname === "/api/auth/deconnexion") {
+          return reponseAvecCookie(res, 200, { deconnecte: true }, effaceSession());
+        }
+
+        if (req.method === "GET" && url.pathname === "/api/auth/moi") {
+          const uid = uidCourant(req);
+          if (!uid) return json(res, 401, { erreur: "non connecté" });
+          // la session EST la preuve : on renvoie l'email pour l'UI, et
+          // rien d'autre — jamais le téléphone, jamais les identifiants
+          const c = await (await db()).connect();
+          try {
+            const r = await c.query(
+              "SELECT email FROM utilisateurs WHERE id = $1 AND deleted_at IS NULL",
+              [uid]
+            );
+            if (!r.rows[0]) return json(res, 401, { erreur: "non connecté" });
+            return json(res, 200, { email: r.rows[0].email });
+          } finally {
+            c.release();
+          }
+        }
+
+        return json(res, 404, { erreur: "route inconnue" });
       }
 
       return json(res, 404, { erreur: "route inconnue" });
