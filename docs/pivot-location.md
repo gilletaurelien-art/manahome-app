@@ -44,19 +44,43 @@ côté propriétaire, **sans paiement en ligne**.
 - Messagerie (existante), états des lieux et comptes-rendus réservés à
   l'offre gestionnaire (voir `docs/modele-economique.md`).
 
-## Évolutions de schéma (migration 007 — à figer avant codage)
+## Évolutions de schéma (migration 007 — figée)
 
-- `annonces.transaction` (`vente` | `location_courte_duree`) — l'offre se
+- `annonces.offre` (`vente` | `location_courte_duree`) — l'offre se
   distingue du bien ; la vente existante reste possible.
-- Tarifs court terme : `tarif_nuit`, saisonnalité.
-- Table `annonces_disponibilites` (créneaux bloqués par nuitée) — le calendrier
-  se stocke par exceptions sur blocage, pas par état par nuitée.
-- Champs légaux : `numero_declaration_meuble`, contrainte de publication.
+- Tarifs court terme : `tarif_nuit`, `capacite` ; `code_insee` sur l'annonce
+  (porte les règles de publication territoriales et les facettes de recherche).
+- Table `annonces_indisponibilites` (nuitées bloquées) — le calendrier se
+  stocke par exceptions sur blocage, pas par état par nuitée.
+- **Garde-fou 1 — déclaration obligatoire pour publier, brouillon toujours
+  possible** : un location_courte_duree ne passe en `publiee` QUE si les
+  justificatifs requis existent ; un propriétaire sans numéro prépare son
+  annonce en brouillon sans limite de temps. La territorialité des règles
+  est portée par une table `regles_publication` (portée globale ou par
+  commune) — jamais codée en dur.
+- **Garde-fou 2 — quatre objets distincts, jamais confondus** :
+  1. le document fourni (`justificatifs` : type, référence, délivré le,
+     expire le) ;
+  2. la vérification documentaire (`justificatif_verifications` : présence,
+     validité apparente — une vérification ne se pose pas soi-même) ;
+  3. le statut dérivé (`statut_justificatif()` : à jour / expiré / à
+     vérifier — **jamais stocké**, recalculé à la lecture) ;
+  4. l'événement horodaté (`evenements_sejour` : contrat, états des lieux,
+     horodatage + charge utile).
+  Cette séparation permet de faire évoluer les règles sans réécrire les
+  preuves historiques.
+- **Garde-fou 3 — publication indépendante de Sérénité** : la conformité de
+  base (dépôt des justificatifs, vérification, publication) est gratuite.
+  Sérénité vend le suivi des échéances et les alertes, jamais le droit
+  d'être publié ; aucun verrou de publication ne lit de donnée
+  d'abonnement.
 - Paiement facilité : `lien_paiement` par hôte (PSP de l'hôte, jamais de montant
   de réservation stocké comme un flux nous appartenant) ; tables d'objets de
-  preuve (contrat horodaté, états des lieux) — en V2, le champ est prévu dès
-  la 007 pour éviter toute refonte.
+  preuve ci-dessus.
 - `empreinte` (dédup) : recalcul incluant les nouveaux champs, à figer.
+
+Validation juridique en parallèle : aucun encaissement ni lancement
+commercial avant son résultat ; le schéma technique n'attend pas.
 - RLS + `REVOKE ... FROM anon` + vues de publication : règles inchangées.
 
 ## Paiement facilité — « jamais dépositaire, toujours garant de preuve »
