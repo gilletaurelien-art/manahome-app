@@ -24,6 +24,7 @@ import {
 } from "./session.mjs";
 import { inscrire, connecter, validerIdentifiants } from "./auth.mjs";
 import { trierNuits, delta } from "./indispos.mjs";
+import { validerDemande, traduireErreurSejour, traduireTransition } from "./sejours.mjs";
 import { plageValide as plageValideRequete } from "./requetes.mjs";
 
 const PORT = Number(process.env.PORT ?? 3000);
@@ -235,6 +236,151 @@ export function creerServeur() {
         }
 
         return json(res, 405, { erreur: "méthode non permise" });
+      }
+
+      // ===== Le cycle du séjour (chantier 4) =====
+      // ⭐ LA BASE DÉCIDE, L'API TRADUIT : le trigger de la 007 bloque les
+      // nuitées à la confirmation (et refuse la double réservation), les
+      // UPDATE ... WHERE statut = verrouillent les transitions. Aucun
+      // montant n'est écrit : le paiement vit chez le PSP de l'hôte.
+      if (url.pathname === "/api/sejours" && req.method === "POST") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const corpsRequ = await corps(req);
+        const v = validerDemande({
+          annonceId: corpsRequ.annonceId,
+          arrivee: corpsRequ.arrivee,
+          depart: corpsRequ.depart,
+          voyageursNb: Number(corpsRequ.voyageursNb),
+        });
+        if (!v.ok) return json(res, 400, { erreur: v.erreur });
+        const c = await transactionAuth(uid);
+        try {
+          // l'annonce doit être PUBLIÉE et de l'offre location — une demande
+          // sur un brouillon ou une vente n'a pas de sens, la requête le dit
+          const dispo = await c.query(
+            `SELECT 1 FROM annonces a
+             WHERE a.id = $1 AND a.statut = 'publiee'
+               AND a.offre = 'location_courte_duree'
+               AND est_disponible(a.id, $2::date, $3::date)`,
+            [corpsRequ.annonceId, corpsRequ.arrivee, corpsRequ.depart]
+          );
+          if (dispo.rows.length === 0) {
+            await c.query("ROLLBACK");
+            // indisponible ou inconnue : le même 409 — jamais d'annuaire
+            return json(res, 409, { erreur: "ces dates ne sont pas disponibles" });
+          }
+          const r = await c.query(
+            `INSERT INTO sejours (annonce_id, voyageur, arrivee, depart, voyageurs_nb, mode, conditions)
+             VALUES ($1, auth.uid()::uuid, $2::date, $3::date, $4, 'demande',
+                     jsonb_build_object('paiement', 'direct_hote'))
+             RETURNING id, arrivee, depart, voyageurs_nb, statut`,
+            [corpsRequ.annonceId, corpsRequ.arrivee, corpsRequ.depart, Number(corpsRequ.voyageursNb)]
+          );
+          await c.query("COMMIT");
+          return json(res, 201, r.rows[0]);
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          const traduit = traduireErreurSejour(e);
+          if (traduit) return json(res, traduit.statut, { erreur: traduit.erreur });
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      if (url.pathname === "/api/sejours" && req.method === "GET") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const c = await transactionAuth(uid);
+        try {
+          // les séjours où je suis voyageur OU hôte : deux rôles, une liste,
+          // la propriété dans le SQL — jamais les séjours des autres
+          const r = await c.query(
+            `SELECT s.id, s.annonce_id, s.arrivee, s.depart, s.voyageurs_nb,
+                    s.mode, s.statut, s.conditions, a.titre
+             FROM sejours s JOIN annonces a ON a.id = s.annonce_id
+             WHERE s.voyageur = auth.uid()
+                OR a.proprietaire = auth.uid()
+             ORDER BY s.created_at DESC`
+          );
+          await c.query("COMMIT");
+          return json(res, 200, { sejours: r.rows });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      const mSejour = url.pathname.match(/^\/api\/sejours\/([\w-]+)\/([\w-]+)$/);
+      if (mSejour) {
+        const [, sejourId, geste] = mSejour;
+        if (!UUID.test(sejourId)) return json(res, 404, { erreur: "route inconnue" });
+        const gestes = new Set(["accepter", "confirmer", "annuler", "cloturer"]);
+        if (req.method !== "POST" || !gestes.has(geste)) {
+          return json(res, 404, { erreur: "route inconnue" });
+        }
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const c = await transactionAuth(uid);
+        try {
+          // chaque geste est UN UPDATE verrouillé par le statut courant et
+          // par la propriété (hôte pour accepter/confirmer/clôturer, l'une ou
+          // l'autre partie pour annuler) : zéro ligne affectée = 409
+          let sql;
+          if (geste === "accepter") {
+            sql = `UPDATE sejours SET statut = 'acceptee'
+                   RETURNING statut
+                   WHERE id = $1 AND statut = 'demande_envoyee'
+                     AND EXISTS (SELECT 1 FROM annonces a
+                                 WHERE a.id = sejours.annonce_id
+                                   AND a.proprietaire = auth.uid())`;
+          } else if (geste === "confirmer") {
+            // le trigger de la 007 bloque les nuitées ici — ou refuse :
+            // c'est LUI le garant anti-double-réservation
+            sql = `UPDATE sejours SET statut = 'confirmee',
+                      conditions = conditions || jsonb_build_object('confirme_le', now()::text)
+                   RETURNING statut
+                   WHERE id = $1 AND statut IN ('acceptee', 'paiement_attendu')
+                     AND EXISTS (SELECT 1 FROM annonces a
+                                 WHERE a.id = sejours.annonce_id
+                                   AND a.proprietaire = auth.uid())`;
+          } else if (geste === "annuler") {
+            // le trigger libère les nuitées posées par ce séjour (cause
+            // ciblée) — les blocages manuels de l'hôte restent
+            sql = `UPDATE sejours SET statut = 'annulee'
+                   RETURNING statut
+                   WHERE id = $1 AND statut NOT IN ('annulee', 'cloturee')
+                     AND (voyageur = auth.uid()
+                          OR EXISTS (SELECT 1 FROM annonces a
+                                     WHERE a.id = sejours.annonce_id
+                                       AND a.proprietaire = auth.uid()))`;
+          } else {
+            sql = `UPDATE sejours SET statut = 'cloturee'
+                   RETURNING statut
+                   WHERE id = $1 AND statut = 'confirmee'
+                     AND EXISTS (SELECT 1 FROM annonces a
+                                 WHERE a.id = sejours.annonce_id
+                                   AND a.proprietaire = auth.uid())`;
+          }
+          const r = await c.query(sql, [sejourId]);
+          const transition = traduireTransition(r.rowCount);
+          if (transition) {
+            await c.query("ROLLBACK");
+            return json(res, transition.statut, { erreur: transition.erreur });
+          }
+          await c.query("COMMIT");
+          return json(res, 200, { statut: r.rows[0].statut });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          const traduit = traduireErreurSejour(e);
+          if (traduit) return json(res, traduit.statut, { erreur: traduit.erreur });
+          throw e;
+        } finally {
+          c.release();
+        }
       }
 
       // ===== Authentification =====
