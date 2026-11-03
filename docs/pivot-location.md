@@ -25,13 +25,37 @@ côté propriétaire, **sans paiement en ligne**.
 
 ## Parcours voyageur (remplace la landing actuelle)
 
-- Recherche par **dates** (arrivée/départ), commune/zone, capacité, type de bien.
+- Recherche par **dates** (arrivée/départ), commune/zone, capacité, budget, type de bien.
 - Résultats avec disponibilité réelle : une annonce sans créneau libre sur les
   dates demandées ne sort pas.
-- Fiche annonce : photos (pipeline WebP existant), tarif par nuit, champs légaux
-  (n° de déclaration meublé touristique, DPE), données de territoire.
-- Contact = message interne ; jamais de coordonnée publique, jamais de
-  bouton « réserver et payer ».
+- Fiche annonce : photos (pipeline WebP existant), tarifs et frais détaillés
+  (nuit, week-end, ménage, suppléments), capacité, conditions d'annulation,
+  champs légaux (n° de déclaration meublé touristique, DPE), données de territoire.
+- **Deux modes de réservation** : `immediate` (l'hôte a activé la confirmation
+  automatique et renseigné toutes ses conditions) ou `demande` (l'hôte valide
+  chaque séjour). Statut visible en continu des deux côtés : demande envoyée,
+  acceptée, paiement attendu, séjour confirmé, clôturé.
+- Paiement direct auprès de l'hôte (son PSP, échéancier éventuel) — jamais
+  via MANAhome.
+- Préparation : contrat et documents horodatés, adresse exacte et consignes
+  communiquées à la confirmation uniquement (jamais publiques).
+- Clôture : état des lieux, restitution de caution (préautorisation PSP hôte),
+  avis — module avis en V2 après le pilote.
+
+## Le cycle de vie d'un séjour (objet central du produit)
+
+1. **Disponibilité** — le logement est ouvert à la réservation.
+2. **Demande** — le voyageur choisit ses dates, voit le devis détaillé.
+3. **Confirmation** — l'hôte accepte (ou l'auto-confirmation s'applique) ;
+   les conditions sont figées ; les nuitées sont bloquées.
+4. **Paiement** — le voyageur paie directement l'hôte via son PSP.
+5. **Préparation** — contrat, accès, consignes, rappels avant arrivée.
+6. **Séjour** — arrivée, nuitées, échanges, incidents tracés.
+7. **Clôture** — départ, état des lieux, caution, avis.
+
+Le statut est visible des deux côtés, à chaque étape. Le garant
+anti-double-réservation est **en base** (contrainte d'exclusion + blocage
+des nuitées à la confirmation), pas côté client.
 
 ## Parcours propriétaire (extranet)
 
@@ -39,6 +63,13 @@ côté propriétaire, **sans paiement en ligne**.
   tarif par nuit, tarifs saisonniers (min.), capacité, règles du logement.
 - **Calendrier de disponibilités** : blocage/ouverture des nuitées, la brique
   spécifique du pivot — sans elle, pas de recherche par dates.
+- **Synchronisation iCal** (import/export, format standard sans convention
+  commerciale) : l'hôte garde ses autres canaux sans double réservation ;
+  les nuitées importées apparaissent comme blocages.
+- Tarification : nuit, week-end, saison, durée min./max., ménage et
+  suppléments, conditions d'annulation et délais de paiement.
+- Gestion des demandes : historique, réponse, devis détaillé, documents
+  contractuels générés automatiquement, rappels avant arrivée/départ.
 - Champs légaux obligatoires pour publication : n° de déclaration (meublé
   touristique), classe DPE.
 - Messagerie (existante), états des lieux et comptes-rendus réservés à
@@ -145,15 +176,23 @@ de lucrativité (voir `docs/modele-economique.md`).
 - Channel manager vers Airbnb/Booking (API partenaires = convention commerciale ;
   l'export **iCal** standard pourra venir plus tard, sans convention).
 - Mandat, négociation, transaction — loi Hoguet, inchangé.
-- Réservation bloquante côté voyageur : le voyageur demande, le propriétaire
-  confirme ; le calendrier n'est pas un système d'encaissement.
+- Encaissement côté plateforme : jamais — la réservation confirmée bloque
+  bien les nuitées (l'objet `sejours`, garant en base), mais le calendrier
+  n'est pas un système de paiement.
 - Fonds de tiers sur un compte MANAhome — jamais, dans aucun scénario.
 
-## Ordre de construction (V1)
+## Ordre de construction (pilote Crozon)
 
-1. Migration 007 (schéma + RLS + vues).
-2. Extranet propriétaire : dépôt court terme + calendrier.
-3. Recherche par dates + nouvelle landing voyageur.
-4. Activation locale Crozon (offrir l'accompagnement gratuit aux premiers hôtes).
-5. Logiciel gestionnaire (conciergeries) — après la brique location, sur
+1. Migration 007 (schéma + RLS + vues) — inclut le séjour.
+2. Recherche par dates et disponibilités fiables.
+3. Demande de réservation avec réponse de l'hôte + calendrier propriétaire
+   avec synchronisation iCal.
+4. Devis détaillé, conditions figées, contrat et documents horodatés,
+   paiement direct via le PSP de l'hôte, messages automatiques avant
+   arrivée/départ.
+5. Activation locale Crozon (accompagnement gratuit des premiers hôtes).
+6. Logiciel gestionnaire (conciergeries) — après la brique location, sur
    abonnement TEMPOsystem.
+
+Ensuite seulement : réservation instantanée généralisée, cautions par
+préautorisation, module avis, intégrations avancées.

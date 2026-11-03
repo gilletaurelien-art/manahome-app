@@ -234,3 +234,93 @@ AS $$
 $$;
 
 GRANT EXECUTE ON FUNCTION est_disponible(uuid, date, date) TO anon;
+
+-- ===== 8. Le séjour : objet central du parcours =====
+-- Cycle : demande envoyée → acceptée → paiement attendu → confirmée → clôturée
+-- (ou annulée). Le paiement vit chez le PSP de l'hôte : ce cycle n'encaisse
+-- jamais rien, il trace et garantit.
+
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+
+CREATE TABLE sejours (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  annonce_id  uuid NOT NULL REFERENCES annonces(id) ON DELETE CASCADE,
+  voyageur    uuid NOT NULL REFERENCES utilisateurs(id),
+  arrivee     date NOT NULL,
+  depart      date NOT NULL CHECK (depart > arrivee),
+  voyageurs_nb int NOT NULL CHECK (voyageurs_nb > 0),
+  -- le devis figé à la confirmation : tarifs, suppléments, annulation,
+  -- échéancier — jamais un flux à encaisser par nous
+  conditions  jsonb NOT NULL DEFAULT '{}',
+  mode        text NOT NULL DEFAULT 'demande'
+              CHECK (mode IN ('demande','immediate')),
+  statut      text NOT NULL DEFAULT 'demande_envoyee'
+              CHECK (statut IN ('demande_envoyee','acceptee','paiement_attendu',
+                                'confirmee','annulee','cloturee')),
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+-- pas deux demandes identiques en parallèle ; les demandes annulées ne
+-- comptent pas (une nouvelle demande reste toujours possible)
+CREATE UNIQUE INDEX uniq_demande_sejour ON sejours (annonce_id, voyageur, arrivee)
+  WHERE (statut <> 'annulee');
+
+-- deux séjours confirmés ne peuvent pas se chevaucher : le garant est en
+-- base, pas côté client
+ALTER TABLE sejours ADD CONSTRAINT excl_sejours_confirmes
+  EXCLUDE USING gist (annonce_id WITH =, daterange(arrivee, depart) WITH &&)
+  WHERE (statut = 'confirmee');
+
+-- confirmation = blocage des nuitées ; annulation = libération immédiate
+CREATE OR REPLACE FUNCTION verrouille_nuitees_sejour()
+RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE conflits int;
+BEGIN
+  IF NEW.statut = 'confirmee' THEN
+    SELECT count(*) INTO conflits FROM annonces_indisponibilites i
+    WHERE i.annonce_id = NEW.annonce_id
+      AND i.nuit >= NEW.arrivee AND i.nuit < NEW.depart;
+    IF conflits > 0 THEN
+      RAISE EXCEPTION 'confirmation refusee : nuitees deja bloquees';
+    END IF;
+    INSERT INTO annonces_indisponibilites (annonce_id, nuit, cause)
+    SELECT NEW.annonce_id,
+           generate_series(NEW.arrivee, NEW.depart - 1, '1 day')::date,
+           'reservation_confirmee';
+  ELSIF NEW.statut = 'annulee' THEN
+    DELETE FROM annonces_indisponibilites
+    WHERE annonce_id = NEW.annonce_id
+      AND nuit >= NEW.arrivee AND nuit < NEW.depart
+      AND cause = 'reservation_confirmee';
+  END IF;
+  RETURN NEW;
+END $$;
+
+CREATE TRIGGER t_verrouille_nuitees_sejour
+AFTER INSERT OR UPDATE OF statut ON sejours
+FOR EACH ROW EXECUTE FUNCTION verrouille_nuitees_sejour();
+
+-- ===== 9. Synchronisation iCal : l'hôte garde ses autres canaux =====
+-- Format standard, sans convention commerciale ; les nuitées importées
+-- deviennent des blocages (cause 'blocage'), jamais des réservations.
+
+CREATE TABLE annonces_ical (
+  annonce_id     uuid NOT NULL REFERENCES annonces(id) ON DELETE CASCADE,
+  url            text NOT NULL CHECK (url ~ '^https?://'),
+  dernier_import timestamptz,
+  PRIMARY KEY (annonce_id, url)
+);
+
+-- RLS : hôte seul maître de ses calendriers externes
+ALTER TABLE sejours ENABLE ROW LEVEL SECURITY;
+ALTER TABLE annonces_ical ENABLE ROW LEVEL SECURITY;
+
+REVOKE ALL ON sejours, annonces_ical FROM anon;
+
+CREATE POLICY p_sejour_parties ON sejours
+  USING (voyageur = auth.uid()
+         OR EXISTS (SELECT 1 FROM annonces a WHERE a.id = annonce_id
+                    AND (a.proprietaire = auth.uid() OR a.is_demo)));
+
+CREATE POLICY p_owner_ical ON annonces_ical
+  USING (EXISTS (SELECT 1 FROM annonces a WHERE a.id = annonce_id
+                 AND (a.proprietaire = auth.uid() OR a.is_demo)));
