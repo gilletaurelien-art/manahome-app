@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 import {
   AnnonceLocale,
   lireAnnoncesLocales,
@@ -57,11 +57,11 @@ export function MesAnnonces() {
             <div className="est-actions">
               <a
                 className="btn btn-primary"
-                href={`${B}/annonce/${publieeId}`}
+                href={lien(`/annonce/${publieeId}`)}
               >
                 Voir ma fiche publique
               </a>
-              <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
+              <a className="btn btn-ghost" href={lien(`/annonces/crozon`)}>
                 Voir le catalogue
               </a>
             </div>
@@ -75,7 +75,7 @@ export function MesAnnonces() {
               commission — trois étapes suffisent.
             </p>
             <div className="est-actions">
-              <a className="btn btn-primary" href={`${B}/publier`}>
+              <a className="btn btn-primary" href={lien(`/publier`)}>
                 Publier mon annonce — gratuit
               </a>
             </div>
@@ -96,7 +96,7 @@ export function MesAnnonces() {
                 </div>
                 <div className="annonce-vendeur-actions">
                   {a.statut === "publiee" && (
-                    <a className="btn btn-ghost" href={`${B}/annonce/${a.id}`}>
+                    <a className="btn btn-ghost" href={lien(`/annonce/${a.id}`)}>
                       Voir
                     </a>
                   )}

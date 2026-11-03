@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 import {
   Conversation,
   conversationParAnnonce,
@@ -55,7 +55,7 @@ export function Messagerie() {
               une fiche d'annonce pour ouvrir la messagerie.
             </p>
             <div className="est-actions">
-              <a className="btn btn-primary" href={`${B}/annonces/crozon`}>
+              <a className="btn btn-primary" href={lien(`/annonces/crozon`)}>
                 Voir les annonces du pilote
               </a>
             </div>

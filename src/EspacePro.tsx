@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 import { PROS } from "./prosDonnees";
 
 // Espace pro — inscription au référentiel (3 états) et dépôt de candidature
@@ -84,7 +84,7 @@ export function EspacePro() {
               documentaire pour le statut « vérifié ».)
             </p>
             <div className="est-actions">
-              <a className="btn btn-ghost" href={`${B}/pros`}>
+              <a className="btn btn-ghost" href={lien(`/pros`)}>
                 Voir le référentiel
               </a>
               <button

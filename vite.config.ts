@@ -6,6 +6,7 @@ import {
   canonique,
   titreDeLaRoute,
 } from "./src/canonique";
+import { LOCALES } from "./src/i18n";
 
 // La cible décide du chemin de base ET de l'hôte — pas le code.
 //   • GitHub Pages sert sous /manahome-app/ → sans base, les bundles 404, page blanche.
@@ -65,14 +66,20 @@ function injecterTitre(html: string, titre: string): string {
 }
 
 /** Remplace la canonique d'une coquille HTML, et y ajoute og:url. */
-function injecterCanonique(html: string, url: string): string {
+function injecterCanonique(html: string, url: string, hreflangDe: string = ""): string {
   if (!MOTIF_CANONIQUE.test(html)) {
     throw new Error('aucune <link rel="canonical"> à réécrire dans la coquille');
   }
   return html.replace(
     MOTIF_CANONIQUE,
-    `<link rel="canonical" href="${url}" />\n    <meta property="og:url" content="${url}" />`,
+    `<link rel="canonical" href="${url}" />${hreflangDe}\n    <meta property="og:url" content="${url}" />`,
   );
+}
+
+/** Le href de chaque version linguistique d'une coquille, avec x-default. */
+function hreflangDe(racine: string, chemin: string): string {
+  const url = (l: string) => racine + l + (chemin === "/" ? "/" : chemin);
+  return `\n    <link rel="alternate" hreflang="fr" href="${url("fr")}" />\n    <link rel="alternate" hreflang="en" href="${url("en")}" />\n    <link rel="alternate" hreflang="x-default" href="${url("fr")}" />`;
 }
 
 function cible(): Plugin {
@@ -80,7 +87,7 @@ function cible(): Plugin {
   return {
     name: "valeurs-de-la-cible",
     transformIndexHtml(html) {
-      const sortie = injecterCanonique(html, racine);
+      const sortie = injecterCanonique(html, `${racine}fr/`, hreflangDe(racine, "/"));
       coquille = sortie;
       return sortie;
     },
@@ -106,15 +113,46 @@ function cible(): Plugin {
         // erreur sur chacune. ⭐ Un site qui s'affiche parfaitement peut être
         // intégralement désindexé : on teste le STATUT, jamais l'affichage.
         if (!coquille) throw new Error("coquille HTML jamais capturée");
+        // ⭐ BILINGUE : une coquille par route × langue, chacune avec SA
+        // canonique, ses hreflang et son attribut lang. Les coquilles NUES
+        // restent émises (alias français des URLs indexées avant le
+        // bilingue) et portent la canonique /fr/… : Google consolide, aucun
+        // lien partagé ne devient orphelin.
+        for (const l of LOCALES) {
+          const coquilleLangue =
+            l === "fr" ? coquille : coquille.replace("<html lang=\"fr\">", `<html lang=\"${l}\">`);
+          for (const slug of ROUTES_PLATES) {
+            const url = canonique(`/${slug}`, siteUrl, base, l);
+            if (!url) throw new Error(`route ${slug}/${l} : aucune canonique calculable`);
+            const titre = titreDeLaRoute(`/${slug}`, l);
+            if (!titre) throw new Error(`route ${slug}/${l} : aucun titre`);
+            await mkdir(`${dir}/${l}/${slug}`, { recursive: true });
+            await writeFile(
+              `${dir}/${l}/${slug}/index.html`,
+              injecterTitre(
+                injecterCanonique(coquilleLangue, url, hreflangDe(racine, `/${slug}`)),
+                titre,
+              ),
+            );
+          }
+          // L'accueil de chaque langue, canonique sur lui-même.
+          await mkdir(`${dir}/${l}`, { recursive: true });
+          await writeFile(
+            `${dir}/${l}/index.html`,
+            injecterTitre(
+              injecterCanonique(coquilleLangue, `${racine}${l}/`, hreflangDe(racine, "/")),
+              titreDeLaRoute("/", l)!,
+            ),
+          );
+        }
         for (const slug of ROUTES_PLATES) {
-          const url = canonique(`/${slug}`, siteUrl, base);
-          if (!url) throw new Error(`route ${slug} : aucune canonique calculable`);
-          const titre = titreDeLaRoute(`/${slug}`);
-          if (!titre) throw new Error(`route ${slug} : aucun titre`);
           await mkdir(`${dir}/${slug}`, { recursive: true });
           await writeFile(
             `${dir}/${slug}/index.html`,
-            injecterTitre(injecterCanonique(coquille, url), titre),
+            injecterTitre(
+              injecterCanonique(coquille, canonique(`/${slug}`, siteUrl, base, "fr")!),
+              titreDeLaRoute(`/${slug}`, "fr")!,
+            ),
           );
         }
 
@@ -159,18 +197,24 @@ function cible(): Plugin {
 
         // 5. Le contrôle qui vaut les autres : chaque route livrée porte-t-elle
         // BIEN sa canonique ? Relu sur le fichier écrit, pas supposé.
-        for (const slug of ROUTES_PLATES) {
-          const h = await readFile(`${dir}/${slug}/index.html`, "utf8");
-          const pose = h.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
-          const attendu = canonique(`/${slug}`, siteUrl, base);
-          if (pose !== attendu) throw new Error(`/${slug} : canonique ${pose}, attendu ${attendu}`);
-          const titreAttendu = titreDeLaRoute(`/${slug}`);
-          const titrePose = h.match(/<title>([^<]*)<\/title>/)?.[1];
-          const ogPose = h.match(/<meta property="og:title" content="([^"]*)"/)?.[1];
-          if (titrePose !== titreAttendu || ogPose !== titreAttendu) {
-            throw new Error(
-              `/${slug} : titre « ${titrePose} », og:title « ${ogPose} », attendu « ${titreAttendu} »`,
-            );
+        for (const l of LOCALES) {
+          for (const slug of ROUTES_PLATES) {
+            const h = await readFile(`${dir}/${l}/${slug}/index.html`, "utf8");
+            const pose = h.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
+            const attendu = canonique(`/${slug}`, siteUrl, base, l);
+            if (pose !== attendu) throw new Error(`/${l}/${slug} : canonique ${pose}, attendu ${attendu}`);
+            const titreAttendu = titreDeLaRoute(`/${slug}`, l);
+            const titrePose = h.match(/<title>([^<]*)<\/title>/)?.[1];
+            const ogPose = h.match(/<meta property="og:title" content="([^"]*)"/)?.[1];
+            if (titrePose !== titreAttendu || ogPose !== titreAttendu) {
+              throw new Error(
+                `/${l}/${slug} : titre « ${titrePose} », og:title « ${ogPose} », attendu « ${titreAttendu} »`,
+              );
+            }
+            // ⭐ Une coquille EN qui déclarerait lang="fr" ment aux moteurs
+            // comme aux lecteurs d'écran : on relit l'attribut posé.
+            const langPose = h.match(/<html lang="([^"]*)"/)?.[1];
+            if (langPose !== l) throw new Error(`/${l}/${slug} : lang="${langPose}", attendu "${l}"`);
           }
         }
       },

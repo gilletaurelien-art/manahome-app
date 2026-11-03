@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ANNONCES_DEMO, Annonce } from "./annonces";
 import { annoncesPublieesLocales, enAnnonce } from "./annoncesLocales";
 import { AnnonceCard } from "./AnnonceCard";
-import { territoireParSlug } from "./router";
+import { territoireParSlug , lien} from "./router";
 import { baseUrl } from "./router";
 
 // Page catalogue /annonces/:territoire — miroir front de la vue SQL
@@ -193,10 +193,10 @@ export function AnnoncesListe({ slug }: { slug: string }) {
         </p>
 
         <div className="est-actions">
-          <a className="btn btn-ghost" href={`${B}/territoire/${slug}`}>
+          <a className="btn btn-ghost" href={lien(`/territoire/${slug}`)}>
             Découvrir le territoire
           </a>
-          <a className="btn btn-primary" href={`${B}/publier`}>
+          <a className="btn btn-primary" href={lien(`/publier`)}>
             Publier mon annonce — gratuit
           </a>
         </div>

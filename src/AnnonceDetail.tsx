@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Annonce } from "./annonces";
-import { baseUrl } from "./router";
+import { baseUrl, langueCourante } from "./router";
+import { t } from "./i18n";
 import { ouvrirConversation } from "./messagerieDonnees";
 import { annonceLocaleParId } from "./annoncesLocales";
 
@@ -42,6 +43,46 @@ function JsonLd({ annonce }: { annonce: Annonce }) {
   };
   return (
     <script type="application/ld+json">{JSON.stringify(data)}</script>
+  );
+}
+
+// ⭐ POURQUOI OS SUR UNE IFRAME, PAS UNE BIBLIOTHÈQUE DE CARTES.
+// 1. DOCTRINE SOUVERAINE : OpenStreetMap est un fond de carte libre, hébergé
+//    par une fondation européenne — pas une tuile cloud américaine. Et
+//    l'embed officiel dispense d'ajouter Leaflet/MapLibre au bundle : la
+//    fiche reste un pré-rendu léger, lisible, rapide sur mobile rural.
+// 2. DOCTRINE ANTI-ADRESSE : PAS de marqueur. La géoloc des annonces est
+//    LARGE (au quartier, voir 001_init.sql) et la carte dézoome d'office —
+//    un marqueur transformerait un quartier en adresse. Le lien sortant
+//    ouvre OSM sur la même zone, pas sur le bien.
+function CarteOsm({ annonce }: { annonce: Annonce }) {
+  const L = langueCourante();
+  if (!annonce.geoloc) return null;
+  const { lat, lon } = annonce.geoloc;
+  // ~1,5 km de côté : la carte montre le QUARTIER, jamais la porte.
+  const demi = 0.008;
+  const bbox = `${lon - demi},${lat - demi},${lon + demi},${lat + demi}`;
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik`;
+  return (
+    <section className="fiche-carte" aria-label={t(L, "Carte du quartier")}>
+      <p className="apercu-label">{t(L, "Carte du quartier")}</p>
+      <iframe
+        title={t(L, "Carte du quartier")}
+        src={src}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+      />
+      <p className="fiche-carte-note">
+        {t(L, "Localisation approximative au quartier, posée sur OpenStreetMap — la carte ne désigne jamais l'adresse précise du bien.")}{" "}
+        <a
+          href={`https://www.openstreetmap.org/#map=13/${lat}/${lon}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t(L, "Voir sur OpenStreetMap")}
+        </a>
+      </p>
+    </section>
   );
 }
 
@@ -168,6 +209,8 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           </dl>
 
           <p className="fiche-description">{annonce.description}</p>
+
+          <CarteOsm annonce={annonce} />
 
           <div className="fiche-pied">
             {annonce.source === "import_pro" ? (

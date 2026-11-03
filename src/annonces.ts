@@ -14,6 +14,10 @@ export interface Annonce {
   description: string;
   datePublication: string;
   source: Source;
+  // Géoloc large (doctrine 001_init.sql : JAMAIS l'adresse précise d'un
+  // particulier). Un point approximatif au quartier — la carte dézoome
+  // d'office et ne pose aucun marqueur.
+  geoloc?: { lat: number; lon: number };
   // Démo locale : photos compressées côté client (dataURL). En prod : objets
   // S3 (OVH/RustFS) + clés serveur, jamais de binaire en base.
   photos?: string[];
@@ -23,6 +27,7 @@ export interface Annonce {
 export const ANNONCES_DEMO: Annonce[] = [
   {
     id: "demo-crozon-maison-1",
+    geoloc: { lat: 48.247, lon: -4.423 },
     titre: "Maison de ville lumineuse, jardin clos",
     lieu: "Crozon · à deux pas du port",
     prix: 245000,
@@ -37,6 +42,7 @@ export const ANNONCES_DEMO: Annonce[] = [
   },
   {
     id: "demo-crozon-appt-1",
+    geoloc: { lat: 48.236, lon: -4.456 },
     titre: "Dernier étage, balcon plein sud",
     lieu: "Crozon · proche plage de Pen-Hat",
     prix: 168000,
@@ -51,6 +57,7 @@ export const ANNONCES_DEMO: Annonce[] = [
   },
   {
     id: "demo-crozon-terrain-1",
+    geoloc: { lat: 48.262, lon: -4.463 },
     titre: "Terrain viabilisé au calme, en lisière",
     lieu: "Crozon · hameau de Kerloc'h",
     prix: 89000,
@@ -64,6 +71,7 @@ export const ANNONCES_DEMO: Annonce[] = [
   },
   {
     id: "demo-crozon-maison-2",
+    geoloc: { lat: 48.244, lon: -4.434 },
     titre: "Longère rénovée avec dépendance, panorama mer",
     lieu: "Crozon · 10 min des plages",
     prix: 410000,
@@ -78,6 +86,7 @@ export const ANNONCES_DEMO: Annonce[] = [
   },
   {
     id: "demo-crozon-location-1",
+    geoloc: { lat: 48.24, lon: -4.429 },
     titre: "T3 lumineux avec vue sur la rade",
     lieu: "Crozon · centre",
     prix: 780,
@@ -92,6 +101,7 @@ export const ANNONCES_DEMO: Annonce[] = [
   },
   {
     id: "demo-crozon-location-2",
+    geoloc: { lat: 48.229, lon: -4.467 },
     titre: "Maison neuve F4 avec jardin",
     lieu: "Crozon · Kerloc'h",
     prix: 1150,
@@ -106,6 +116,7 @@ export const ANNONCES_DEMO: Annonce[] = [
   },
   {
     id: "demo-crozon-location-3",
+    geoloc: { lat: 48.257, lon: -4.481 },
     titre: "Studio meublé, proximité port",
     lieu: "Crozon · port",
     prix: 520,
