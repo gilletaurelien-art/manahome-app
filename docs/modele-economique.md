@@ -105,6 +105,29 @@ d'observation financé par convention, pas un produit de données) et
   propre : **annuaire de partenaires locaux, gratuit, sans commission, sans
   mise en avant achetable**.
 
+## Marché adressable (repères)
+
+- **Offices de tourisme** : ~1 200 organismes de tourisme en France (photographie
+  du réseau ADN Tourisme), mais le nombre d'OT juridiquement distincts
+  acheteurs est plus petit — viser les structures intercommunales capables de
+  porter une convention pour plusieurs communes.
+- **Conciergeries** : 5 000 à 9 000 entreprises identifiables selon les
+  recensements (Majordia 8 872, Classement Conciergeries 5 645, MyHostKit
+  5 232) ; marché très fragmenté, structures jeunes, souvent sans salarié.
+- **Cible de lancement** : les conciergeries gérant plusieurs dizaines de
+  logements et les OT intercommunaux — chaque conciergerie amène son
+  portefeuille entier d'un coup.
+
+| Objectif | Revenu annuel récurrent |
+|---|---|
+| 2 conciergeries + 1 convention | point mort (~4 000 €) |
+| 50 conciergeries + 20 conventions | ~44 400 € |
+| 100 conciergeries + 100 conventions | ~160 000 € |
+
+Lecture : une petite part du marché français suffit largement — la
+rentabilité ne dépend pas d'une conquête massive, mais d'une densité
+territoriale réelle (le modèle ne se réplique que territoire par territoire).
+
 ## Périmètre légal (loi Hoguet) — à vérifier avant tout encaissement
 
 - Ce qui est vendu : des outils logiciels de gestion et de conformité, de la
