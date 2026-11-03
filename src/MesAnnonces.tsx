@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { baseUrl , lien} from "./router";
+import { baseUrl , lien, langueCourante} from "./router";
+import { t } from "./i18n";
+import { Calendrier } from "./Calendrier";
 import {
   AnnonceLocale,
   lireAnnoncesLocales,
@@ -86,6 +88,14 @@ export function MesAnnonces() {
               <li key={a.id} className="annonce-vendeur">
                 <div>
                   <p className="fiche-lieu">{a.lieu}</p>
+                  {a.transaction === "location" && (
+                    <div className="annonce-vendeur-calendrier">
+                      <p className="apercu-label">
+                        {t(langueCourante(), "Calendrier de mes nuitées")}
+                      </p>
+                      <Calendrier annonceId={a.id} />
+                    </div>
+                  )}
                   <p className="annonce-vendeur-titre">{a.titre}</p>
                   <p className="annonce-vendeur-meta">
                     {a.prix.toLocaleString("fr-FR")} €

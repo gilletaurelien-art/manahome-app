@@ -1366,3 +1366,20 @@ html { background: var(--sand); }
 
 /* Brand du footer : MANA blanc, home or — sur fond encre */
 .site-footer .brand { color: #fff; }
+
+/* Calendrier de blocage — miroir front de annonces_indisponibilites (007).
+   L'état se lit aussi en texte (aria-pressed), jamais en couleur seule. */
+.calendrier { max-width: 420px; }
+.calendrier-tete { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+.calendrier-mois { margin: 0; font-weight: 600; text-transform: capitalize; }
+.calendrier-grille { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: var(--sp-3); }
+.calendrier-entete { font-size: var(--t-xs); opacity: 0.6; text-align: center; text-transform: uppercase; letter-spacing: 0.06em; }
+.calendrier-nuit { position: relative; border: 1px solid rgba(0,0,0,0.12); background: transparent; border-radius: 8px; padding: 6px 0; cursor: pointer; font-size: var(--t-s); }
+.calendrier-nuit.bloquee { background: rgba(0,0,0,0.78); color: #fff; border-color: transparent; }
+.calendrier-auj { position: absolute; inset: 2px; border: 1px dashed currentColor; border-radius: 6px; opacity: 0.5; pointer-events: none; }
+.calendrier-note { font-size: var(--t-xs); opacity: 0.65; margin: var(--sp-3) 0 0; }
+.annonce-vendeur-calendrier { margin-top: var(--sp-4); }
+@media (prefers-color-scheme: dark) {
+  .calendrier-nuit { border-color: rgba(255,255,255,0.2); }
+  .calendrier-nuit.bloquee { background: rgba(255,255,255,0.85); color: #000; }
+}

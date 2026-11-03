@@ -108,6 +108,18 @@ const DICO_EN: Record<string, string> = {
     "Agencies, notaries, repairers, surveys: one directory, factual, no endorsement.",
   "Découvrir les pros & services du territoire": "Discover the area's pros & services",
 
+  // ── Calendrier de l'extranet propriétaire ──
+  "lun": "Mon", "mar": "Tue", "mer": "Wed", "jeu": "Thu",
+  "ven": "Fri", "sam": "Sat", "dim": "Sun",
+  "janvier": "January", "février": "February", "mars": "March",
+  "avril": "April", "mai": "May", "juin": "June",
+  "juillet": "July", "août": "August", "septembre": "September",
+  "octobre": "October", "novembre": "November", "décembre": "December",
+  "bloquée": "blocked", "disponible": "available",
+  "Calendrier de mes nuitées": "My nights calendar",
+  "Cliquez une nuitée pour la bloquer ou la libérer. Bloquer n'est pas réserver : MANAhome n'encaisse aucun paiement, et une nuitée non bloquée reste disponible partout où vous diffusez.":
+    "Click a night to block or release it. Blocking is not booking: MANAhome never takes a payment, and a night that isn't blocked stays available wherever you list.",
+
   // ── Carte OSM de la fiche ──
   "Carte du quartier": "Area map",
   "Voir sur OpenStreetMap": "View on OpenStreetMap",
