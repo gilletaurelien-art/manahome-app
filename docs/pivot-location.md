@@ -52,17 +52,65 @@ côté propriétaire, **sans paiement en ligne**.
 - Table `annonces_disponibilites` (créneaux bloqués par nuitée) — le calendrier
   se stocke par exceptions sur blocage, pas par état par nuitée.
 - Champs légaux : `numero_declaration_meuble`, contrainte de publication.
+- Paiement facilité : `lien_paiement` par hôte (PSP de l'hôte, jamais de montant
+  de réservation stocké comme un flux nous appartenant) ; tables d'objets de
+  preuve (contrat horodaté, états des lieux) — en V2, le champ est prévu dès
+  la 007 pour éviter toute refonte.
 - `empreinte` (dédup) : recalcul incluant les nouveaux champs, à figer.
 - RLS + `REVOKE ... FROM anon` + vues de publication : règles inchangées.
 
+## Paiement facilité — « jamais dépositaire, toujours garant de preuve »
+
+La confiance ne demande pas de garder l'argent, elle demande de rendre les
+faits vérifiables. La preuve remplace le séquestre.
+
+Séquencement :
+
+1. **V1 — le protocole (aucun enjei financier)** : contrat type de location
+   saisonnière horodaté, échéancier standard (acompte/solde) suivi dans la
+   messagerie, checklist anti-arnaque avant paiement.
+2. **V2 — le lien de paiement propriétaire** : l'hôte connecte **son propre
+   PSP** (Stripe et équivalents) ; la conversation génère un bouton « payer
+   [nom de l'hôte] ». Le marchand est l'hôte : MANAhome ne détient jamais de
+   fonds, n'a pas de licence PSP à détenir, et ne prend jamais de commission
+   (0 % définitif — bouclier juridique et commercial).
+3. **V3 — le paiement en plusieurs fois (BNPL)** : Klarna est disponible comme
+   moyen de paiement côté PSP de l'hôte. Le voyageur paie en plusieurs fois,
+   l'hôte est payé intégral d'avance, le risque de crédit est entre Klarna et
+   le voyageur — MANAhome reste hors du circuit. Garde éthique : l'option
+   s'affiche neutre, elle ne se pousse jamais (le BNPL est du crédit à la
+   consommation ; aucun encouragement).
+
+Objets de preuve (archivage horodaté, exploitables en litige ou par une
+assurance) : contrat signé, états des lieux d'entrée/sortie photo-datés
+(pipeline WebP existant), fil de messagerie. En cas de contestation PSP ou
+BNPL, ces objets forment le dossier de défense de l'hôte.
+
+Deux contrats distincts, jamais confondus : le contrat de location (hôte ↔
+voyageur, archivé par MANAhome) et le contrat de crédit (voyageur ↔ PSP).
+Aucun prestataire de paiement ne « récupère » le contrat de location.
+
+Porte de sortie documentée, jamais planifiée : un séquestre chez un PSP
+français agréé, en marque blanche, si un séjour haut de gamme l'exige —
+le PSP est dépositaire, MANAhome est interface, 0 % toujours.
+
+Répartition des pôles : la **mise en relation** (présence, publication,
+messagerie) appartient à l'Alliance MANA, gratuite ; les **outils payants**
+(lien de paiement, accompagnement BNPL, abonnements, distribution
+d'assurance) appartiennent à TEMPOsystem. L'Alliance ne perçoit jamais de
+revenu conditionné par une transaction — garde contre la requalification
+de lucrativité (voir `docs/modele-economique.md`).
+
 ## Explicitement hors périmètre
 
-- Paiement, caution, garantie, remboursement — jamais.
+- Caution, garantie, remboursement — jamais : l'hôte encaisse chez son PSP,
+  les litiges se règlent avec les objets de preuve, pas avec nos fonds.
 - Channel manager vers Airbnb/Booking (API partenaires = convention commerciale ;
   l'export **iCal** standard pourra venir plus tard, sans convention).
 - Mandat, négociation, transaction — loi Hoguet, inchangé.
 - Réservation bloquante côté voyageur : le voyageur demande, le propriétaire
   confirme ; le calendrier n'est pas un système d'encaissement.
+- Fonds de tiers sur un compte MANAhome — jamais, dans aucun scénario.
 
 ## Ordre de construction (V1)
 
