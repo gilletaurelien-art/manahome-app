@@ -108,6 +108,44 @@ const DICO_EN: Record<string, string> = {
     "Agencies, notaries, repairers, surveys: one directory, factual, no endorsement.",
   "Découvrir les pros & services du territoire": "Discover the area's pros & services",
 
+  // ── Le séjour (cycle de vie) ──
+  "Voyageurs": "Guests",
+  "Demander une réservation": "Request a booking",
+  "Envoyer ma demande": "Send my request",
+  "La demande n'est pas un paiement : vous réglerez l'hôte directement, via son propre moyen de paiement. Aucun encaissement ne passe par MANAhome.":
+    "A request is not a payment: you will pay the host directly, via their own payment method. No money ever goes through MANAhome.",
+  "Vérifiez vos dates : arrivée avant départ, dates réelles.":
+    "Check your dates: arrival before departure, real dates.",
+  "Indiquez au moins un voyageur.": "At least one guest, please.",
+  "Ces dates ne sont pas disponibles pour ce logement.":
+    "These dates are not available for this listing.",
+  "Vous avez déjà une demande en cours pour ce logement.":
+    "You already have a pending request for this listing.",
+  "Demande envoyée — l'hôte vous répond prochainement.":
+    "Request sent — the host will reply shortly.",
+  "Demande acceptée — l'hôte attend votre paiement (directement auprès de lui).":
+    "Request accepted — the host awaits your payment (directly to them).",
+  "Paiement attendu — directement auprès de l'hôte.":
+    "Payment expected — directly to the host.",
+  "Séjour confirmé. Les nuitées sont bloquées.":
+    "Stay confirmed. The nights are blocked.",
+  "Séjour annulé.": "Stay cancelled.",
+  "Séjour terminé.": "Stay completed.",
+  "Mes séjours": "My stays",
+  "Démo locale : ce navigateur joue les deux rôles — vous voyez la demande du voyageur ET les commandes de l'hôte. En production, chaque côté ne voit que le sien, et aucun paiement ne transite ici.":
+    "Local demo: this browser plays both roles — you see the guest's request AND the host's controls. In production each side sees only its own, and no payment ever transits here.",
+  "voyageur(s)": "guest(s)",
+  "Accepter": "Accept",
+  "Confirmer le séjour": "Confirm the stay",
+  "Clôturer": "Close out",
+  "Annuler": "Cancel",
+  "demande envoyée": "request sent",
+  "acceptée": "accepted",
+  "paiement attendu": "payment expected",
+  "confirmé — nuitées bloquées": "confirmed — nights blocked",
+  "annulé": "cancelled",
+  "terminé": "completed",
+
   // ── Recherche par dates (voyageur) ──
   "Arrivée": "Arrival", "Départ": "Departure",
   "Séjour du {plage} — seules les annonces disponibles sur ces dates sont affichées.":

@@ -1380,6 +1380,9 @@ html { background: var(--sand); }
 .calendrier-note { font-size: var(--t-xs); opacity: 0.65; margin: var(--sp-3) 0 0; }
 .calendrier-outils { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
 .recherche-dates { font-size: var(--t-s); opacity: 0.8; margin: var(--sp-3) 0 0; }
+.sejours-liste { list-style: none; padding: 0; margin: var(--sp-4) 0 0; display: grid; gap: var(--sp-3); }
+.sejour-item { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
+  border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; padding: var(--sp-3) var(--sp-4); }
 .calendrier-ics { margin-top: var(--sp-4); }
 .calendrier-ics summary { cursor: pointer; font-size: var(--t-s); opacity: 0.8; }
 .annonce-vendeur-calendrier { margin-top: var(--sp-4); }
