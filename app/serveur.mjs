@@ -23,6 +23,8 @@ import {
   TTL_SESSION_MS,
 } from "./session.mjs";
 import { inscrire, connecter, validerIdentifiants } from "./auth.mjs";
+import { trierNuits, delta } from "./indispos.mjs";
+import { plageValide as plageValideRequete } from "./requetes.mjs";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const AUTH_SECRET = process.env.AUTH_SECRET ?? "";
@@ -42,6 +44,24 @@ function json(res, statut, donnees) {
   });
   res.end(texte);
 }
+
+// ⚠️ V1 ASSUMÉE : le rôle de la DATABASE_URL est le superuser du conteneur —
+// la RLS ne s'applique pas au superuser, elle est donc EN VEILLE. Deux garde-
+// fous en attendant le rôle non-privilégié qui l'armera (suivi dans le cahier
+// des charges) : (1) chaque requête authentifiée porte la propriété DANS LE
+// SQL (proprietaire = auth.uid(), posé par transaction) — l'application ne
+// décide rien, elle déclare qui parle ; (2) aucun endpoint ne lit jamais une
+// table sans condition de propriété ou de vue publique.
+async function transactionAuth(uid) {
+  const client = await (await db()).connect();
+  await client.query("BEGIN");
+  // t = true : la variable vit et meurt avec CETTE transaction — jamais
+  // une session qui fuite vers la requête suivante du pool
+  await client.query("SELECT set_config('app.utilisateur', $1, true)", [uid]);
+  return client;
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 let pool = null;
 async function db() {
@@ -111,6 +131,110 @@ export function creerServeur() {
         } finally {
           client.release();
         }
+      }
+
+      // ===== Annonce : disponibilité publique et indisponibilités du propriétaire =====
+
+      // Disponibilité d'une annonce PUBLIÉE : information publique, vue/fonction
+      // de la 007 — réponde false pour une annonce non publiée, anon ne peut pas
+      // sonder les brouillons.
+      const mDispo = url.pathname.match(/^\/api\/annonces\/([\w-]+)\/disponibilite$/);
+      if (req.method === "GET" && mDispo) {
+        const arr = url.searchParams.get("arr");
+        const dep = url.searchParams.get("dep");
+        if (!plageValideRequete({ arr, dep })) {
+          return json(res, 400, { erreur: "plage invalide" });
+        }
+        const c = await (await db()).connect();
+        try {
+          const r = await c.query(
+            "SELECT est_disponible($1::uuid, $2::date, $3::date) AS disponible",
+            [mDispo[1], arr, dep]
+          );
+          return json(res, 200, { disponible: r.rows[0].disponible });
+        } finally {
+          c.release();
+        }
+      }
+
+      // Les nuitées bloquées de SON annonce : propriété vérifiée DANS LE SQL.
+      const mIndispos = url.pathname.match(/^\/api\/annonces\/([\w-]+)\/indisponibilites$/);
+      if (mIndispos && !UUID.test(mIndispos[1])) {
+        return json(res, 404, { erreur: "route inconnue" });
+      }
+      if (mIndispos) {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+
+        if (req.method === "GET") {
+          const c = await transactionAuth(uid);
+          try {
+            // la propriété vit dans la requête, pas dans un if applicatif :
+            // l'annonce d'un autre ne renvoie pas 403, elle n'EXISTE pas ici
+            const r = await c.query(
+              `SELECT i.nuit FROM annonces_indisponibilites i
+               JOIN annonces a ON a.id = i.annonce_id
+               WHERE i.annonce_id = $1 AND a.proprietaire = auth.uid()
+               ORDER BY i.nuit`,
+              [mIndispos[1]]
+            );
+            await c.query("COMMIT");
+            return json(res, 200, { nuits: r.rows.map((l) => l.nuit.toISOString().slice(0, 10)) });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        if (req.method === "PUT") {
+          const corpsRequ = await corps(req);
+          const { valides, invalides } = trierNuits(corpsRequ.nuits);
+          if (invalides.length > 0) {
+            // refuser sans enregistrer : un calendrier qui accepterait en
+            // partie mentirait sur ce qu'il a retenu
+            return json(res, 400, { erreur: "nuitées invalides", invalides });
+          }
+          const c = await transactionAuth(uid);
+          try {
+            const enPlace = (await c.query(
+              `SELECT i.nuit FROM annonces_indisponibilites i
+               JOIN annonces a ON a.id = i.annonce_id
+               WHERE i.annonce_id = $1 AND a.proprietaire = auth.uid()`,
+              [mIndispos[1]]
+            )).rows.map((l) => l.nuit.toISOString().slice(0, 10));
+            // l'ensemble n'existe que si l'annonce appartient à l'appelant :
+            // sinon on lirait TOUTES ses nuits comme ensemble courant
+            const possede = (await c.query(
+              "SELECT 1 FROM annonces WHERE id = $1 AND proprietaire = auth.uid()",
+              [mIndispos[1]]
+            )).rows.length > 0;
+            if (!possede) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "annonce inconnue" });
+            }
+            const { aPoser, aRetirer } = delta(enPlace, valides);
+            for (const n of aRetirer) {
+              await c.query("DELETE FROM annonces_indisponibilites WHERE annonce_id = $1 AND nuit = $2::date", [mIndispos[1], n]);
+            }
+            for (const n of aPoser) {
+              await c.query(
+                "INSERT INTO annonces_indisponibilites (annonce_id, nuit) VALUES ($1, $2::date) ON CONFLICT DO NOTHING",
+                [mIndispos[1], n]
+              );
+            }
+            await c.query("COMMIT");
+            return json(res, 200, { nuits: valides, posees: aPoser.length, retirees: aRetirer.length });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        return json(res, 405, { erreur: "méthode non permise" });
       }
 
       // ===== Authentification =====
