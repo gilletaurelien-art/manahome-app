@@ -3,6 +3,10 @@ import { ANNONCES_DEMO, Annonce } from "./annonces";
 import { annoncesPublieesLocales, enAnnonce } from "./annoncesLocales";
 import { AnnonceCard } from "./AnnonceCard";
 import { territoireParSlug , lien} from "./router";
+import { t } from "./i18n";
+import { langueCourante } from "./router";
+import { lireIndispos } from "./calendrierDonnees";
+import { estDisponible, libellePlage, plageValide, type Plage } from "./disponibilite";
 import { baseUrl } from "./router";
 
 // Page catalogue /annonces/:territoire — miroir front de la vue SQL
@@ -17,6 +21,10 @@ const TYPES_FILTRE = [
 ];
 
 // Vente / location : le portail couvre l'habitat entier, pas que la vente.
+// Miroir front : les mois courts du libellé de plage (disponibilite.ts).
+const MOIS_COURTS = ["janv.", "févr.", "mars", "avr.", "mai", "juin",
+  "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+
 const TX_FILTRE = [
   { v: "tous", l: "Vente & location" },
   { v: "vente", l: "À vendre" },
@@ -54,6 +62,10 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   const params = new URLSearchParams(window.location.search);
   const [recherche, setRecherche] = useState(params.get("q") ?? "");
   const [prixMax, setPrixMax] = useState("");
+  // Dates du voyageur : arrivée/départ, lues dans l'URL (?arr=…&dep=…) pour
+  // que le moteur d'accueil puisse y envoyer une recherche datée.
+  const [arrivee, setArrivee] = useState(params.get("arr") ?? "");
+  const [depart, setDepart] = useState(params.get("dep") ?? "");
   const txInitial = params.get("tx");
   const [filtreTx, setFiltreTx] = useState(
     txInitial === "location" || txInitial === "vente" ? txInitial : "tous"
@@ -94,8 +106,16 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     const parPrix = budget
       ? parTexte.filter((a) => a.prix <= budget)
       : parTexte;
-    return parPrix;
-  }, [filtre, filtreTx, recherche, prixMax]);
+    // Disponibilité réelle : une annonce aux nuitées bloquées sur la plage
+    // ne sort PAS — miroir front de est_disponible() (007). Bord exclu :
+    // la même sémantique que le calendrier propriétaire, sinon la fiche
+    // dirait « disponible » là où l'hôte lit « bloquée ».
+    const plage: Plage = { arrivee, depart };
+    const parDates = plageValide(plage)
+      ? parPrix.filter((a) => estDisponible(lireIndispos(a.id), plage))
+      : parPrix;
+    return parDates;
+  }, [filtre, filtreTx, recherche, prixMax, arrivee, depart]);
 
   const B = baseUrl();
 
@@ -126,6 +146,24 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               />
             </div>
             <div className="champ">
+              <label htmlFor="date-arrivee">Arrivée</label>
+              <input
+                id="date-arrivee"
+                type="date"
+                value={arrivee}
+                onChange={(e) => setArrivee(e.target.value)}
+              />
+            </div>
+            <div className="champ">
+              <label htmlFor="date-depart">Départ</label>
+              <input
+                id="date-depart"
+                type="date"
+                value={depart}
+                onChange={(e) => setDepart(e.target.value)}
+              />
+            </div>
+            <div className="champ">
               <label htmlFor="prix-max">
                 Budget max {filtreTx === "location" ? "(€/mois)" : "(€)"}
               </label>
@@ -140,6 +178,13 @@ export function AnnoncesListe({ slug }: { slug: string }) {
             </div>
           </div>
         </section>
+
+        {plageValide({ arrivee, depart }) && (
+          <p className="recherche-dates" role="status">
+            {t(langueCourante(), "Séjour du {plage} — seules les annonces disponibles sur ces dates sont affichées.")
+              .replace("{plage}", libellePlage({ arrivee, depart }, MOIS_COURTS) ?? "")}
+          </p>
+        )}
 
         <div className="annonces-filtres" role="group" aria-label="Filtrer par transaction">
           {TX_FILTRE.map((t) => (

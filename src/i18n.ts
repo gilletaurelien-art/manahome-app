@@ -108,6 +108,11 @@ const DICO_EN: Record<string, string> = {
     "Agencies, notaries, repairers, surveys: one directory, factual, no endorsement.",
   "Découvrir les pros & services du territoire": "Discover the area's pros & services",
 
+  // ── Recherche par dates (voyageur) ──
+  "Arrivée": "Arrival", "Départ": "Departure",
+  "Séjour du {plage} — seules les annonces disponibles sur ces dates sont affichées.":
+    "Stay from {plage} — only listings available on these dates are shown.",
+
   // ── Calendrier de l'extranet propriétaire ──
   "lun": "Mon", "mar": "Tue", "mer": "Wed", "jeu": "Thu",
   "ven": "Fri", "sam": "Sat", "dim": "Sun",
