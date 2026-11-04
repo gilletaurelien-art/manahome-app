@@ -25,6 +25,7 @@ import {
 import { inscrire, connecter, validerIdentifiants } from "./auth.mjs";
 import { trierNuits, delta } from "./indispos.mjs";
 import { validerDemande, traduireErreurSejour, traduireTransition, sqlDuGeste } from "./sejours.mjs";
+import { nuiteesDepuisIcs, urlValide, telechargerIcs, deltaImport } from "./ical.mjs";
 import { validerMessage, sqlOuvrirConversation, sqlListeConversations } from "./messagerieApi.mjs";
 import { plageValide as plageValideRequete } from "./requetes.mjs";
 
@@ -348,6 +349,178 @@ export function creerServeur() {
         } finally {
           c.release();
         }
+      }
+
+      // ===== iCal serveur (chantier 5) =====
+      // ⭐ UN ÉVÈNEMENT ICAL EST UN BLOCAGE, JAMAIS UNE RÉSERVATION. Et un
+      // ré-import REMPLACE SA PROPRE TRACE (nuits_importees, migration 009) :
+      // il ne touche ni les blocages manuels de l'hôte ni les nuits confirmées.
+      const mIcal = url.pathname.match(/^\/api\/annonces\/([\w-]+)\/ical(\/importer)?$/);
+      if (mIcal) {
+        const [, annonceId, importer] = mIcal;
+        if (!UUID.test(annonceId)) return json(res, 404, { erreur: "route inconnue" });
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+
+        const possedeAnnonce = async (c) =>
+          (await c.query(
+            "SELECT 1 FROM annonces WHERE id = $1 AND proprietaire = auth.uid()",
+            [annonceId]
+          )).rows.length > 0;
+
+        // GET : les calendriers déclarés et leur dernier import
+        if (req.method === "GET" && !importer) {
+          const c = await transactionAuth(uid);
+          try {
+            const r = await c.query(
+              `SELECT url, dernier_import, jsonb_array_length(nuits_importees) AS nuits
+               FROM annonces_ical i
+               JOIN annonces a ON a.id = i.annonce_id
+               WHERE i.annonce_id = $1 AND a.proprietaire = auth.uid()`,
+              [annonceId]
+            );
+            await c.query("COMMIT");
+            return json(res, 200, { calendriers: r.rows });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        // PUT : déclarer un calendrier (https uniquement, jamais le réseau interne)
+        if (req.method === "PUT" && !importer) {
+          const corpsRequ = await corps(req);
+          if (!urlValide(corpsRequ.url)) {
+            return json(res, 400, { erreur: "URL de calendrier invalide (https requis)" });
+          }
+          const c = await transactionAuth(uid);
+          try {
+            if (!(await possedeAnnonce(c))) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "annonce inconnue" });
+            }
+            await c.query(
+              `INSERT INTO annonces_ical (annonce_id, url) VALUES ($1, $2)
+               ON CONFLICT (annonce_id, url) DO NOTHING`,
+              [annonceId, corpsRequ.url]
+            );
+            await c.query("COMMIT");
+            return json(res, 201, { declare: true });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        // DELETE : retirer un calendrier ET sa trace de nuitées (cause blocage)
+        if (req.method === "DELETE" && !importer) {
+          const cible = url.searchParams.get("url");
+          if (!cible) return json(res, 400, { erreur: "URL de calendrier requise" });
+          const c = await transactionAuth(uid);
+          try {
+            if (!(await possedeAnnonce(c))) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "annonce inconnue" });
+            }
+            const ligne = (await c.query(
+              `SELECT url, nuits_importees FROM annonces_ical
+               WHERE annonce_id = $1 AND url = $2`,
+              [annonceId, cible]
+            )).rows[0];
+            if (!ligne) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "calendrier inconnu" });
+            }
+            // libérer SA trace : seulement cause 'blocage' — jamais une
+            // nuit confirmée entre-temps, jamais un blocage manuel
+            for (const nuit of ligne.nuits_importees) {
+              await c.query(
+                `DELETE FROM annonces_indisponibilites
+                 WHERE annonce_id = $1 AND nuit = $2::date AND cause = 'blocage'`,
+                [annonceId, nuit]
+              );
+            }
+            await c.query(
+              "DELETE FROM annonces_ical WHERE annonce_id = $1 AND url = $2",
+              [annonceId, cible]
+            );
+            await c.query("COMMIT");
+            return json(res, 200, { retire: true });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        // POST /importer : télécharger, parser, remplacer SA trace
+        if (req.method === "POST" && importer) {
+          const corpsRequ = await corps(req);
+          if (!urlValide(corpsRequ.url)) {
+            return json(res, 400, { erreur: "URL de calendrier invalide (https requis)" });
+          }
+          const telecharge = await telechargerIcs(corpsRequ.url);
+          if (!telecharge.ok) return json(res, 502, { erreur: telecharge.erreur });
+          const { nuits, ignores } = nuiteesDepuisIcs(telecharge.texte);
+          const c = await transactionAuth(uid);
+          try {
+            if (!(await possedeAnnonce(c))) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "annonce inconnue" });
+            }
+            const ligne = (await c.query(
+              `SELECT nuits_importees FROM annonces_ical
+               WHERE annonce_id = $1 AND url = $2`,
+              [annonceId, corpsRequ.url]
+            )).rows[0];
+            if (!ligne) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "calendrier inconnu — déclarez-le d'abord" });
+            }
+            const { aPoser, aRetirer } = deltaImport(ligne.nuits_importees, nuits);
+            for (const nuit of aRetirer) {
+              await c.query(
+                `DELETE FROM annonces_indisponibilites
+                 WHERE annonce_id = $1 AND nuit = $2::date AND cause = 'blocage'`,
+                [annonceId, nuit]
+              );
+            }
+            for (const nuit of aPoser) {
+              await c.query(
+                `INSERT INTO annonces_indisponibilites (annonce_id, nuit, cause)
+                 VALUES ($1, $2::date, 'blocage') ON CONFLICT DO NOTHING`,
+                [annonceId, nuit]
+              );
+            }
+            await c.query(
+              `UPDATE annonces_ical
+               SET dernier_import = now(), nuits_importees = $2::jsonb
+               WHERE annonce_id = $1 AND url = $3`,
+              [annonceId, JSON.stringify(nuits), corpsRequ.url]
+            );
+            await c.query("COMMIT");
+            // les ignorés sont signalés, jamais gobés : un calendrier qui
+            // ment sur l'offre affichée doit se voir
+            return json(res, 200, {
+              importees: nuits.length,
+              posees: aPoser.length,
+              retirees: aRetirer.length,
+              ignores,
+            });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        return json(res, 405, { erreur: "méthode non permise" });
       }
 
       // ===== Messagerie (chantier 6) =====
