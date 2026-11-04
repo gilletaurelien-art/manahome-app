@@ -222,9 +222,20 @@ function cible(): Plugin {
   };
 }
 
+// ⭐ FEATURE_BACK : la bascule API réelle, côté front (docs/branchement-back.md).
+// Comme BASE_PATH et SITE_URL : quand une valeur dépend de la cible, elle en
+// dépend partout — substituée au build par define. ÉTEINTE PAR DÉFAUT : la
+// démo localStorage reste serviable ; un flag éteint n'affiche rien, ne
+// casse rien (doctrine de déploiement du repo : la fonction AVANT l'app,
+// le branchement AVANT la bascule).
+const FEATURE_BACK = process.env.FEATURE_BACK === "true";
+
 export default defineConfig({
   plugins: [react(), cible()],
   base,
-  define: { __SITE_URL__: JSON.stringify(siteUrl) },
+  define: {
+    __SITE_URL__: JSON.stringify(siteUrl),
+    __FEATURE_BACK__: JSON.stringify(FEATURE_BACK),
+  },
   build: { outDir },
 });

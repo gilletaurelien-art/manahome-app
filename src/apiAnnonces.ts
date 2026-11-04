@@ -1,0 +1,124 @@
+import type { Annonce, Transaction } from "./annonces";
+
+// Client du module annonces — le premier maillon de la bascule FEATURE_BACK
+// (docs/branchement-back.md). ⭐ TROIS RÈGLES :
+// 1. LA SÉCURITÉ DU REPLI : si l'API échoue, le front sert la démo — jamais
+//    un écran vide là où la veille il y avait un catalogue. Un back absent
+//    doit coûter zéro affichage.
+// 2. LE FILTRE DE DATES SE FAIT CÔTÉ SERVEUR (est_disponible) : le front ne
+//    RE-filtre pas ce que le serveur a déjà filtré — deux filtres des mêmes
+//    dates, c'est deux occasions de diverger.
+// 3. LE MAPPING EST PUR ET TESTÉ : la vue publique n'expose pas de titre,
+//    la fiche en synthétise un honnête (type · pièces · surface) — jamais
+//    un titre inventé qui ressemblerait à du marketing.
+
+export interface LigneAnnonce {
+  id: string;
+  type_bien: "maison" | "appartement" | "terrain" | "autre";
+  surface_m2: number | null;
+  pieces: number | null;
+  prix_eur: number | null;
+  dpe: string | null;
+  description: string | null;
+  offre: "vente" | "location_courte_duree";
+  tarif_nuit: number | null;
+  capacite: number | null;
+  code_insee: string | null;
+  source: "directe_particulier" | "import_pro";
+  source_id: string | null;
+  created_at: string;
+}
+
+const TYPES: Record<LigneAnnonce["type_bien"], string> = {
+  maison: "Maison",
+  appartement: "Appartement",
+  terrain: "Terrain",
+  autre: "Bien",
+};
+
+/** La transaction front (vente | location) depuis l'offre base (007). */
+export function transactionDe(offre: LigneAnnonce["offre"]): Transaction {
+  return offre === "location_courte_duree" ? "location" : "vente";
+}
+
+/** Le titre honnête d'une ligne publique — descriptif, jamais inventé. */
+export function titreDeLigne(l: LigneAnnonce): string {
+  const morceaux = [TYPES[l.type_bien]];
+  if (l.pieces) morceaux.push(`${l.pieces} pièces`);
+  if (l.surface_m2) morceaux.push(`${l.surface_m2} m²`);
+  return morceaux.join(" · ");
+}
+
+/** Le lieu lisible depuis l'offre : les locations se vendent à la nuitée. */
+export function lieuDeLigne(l: LigneAnnonce): string {
+  return l.offre === "location_courte_duree"
+    ? `Location courte durée${l.capacite ? ` · ${l.capacite} voyageurs` : ""}`
+    : "Vente";
+}
+
+/** Une ligne de la vue annonces_publiques → une Annonce du front. */
+export function versAnnonce(l: LigneAnnonce): Annonce {
+  return {
+    id: l.id,
+    titre: titreDeLigne(l),
+    lieu: lieuDeLigne(l),
+    prix: l.offre === "location_courte_duree" ? (l.tarif_nuit ?? l.prix_eur ?? 0) : (l.prix_eur ?? 0),
+    transaction: transactionDe(l.offre),
+    surface: l.surface_m2 ?? undefined,
+    pieces: l.pieces ?? undefined,
+    dpe: l.dpe ?? undefined,
+    description: l.description ?? "",
+    datePublication: l.created_at.slice(0, 10),
+    source: l.source,
+  };
+}
+
+export interface FiltresRecherche {
+  offre?: Transaction;
+  type_bien?: string;
+  prix_max?: number;
+  q?: string;
+  arrivee?: string;
+  depart?: string;
+}
+
+/** La query string de recherche — les dates ne partent QUE si la plage est valide. */
+export function requeteRecherche(f: FiltresRecherche): string {
+  const p = new URLSearchParams();
+  if (f.offre) p.set("offre", f.offre === "location" ? "location_courte_duree" : "vente");
+  if (f.type_bien) p.set("type_bien", f.type_bien);
+  if (f.prix_max && f.prix_max > 0) p.set("prix_max", String(f.prix_max));
+  if (f.q?.trim()) p.set("q", f.q.trim());
+  // miroir de disponibilite.ts : une plage invalide ne filtre PAS —
+  // le serveur appliquerait la même règle, autant ne pas l'appeler pour rien
+  const plageValide =
+    /^\d{4}-\d{2}-\d{2}$/.test(f.arrivee ?? "") &&
+    /^\d{4}-\d{2}-\d{2}$/.test(f.depart ?? "") &&
+    (f.depart ?? "") > (f.arrivee ?? "");
+  if (plageValide) {
+    p.set("arr", f.arrivee!);
+    p.set("dep", f.depart!);
+  }
+  return p.toString();
+}
+
+export interface ResultatAnnonces {
+  ok: boolean;
+  annonces?: Annonce[];
+}
+
+/** Recherche auprès du service app — jamais de throw, le repli décide ici. */
+export async function chargerAnnonces(f: FiltresRecherche): Promise<ResultatAnnonces> {
+  try {
+    const reponse = await fetch(`/api/annonces?${requeteRecherche(f)}`, {
+      credentials: "same-origin",
+    });
+    if (!reponse.ok) return { ok: false };
+    const corps = (await reponse.json()) as { annonces: LigneAnnonce[] };
+    return { ok: true, annonces: corps.annonces.map(versAnnonce) };
+  } catch {
+    // back absent, réseau coupé : le repli démo prend le relais — la page
+    // ne doit pas être plus vide qu'avant la bascule
+    return { ok: false };
+  }
+}

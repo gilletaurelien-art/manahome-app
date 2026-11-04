@@ -7,6 +7,7 @@ import { t } from "./i18n";
 import { langueCourante } from "./router";
 import { lireIndispos } from "./calendrierDonnees";
 import { estDisponible, libellePlage, plageValide, type Plage } from "./disponibilite";
+import { chargerAnnonces } from "./apiAnnonces";
 import { baseUrl } from "./router";
 
 // Page catalogue /annonces/:territoire — miroir front de la vue SQL
@@ -57,6 +58,13 @@ function JsonLd({ annonces, slug }: { annonces: Annonce[]; slug: string }) {
   return <script type="application/ld+json">{JSON.stringify(data)}</script>;
 }
 
+// ⭐ FEATURE_BACK (docs/branchement-back.md) : sous le flag, la recherche
+// part du service app — le FILTRE DE DATES SE FAIT CÔTÉ SERVEUR
+// (est_disponible), le front ne re-filtre pas ce que le serveur a déjà
+// filtré. En repli (flag éteint OU appel échoué), la démo localStorage
+// sert les mêmes sémantiques : la page n'est jamais plus vide qu'avant.
+const featureBack = typeof __FEATURE_BACK__ !== "undefined" && __FEATURE_BACK__;
+
 export function AnnoncesListe({ slug }: { slug: string }) {
   const [filtre, setFiltre] = useState("tous");
   const params = new URLSearchParams(window.location.search);
@@ -70,6 +78,9 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   const [filtreTx, setFiltreTx] = useState(
     txInitial === "location" || txInitial === "vente" ? txInitial : "tous"
   );
+  // mode API : annonces du service (undefined = pas encore tranché)
+  const [annoncesApi, setAnnoncesApi] = useState<Annonce[] | null>(null);
+  const [apiEchouee, setApiEchouee] = useState(false);
 
   useEffect(() => {
     const t = territoireParSlug(slug);
@@ -80,6 +91,31 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   }, [slug]);
 
   const territoire = territoireParSlug(slug);
+
+  // En mode API, la recherche part au serveur à CHAQUE changement de filtre :
+  // c'est lui qui détient la disponibilité réelle (est_disponible).
+  useEffect(() => {
+    if (!featureBack) return;
+    let ignore = false;
+    chargerAnnonces({
+      offre: filtreTx === "tous" ? undefined : (filtreTx as "vente" | "location"),
+      type_bien: filtre === "tous" ? undefined : filtre,
+      prix_max: prixMax ? Number(prixMax) : undefined,
+      q: recherche || undefined,
+      arrivee: arrivee || undefined,
+      depart: depart || undefined,
+    }).then((r) => {
+      if (ignore) return;
+      if (r.ok && r.annonces) setAnnoncesApi(r.annonces);
+      else {
+        // back absent : repli démo — et l'état dit POURQUOI, pas seulement quoi
+        setApiEchouee(true);
+        setAnnoncesApi(null);
+      }
+    });
+    return () => { ignore = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtre, filtreTx, recherche, prixMax, arrivee, depart]);
 
   const annonces = useMemo(() => {
     const directes = [
@@ -106,16 +142,19 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     const parPrix = budget
       ? parTexte.filter((a) => a.prix <= budget)
       : parTexte;
-    // Disponibilité réelle : une annonce aux nuitées bloquées sur la plage
-    // ne sort PAS — miroir front de est_disponible() (007). Bord exclu :
-    // la même sémantique que le calendrier propriétaire, sinon la fiche
-    // dirait « disponible » là où l'hôte lit « bloquée ».
+    // Sous le flag, le serveur a DÉJÀ filtré par dates et budget (et le
+    // front ne re-filtre pas : deux filtres des mêmes dates = deux
+    // occasions de diverger). En démo, le miroir local s'applique —
+    // bord exclu, la même sémantique que le calendrier propriétaire.
+    if (featureBack) {
+      return annoncesApi ?? (apiEchouee ? parPrix : []);
+    }
     const plage: Plage = { arrivee, depart };
     const parDates = plageValide(plage)
       ? parPrix.filter((a) => estDisponible(lireIndispos(a.id), plage))
       : parPrix;
     return parDates;
-  }, [filtre, filtreTx, recherche, prixMax, arrivee, depart]);
+  }, [filtre, filtreTx, recherche, prixMax, arrivee, depart, featureBack, annoncesApi, apiEchouee]);
 
   const B = baseUrl();
 
@@ -179,6 +218,12 @@ export function AnnoncesListe({ slug }: { slug: string }) {
           </div>
         </section>
 
+        {featureBack && apiEchouee && (
+          <p className="recherche-dates" role="status">
+            {t(langueCourante(), "Le service des annonces est momentanément indisponible — le catalogue de démonstration s'affiche.")}
+          </p>
+        )}
+
         {plageValide({ arrivee, depart }) && (
           <p className="recherche-dates" role="status">
             {t(langueCourante(), "Séjour du {plage} — seules les annonces disponibles sur ces dates sont affichées.")
@@ -231,11 +276,13 @@ export function AnnoncesListe({ slug }: { slug: string }) {
           </ul>
         )}
 
-        <p className="catalogue-note">
-          Annonces de démonstration — les annonces réelles arriveront avec les
-          premiers vendeurs. Les annonces professionnelles importées sont
-          toujours affichées après les dépôts directs, à qualité égale.
-        </p>
+        {!featureBack && (
+          <p className="catalogue-note">
+            Annonces de démonstration — les annonces réelles arriveront avec les
+            premiers vendeurs. Les annonces professionnelles importées sont
+            toujours affichées après les dépôts directs, à qualité égale.
+          </p>
+        )}
 
         <div className="est-actions">
           <a className="btn btn-ghost" href={lien(`/territoire/${slug}`)}>

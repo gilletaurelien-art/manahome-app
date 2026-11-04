@@ -146,6 +146,10 @@ const DICO_EN: Record<string, string> = {
   "annulé": "cancelled",
   "terminé": "completed",
 
+  // ── Bascule FEATURE_BACK (module annonces) ──
+  "Le service des annonces est momentanément indisponible — le catalogue de démonstration s'affiche.":
+    "The listings service is temporarily unavailable — the demonstration catalogue is shown.",
+
   // ── Recherche par dates (voyageur) ──
   "Arrivée": "Arrival", "Départ": "Departure",
   "Séjour du {plage} — seules les annonces disponibles sur ces dates sont affichées.":
