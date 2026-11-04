@@ -9,16 +9,20 @@ import { lireIndispos } from "./calendrierDonnees";
 import { estDisponible, libellePlage, plageValide, type Plage } from "./disponibilite";
 import { chargerAnnonces } from "./apiAnnonces";
 import { baseUrl } from "./router";
+import {
+  GlyphStructure, GlyphMaison, GlyphAppartement, GlyphTerrain,
+  GlyphCompas, GlyphBudget, GlyphVoyageurs,
+} from "./Glyphs";
 
 // Page catalogue /annonces/:territoire — miroir front de la vue SQL
 // annonces_publiques : tri directes avant importées à adéquation égale,
 // badge source sur les importées, jamais l'inverse.
 
 const TYPES_FILTRE = [
-  { v: "tous", l: "Tous les biens" },
-  { v: "maison", l: "Maisons" },
-  { v: "appartement", l: "Appartements" },
-  { v: "terrain", l: "Terrains" },
+  { v: "tous", l: "Tous les biens", glyphe: GlyphStructure },
+  { v: "maison", l: "Maisons", glyphe: GlyphMaison },
+  { v: "appartement", l: "Appartements", glyphe: GlyphAppartement },
+  { v: "terrain", l: "Terrains", glyphe: GlyphTerrain },
 ];
 
 // Miroir front : les mois courts du libellé de plage (disponibilite.ts).
@@ -122,9 +126,12 @@ export function AnnoncesListe({ slug }: { slug: string }) {
             a.titre.toLowerCase().includes(q)
         )
       : parType;
+    // Le budget ne porte QUE sur le tarif à la nuitée (label du champ) : une
+    // annonce sans ce palier n'est ni exclue ni incluse par erreur, elle
+    // passe simplement le filtre — on ne compare jamais à un prix absent.
     const budget = prixMax ? Number(prixMax) : null;
     const parPrix = budget
-      ? parTexte.filter((a) => a.prix <= budget)
+      ? parTexte.filter((a) => a.tarifs.nuit == null || a.tarifs.nuit <= budget)
       : parTexte;
     // Sous le flag, le serveur a DÉJÀ filtré par dates et budget (et le
     // front ne re-filtre pas : deux filtres des mêmes dates = deux
@@ -147,9 +154,9 @@ export function AnnoncesListe({ slug }: { slug: string }) {
       <JsonLd annonces={annonces} slug={slug} />
       <main className="publier">
       <div className="wrap">
-        <p className="hero-label">Pilote {territoire ? territoire.nom : "Crozon"}</p>
+        {territoire && <p className="hero-label">{territoire.nom}</p>}
         <h1 className="fiche-titre">
-          Les annonces {territoire ? `à ${territoire.nom}` : "du pilote"}
+          {territoire ? `Les annonces à ${territoire.nom}` : "Les annonces"}
         </h1>
         <p className="territoire-intro">
           Un catalogue volontairement restreint et soigné. Chaque annonce est
@@ -159,17 +166,17 @@ export function AnnoncesListe({ slug }: { slug: string }) {
         <section className="publier-panel recherche-panel" aria-label="Recherche">
           <div className="champ-grid">
             <div className="champ">
-              <label htmlFor="recherche">Commune ou secteur</label>
+              <label htmlFor="recherche" className="label-icone"><GlyphCompas size={15} />Commune ou secteur</label>
               <input
                 id="recherche"
                 type="search"
-                placeholder="Ex : Crozon, Kerloc'h, port…"
+                placeholder="Ex : nom de la commune, quartier, port…"
                 value={recherche}
                 onChange={(e) => setRecherche(e.target.value)}
               />
             </div>
             <div className="champ">
-              <label htmlFor="date-arrivee">Arrivée</label>
+              <label htmlFor="date-arrivee" className="label-icone"><GlyphVoyageurs size={15} />Arrivée</label>
               <input
                 id="date-arrivee"
                 type="date"
@@ -178,7 +185,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               />
             </div>
             <div className="champ">
-              <label htmlFor="date-depart">Départ</label>
+              <label htmlFor="date-depart" className="label-icone"><GlyphVoyageurs size={15} />Départ</label>
               <input
                 id="date-depart"
                 type="date"
@@ -187,7 +194,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               />
             </div>
             <div className="champ">
-              <label htmlFor="prix-max">Budget max (€/nuit)</label>
+              <label htmlFor="prix-max" className="label-icone"><GlyphBudget size={15} />Budget max (€/nuit)</label>
               <input
                 id="prix-max"
                 type="number"
@@ -214,15 +221,16 @@ export function AnnoncesListe({ slug }: { slug: string }) {
         )}
 
         <div className="annonces-filtres" role="group" aria-label="Filtrer par type">
-          {TYPES_FILTRE.map((t) => (
+          {TYPES_FILTRE.map((opt) => (
             <button
-              key={t.v}
+              key={opt.v}
               type="button"
-              className={`btn btn-ghost ${filtre === t.v ? "on" : ""}`}
-              aria-pressed={filtre === t.v}
-              onClick={() => setFiltre(t.v)}
+              className={`btn btn-ghost label-icone ${filtre === opt.v ? "on" : ""}`}
+              aria-pressed={filtre === opt.v}
+              onClick={() => setFiltre(opt.v)}
             >
-              {t.l}
+              <opt.glyphe size={16} />
+              {opt.l}
             </button>
           ))}
         </div>
@@ -233,7 +241,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               Aucune annonce de ce type pour l'instant sur ce territoire.
             </p>
             <p className="territoire-intro">
-              En pilote démarrage, le catalogue est volontairement restreint.
+              Catalogue de démarrage : il est volontairement restreint.
               Revenez bientôt, ou explorez le territoire pendant ce temps.
             </p>
           </section>

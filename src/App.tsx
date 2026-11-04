@@ -47,7 +47,7 @@ const SECTIONS = [
     titre: "Découvrez les séjours",
     accroche: "Des locations de vacances, près de chez vous",
     texte:
-      "Un accès direct aux annonces, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête." },
+      "Un accès direct aux annonces, sans compte à créer. Le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête." },
   {
     glyphe: GlyphAccompagnement,
     num: "02",
@@ -71,7 +71,7 @@ const SECTIONS = [
     accroche: "Un lieu, une fiche : la vie autour du séjour.",
     texte:
       "Transports, commerces, écoles, services, nature : chaque commune du territoire présentée honnêtement, avec des informations vérifiées lorsque c'est possible.",
-    cta: { label: "Découvrir le territoire de Crozon", href: "/territoire/crozon" } },
+    cta: { label: "Découvrir le territoire", href: "/territoire/crozon" } },
 ];
 
 // Le moteur n'a plus qu'une distinction : chercher un séjour, ou publier
@@ -128,7 +128,7 @@ export default function App() {
           <nav className="nav">
             <a href={lien(`/annonces/crozon`)}>
               <NavAnnonces />
-              <span>{t(L, "Annonces")}</span>
+              <span>{t(L, "Vacances")}</span>
             </a>
             <a href={lien(`/territoire/crozon`)}>
               <NavTerritoire />
@@ -246,7 +246,7 @@ export default function App() {
                 <p className="section-texte">{t(L, SECTIONS[0].texte)}</p>
                 <div className="est-actions">
                   <a className="btn btn-clair" href={lien(`/annonces/crozon`)}>
-                    {t(L, "Parcourir le catalogue du pilote")}
+                    {t(L, "Parcourir le catalogue")}
                   </a>
                 </div>
               </div>
@@ -280,12 +280,12 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "Portail de locations de vacances, entre propriétaires et vacanciers — pilote Crozon, presqu'île du Finistère. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
+              {t(L, "Portail de locations de vacances, entre propriétaires et vacanciers. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
             </p>
             <ContactForm />
           </div>
           <nav className="footer-nav" aria-label={t(L, "Pied de page")}>
-            <a href={lien(`/annonces/crozon`)}>{t(L, "Annonces")}</a>
+            <a href={lien(`/annonces/crozon`)}>{t(L, "Vacances")}</a>
             <a href={lien(`/territoire/crozon`)}>{t(L, "Territoire")}</a>
             <a href={lien(`/publier`)}>{t(L, "Publier — gratuit")}</a>
             <a href={lien(`/approche`)}>{t(L, "Notre approche")}</a>

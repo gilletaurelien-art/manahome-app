@@ -1,4 +1,4 @@
-import type { Annonce, Source, Transaction } from "./annonces";
+import type { Annonce, Equipement, Source, Tarifs, Transaction } from "./annonces";
 
 // Annonces déposées localement (démo) — miroir front des tables du back :
 // dépôt direct de particulier, statut de publication, suppression = exclusion.
@@ -11,9 +11,11 @@ export interface AnnonceLocale {
   id: string;
   titre: string;
   lieu: string;
-  prix: number;
+  tarifs: Tarifs;
   surface?: number;
   pieces?: number;
+  couchages?: number;
+  equipements?: Equipement[];
   dpe?: string;
   description: string;
   datePublication: string;
@@ -81,9 +83,11 @@ export function enAnnonce(a: AnnonceLocale): Annonce {
     id: a.id,
     titre: a.titre,
     lieu: a.lieu,
-    prix: a.prix,
+    tarifs: a.tarifs,
     surface: a.surface,
     pieces: a.pieces,
+    couchages: a.couchages,
+    equipements: a.equipements,
     dpe: a.dpe,
     description: a.description,
     datePublication: a.datePublication,

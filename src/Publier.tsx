@@ -3,18 +3,41 @@ import { baseUrl } from "./router";
 import { enregistrerAnnonceLocale } from "./annoncesLocales";
 import { creerAnnonceApi, poserJustificatifApi, publierAnnonceApi } from "./apiDepot";
 import { compresserPhoto, LIMITE_PHOTOS } from "./photos";
+import {
+  tarifsListe, EQUIPEMENTS, LIBELLE_EQUIPEMENT,
+  type Tarifs, type UniteTarif, type Equipement,
+} from "./annonces";
+import {
+  GlyphMaison, GlyphNuit, GlyphSemaine, GlyphMois,
+  GlyphSurface, GlyphPieces, GlyphDpe, GlyphPhoto, GlyphDescription, GlyphEmail,
+  GlyphCompas, GlyphValidation, GlyphCouchage,
+  GlyphParking, GlyphPiscine, GlyphJardin, GlyphBalconEquip,
+} from "./Glyphs";
+
+const ICONE_EQUIPEMENT: Record<Equipement, (p: { size?: number }) => JSX.Element> = {
+  parking: GlyphParking,
+  piscine: GlyphPiscine,
+  jardin: GlyphJardin,
+  balcon: GlyphBalconEquip,
+};
+
+const ICONE_UNITE: Record<UniteTarif, (p: { size?: number }) => JSX.Element> = {
+  nuit: GlyphNuit,
+  semaine: GlyphSemaine,
+  mois: GlyphMois,
+};
 
 // Pré-remplissage depuis un lien profond : /publier?type=…&lieu=…
 function paramsPublier(): Partial<FormBien> {
   const p = new URLSearchParams(window.location.search);
   const get = (k: string) => p.get(k) ?? "";
-  const prix = get("prix");
+  const nuit = get("prix"); // compat : les liens profonds existants passent "prix"
   return {
     type: get("type"),
     lieu: get("lieu"),
     surface: get("surface"),
     pieces: get("pieces"),
-    prix: prix && Number(prix) > 0 ? String(Math.round(Number(prix))) : "",
+    tarifNuit: nuit && Number(nuit) > 0 ? String(Math.round(Number(nuit))) : "",
   };
 }
 
@@ -22,6 +45,9 @@ function paramsPublier(): Partial<FormBien> {
 // « aucun champ obligatoire inutile »). 3 étapes max, ton chaleureux.
 // MANAhome ne porte plus que la location de vacances (séjours courts) :
 // un seul parcours, pas de choix vente/location.
+// ⭐ TROIS PALIERS DE TARIF (04/11/2026), LIBRES : le propriétaire choisit
+// lesquels il propose — nuit, semaine, mois — et les montants n'ont pas à
+// être proportionnels entre eux. Seule règle : au moins un des trois.
 // Le backend branchera : auth particuliers, sauvegarde brouillon,
 // rédaction assistée Mistral, pipeline photo S3.
 
@@ -31,9 +57,21 @@ interface FormBien {
   type: string;
   surface: string;
   pieces: string;
-  prix: string;
+  couchages: string;
+  tarifNuit: string;
+  tarifSemaine: string;
+  tarifMois: string;
   dpe: string;
   lieu: string;
+}
+
+/** Les champs de tarif remplis, en Tarifs — jamais un champ vide converti en 0. */
+function tarifsDuFormulaire(bien: FormBien): Tarifs {
+  return {
+    ...(bien.tarifNuit ? { nuit: Number(bien.tarifNuit) } : {}),
+    ...(bien.tarifSemaine ? { semaine: Number(bien.tarifSemaine) } : {}),
+    ...(bien.tarifMois ? { mois: Number(bien.tarifMois) } : {}),
+  };
 }
 
 const TYPES = [
@@ -48,9 +86,24 @@ const DPES = ["A", "B", "C", "D", "E", "F", "G", "NC"];
 export function Publier() {
   const [etape, setEtape] = useState<Etape>(1);
   const [bien, setBien] = useState<FormBien>({
-    ...paramsPublier(),
+    type: "",
+    surface: "",
+    pieces: "",
+    couchages: "",
+    tarifNuit: "",
+    tarifSemaine: "",
+    tarifMois: "",
+    lieu: "",
     dpe: "",
-  } as FormBien);
+    ...paramsPublier(),
+  });
+  // Équipements : une LISTE de ce qui est présent, jamais quatre booléens
+  // à part — un équipement non coché n'entre simplement pas dans la liste.
+  const [equipements, setEquipements] = useState<Equipement[]>([]);
+  const basculerEquipement = (e: Equipement) =>
+    setEquipements((liste) =>
+      liste.includes(e) ? liste.filter((x) => x !== e) : [...liste, e]
+    );
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
@@ -98,15 +151,18 @@ export function Publier() {
         bien.type && bien.lieu
           ? `${TYPES.find((t) => t.v === bien.type)?.l ?? bien.type} à ${bien.lieu}`
           : "Votre annonce",
-      prix: bien.prix ? `${Number(bien.prix).toLocaleString("fr-FR")} € / nuit` : "Tarif à définir",
+      tarifs: tarifsListe(tarifsDuFormulaire(bien)),
       surface: bien.surface ? `${bien.surface} m²` : null,
       pieces: bien.pieces ? `${bien.pieces} pièces` : null,
+      couchages: bien.couchages ? `${bien.couchages} couchages` : null,
       dpe: bien.dpe && bien.dpe !== "NC" ? bien.dpe : null,
     }),
     [bien]
   );
 
-  const etape1Valide = bien.type && bien.lieu && bien.prix;
+  // Au moins UN des trois paliers — jamais tous requis.
+  const etape1Valide =
+    bien.type && bien.lieu && (bien.tarifNuit || bien.tarifSemaine || bien.tarifMois);
 
   // ⭐ FEATURE_BACK : sous le flag, le dépôt part au service — brouillon
   // GRATUIT ET SANS CONDITION, puis publication via le verrou serveur.
@@ -128,9 +184,16 @@ export function Publier() {
         type_bien: bien.type === "terrain" ? "terrain" : bien.type === "appartement" ? "appartement" : "maison",
         offre: "location_courte_duree",
         prix_eur: null,
-        tarif_nuit: Number(bien.prix),
+        tarif_nuit: bien.tarifNuit ? Number(bien.tarifNuit) : null,
+        tarif_semaine: bien.tarifSemaine ? Number(bien.tarifSemaine) : null,
+        tarif_mois: bien.tarifMois ? Number(bien.tarifMois) : null,
         surface_m2: bien.surface ? Number(bien.surface) : null,
         pieces: bien.pieces ? Number(bien.pieces) : null,
+        couchages: bien.couchages ? Number(bien.couchages) : null,
+        parking: equipements.includes("parking"),
+        piscine: equipements.includes("piscine"),
+        jardin: equipements.includes("jardin"),
+        balcon: equipements.includes("balcon"),
         dpe: bien.dpe || null,
         description,
         code_insee: "29042",
@@ -193,9 +256,11 @@ export function Publier() {
       transaction: "location",
       titre: apercu.titre,
       lieu: bien.lieu,
-      prix: Number(bien.prix),
+      tarifs: tarifsDuFormulaire(bien),
       surface: bien.surface ? Number(bien.surface) : undefined,
       pieces: bien.pieces ? Number(bien.pieces) : undefined,
+      couchages: bien.couchages ? Number(bien.couchages) : undefined,
+      equipements: equipements.length ? equipements : undefined,
       dpe: bien.dpe && bien.dpe !== "NC" ? bien.dpe : undefined,
       description,
       photos: photos.length ? photos : undefined,
@@ -215,15 +280,15 @@ export function Publier() {
 
         {/* Étapes */}
         <ol className="etapes">
-          <li className={etape === 1 ? "on" : etape > 1 ? "done" : ""}>Le bien</li>
-          <li className={etape === 2 ? "on" : etape > 2 ? "done" : ""}>La description</li>
-          <li className={etape === 3 ? "on" : ""}>Validation</li>
+          <li className={`label-icone ${etape === 1 ? "on" : etape > 1 ? "done" : ""}`}><GlyphMaison size={16} />Le bien</li>
+          <li className={`label-icone ${etape === 2 ? "on" : etape > 2 ? "done" : ""}`}><GlyphDescription size={16} />La description</li>
+          <li className={`label-icone ${etape === 3 ? "on" : ""}`}><GlyphValidation size={16} />Validation</li>
         </ol>
 
         {etape === 1 && (
           <section className="publier-panel">
             <div className="champ champ-recherche">
-              <label htmlFor="type">Type de bien *</label>
+              <label htmlFor="type" className="label-icone"><GlyphMaison size={15} />Type de bien *</label>
               <input
                 id="type"
                 type="text"
@@ -263,32 +328,59 @@ export function Publier() {
               )}
             </div>
             <div className="champ">
-              <label htmlFor="lieu">Commune ou secteur *</label>
+              <label htmlFor="lieu" className="label-icone"><GlyphCompas size={15} />Commune ou secteur *</label>
               <input
                 id="lieu"
-                placeholder="Ex : Crozon, presqu'île"
+                placeholder="Ex : nom de la commune ou du secteur"
                 value={bien.lieu}
                 onChange={(e) => setBien({ ...bien, lieu: e.target.value })}
               />
             </div>
+            <div className="champ">
+              <label className="label-icone"><GlyphNuit size={15} />Vos tarifs — au moins un des trois *</label>
+              <p className="champ-aide">
+                Libre à vous de ne proposer qu'un seul palier, ou les trois.
+                Les montants n'ont pas besoin d'être proportionnels entre eux.
+              </p>
+              <div className="champ-grid">
+                <div className="champ">
+                  <label htmlFor="tarif-nuit" className="label-icone"><GlyphNuit size={15} />Par nuit (€)</label>
+                  <input
+                    id="tarif-nuit"
+                    type="number"
+                    min={0}
+                    placeholder="50"
+                    value={bien.tarifNuit}
+                    onChange={(e) => setBien({ ...bien, tarifNuit: e.target.value })}
+                  />
+                </div>
+                <div className="champ">
+                  <label htmlFor="tarif-semaine" className="label-icone"><GlyphSemaine size={15} />Par semaine (€)</label>
+                  <input
+                    id="tarif-semaine"
+                    type="number"
+                    min={0}
+                    placeholder="250"
+                    value={bien.tarifSemaine}
+                    onChange={(e) => setBien({ ...bien, tarifSemaine: e.target.value })}
+                  />
+                </div>
+                <div className="champ">
+                  <label htmlFor="tarif-mois" className="label-icone"><GlyphMois size={15} />Par mois (€)</label>
+                  <input
+                    id="tarif-mois"
+                    type="number"
+                    min={0}
+                    placeholder="750"
+                    value={bien.tarifMois}
+                    onChange={(e) => setBien({ ...bien, tarifMois: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
             <div className="champ-grid">
               <div className="champ">
-                <label htmlFor="prix">Tarif par nuit (€) *</label>
-                <input
-                  id="prix"
-                  type="number"
-                  min={0}
-                  placeholder="85"
-                  value={bien.prix}
-                  onChange={(e) => setBien({ ...bien, prix: e.target.value })}
-                />
-                <p className="champ-aide">
-                  Vous pourrez ajuster vos tarifs par période depuis votre
-                  calendrier, après publication.
-                </p>
-              </div>
-              <div className="champ">
-                <label htmlFor="surface">Surface (m²)</label>
+                <label htmlFor="surface" className="label-icone"><GlyphSurface size={15} />Surface (m²)</label>
                 <input
                   id="surface"
                   type="number"
@@ -298,7 +390,7 @@ export function Publier() {
                 />
               </div>
               <div className="champ">
-                <label htmlFor="pieces">Pièces</label>
+                <label htmlFor="pieces" className="label-icone"><GlyphPieces size={15} />Pièces</label>
                 <input
                   id="pieces"
                   type="number"
@@ -307,9 +399,45 @@ export function Publier() {
                   onChange={(e) => setBien({ ...bien, pieces: e.target.value })}
                 />
               </div>
+              <div className="champ">
+                <label htmlFor="couchages" className="label-icone"><GlyphCouchage size={15} />Couchages</label>
+                <input
+                  id="couchages"
+                  type="number"
+                  min={0}
+                  placeholder="Ex : 4"
+                  value={bien.couchages}
+                  onChange={(e) => setBien({ ...bien, couchages: e.target.value })}
+                />
+              </div>
             </div>
             <div className="champ">
-              <label>DPE (diagnostic de performance énergétique)</label>
+              <label className="label-icone"><GlyphParking size={15} />Équipements</label>
+              <p className="champ-aide">
+                Cochez uniquement ce qui est réellement présent — un
+                équipement non coché n'est pas affiché comme absent, il
+                n'est juste pas annoncé.
+              </p>
+              <div className="dpe-choix">
+                {EQUIPEMENTS.map((e) => {
+                  const Icone = ICONE_EQUIPEMENT[e];
+                  return (
+                    <button
+                      key={e}
+                      type="button"
+                      className={`dpe-btn label-icone ${equipements.includes(e) ? "on" : ""}`}
+                      aria-pressed={equipements.includes(e)}
+                      onClick={() => basculerEquipement(e)}
+                    >
+                      <Icone size={16} />
+                      {LIBELLE_EQUIPEMENT[e]}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="champ">
+              <label className="label-icone"><GlyphDpe size={15} />DPE (diagnostic de performance énergétique)</label>
               <div className="dpe-choix">
                 {DPES.map((d) => (
                   <button
@@ -339,7 +467,7 @@ export function Publier() {
         {etape === 2 && (
           <section className="publier-panel">
             <div className="champ">
-              <label htmlFor="photos">Les photos de votre bien</label>
+              <label htmlFor="photos" className="label-icone"><GlyphPhoto size={15} />Les photos de votre bien</label>
               <input
                 id="photos"
                 type="file"
@@ -377,7 +505,7 @@ export function Publier() {
               )}
             </div>
             <div className="champ">
-              <label htmlFor="desc">Décrivez votre bien, comme vous le raconteriez</label>
+              <label htmlFor="desc" className="label-icone"><GlyphDescription size={15} />Décrivez votre bien, comme vous le raconteriez</label>
               <textarea
                 id="desc"
                 rows={7}
@@ -403,7 +531,7 @@ export function Publier() {
 
         {etape === 3 && (
           <section className="publier-panel">
-            <p className="apercu-label">Aperçu de votre annonce</p>
+            <p className="apercu-label label-icone"><GlyphValidation size={18} />Aperçu de votre annonce</p>
             {photos.length > 0 && (
               <div className="apercu-photo">
                 <img src={photos[0]} alt="Photo principale" />
@@ -413,36 +541,66 @@ export function Publier() {
               <p className="fiche-lieu">{bien.lieu}</p>
               <h2 className="fiche-titre">{apercu.titre}</h2>
               <dl className="fiche-chiffres">
-                <div>
-                  <dt>Tarif</dt>
-                  <dd className="canon">{apercu.prix}</dd>
-                </div>
+                {apercu.tarifs.length > 0 ? (
+                  apercu.tarifs.map((t) => {
+                    const Icone = ICONE_UNITE[t.unite];
+                    return (
+                      <div key={t.unite}>
+                        <dt className="label-icone"><Icone size={16} />Tarif / {t.unite}</dt>
+                        <dd className="canon">{t.montant.toLocaleString("fr-FR")} €</dd>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div>
+                    <dt className="label-icone"><GlyphNuit size={16} />Tarif</dt>
+                    <dd className="canon">À définir</dd>
+                  </div>
+                )}
                 {apercu.surface && (
                   <div>
-                    <dt>Surface</dt>
+                    <dt className="label-icone"><GlyphSurface size={16} />Surface</dt>
                     <dd>{apercu.surface}</dd>
                   </div>
                 )}
                 {apercu.pieces && (
                   <div>
-                    <dt>Pièces</dt>
+                    <dt className="label-icone"><GlyphPieces size={16} />Pièces</dt>
                     <dd>{apercu.pieces}</dd>
+                  </div>
+                )}
+                {apercu.couchages && (
+                  <div>
+                    <dt className="label-icone"><GlyphCouchage size={16} />Couchages</dt>
+                    <dd>{apercu.couchages}</dd>
                   </div>
                 )}
                 {apercu.dpe && (
                   <div>
-                    <dt>DPE</dt>
+                    <dt className="label-icone"><GlyphDpe size={16} />DPE</dt>
                     <dd>
                       <span className={`dpe dpe-${apercu.dpe}`}>{apercu.dpe}</span>
                     </dd>
                   </div>
                 )}
               </dl>
+              {equipements.length > 0 && (
+                <p className="meta">
+                  {equipements.map((e) => {
+                    const Icone = ICONE_EQUIPEMENT[e];
+                    return (
+                      <span key={e} className="label-icone">
+                        <Icone size={15} />{LIBELLE_EQUIPEMENT[e]}
+                      </span>
+                    );
+                  })}
+                </p>
+              )}
               {description && <p className="fiche-description">{description}</p>}
             </div>
 
             <div className="champ">
-              <label htmlFor="email">Votre e-mail (pour retrouver votre brouillon) *</label>
+              <label htmlFor="email" className="label-icone"><GlyphEmail size={15} />Votre e-mail (pour retrouver votre brouillon) *</label>
               <input
                 id="email"
                 type="email"

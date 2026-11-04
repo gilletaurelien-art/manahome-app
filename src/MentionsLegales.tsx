@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { baseUrl , lien} from "./router";
+import { GlyphStructure, GlyphHebergement, GlyphBouclier, GlyphCadenas } from "./Glyphs";
 
 // Mentions légales — page minimale, honnête : pas d'acte loi Hoguet,
 // pas de revente de données, hébergement GitHub Pages.
@@ -17,17 +18,16 @@ export function MentionsLegales() {
         <h1 className="fiche-titre">Mentions légales</h1>
 
         <section className="publier-panel">
-          <p className="apercu-label">Éditeur</p>
+          <p className="apercu-label label-icone"><GlyphStructure size={18} />Éditeur</p>
           <p className="territoire-intro">
             MANAhome est édité par l'écosystème MANA (mana.bzh, mana.love,
-            manafrance.org), dans le cadre du pilote territorial de Crozon
-            (Finistère). Les coordonnées complètes de l'éditeur seront
+            manafrance.org). Les coordonnées complètes de l'éditeur seront
             publiées avec la structure juridique définitive du projet.
           </p>
         </section>
 
         <section className="publier-panel">
-          <p className="apercu-label">Hébergement</p>
+          <p className="apercu-label label-icone"><GlyphHebergement size={18} />Hébergement</p>
           <p className="territoire-intro">
             Site statique hébergé sur GitHub Pages (GitHub, Inc.). Aucune
             donnée personnelle n'est collectée par le site en l'état : les
@@ -37,7 +37,7 @@ export function MentionsLegales() {
         </section>
 
         <section className="publier-panel">
-          <p className="apercu-label">Nature du service</p>
+          <p className="apercu-label label-icone"><GlyphBouclier size={18} />Nature du service</p>
           <p className="territoire-intro">
             MANAhome est une plateforme de mise en relation pour la location
             de vacances, entre propriétaires et vacanciers. Elle ne réalise
@@ -49,7 +49,7 @@ export function MentionsLegales() {
         </section>
 
         <section className="publier-panel">
-          <p className="apercu-label">Données personnelles</p>
+          <p className="apercu-label label-icone"><GlyphCadenas size={18} />Données personnelles</p>
           <p className="territoire-intro">
             Aucune donnée ni lead n'est revendu. Les coordonnées ne sont
             jamais publiées : la mise en relation se fait par messagerie
