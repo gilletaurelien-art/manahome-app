@@ -8,7 +8,7 @@
 export interface Message {
   id: string;
   conversationId: string;
-  auteur: "moi" | "vendeur"; // démo : l'acheteur local et le vendeur simulé
+  auteur: "moi" | "proprietaire"; // démo : le voyageur local et le propriétaire simulé
   corps: string;
   date: string; // ISO
 }
@@ -94,7 +94,7 @@ export function envoyer(
   ecrire(tous);
 }
 
-// Réponse simulée du vendeur (démo uniquement) — un échange pour rendre
+// Réponse simulée du propriétaire (démo uniquement) — un échange pour rendre
 // le parcours lisible ; en prod, notification + réponse réelle.
 export function reponseSimulee(conversationId: string) {
   const tous = lireConversations();
@@ -103,8 +103,8 @@ export function reponseSimulee(conversationId: string) {
   conv.messages.push({
     id: `msg-${Date.now()}`,
     conversationId,
-    auteur: "vendeur",
-    corps: "Merci pour votre message ! (Démo — en production, le vendeur répond ici, par messagerie interne, sans jamais exposer ses coordonnées.)",
+    auteur: "proprietaire",
+    corps: "Merci pour votre message ! (Démo — en production, le propriétaire répond ici, par messagerie interne, sans jamais exposer ses coordonnées.)",
     date: new Date().toISOString(),
   });
   conv.dernierLe = new Date().toISOString();

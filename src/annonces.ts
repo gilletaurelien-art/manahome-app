@@ -1,11 +1,13 @@
 export type Source = "directe_particulier" | "import_pro";
-// Vente OU location — MANAhome couvre l'habitat, pas que la vente.
-export type Transaction = "vente" | "location";
+// MANAhome est un portail de LOCATION DE VACANCES, entre propriétaires et
+// vacanciers — la vente a quitté le produit le 04/11/2026 (repositionnement).
+export type Transaction = "location";
 
 export interface Annonce {
   id: string;
   titre: string;
   lieu: string;
+  // Tarif à la nuitée, en euros — jamais un prix de vente ou un loyer mensuel.
   prix: number;
   transaction: Transaction;
   surface?: number;
@@ -24,14 +26,15 @@ export interface Annonce {
 }
 
 // Fixtures de démonstration (is_demo=true en base) — jamais de donnée réelle.
+// Tarifs à la nuitée, cohérents avec une location de vacances à Crozon.
 export const ANNONCES_DEMO: Annonce[] = [
   {
     id: "demo-crozon-maison-1",
     geoloc: { lat: 48.247, lon: -4.423 },
     titre: "Maison de ville lumineuse, jardin clos",
     lieu: "Crozon · à deux pas du port",
-    prix: 245000,
-    transaction: "vente",
+    prix: 95,
+    transaction: "location",
     surface: 98,
     pieces: 4,
     dpe: "C",
@@ -45,8 +48,8 @@ export const ANNONCES_DEMO: Annonce[] = [
     geoloc: { lat: 48.236, lon: -4.456 },
     titre: "Dernier étage, balcon plein sud",
     lieu: "Crozon · proche plage de Pen-Hat",
-    prix: 168000,
-    transaction: "vente",
+    prix: 65,
+    transaction: "location",
     surface: 62,
     pieces: 3,
     dpe: "D",
@@ -56,16 +59,17 @@ export const ANNONCES_DEMO: Annonce[] = [
     source: "directe_particulier",
   },
   {
-    id: "demo-crozon-terrain-1",
+    id: "demo-crozon-studio-vue",
     geoloc: { lat: 48.262, lon: -4.463 },
-    titre: "Terrain viabilisé au calme, en lisière",
+    titre: "Chambre d'hôtes au calme, vue sur la lande",
     lieu: "Crozon · hameau de Kerloc'h",
-    prix: 89000,
-    transaction: "vente",
-    surface: 720,
+    prix: 48,
+    transaction: "location",
+    surface: 18,
+    pieces: 1,
     dpe: undefined,
     description:
-      "Terrain viabilisé au calme, en lisière du hameau, idéal maison de famille. Bornage à jour.",
+      "Chambre d'hôtes indépendante au calme, en lisière du hameau. Petit-déjeuner compris, accès direct aux sentiers.",
     datePublication: "2026-10-25",
     source: "directe_particulier",
   },
@@ -74,13 +78,13 @@ export const ANNONCES_DEMO: Annonce[] = [
     geoloc: { lat: 48.244, lon: -4.434 },
     titre: "Longère rénovée avec dépendance, panorama mer",
     lieu: "Crozon · 10 min des plages",
-    prix: 410000,
-    transaction: "vente",
+    prix: 140,
+    transaction: "location",
     surface: 145,
     pieces: 5,
     dpe: "B",
     description:
-      "[DÉMO] Longère rénovée avec dépendance, panorama mer, à 10 min des plages.",
+      "[DÉMO] Longère rénovée avec dépendance, panorama mer, à 10 min des plages. Idéale pour un séjour en famille.",
     datePublication: "2026-10-24",
     source: "import_pro",
   },
@@ -89,13 +93,13 @@ export const ANNONCES_DEMO: Annonce[] = [
     geoloc: { lat: 48.24, lon: -4.429 },
     titre: "T3 lumineux avec vue sur la rade",
     lieu: "Crozon · centre",
-    prix: 780,
+    prix: 72,
     transaction: "location",
     surface: 64,
     pieces: 3,
     dpe: "D",
     description:
-      "[DEMO] T3 lumineux au calme, vue sur la rade, cave et garage. Disponible immédiatement.",
+      "[DEMO] T3 lumineux au calme, vue sur la rade, cave et garage. Idéal pour un séjour au centre de Crozon.",
     datePublication: "2026-10-25",
     source: "import_pro",
   },
@@ -104,13 +108,13 @@ export const ANNONCES_DEMO: Annonce[] = [
     geoloc: { lat: 48.229, lon: -4.467 },
     titre: "Maison neuve F4 avec jardin",
     lieu: "Crozon · Kerloc'h",
-    prix: 1150,
+    prix: 110,
     transaction: "location",
     surface: 92,
     pieces: 4,
     dpe: "A",
     description:
-      "[DEMO] Maison neuve F4, jardin clos, garage double. Proche écoles et plage.",
+      "[DEMO] Maison neuve F4, jardin clos, garage double. Proche écoles et plage — parfaite pour des vacances au calme.",
     datePublication: "2026-10-25",
     source: "import_pro",
   },
@@ -119,7 +123,7 @@ export const ANNONCES_DEMO: Annonce[] = [
     geoloc: { lat: 48.257, lon: -4.481 },
     titre: "Studio meublé, proximité port",
     lieu: "Crozon · port",
-    prix: 520,
+    prix: 48,
     transaction: "location",
     surface: 28,
     pieces: 1,

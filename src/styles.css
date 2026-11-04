@@ -906,7 +906,7 @@ html { background: var(--sand); }
   color: #fff;
   border-bottom-right-radius: 4px;
 }
-.msg-vendeur {
+.msg-proprietaire {
   align-self: flex-start;
   background: var(--sand);
   color: var(--ink);

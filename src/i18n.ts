@@ -50,63 +50,44 @@ export function t(langue: Langue, texte: string): string {
 const DICO_EN: Record<string, string> = {
   // ── Barre de navigation ──
   "Annonces": "Listings",
-  "Estimation": "Valuation",
   "Territoire": "Territory",
-  "Pros": "Pros",
   "Publier": "Publish",
   "Changer de langue": "Switch language",
 
-  // ── Moteur de recherche de l'accueil ──
+  // ── Moteur de recherche de l'accueil (repositionné 04/11/2026 : location
+  // de vacances uniquement, plus de choix acheter/vendre/services) ──
   "Je cherche": "I'm looking for",
-  "Acheter": "Buy",
-  "Vendre": "Sell",
-  "Louer": "Rent",
-  "Services": "Services",
-  "Agence immobilière / mandataire": "Estate agency / agent",
-  "Notaire": "Notary",
-  "Réparation & travaux": "Repair & works",
-  "Ménage & nettoyage": "Housekeeping & cleaning",
-  "Jardin & extérieur": "Garden & outdoors",
-  "Garde de logement": "Home watching",
-  "Diagnostics & expertise": "Surveys & expertise",
-  "Autonomie & adaptation": "Independence & home adaptation",
+  "Trouver un séjour": "Find a stay",
+  "Louer mon bien": "List my property",
   "Commune ou code postal": "Town or postcode",
-  "Commune, métier ou besoin": "Town, trade or need",
   "Rechercher": "Search",
 
   // ── Hero ──
-  "L'immobilier, autrement": "Property, differently",
+  "Les vacances, autrement": "Holidays, differently",
 
   // ── Sections de l'accueil ──
-  "Découvrez les biens": "Explore the listings",
-  "Vente et location, près de chez vous": "For sale and to rent, near you",
-  "Un accès direct aux biens, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête.":
-    "Direct access to properties, no account needed. As a pilot, the catalogue is deliberately small and carefully kept — every listing is structured, sourced, honest.",
+  "Découvrez les séjours": "Explore the stays",
+  "Des locations de vacances, près de chez vous": "Holiday rentals, near you",
+  "Un accès direct aux annonces, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête.":
+    "Direct access to listings, no account needed. As a pilot, the catalogue is deliberately small and carefully kept — every listing is structured, sourced, honest.",
   "Parcourir le catalogue du pilote": "Browse the pilot catalogue",
-  "Vendre ou louer avec MANA": "Sell or rent with MANA",
+  "Louez votre logement avec MANA": "List your property with MANA",
   "Vous gardez la main. MANA vous accompagne.": "You stay in charge. MANA supports you.",
-  "Estimation indicative, préparation de l'annonce, documents à prévoir, compréhension du prix ou du loyer : le particulier reste maître de son projet.":
-    "Indicative valuation, listing preparation, documents to plan, understanding the price or the rent: the individual stays in charge of their project.",
+  "Préparation de l'annonce, documents à prévoir (déclaration de meublé touristique, attestation d'assurance), calendrier de réservation : le propriétaire reste maître de son bien.":
+    "Listing preparation, documents to plan (short-term rental declaration, insurance certificate), booking calendar: the owner stays in charge of their property.",
   "Publier mon annonce": "Publish my listing",
-  "Estimer mon bien": "Value my property",
   "Annonces pour les IA": "Listings for AIs",
-  "Votre bien mérite d'être trouvé, pas noyé.":
+  "Votre logement mérite d'être trouvé, pas noyé.":
     "Your property deserves to be found, not drowned.",
   "Caractéristiques organisées, informations utiles, page publique accessible aux moteurs et assistants compatibles.":
     "Organised characteristics, useful information, a public page accessible to search engines and compatible assistants.",
   "Comprendre notre approche": "Understand our approach",
   "L'index des communes": "The index of towns",
-  "Un lieu, une fiche : la vie autour du bien.":
-    "One place, one page: life around the property.",
+  "Un lieu, une fiche : la vie autour du séjour.":
+    "One place, one page: life around the stay.",
   "Transports, commerces, écoles, services, nature : chaque commune du territoire présentée honnêtement, avec des informations vérifiées lorsque c'est possible.":
     "Transport, shops, schools, services, nature: every town of the territory presented honestly, with verified information wherever possible.",
   "Découvrir le territoire de Crozon": "Discover the Crozon territory",
-  "Professionnels & services de l'habitat": "Housing professionals & services",
-  "Ceux qui vendent, louent… et ceux qui soignent les logements.":
-    "Those who sell and rent… and those who care for homes.",
-  "Agences, notaires, réparateurs, diagnostics : un seul référentiel, factuel, sans recommandation.":
-    "Agencies, notaries, repairers, surveys: one directory, factual, no endorsement.",
-  "Découvrir les pros & services du territoire": "Discover the area's pros & services",
 
   // ── Le séjour (cycle de vie) ──
   "Voyageurs": "Guests",
@@ -207,15 +188,13 @@ const DICO_EN: Record<string, string> = {
     "Approximate neighbourhood location, served by OpenStreetMap — the map never points at the property's exact address.",
 
   // ── Pied de page ──
-  "Estimation indicative": "Indicative valuation",
   "Publier — gratuit": "Publish — free",
   "Notre approche": "Our approach",
-  "Rejoindre le référentiel": "Join the directory",
   "Ma messagerie": "My inbox",
   "Mes annonces": "My listings",
   "À propos": "About",
   "Mentions légales": "Legal notice",
   "Pied de page": "Footer",
-  "Portail immobilier territorial — pilote Crozon, presqu'île du Finistère. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.":
-    "Territorial property portal — Crozon pilot, Finistère peninsula. Free, supported, AI-readable. Structuring improves the chances of understanding and discovery; it does not guarantee that an AI assistant will index, recommend or cite a listing.",
+  "Portail de locations de vacances, entre propriétaires et vacanciers — pilote Crozon, presqu'île du Finistère. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.":
+    "A holiday rental portal, between owners and guests — Crozon pilot, Finistère peninsula. Free, supported, AI-readable. Structuring improves the chances of understanding and discovery; it does not guarantee that an AI assistant will index, recommend or cite a listing.",
 };

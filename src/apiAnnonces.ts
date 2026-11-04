@@ -1,7 +1,7 @@
 import type { Annonce, Transaction } from "./annonces";
 
 // Client du module annonces — le premier maillon de la bascule FEATURE_BACK
-// (docs/branchement-back.md). ⭐ TROIS RÈGLES :
+// (docs/branchement-back.md). ⭐ QUATRE RÈGLES :
 // 1. LA SÉCURITÉ DU REPLI : si l'API échoue, le front sert la démo — jamais
 //    un écran vide là où la veille il y avait un catalogue. Un back absent
 //    doit coûter zéro affichage.
@@ -11,6 +11,12 @@ import type { Annonce, Transaction } from "./annonces";
 // 3. LE MAPPING EST PUR ET TESTÉ : la vue publique n'expose pas de titre,
 //    la fiche en synthétise un honnête (type · pièces · surface) — jamais
 //    un titre inventé qui ressemblerait à du marketing.
+// 4. MANAhome N'EST PLUS QU'UN PORTAIL DE LOCATION DE VACANCES (04/11/2026) :
+//    `offre: "vente"` reste dans le contrat de la vue (schéma non modifié
+//    par ce chantier), mais toute ligne de vente est ÉCARTÉE avant mapping —
+//    jamais affichée, jamais convertie. Le produit n'a plus de notion de
+//    vente ; une ligne qui en porte une est une donnée héritée, pas un cas
+//    d'affichage.
 
 export interface LigneAnnonce {
   id: string;
@@ -36,11 +42,6 @@ const TYPES: Record<LigneAnnonce["type_bien"], string> = {
   autre: "Bien",
 };
 
-/** La transaction front (vente | location) depuis l'offre base (007). */
-export function transactionDe(offre: LigneAnnonce["offre"]): Transaction {
-  return offre === "location_courte_duree" ? "location" : "vente";
-}
-
 /** Le titre honnête d'une ligne publique — descriptif, jamais inventé. */
 export function titreDeLigne(l: LigneAnnonce): string {
   const morceaux = [TYPES[l.type_bien]];
@@ -49,21 +50,24 @@ export function titreDeLigne(l: LigneAnnonce): string {
   return morceaux.join(" · ");
 }
 
-/** Le lieu lisible depuis l'offre : les locations se vendent à la nuitée. */
+/** Le lieu lisible : une location de vacances, à la nuitée. */
 export function lieuDeLigne(l: LigneAnnonce): string {
-  return l.offre === "location_courte_duree"
-    ? `Location courte durée${l.capacite ? ` · ${l.capacite} voyageurs` : ""}`
-    : "Vente";
+  return `Location courte durée${l.capacite ? ` · ${l.capacite} voyageurs` : ""}`;
 }
 
-/** Une ligne de la vue annonces_publiques → une Annonce du front. */
+/**
+ * Une ligne de la vue annonces_publiques → une Annonce du front.
+ * ⚠️ Ne mappe que des lignes de location : appeler cette fonction sur une
+ * ligne `offre: "vente"` est une erreur d'appelant — filtrer AVANT
+ * (voir `chargerAnnonces`), jamais ici.
+ */
 export function versAnnonce(l: LigneAnnonce): Annonce {
   return {
     id: l.id,
     titre: titreDeLigne(l),
     lieu: lieuDeLigne(l),
-    prix: l.offre === "location_courte_duree" ? (l.tarif_nuit ?? l.prix_eur ?? 0) : (l.prix_eur ?? 0),
-    transaction: transactionDe(l.offre),
+    prix: l.tarif_nuit ?? 0,
+    transaction: "location",
     surface: l.surface_m2 ?? undefined,
     pieces: l.pieces ?? undefined,
     dpe: l.dpe ?? undefined,
@@ -74,6 +78,8 @@ export function versAnnonce(l: LigneAnnonce): Annonce {
 }
 
 export interface FiltresRecherche {
+  // Transaction n'a plus qu'une valeur ("location") : le champ reste
+  // optionnel pour la compat de l'URL, mais ne sert plus à distinguer.
   offre?: Transaction;
   type_bien?: string;
   prix_max?: number;
@@ -85,7 +91,7 @@ export interface FiltresRecherche {
 /** La query string de recherche — les dates ne partent QUE si la plage est valide. */
 export function requeteRecherche(f: FiltresRecherche): string {
   const p = new URLSearchParams();
-  if (f.offre) p.set("offre", f.offre === "location" ? "location_courte_duree" : "vente");
+  if (f.offre) p.set("offre", "location_courte_duree");
   if (f.type_bien) p.set("type_bien", f.type_bien);
   if (f.prix_max && f.prix_max > 0) p.set("prix_max", String(f.prix_max));
   if (f.q?.trim()) p.set("q", f.q.trim());
@@ -115,7 +121,12 @@ export async function chargerAnnonces(f: FiltresRecherche): Promise<ResultatAnno
     });
     if (!reponse.ok) return { ok: false };
     const corps = (await reponse.json()) as { annonces: LigneAnnonce[] };
-    return { ok: true, annonces: corps.annonces.map(versAnnonce) };
+    // Une ligne héritée `offre: "vente"` n'a plus sa place au catalogue —
+    // voir la règle 4 en tête de fichier : écartée, jamais mappée.
+    return {
+      ok: true,
+      annonces: corps.annonces.filter((l) => l.offre !== "vente").map(versAnnonce),
+    };
   } catch {
     // back absent, réseau coupé : le repli démo prend le relais — la page
     // ne doit pas être plus vide qu'avant la bascule

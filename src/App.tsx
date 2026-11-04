@@ -5,14 +5,11 @@ import {
   GlyphCompas,
   GlyphStructure,
   GlyphAccompagnement,
-  GlyphTerritoire,
-  GlyphPros } from "./Glyphs";
+  GlyphTerritoire } from "./Glyphs";
 import {
   NavAnnonces,
   NavTerritoire,
-  NavPros,
-  NavPublier,
-  NavEstimation } from "./NavGlyphs";
+  NavPublier } from "./NavGlyphs";
 import {
   usePath,
   routeAnnonce,
@@ -25,23 +22,12 @@ import { t } from "./i18n";
 import { AnnonceDetail } from "./AnnonceDetail";
 import { TerritoireDetail } from "./TerritoireDetail";
 import { Publier } from "./Publier";
-import { Estimation } from "./Estimation";
 import { AnnoncesListe } from "./AnnoncesListe";
 import { Approche } from "./Approche";
-// ⚠️ `pros.ts` et `messagerie.ts` ont été RENOMMÉS en `prosDonnees.ts` et
-// `messagerieDonnees.ts` le 28/10/2026, et ce n'est pas un goût de nommage.
-// Ils ne différaient de `Pros.tsx` / `Messagerie.tsx` que par la casse du
-// radical. Le résolveur essaie `./Pros.ts` AVANT `./Pros.tsx` : sur un système
-// de fichiers insensible à la casse (macOS par défaut) il tombait sur le module
-// de DONNÉES, et le build échouait sur « "Pros" is not exported ».
-// ⭐ Le dépôt ne se construisait donc que sur un système sensible à la casse —
-// la CI Linux, et nulle part ailleurs. Mesuré en voulant construire pour le
-// domaine depuis le Mac. ⚠️ Et le premier correctif essayé (extension `.tsx`
-// explicite dans l'import) réparait rollup et CASSAIT `tsc` : la CI enchaîne
-// les deux. Renommer traite la cause, pas le symptôme.
-import { Pros } from "./Pros";
+// ⚠️ `messagerie.ts` a été RENOMMÉ en `messagerieDonnees.ts` le 28/10/2026 —
+// voir ce fichier pour la raison (collision de casse avec `Messagerie.tsx`
+// sur un système de fichiers insensible à la casse).
 import { Messagerie } from "./Messagerie";
-import { EspacePro } from "./EspacePro";
 import { MesAnnonces } from "./MesAnnonces";
 import { MentionsLegales } from "./MentionsLegales";
 import { ContactForm } from "./ContactForm";
@@ -49,28 +35,32 @@ import { ContactForm } from "./ContactForm";
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
 
+// Repositionné le 04/11/2026 : MANAhome n'est plus un portail immobilier
+// généraliste (vente/achat/pros de l'habitat) — c'est un portail de
+// LOCATION DE VACANCES, entre propriétaires et vacanciers. Les sections 02
+// (ex-« Vendre ou louer ») et 05 (ex-« Pros & services de l'habitat »,
+// retirée) sont réécrites ou retirées en conséquence.
 const SECTIONS = [
   {
     glyphe: GlyphCompas,
     num: "01",
-    titre: "Découvrez les biens",
-    accroche: "Vente et location, près de chez vous",
+    titre: "Découvrez les séjours",
+    accroche: "Des locations de vacances, près de chez vous",
     texte:
-      "Un accès direct aux biens, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête." },
+      "Un accès direct aux annonces, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête." },
   {
     glyphe: GlyphAccompagnement,
     num: "02",
-    titre: "Vendre ou louer avec MANA",
+    titre: "Louez votre logement avec MANA",
     accroche: "Vous gardez la main. MANA vous accompagne.",
     texte:
-      "Estimation indicative, préparation de l'annonce, documents à prévoir, compréhension du prix ou du loyer : le particulier reste maître de son projet.",
-    cta: { label: "Publier mon annonce", href: "/publier" },
-    cta2: { label: "Estimer mon bien", href: "/estimation" } },
+      "Préparation de l'annonce, documents à prévoir (déclaration de meublé touristique, attestation d'assurance), calendrier de réservation : le propriétaire reste maître de son bien.",
+    cta: { label: "Publier mon annonce", href: "/publier" } },
   {
     glyphe: GlyphStructure,
     num: "03",
     titre: "Annonces pour les IA",
-    accroche: "Votre bien mérite d'être trouvé, pas noyé.",
+    accroche: "Votre logement mérite d'être trouvé, pas noyé.",
     texte:
       "Caractéristiques organisées, informations utiles, page publique accessible aux moteurs et assistants compatibles.",
     cta: { label: "Comprendre notre approche", href: "/approche" } },
@@ -78,40 +68,17 @@ const SECTIONS = [
     glyphe: GlyphTerritoire,
     num: "04",
     titre: "L'index des communes",
-    accroche: "Un lieu, une fiche : la vie autour du bien.",
+    accroche: "Un lieu, une fiche : la vie autour du séjour.",
     texte:
       "Transports, commerces, écoles, services, nature : chaque commune du territoire présentée honnêtement, avec des informations vérifiées lorsque c'est possible.",
     cta: { label: "Découvrir le territoire de Crozon", href: "/territoire/crozon" } },
-  {
-    glyphe: GlyphPros,
-    num: "05",
-    titre: "Professionnels & services de l'habitat",
-    accroche: "Ceux qui vendent, louent… et ceux qui soignent les logements.",
-    texte:
-      "Agences, notaires, réparateurs, diagnostics : un seul référentiel, factuel, sans recommandation.",
-    cta: {
-      label: "Découvrir les pros & services du territoire",
-      href: "/pros" } },
 ];
 
+// Le moteur n'a plus qu'une distinction : chercher un séjour, ou publier
+// le sien. Aucun choix vente/achat/services — un seul produit, deux côtés.
 const MOTEUR_CATEGORIES = [
-  { v: "acheter", l: "Acheter" },
-  { v: "vendre", l: "Vendre" },
-  { v: "louer", l: "Louer" },
-  { v: "entretenir", l: "Services" },
-];
-
-// Sous le bouton Services : tout ce qui fait vivre l'habitat —
-// l'immobilier pro ET les services à la personne autour du logement.
-const SERVICES_CATEGORIES_MOTEUR = [
-  { v: "pro", l: "Agence immobilière / mandataire" },
-  { v: "notaire", l: "Notaire" },
-  { v: "reparation", l: "Réparation & travaux" },
-  { v: "menage", l: "Ménage & nettoyage" },
-  { v: "jardinage", l: "Jardin & extérieur" },
-  { v: "garde", l: "Garde de logement" },
-  { v: "diagnostic", l: "Diagnostics & expertise" },
-  { v: "autonomie", l: "Autonomie & adaptation" },
+  { v: "chercher", l: "Trouver un séjour" },
+  { v: "louer", l: "Louer mon bien" },
 ];
 
 
@@ -126,21 +93,20 @@ export default function App() {
   useEffect(() => {
     poserCanonique(path, L);
   }, [path, L]);
-  const [moteurCategorie, setMoteurCategorie] = useState("acheter");
-  const [servicesOuvert, setServicesOuvert] = useState(false);
+  const [moteurCategorie, setMoteurCategorie] = useState("chercher");
   const [moteurLieu, setMoteurLieu] = useState("");
 
+  // Deux côtés, un seul produit : chercher un séjour, ou publier son bien —
+  // plus de distinction acheter/vendre/services (repositionné 04/11/2026).
   const moteurRechercher = () => {
     const params = new URLSearchParams();
     if (moteurLieu.trim()) params.set("q", moteurLieu.trim());
-    if (moteurCategorie === "acheter" || moteurCategorie === "louer") {
-      params.set("tx", moteurCategorie === "louer" ? "location" : "vente");
+    if (moteurCategorie === "chercher") {
       window.location.assign(lien(`/annonces/crozon?${params}`));
-    } else if (moteurCategorie === "vendre") {
-      window.location.assign(lien(`/publier?tx=${params.get("tx") ?? "vente"}${params.get("q") ? `&lieu=${encodeURIComponent(params.get("q")!)}` : ""}`));
     } else {
-      // pro / notaire / service : la page /pros regroupe le référentiel
-      window.location.assign(lien(`/pros?${params}`));
+      window.location.assign(
+        lien(`/publier${moteurLieu.trim() ? `?lieu=${encodeURIComponent(moteurLieu.trim())}` : ""}`),
+      );
     }
   };
   const annonce =
@@ -164,17 +130,9 @@ export default function App() {
               <NavAnnonces />
               <span>{t(L, "Annonces")}</span>
             </a>
-            <a href={lien(`/estimation`)}>
-              <NavEstimation />
-              <span>{t(L, "Estimation")}</span>
-            </a>
             <a href={lien(`/territoire/crozon`)}>
               <NavTerritoire />
               <span>{t(L, "Territoire")}</span>
-            </a>
-            <a href={lien(`/pros`)}>
-              <NavPros />
-              <span>{t(L, "Pros")}</span>
             </a>
             <a href={lien(`/publier`)} className="nav-cta">
               <NavPublier />
@@ -198,24 +156,29 @@ export default function App() {
         <AnnonceDetail annonce={annonce} />
       ) : path === "/publier" ? (
         <Publier />
-      ) : path === "/estimation" ? (
-        <Estimation />
       ) : listeSlug ? (
         <AnnoncesListe slug={listeSlug} />
       ) : path === "/approche" ? (
         <Approche />
-      ) : path === "/pros" ? (
-        <Pros />
       ) : path === "/messagerie" ? (
         <Messagerie />
-      ) : path === "/espace-pro" ? (
-        <EspacePro />
       ) : path === "/mes-annonces" ? (
         <MesAnnonces />
       ) : path === "/mentions-legales" ? (
         <MentionsLegales />
+      ) : // Pages retirées le 04/11/2026 (repositionnement vers la location
+      // de vacances) : /pros, /estimation, /espace-pro et /services n'ont
+      // plus d'équivalent — elles redirigent vers /approche plutôt que de
+      // répondre 404 à une URL déjà indexée (voir REDIRIGEES, canonique.ts,
+      // et "une valeur qui dépend de la cible en dépend partout").
+      path === "/pros" ? (
+        window.location.replace(`${baseUrl()}/approche`)
+      ) : path === "/estimation" ? (
+        window.location.replace(`${baseUrl()}/approche`)
+      ) : path === "/espace-pro" ? (
+        window.location.replace(`${baseUrl()}/approche`)
       ) : path === "/services" ? (
-        window.location.replace(`${baseUrl()}/pros`)
+        window.location.replace(`${baseUrl()}/approche`)
       ) : territoire ? (
         <TerritoireDetail territoire={territoire} />
       ) : (
@@ -223,55 +186,23 @@ export default function App() {
           {/* Hero : le logo en grand, la promesse en dessous */}
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
-              <p className="hero-label">{t(L, "L'immobilier, autrement")}</p>
+              <p className="hero-label">{t(L, "Les vacances, autrement")}</p>
               <h1 className="brand-grand">
                 MANA<em>home</em>
               </h1>
               <div className="moteur">
                 <div className="moteur-categories" role="group" aria-label={t(L, "Je cherche")}>
-                  {MOTEUR_CATEGORIES.map((c) =>
-                    c.v === "entretenir" ? (
-                      <div key={c.v} className="moteur-services-wrap">
-                        <button
-                          type="button"
-                          className={`moteur-categorie-btn moteur-btn-or ${servicesOuvert || (moteurCategorie !== "acheter" && moteurCategorie !== "louer") ? "on" : ""}`}
-                          aria-expanded={servicesOuvert}
-                          aria-haspopup="listbox"
-                          onClick={() => setServicesOuvert((o) => !o)}
-                        >
-                          {SERVICES_CATEGORIES_MOTEUR.find((sv) => sv.v === moteurCategorie)?.l ?? t(L, c.l)}
-                          <span className="chevron" aria-hidden="true">▾</span>
-                        </button>
-                        {servicesOuvert && (
-                          <ul className="suggestions moteur-services-menu" role="listbox">
-                            {SERVICES_CATEGORIES_MOTEUR.map((sv) => (
-                              <li key={sv.v} role="option" aria-selected={moteurCategorie === sv.v}>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setMoteurCategorie(sv.v);
-                                    setServicesOuvert(false);
-                                  }}
-                                >
-                                  {t(L, sv.l)}
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    ) : (
-                      <button
-                        key={c.v}
-                        type="button"
-                        className={`moteur-categorie-btn ${moteurCategorie === c.v ? "on" : ""}`}
-                        aria-pressed={moteurCategorie === c.v}
-                        onClick={() => setMoteurCategorie(c.v)}
-                      >
-                        {c.l}
-                      </button>
-                    )
-                  )}
+                  {MOTEUR_CATEGORIES.map((c) => (
+                    <button
+                      key={c.v}
+                      type="button"
+                      className={`moteur-categorie-btn ${moteurCategorie === c.v ? "on" : ""}`}
+                      aria-pressed={moteurCategorie === c.v}
+                      onClick={() => setMoteurCategorie(c.v)}
+                    >
+                      {t(L, c.l)}
+                    </button>
+                  ))}
                 </div>
 
                 <div className="moteur-barre">
@@ -283,11 +214,7 @@ export default function App() {
                     id="moteur-lieu"
                     type="search"
                     autoComplete="off"
-                    placeholder={
-                      moteurCategorie === "acheter" || moteurCategorie === "louer"
-                        ? t(L, "Commune ou code postal")
-                        : t(L, "Commune, métier ou besoin")
-                    }
+                    placeholder={t(L, "Commune ou code postal")}
                     value={moteurLieu}
                     onChange={(e) => setMoteurLieu(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && moteurRechercher()}
@@ -338,11 +265,6 @@ export default function App() {
                           {t(L, s.cta.label)}
                         </a>
                       )}
-                      {s.cta2 && (
-                        <a className="btn btn-clair-ghost" href={lien(`${s.cta2.href}`)}>
-                          {t(L, s.cta2.label)}
-                        </a>
-                      )}
                     </div>
                   </div>
                 </section>
@@ -358,18 +280,15 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "Portail immobilier territorial — pilote Crozon, presqu'île du Finistère. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
+              {t(L, "Portail de locations de vacances, entre propriétaires et vacanciers — pilote Crozon, presqu'île du Finistère. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
             </p>
             <ContactForm />
           </div>
           <nav className="footer-nav" aria-label={t(L, "Pied de page")}>
             <a href={lien(`/annonces/crozon`)}>{t(L, "Annonces")}</a>
-            <a href={lien(`/estimation`)}>{t(L, "Estimation indicative")}</a>
             <a href={lien(`/territoire/crozon`)}>{t(L, "Territoire")}</a>
             <a href={lien(`/publier`)}>{t(L, "Publier — gratuit")}</a>
             <a href={lien(`/approche`)}>{t(L, "Notre approche")}</a>
-            <a href={lien(`/pros`)}>{t(L, "Professionnels & services de l'habitat")}</a>
-            <a href={lien(`/espace-pro`)}>{t(L, "Rejoindre le référentiel")}</a>
             <a href={lien(`/messagerie`)}>{t(L, "Ma messagerie")}</a>
             <a href={lien(`/mes-annonces`)}>{t(L, "Mes annonces")}</a>
             <a href={lien(`/approche`)}>{t(L, "À propos")}</a>

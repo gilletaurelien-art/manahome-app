@@ -21,16 +21,9 @@ const TYPES_FILTRE = [
   { v: "terrain", l: "Terrains" },
 ];
 
-// Vente / location : le portail couvre l'habitat entier, pas que la vente.
 // Miroir front : les mois courts du libellé de plage (disponibilite.ts).
 const MOIS_COURTS = ["janv.", "févr.", "mars", "avr.", "mai", "juin",
   "juil.", "août", "sept.", "oct.", "nov.", "déc."];
-
-const TX_FILTRE = [
-  { v: "tous", l: "Vente & location" },
-  { v: "vente", l: "À vendre" },
-  { v: "location", l: "À louer" },
-];
 
 function typeDe(annonce: Annonce): string {
   const t = annonce.titre.toLowerCase();
@@ -74,10 +67,6 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   // que le moteur d'accueil puisse y envoyer une recherche datée.
   const [arrivee, setArrivee] = useState(params.get("arr") ?? "");
   const [depart, setDepart] = useState(params.get("dep") ?? "");
-  const txInitial = params.get("tx");
-  const [filtreTx, setFiltreTx] = useState(
-    txInitial === "location" || txInitial === "vente" ? txInitial : "tous"
-  );
   // mode API : annonces du service (undefined = pas encore tranché)
   const [annoncesApi, setAnnoncesApi] = useState<Annonce[] | null>(null);
   const [apiEchouee, setApiEchouee] = useState(false);
@@ -98,7 +87,6 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     if (!featureBack) return;
     let ignore = false;
     chargerAnnonces({
-      offre: filtreTx === "tous" ? undefined : (filtreTx as "vente" | "location"),
       type_bien: filtre === "tous" ? undefined : filtre,
       prix_max: prixMax ? Number(prixMax) : undefined,
       q: recherche || undefined,
@@ -115,7 +103,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     });
     return () => { ignore = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filtre, filtreTx, recherche, prixMax, arrivee, depart]);
+  }, [filtre, recherche, prixMax, arrivee, depart]);
 
   const annonces = useMemo(() => {
     const directes = [
@@ -126,18 +114,14 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     const triees = [...directes, ...importees];
     const parType =
       filtre === "tous" ? triees : triees.filter((a) => typeDe(a) === filtre);
-    const parTx =
-      filtreTx === "tous"
-        ? parType
-        : parType.filter((a) => (a.transaction ?? "vente") === filtreTx);
     const q = recherche.trim().toLowerCase();
     const parTexte = q
-      ? parTx.filter(
+      ? parType.filter(
           (a) =>
             a.lieu.toLowerCase().includes(q) ||
             a.titre.toLowerCase().includes(q)
         )
-      : parTx;
+      : parType;
     const budget = prixMax ? Number(prixMax) : null;
     const parPrix = budget
       ? parTexte.filter((a) => a.prix <= budget)
@@ -154,7 +138,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
       ? parPrix.filter((a) => estDisponible(lireIndispos(a.id), plage))
       : parPrix;
     return parDates;
-  }, [filtre, filtreTx, recherche, prixMax, arrivee, depart, featureBack, annoncesApi, apiEchouee]);
+  }, [filtre, recherche, prixMax, arrivee, depart, featureBack, annoncesApi, apiEchouee]);
 
   const B = baseUrl();
 
@@ -203,14 +187,12 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               />
             </div>
             <div className="champ">
-              <label htmlFor="prix-max">
-                Budget max {filtreTx === "location" ? "(€/mois)" : "(€)"}
-              </label>
+              <label htmlFor="prix-max">Budget max (€/nuit)</label>
               <input
                 id="prix-max"
                 type="number"
                 min={0}
-                placeholder={filtreTx === "location" ? "Ex : 900" : "Ex : 300 000"}
+                placeholder="Ex : 100"
                 value={prixMax}
                 onChange={(e) => setPrixMax(e.target.value)}
               />
@@ -231,19 +213,6 @@ export function AnnoncesListe({ slug }: { slug: string }) {
           </p>
         )}
 
-        <div className="annonces-filtres" role="group" aria-label="Filtrer par transaction">
-          {TX_FILTRE.map((t) => (
-            <button
-              key={t.v}
-              type="button"
-              className={`btn btn-ghost ${filtreTx === t.v ? "on" : ""}`}
-              aria-pressed={filtreTx === t.v}
-              onClick={() => setFiltreTx(t.v)}
-            >
-              {t.l}
-            </button>
-          ))}
-        </div>
         <div className="annonces-filtres" role="group" aria-label="Filtrer par type">
           {TYPES_FILTRE.map((t) => (
             <button
@@ -279,8 +248,8 @@ export function AnnoncesListe({ slug }: { slug: string }) {
         {!featureBack && (
           <p className="catalogue-note">
             Annonces de démonstration — les annonces réelles arriveront avec les
-            premiers vendeurs. Les annonces professionnelles importées sont
-            toujours affichées après les dépôts directs, à qualité égale.
+            premiers propriétaires. Les annonces professionnelles importées
+            sont toujours affichées après les dépôts directs, à qualité égale.
           </p>
         )}
 

@@ -89,7 +89,7 @@ describe("la carte des routes est la source unique", () => {
 
   // ⛔ Aucune description par page dans ce dépôt : en écrire serait inventer.
   it("aucun composant ne pose plus de titre fixe — une seule source", () => {
-    const fixes = ["Approche", "Pros", "Estimation", "MentionsLegales", "Messagerie", "EspacePro", "MesAnnonces"]
+    const fixes = ["Approche", "MentionsLegales", "Messagerie", "MesAnnonces"]
       .map((n) => [n, readFileSync(new URL(`./${n}.tsx`, import.meta.url), "utf8")] as const)
       .filter(([, src]) => /document\.title = "/.test(src))
       .map(([n]) => n);
