@@ -27,6 +27,7 @@ import { trierNuits, delta } from "./indispos.mjs";
 import { validerDemande, traduireErreurSejour, traduireTransition, sqlDuGeste } from "./sejours.mjs";
 import { nuiteesDepuisIcs, urlValide, telechargerIcs, deltaImport } from "./ical.mjs";
 import { validerMessage, sqlOuvrirConversation, sqlListeConversations } from "./messagerieApi.mjs";
+import { validerDepot, validerJustificatif, phraseRefusPublication } from "./depot.mjs";
 import { plageValide as plageValideRequete } from "./requetes.mjs";
 
 const PORT = Number(process.env.PORT ?? 3000);
@@ -133,6 +134,111 @@ export function creerServeur() {
           return json(res, 200, { annonces: resultat.rows, total: resultat.rows.length });
         } finally {
           client.release();
+        }
+      }
+
+      // ===== Dépôt d'annonce (réel) =====
+      // ⭐ GRATUIT ET SANS CONDITION (doctrine) : créer un brouillon n'exige
+      // RIEN. Publier, en revanche, passe par le verrou de la 007 — les
+      // locations exigent leurs justificatifs, et c'est le TRIGGER qui
+      // tranche, pas l'API : la base décide, l'API traduit.
+
+      if (url.pathname === "/api/annonces" && req.method === "POST") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const corpsRequ = await corps(req);
+        const v = validerDepot(corpsRequ);
+        if (!v.ok) return json(res, 400, { erreur: v.erreur });
+        const c = await transactionAuth(uid);
+        try {
+          const r = await c.query(
+            `INSERT INTO annonces
+               (proprietaire, type_bien, surface_m2, pieces, prix_eur, dpe,
+                description, offre, tarif_nuit, capacite, code_insee,
+                source, empreinte, statut)
+             VALUES (auth.uid()::uuid, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+                     'directe_particulier', $11, 'brouillon')
+             RETURNING id, statut`,
+            [
+              v.valeurs.type_bien, v.valeurs.surface_m2, v.valeurs.pieces,
+              v.valeurs.prix_eur, v.valeurs.dpe, v.valeurs.description,
+              v.valeurs.offre, v.valeurs.tarif_nuit, v.valeurs.capacite,
+              v.valeurs.code_insee, v.empreinte,
+            ]
+          );
+          await c.query("COMMIT");
+          return json(res, 201, r.rows[0]);
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      const mJustificatif = url.pathname.match(/^\/api\/annonces\/([\w-]+)\/justificatifs$/);
+      if (mJustificatif && req.method === "POST") {
+        if (!UUID.test(mJustificatif[1])) return json(res, 404, { erreur: "route inconnue" });
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const corpsRequ = await corps(req);
+        const v = validerJustificatif(corpsRequ);
+        if (!v.ok) return json(res, 400, { erreur: v.erreur });
+        const c = await transactionAuth(uid);
+        try {
+          // propriété dans le SQL : l'annonce d'un autre n'existe pas ici
+          const r = await c.query(
+            `INSERT INTO justificatifs (annonce_id, type_document, reference,
+                                        delivre_le, expire_le, depose_par)
+             SELECT $1, $2, $3, $4::date, $5::date, auth.uid()::uuid
+             WHERE EXISTS (SELECT 1 FROM annonces a
+                           WHERE a.id = $1 AND a.proprietaire = auth.uid())
+             RETURNING id`,
+            [mJustificatif[1], v.valeurs.type_document, v.valeurs.reference,
+             v.valeurs.delivre_le, v.valeurs.expire_le]
+          );
+          if (r.rows.length === 0) {
+            await c.query("ROLLBACK");
+            return json(res, 404, { erreur: "annonce inconnue" });
+          }
+          await c.query("COMMIT");
+          return json(res, 201, { depose: true });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      const mPublier = url.pathname.match(/^\/api\/annonces\/([\w-]+)\/publier$/);
+      if (mPublier && req.method === "POST") {
+        if (!UUID.test(mPublier[1])) return json(res, 404, { erreur: "route inconnue" });
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const c = await transactionAuth(uid);
+        try {
+          const r = await c.query(
+            `UPDATE annonces SET statut = 'publiee'
+             WHERE id = $1 AND proprietaire = auth.uid() AND statut = 'brouillon'
+             RETURNING id, statut`,
+            [mPublier[1]]
+          );
+          if (r.rows.length === 0) {
+            await c.query("ROLLBACK");
+            return json(res, 404, { erreur: "annonce inconnue" });
+          }
+          await c.query("COMMIT");
+          return json(res, 200, r.rows[0]);
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          // le verrou de la 007 parle (declaration / assurance / DPE) :
+          // l'API traduit SA phrase, elle ne re-teste rien — la propriété
+          // est déjà tranchée par le zéro-ligne ci-dessus (404), donc toute
+          // exception restante vient du trigger : 409 traduit
+          return json(res, 409, { erreur: phraseRefusPublication(String(e?.message ?? "")) });
+        } finally {
+          c.release();
         }
       }
 

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { baseUrl } from "./router";
 import { enregistrerAnnonceLocale } from "./annoncesLocales";
+import { creerAnnonceApi, poserJustificatifApi, publierAnnonceApi } from "./apiDepot";
 import { compresserPhoto, LIMITE_PHOTOS } from "./photos";
 
 // Pré-remplissage depuis /estimation (et liens profonds) : /publier?type=…&lieu=…
@@ -107,9 +108,87 @@ export function Publier() {
 
   const etape1Valide = bien.type && bien.lieu && bien.prix;
 
+  // ⭐ FEATURE_BACK : sous le flag, le dépôt part au service — brouillon
+  // GRATUIT ET SANS CONDITION, puis publication via le verrou serveur.
+  // Si le verrou demande les justificatifs légaux (locations, 007), le
+  // formulaire les réclame EN PHRASES et les envoie : le trigger tranche,
+  // le front traduit, il ne devine jamais ce qui manque.
+  const featureBack = typeof __FEATURE_BACK__ !== "undefined" && __FEATURE_BACK__;
+  const [brouillonId, setBrouillonId] = useState<string | null>(null);
+  const [refusPublication, setRefusPublication] = useState<string | null>(null);
+  const [numeroDeclaration, setNumeroDeclaration] = useState("");
+  const [referenceAssurance, setReferenceAssurance] = useState("");
+  const [assuranceExpire, setAssuranceExpire] = useState("");
+  const [envoiEnCours, setEnvoiEnCours] = useState(false);
+
+  const publierReel = async () => {
+    setEnvoiEnCours(true);
+    try {
+      const corps: Record<string, unknown> = {
+        type_bien: bien.type === "terrain" ? "terrain" : bien.type === "appartement" ? "appartement" : "maison",
+        offre: bien.transaction === "location" ? "location_courte_duree" : "vente",
+        prix_eur: bien.transaction === "location" ? null : Number(bien.prix),
+        tarif_nuit: bien.transaction === "location" ? Number(bien.prix) : null,
+        surface_m2: bien.surface ? Number(bien.surface) : null,
+        pieces: bien.pieces ? Number(bien.pieces) : null,
+        dpe: bien.dpe || null,
+        description,
+        code_insee: "29042",
+      };
+      const cree = await creerAnnonceApi(corps);
+      if (!cree.ok || !cree.id) {
+        setRefusPublication(cree.erreur ?? "Une erreur est survenue.");
+        return;
+      }
+      setBrouillonId(cree.id);
+      const pub = await publierAnnonceApi(cree.id);
+      if (pub.ok) {
+        window.location.assign(`${baseUrl()}/mes-annonces?publiee=${cree.id}`);
+        return;
+      }
+      // refus du verrou : la phrase dit ce qui manque, le panneau
+      // justificatifs n'apparaît QUE si le serveur l'a demandé
+      setRefusPublication(pub.erreur ?? "Une erreur est survenue.");
+    } finally {
+      setEnvoiEnCours(false);
+    }
+  };
+
+  const envoyerJustificatifs = async () => {
+    if (!brouillonId) return;
+    setEnvoiEnCours(true);
+    try {
+      if (numeroDeclaration.trim()) {
+        await poserJustificatifApi(brouillonId, {
+          type_document: "declaration_meuble",
+          reference: numeroDeclaration.trim(),
+        });
+      }
+      if (referenceAssurance.trim()) {
+        await poserJustificatifApi(brouillonId, {
+          type_document: "attestation_assurance",
+          reference: referenceAssurance.trim(),
+          expire_le: assuranceExpire || null,
+        });
+      }
+      const pub = await publierAnnonceApi(brouillonId);
+      if (pub.ok) {
+        window.location.assign(`${baseUrl()}/mes-annonces?publiee=${brouillonId}`);
+        return;
+      }
+      setRefusPublication(pub.erreur ?? "Une erreur est survenue.");
+    } finally {
+      setEnvoiEnCours(false);
+    }
+  };
+
   // Démo locale : l'annonce est enregistrée dans ce navigateur (miroir du
   // dépôt direct de particulier). En prod : auth + API + S3 pour les photos.
   const publier = () => {
+    if (featureBack) {
+      publierReel();
+      return;
+    }
     const a = enregistrerAnnonceLocale({
       transaction: bien.transaction === "location" ? "location" : "vente",
       titre: apercu.titre,
@@ -399,13 +478,59 @@ export function Publier() {
               </p>
             </div>
 
+            {featureBack && refusPublication && (
+              <div className="champ" role="alert">
+                <p className="est-erreur">{refusPublication}</p>
+                {brouillonId && bien.transaction === "location" && (
+                  <>
+                    <label htmlFor="num-declaration">Numéro de déclaration de meublé touristique</label>
+                    <input
+                      id="num-declaration"
+                      value={numeroDeclaration}
+                      placeholder="Ex : 29160 123456 2026 1 1"
+                      onChange={(e) => setNumeroDeclaration(e.target.value)}
+                    />
+                    <label htmlFor="ref-assurance">Référence de l'attestation d'assurance</label>
+                    <input
+                      id="ref-assurance"
+                      value={referenceAssurance}
+                      placeholder="Ex : ATL-2026-12345"
+                      onChange={(e) => setReferenceAssurance(e.target.value)}
+                    />
+                    <label htmlFor="assurance-expire">Validité de l'assurance (date)</label>
+                    <input
+                      id="assurance-expire"
+                      type="date"
+                      value={assuranceExpire}
+                      onChange={(e) => setAssuranceExpire(e.target.value)}
+                    />
+                    <div className="est-actions">
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        disabled={envoiEnCours || !numeroDeclaration.trim() || !referenceAssurance.trim()}
+                        onClick={envoyerJustificatifs}
+                      >
+                        Déposer mes justificatifs et publier
+                      </button>
+                    </div>
+                    <p className="champ-aide">
+                      Votre annonce est enregistrée en brouillon — gratuite,
+                      sans condition. Elle passera en ligne dès que le
+                      serveur aura vérifié la présence des justificatifs.
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
+
             <div className="publier-nav">
               <button className="btn btn-ghost" onClick={() => setEtape(2)}>
                 ← Retour
               </button>
               <button
                 className="btn btn-primary"
-                disabled={!email.includes("@")}
+                disabled={!email.includes("@") || envoiEnCours}
                 onClick={publier}
               >
                 Publier mon annonce — gratuit
