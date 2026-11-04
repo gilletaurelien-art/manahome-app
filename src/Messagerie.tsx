@@ -18,6 +18,13 @@ import {
   type Sejour,
 } from "./sejoursDonnees";
 import { lireSejoursApi, gesteSejourApi, type SejourApi } from "./apiSejours";
+import {
+  lireConversationsApi,
+  lireMessagesApi,
+  envoyerMessageApi,
+  type ConversationApi,
+  type MessageApi,
+} from "./apiMessagerie";
 
 // Page /messagerie — boîte de réception de l'acheteur (démo : stockage
 // local, aucun compte). Règle gravée : coordonnées jamais publiées, la
@@ -45,6 +52,10 @@ export function Messagerie() {
   const [brouillon, setBrouillon] = useState("");
   const [sejours, setSejours] = useState<Sejour[]>([]);
   const [sejoursApi, setSejoursApi] = useState<SejourApi[] | null>(null);
+  // ⭐ FEATURE_BACK (module messagerie) : conversations et messages via
+  // l'API — participation vérifiée dans le SQL, repli démo intégral.
+  const [conversationsApi, setConversationsApi] = useState<ConversationApi[] | null>(null);
+  const [messagesApi, setMessagesApi] = useState<MessageApi[] | null>(null);
 
   useEffect(() => {
     setConversations(lireConversations());
@@ -52,6 +63,11 @@ export function Messagerie() {
     if (featureBack) {
       lireSejoursApi().then((r) => {
         if (r.ok && r.sejours) setSejoursApi(r.sejours);
+      });
+      lireConversationsApi().then((r) => {
+        // ok=false (pas connecté, back absent) : conversationsApi reste
+        // null et la liste DÉMO s'affiche — jamais un panneau vide
+        if (r.ok && r.donnees) setConversationsApi(r.donnees);
       });
     }
     const params = new URLSearchParams(window.location.search);
@@ -69,10 +85,35 @@ export function Messagerie() {
       if (r.ok && r.sejours) setSejoursApi(r.sejours);
     });
   };
+  const couranteApi = conversationsApi?.find((c) => c.annonce_id === active) ?? null;
+  useEffect(() => {
+    if (!featureBack || !couranteApi) {
+      setMessagesApi(null);
+      return;
+    }
+    let ignore = false;
+    lireMessagesApi(couranteApi.id).then((r) => {
+      if (!ignore) setMessagesApi(r.ok && r.donnees ? r.donnees : []);
+    });
+    return () => { ignore = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, couranteApi?.id]);
   const courante = conversations.find((c) => c.annonceId === active);
 
   const envoyerMessage = () => {
-    if (!courante || !brouillon.trim()) return;
+    if (!brouillon.trim()) return;
+    if (featureBack && couranteApi && messagesApi !== null) {
+      // le serveur vérifie la participation dans le SQL ; aucun message
+      // simulé ne s'ajoute jamais en mode réel
+      envoyerMessageApi(couranteApi.id, brouillon).then((r) => {
+        if (r.ok && r.donnees) {
+          setMessagesApi([...messagesApi, r.donnees]);
+        }
+      });
+      setBrouillon("");
+      return;
+    }
+    if (!courante) return;
     envoyer(courante.id, brouillon);
     reponseSimulee(courante.id);
     setBrouillon("");
@@ -183,7 +224,7 @@ export function Messagerie() {
           </section>
         )}
 
-        {conversations.length === 0 ? (
+        {(conversationsApi !== null ? conversationsApi.length === 0 : conversations.length === 0) ? (
           <section className="publier-panel">
             <p className="est-erreur">
               Aucune conversation pour l'instant. Contactez un vendeur depuis
@@ -198,7 +239,24 @@ export function Messagerie() {
         ) : (
           <div className="messagerie-grille">
             <aside className="messagerie-liste" aria-label="Conversations">
-              {conversations.map((c) => (
+              {conversationsApi !== null
+                ? conversationsApi.map((c) => (
+                    <button
+                      key={c.id}
+                      className={`messagerie-item${
+                        c.annonce_id === active ? " on" : ""
+                      }`}
+                      onClick={() => setActive(c.annonce_id)}
+                    >
+                      <span className="messagerie-item-titre">
+                        {c.titre ?? c.annonce_id}
+                      </span>
+                      <span className="messagerie-item-date">
+                        {new Date(c.created_at).toLocaleDateString("fr-FR")}
+                      </span>
+                    </button>
+                  ))
+                : conversations.map((c) => (
                 <button
                   key={c.id}
                   className={`messagerie-item${
@@ -214,7 +272,38 @@ export function Messagerie() {
               ))}
             </aside>
             <section className="publier-panel messagerie-fil" aria-live="polite">
-              {!courante ? (
+              {conversationsApi !== null && !couranteApi ? (
+                <p className="territoire-intro">
+                  Choisissez une conversation à gauche.
+                </p>
+              ) : conversationsApi !== null && couranteApi && messagesApi !== null ? (
+                <>
+                  <p className="apercu-label">{couranteApi.titre ?? couranteApi.annonce_id}</p>
+                  <div className="messagerie-messages">
+                    {messagesApi.map((m, i) => (
+                      <div key={`${m.created_at}-${i}`} className="msg">
+                        {m.corps}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="messagerie-envoi">
+                    <input
+                      value={brouillon}
+                      placeholder="Votre message…"
+                      aria-label="Votre message"
+                      onChange={(e) => setBrouillon(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && envoyerMessage()}
+                    />
+                    <button
+                      className="btn btn-primary"
+                      onClick={envoyerMessage}
+                      disabled={!brouillon.trim()}
+                    >
+                      Envoyer
+                    </button>
+                  </div>
+                </>
+              ) : !courante ? (
                 <p className="territoire-intro">
                   Choisissez une conversation à gauche.
                 </p>
@@ -244,11 +333,13 @@ export function Messagerie() {
                       Envoyer
                     </button>
                   </div>
-                  <p className="ia-disclaimer">
-                    Démo : stockage local, aucune donnée transmise. En
-                    production, chaque message passe par le serveur, chiffré
-                    en transit, visible uniquement des participants (RLS).
-                  </p>
+                  {!featureBack && (
+                    <p className="ia-disclaimer">
+                      Démo : stockage local, aucune donnée transmise. En
+                      production, chaque message passe par le serveur, chiffré
+                      en transit, visible uniquement des participants (RLS).
+                    </p>
+                  )}
                 </>
               )}
             </section>

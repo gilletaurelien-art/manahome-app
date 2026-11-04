@@ -5,6 +5,7 @@ import { t } from "./i18n";
 import { ouvrirConversation } from "./messagerieDonnees";
 import { demanderSejour, sejourSurAnnonce, type Sejour } from "./sejoursDonnees";
 import { demanderSejourApi } from "./apiSejours";
+import { ouvrirConversationApi } from "./apiMessagerie";
 import { annonceLocaleParId } from "./annoncesLocales";
 
 // JSON-LD RealEstateListing (schema.org) : le cœur du pilier « Lisible
@@ -351,7 +352,13 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
                 href={`${baseUrl()}/messagerie?annonce=${annonce.id}`}
                 onClick={() => {
                   if (premierMessage.trim()) {
-                    ouvrirConversation(annonce.id, annonce.titre, premierMessage);
+                    if (featureBack) {
+                      // le serveur dérive le vendeur de l'annonce dans le
+                      // SQL — le client ne choisit jamais son interlocuteur
+                      ouvrirConversationApi(annonce.id);
+                    } else {
+                      ouvrirConversation(annonce.id, annonce.titre, premierMessage);
+                    }
                   }
                 }}
               >
