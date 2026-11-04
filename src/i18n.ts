@@ -146,6 +146,20 @@ const DICO_EN: Record<string, string> = {
   "annulé": "cancelled",
   "terminé": "completed",
 
+  // ── Bascule FEATURE_BACK (session + calendrier) ──
+  "Mon compte": "My account",
+  "Se déconnecter": "Sign out",
+  "Se connecter": "Sign in",
+  "Créer mon compte": "Create my account",
+  "Email": "Email",
+  "Mot de passe": "Password",
+  "…": "…",
+  "Identifiants invalides.": "Invalid credentials.",
+  "Inscription impossible — vérifiez votre email et un mot de passe de 10 caractères minimum.":
+    "Sign-up unavailable — check your email and a password of at least 10 characters.",
+  "Les nuitées de vos annonces réelles se gèrent avec votre compte ; sans compte, le calendrier de démonstration reste actif.":
+    "The nights of your real listings are managed with your account; without an account, the demonstration calendar stays active.",
+
   // ── Bascule FEATURE_BACK (module annonces) ──
   "Le service des annonces est momentanément indisponible — le catalogue de démonstration s'affiche.":
     "The listings service is temporarily unavailable — the demonstration catalogue is shown.",

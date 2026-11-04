@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { baseUrl , lien, langueCourante} from "./router";
 import { t } from "./i18n";
 import { Calendrier } from "./Calendrier";
+import { AuthPanel } from "./AuthPanel";
 import {
   AnnonceLocale,
   lireAnnoncesLocales,
@@ -69,6 +70,8 @@ export function MesAnnonces() {
             </div>
           </section>
         )}
+
+        <AuthPanel />
 
         {annonces.length === 0 ? (
           <section className="publier-panel">

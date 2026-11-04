@@ -10,6 +10,19 @@ import {
   nuiteesDepuisIcs,
   nuitIso,
 } from "./calendrierDonnees";
+import {
+  basculerNuitApi,
+  libererMoisApi,
+  lireIndisposApi,
+  poserIndisposApi,
+} from "./apiCalendrier";
+
+// ⭐ FEATURE_BACK (module calendrier) : sous le flag, la source de vérité
+// des nuitées est le SERVEUR (annonces_indisponibilites, 007) — le PUT
+// remplace l'ensemble complet, la sémantique ne bouge pas. Si l'API
+// n'est pas joignable ou l'annonce pas encore branchée côté dépôt, le
+// repli démo sert le même calendrier : jamais plus vide qu'avant.
+const featureBack = typeof __FEATURE_BACK__ !== "undefined" && __FEATURE_BACK__;
 
 // Le calendrier de blocage de l'extranet propriétaire — 04/11/2026.
 // ⭐ MIROIR FRONT de la migration 007 (`annonces_indisponibilites`) :
@@ -35,6 +48,8 @@ const MOIS = [
 export function Calendrier({ annonceId }: { annonceId: string }) {
   const L = langueCourante();
   const [indispos, setIndispos] = useState<string[]>([]);
+  // mode API : nuitées gérées par le serveur ; sinon la démo locale
+  const [enApi, setEnApi] = useState(false);
   const [mois, setMois] = useState(() => {
     const d = new Date();
     return { an: d.getFullYear(), m: d.getMonth() };
@@ -45,10 +60,40 @@ export function Calendrier({ annonceId }: { annonceId: string }) {
   const [rapportIcs, setRapportIcs] = useState<string | null>(null);
 
   useEffect(() => {
-    setIndispos(lireIndispos(annonceId));
+    // sous le flag : le serveur d'abord, la démo en repli. Le mode est
+    // tranché une fois par annonce, pas à chaque clic — le calendrier ne
+    // change pas de source au milieu d'une édition.
+    if (!featureBack) {
+      setIndispos(lireIndispos(annonceId));
+      return;
+    }
+    let ignore = false;
+    lireIndisposApi(annonceId).then((r) => {
+      if (ignore) return;
+      if (r.ok && r.nuits) {
+        setEnApi(true);
+        setIndispos(r.nuits);
+      } else {
+        setEnApi(false);
+        setIndispos(lireIndispos(annonceId));
+      }
+    });
+    return () => { ignore = true; };
   }, [annonceId]);
 
-  const appliquer = (nuits: string[]) => setIndispos(bloquerPlage(annonceId, nuits));
+  const appliquer = (nuits: string[]) => {
+    if (enApi) {
+      // remplacement complet : le serveur fait le delta, on affiche le retour
+      poserIndisposApi(annonceId, nuits).then((r) => {
+        if (r.ok && r.nuits) setIndispos(r.nuits);
+      });
+      // l'affichage reste sur les nuits voulues pendant l'écriture :
+      // jamais un calendrier qui semble ne rien faire au clic
+      setIndispos(nuits);
+      return;
+    }
+    setIndispos(bloquerPlage(annonceId, nuits));
+  };
 
   const cliquerNuit = (nuit: string) => {
     if (debutPlage === null || nuit <= debutPlage) {
@@ -138,7 +183,15 @@ export function Calendrier({ annonceId }: { annonceId: string }) {
           <button
             type="button"
             className="btn btn-ghost"
-            onClick={() => setIndispos(libererMois(annonceId, anMois))}
+            onClick={() => {
+              if (enApi) {
+                libererMoisApi(annonceId, anMois, indispos).then((r) => {
+                  if (r.ok && r.nuits) setIndispos(r.nuits);
+                });
+              } else {
+                setIndispos(libererMois(annonceId, anMois));
+              }
+            }}
           >
             {t(L, "Libérer ce mois")}
           </button>
@@ -162,9 +215,17 @@ export function Calendrier({ annonceId }: { annonceId: string }) {
               className={`calendrier-nuit ${indispos.includes(nuit) ? "bloquee" : ""}`}
               aria-pressed={indispos.includes(nuit)}
               aria-label={`${nuit} — ${indispos.includes(nuit) ? t(L, "bloquée") : t(L, "disponible")}`}
-              onClick={() =>
-                debutPlage !== null ? cliquerNuit(nuit) : setIndispos(basculerNuit(annonceId, nuit))
-              }
+              onClick={() => {
+                if (debutPlage !== null) {
+                  cliquerNuit(nuit);
+                } else if (enApi) {
+                  basculerNuitApi(annonceId, nuit, indispos).then((r) => {
+                    if (r.ok && r.nuits) setIndispos(r.nuits);
+                  });
+                } else {
+                  setIndispos(basculerNuit(annonceId, nuit));
+                }
+              }}
             >
               {Number(nuit.slice(8))}
               {nuit === aujourdhui && <span className="calendrier-auj" aria-hidden="true" />}
