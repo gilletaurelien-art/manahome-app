@@ -48,13 +48,13 @@ function json(res, statut, donnees) {
   res.end(texte);
 }
 
-// ⚠️ V1 ASSUMÉE : le rôle de la DATABASE_URL est le superuser du conteneur —
-// la RLS ne s'applique pas au superuser, elle est donc EN VEILLE. Deux garde-
-// fous en attendant le rôle non-privilégié qui l'armera (suivi dans le cahier
-// des charges) : (1) chaque requête authentifiée porte la propriété DANS LE
-// SQL (proprietaire = auth.uid(), posé par transaction) — l'application ne
-// décide rien, elle déclare qui parle ; (2) aucun endpoint ne lit jamais une
-// table sans condition de propriété ou de vue publique.
+// ⭐ LA RLS EST ARMÉE (migration 010) : le service se connecte en
+// manahome_app, rôle NON privilégié. Les policies de la 002/007/008/010
+// décident tout — cette transaction ne fait que DÉCLARER qui parle
+// (app.utilisateur, posée et détruite avec la transaction). Les conditions
+// de propriété restent dans le SQL des requêtes : la défense en profondeur
+// voudrait que même un bug du service ne traverse pas les policies — et
+// il ne peut pas.
 async function transactionAuth(uid) {
   const client = await (await db()).connect();
   await client.query("BEGIN");
@@ -694,14 +694,21 @@ export function creerServeur() {
           if (!uid) return json(res, 401, { erreur: "non connecté" });
           // la session EST la preuve : on renvoie l'email pour l'UI, et
           // rien d'autre — jamais le téléphone, jamais les identifiants
-          const c = await (await db()).connect();
+          // SOUS RLS : la policy p_self exige auth.uid() — la transaction
+          // le pose, sinon le SELECT lirait « la ligne d'un autre » et
+          // renverrait zéro ligne pour un compte pourtant valide
+          const c = await transactionAuth(uid);
           try {
             const r = await c.query(
               "SELECT email FROM utilisateurs WHERE id = $1 AND deleted_at IS NULL",
               [uid]
             );
+            await c.query("COMMIT");
             if (!r.rows[0]) return json(res, 401, { erreur: "non connecté" });
             return json(res, 200, { email: r.rows[0].email });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
           } finally {
             c.release();
           }
