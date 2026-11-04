@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 import {
   Conversation,
   conversationParAnnonce,
@@ -7,25 +7,51 @@ import {
   lireConversations,
   reponseSimulee,
 } from "./messagerieDonnees";
+import { t } from "./i18n";
+import { langueCourante } from "./router";
+import {
+  lireSejours,
+  accepterSejour,
+  confirmerSejour,
+  annulerSejour,
+  cloreSejour,
+  type Sejour,
+} from "./sejoursDonnees";
 
 // Page /messagerie — boîte de réception de l'acheteur (démo : stockage
 // local, aucun compte). Règle gravée : coordonnées jamais publiées, la
 // mise en relation passe uniquement par ici.
+
+// Le statut du séjour, le vocabulaire de la base — rien d'inventé.
+const STATUT_SEJOUR: Record<string, string> = {
+  demande_envoyee: "demande envoyée",
+  acceptee: "acceptée",
+  paiement_attendu: "paiement attendu",
+  confirmee: "confirmé — nuitées bloquées",
+  annulee: "annulé",
+  cloturee: "terminé",
+};
 
 export function Messagerie() {
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [active, setActive] = useState<string | null>(null);
   const [brouillon, setBrouillon] = useState("");
+  const [sejours, setSejours] = useState<Sejour[]>([]);
 
   useEffect(() => {
     setConversations(lireConversations());
+    setSejours(lireSejours());
     const params = new URLSearchParams(window.location.search);
     const annonce = params.get("annonce");
     if (annonce) setActive(annonce);
   }, []);
 
   const rafraichir = () => setConversations(lireConversations());
+  // Les gestes du séjour RECHARGENT aussi le stockage des nuitées : une
+  // confirmation bloque les dates (miroir du trigger 007) et l'écran des
+  // annonces doit le refléter au prochain montage — pas mentir par cache.
+  const rafraichirSejours = () => setSejours(lireSejours());
   const courante = conversations.find((c) => c.annonceId === active);
 
   const envoyerMessage = () => {
@@ -48,6 +74,55 @@ export function Messagerie() {
           interne : aucune coordonnée n'est exposée, rien n'est revendu.
         </p>
 
+        {sejours.length > 0 && (
+          <section className="publier-panel" aria-label="Mes séjours">
+            <p className="apercu-label">{t(langueCourante(), "Mes séjours")}</p>
+            <p className="champ-aide">
+              {t(langueCourante(), "Démo locale : ce navigateur joue les deux rôles — vous voyez la demande du voyageur ET les commandes de l'hôte. En production, chaque côté ne voit que le sien, et aucun paiement ne transite ici.")}
+            </p>
+            <ul className="sejours-liste">
+              {sejours.map((s) => (
+                <li key={s.id} className="sejour-item">
+                  <div>
+                    <p className="annonce-vendeur-titre">{s.annonceTitre}</p>
+                    <p className="annonce-vendeur-meta">
+                      {s.arrivee} → {s.depart} · {s.voyageursNb}{" "}
+                      {t(langueCourante(), "voyageur(s)")} ·{" "}
+                      {t(langueCourante(), STATUT_SEJOUR[s.statut])}
+                    </p>
+                  </div>
+                  <div className="annonce-vendeur-actions">
+                    {s.statut === "demande_envoyee" && (
+                      <button type="button" className="btn btn-ghost"
+                        onClick={() => { accepterSejour(s.id); rafraichirSejours(); }}>
+                        {t(langueCourante(), "Accepter")}
+                      </button>
+                    )}
+                    {(s.statut === "acceptee" || s.statut === "paiement_attendu") && (
+                      <button type="button" className="btn btn-primary"
+                        onClick={() => { confirmerSejour(s.id); rafraichirSejours(); }}>
+                        {t(langueCourante(), "Confirmer le séjour")}
+                      </button>
+                    )}
+                    {s.statut === "confirmee" && (
+                      <button type="button" className="btn btn-ghost"
+                        onClick={() => { cloreSejour(s.id); rafraichirSejours(); }}>
+                        {t(langueCourante(), "Clôturer")}
+                      </button>
+                    )}
+                    {s.statut !== "annulee" && s.statut !== "cloturee" && (
+                      <button type="button" className="btn btn-ghost"
+                        onClick={() => { annulerSejour(s.id); rafraichirSejours(); }}>
+                        {t(langueCourante(), "Annuler")}
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {conversations.length === 0 ? (
           <section className="publier-panel">
             <p className="est-erreur">
@@ -55,7 +130,7 @@ export function Messagerie() {
               une fiche d'annonce pour ouvrir la messagerie.
             </p>
             <div className="est-actions">
-              <a className="btn btn-primary" href={`${B}/annonces/crozon`}>
+              <a className="btn btn-primary" href={lien(`/annonces/crozon`)}>
                 Voir les annonces du pilote
               </a>
             </div>

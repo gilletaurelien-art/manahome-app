@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 
 // Page /approche — éditoriale : ce que MANAhome fait, ce qu'il ne fait pas.
 // Le visiteur sort de cette page en sachant exactement à quoi s'attendre.
@@ -69,10 +69,10 @@ export function Approche() {
         </p>
 
         <div className="est-actions">
-          <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
+          <a className="btn btn-ghost" href={lien(`/annonces/crozon`)}>
             Voir les annonces du pilote
           </a>
-          <a className="btn btn-primary" href={`${B}/publier`}>
+          <a className="btn btn-primary" href={lien(`/publier`)}>
             Publier mon annonce — gratuit
           </a>
         </div>

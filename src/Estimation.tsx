@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { TERRITOIRES, Territoire } from "./territoires";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 
 // Module ESTIMATION — écran 1 : formulaire minimal sans compte (aucun champ
 // identifiant). Écran 2 : fourchette ±10 % (pas un chiffre unique), médiane
@@ -237,13 +237,13 @@ export function Estimation() {
             <div className="est-actions">
               <a
                 className="btn btn-primary"
-                href={`${B}/publier?${paramsPublier}`}
+                href={lien(`/publier?${paramsPublier}`)}
               >
                 Publier mon annonce avec ce prix
               </a>
               <a
                 className="btn btn-ghost"
-                href={`${B}/territoire/${resultat.territoire.slug}`}
+                href={lien(`/territoire/${resultat.territoire.slug}`)}
               >
                 Voir le détail des prix du territoire
               </a>

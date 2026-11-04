@@ -20,7 +20,8 @@ import {
   routeTerritoire,
   territoireParSlug,
   routeAnnonces,
-  baseUrl } from "./router";
+  baseUrl, lien, langueCourante, lienAutreLangue} from "./router";
+import { t } from "./i18n";
 import { AnnonceDetail } from "./AnnonceDetail";
 import { TerritoireDetail } from "./TerritoireDetail";
 import { Publier } from "./Publier";
@@ -113,15 +114,18 @@ const SERVICES_CATEGORIES_MOTEUR = [
   { v: "autonomie", l: "Autonomie & adaptation" },
 ];
 
-const B = baseUrl();
 
 export default function App() {
   const path = usePath();
-  // La canonique suit la route. Les coquilles livrées la portent déjà dans le
-  // HTML (vite.config.ts) ; ceci tient la navigation côté client.
+  // La langue se lit dans l'URL, jamais dans un stockage : deux URLs, deux
+  // langues, zéro préférence cachée qui diverge de ce que le lien partagé
+  // raconte.
+  const L = langueCourante();
+  // La canonique suit la route ET sa langue. Les coquilles livrées la portent
+  // déjà dans le HTML (vite.config.ts) ; ceci tient la navigation côté client.
   useEffect(() => {
-    poserCanonique(path);
-  }, [path]);
+    poserCanonique(path, L);
+  }, [path, L]);
   const [moteurCategorie, setMoteurCategorie] = useState("acheter");
   const [servicesOuvert, setServicesOuvert] = useState(false);
   const [moteurLieu, setMoteurLieu] = useState("");
@@ -131,12 +135,12 @@ export default function App() {
     if (moteurLieu.trim()) params.set("q", moteurLieu.trim());
     if (moteurCategorie === "acheter" || moteurCategorie === "louer") {
       params.set("tx", moteurCategorie === "louer" ? "location" : "vente");
-      window.location.assign(`${B}/annonces/crozon?${params}`);
+      window.location.assign(lien(`/annonces/crozon?${params}`));
     } else if (moteurCategorie === "vendre") {
-      window.location.assign(`${B}/publier?tx=${params.get("tx") ?? "vente"}${params.get("q") ? `&lieu=${encodeURIComponent(params.get("q")!)}` : ""}`);
+      window.location.assign(lien(`/publier?tx=${params.get("tx") ?? "vente"}${params.get("q") ? `&lieu=${encodeURIComponent(params.get("q")!)}` : ""}`));
     } else {
       // pro / notaire / service : la page /pros regroupe le référentiel
-      window.location.assign(`${B}/pros?${params}`);
+      window.location.assign(lien(`/pros?${params}`));
     }
   };
   const annonce =
@@ -152,29 +156,39 @@ export default function App() {
     <>
       <header className="site-header">
         <div className="wrap">
-          <a className="brand" href={`${B}/`}>
+          <a className="brand" href={lien(`/`)}>
             MANA<em>home</em>
           </a>
           <nav className="nav">
-            <a href={`${B}/annonces/crozon`}>
+            <a href={lien(`/annonces/crozon`)}>
               <NavAnnonces />
-              <span>Annonces</span>
+              <span>{t(L, "Annonces")}</span>
             </a>
-            <a href={`${B}/estimation`}>
+            <a href={lien(`/estimation`)}>
               <NavEstimation />
-              <span>Estimation</span>
+              <span>{t(L, "Estimation")}</span>
             </a>
-            <a href={`${B}/territoire/crozon`}>
+            <a href={lien(`/territoire/crozon`)}>
               <NavTerritoire />
-              <span>Territoire</span>
+              <span>{t(L, "Territoire")}</span>
             </a>
-            <a href={`${B}/pros`}>
+            <a href={lien(`/pros`)}>
               <NavPros />
-              <span>Pros</span>
+              <span>{t(L, "Pros")}</span>
             </a>
-            <a href={`${B}/publier`} className="nav-cta">
+            <a href={lien(`/publier`)} className="nav-cta">
               <NavPublier />
-              <span>Publier</span>
+              <span>{t(L, "Publier")}</span>
+            </a>
+            {/* Sélecteur de langue : l'autre version de la MÊME page, jamais
+                un retour à l'accueil — perdre la route serait le défaut le
+                plus visible du bilingue. */}
+            <a
+              href={lienAutreLangue(L, path)}
+              className="nav-langue"
+              aria-label={t(L, "Changer de langue")}
+            >
+              {L === "fr" ? "EN" : "FR"}
             </a>
           </nav>
         </div>
@@ -209,12 +223,12 @@ export default function App() {
           {/* Hero : le logo en grand, la promesse en dessous */}
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
-              <p className="hero-label">L'immobilier, autrement</p>
+              <p className="hero-label">{t(L, "L'immobilier, autrement")}</p>
               <h1 className="brand-grand">
                 MANA<em>home</em>
               </h1>
               <div className="moteur">
-                <div className="moteur-categories" role="group" aria-label="Je cherche">
+                <div className="moteur-categories" role="group" aria-label={t(L, "Je cherche")}>
                   {MOTEUR_CATEGORIES.map((c) =>
                     c.v === "entretenir" ? (
                       <div key={c.v} className="moteur-services-wrap">
@@ -225,7 +239,7 @@ export default function App() {
                           aria-haspopup="listbox"
                           onClick={() => setServicesOuvert((o) => !o)}
                         >
-                          {SERVICES_CATEGORIES_MOTEUR.find((sv) => sv.v === moteurCategorie)?.l ?? c.l}
+                          {SERVICES_CATEGORIES_MOTEUR.find((sv) => sv.v === moteurCategorie)?.l ?? t(L, c.l)}
                           <span className="chevron" aria-hidden="true">▾</span>
                         </button>
                         {servicesOuvert && (
@@ -239,7 +253,7 @@ export default function App() {
                                     setServicesOuvert(false);
                                   }}
                                 >
-                                  {sv.l}
+                                  {t(L, sv.l)}
                                 </button>
                               </li>
                             ))}
@@ -271,8 +285,8 @@ export default function App() {
                     autoComplete="off"
                     placeholder={
                       moteurCategorie === "acheter" || moteurCategorie === "louer"
-                        ? "Commune ou code postal"
-                        : "Commune, métier ou besoin"
+                        ? t(L, "Commune ou code postal")
+                        : t(L, "Commune, métier ou besoin")
                     }
                     value={moteurLieu}
                     onChange={(e) => setMoteurLieu(e.target.value)}
@@ -281,7 +295,7 @@ export default function App() {
                   <button
                     type="button"
                     className="moteur-fleche"
-                    aria-label="Rechercher"
+                    aria-label={t(L, "Rechercher")}
                     onClick={moteurRechercher}
                   >
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -299,13 +313,13 @@ export default function App() {
           <main className="wrap">
             {/* 01 — Catalogue : bulle avec sous-bulle, résultats dans la recherche */}
             <section className="landing-section bulle">
-              <h2 className="section-title">{SECTIONS[0].titre}</h2>
+              <h2 className="section-title">{t(L, SECTIONS[0].titre)}</h2>
               <div className="sous-bulle">
-                <p className="section-accroche">{SECTIONS[0].accroche}</p>
-                <p className="section-texte">{SECTIONS[0].texte}</p>
+                <p className="section-accroche">{t(L, SECTIONS[0].accroche)}</p>
+                <p className="section-texte">{t(L, SECTIONS[0].texte)}</p>
                 <div className="est-actions">
-                  <a className="btn btn-clair" href={`${B}/annonces/crozon`}>
-                    Parcourir le catalogue du pilote
+                  <a className="btn btn-clair" href={lien(`/annonces/crozon`)}>
+                    {t(L, "Parcourir le catalogue du pilote")}
                   </a>
                 </div>
               </div>
@@ -314,19 +328,19 @@ export default function App() {
             {/* 02 → 05 */}
             {SECTIONS.slice(1).map((s) => (
                 <section key={s.num} className="landing-section alt bulle">
-                  <h2 className="section-title">{s.titre}</h2>
+                  <h2 className="section-title">{t(L, s.titre)}</h2>
                   <div className="sous-bulle">
-                    <p className="section-accroche">{s.accroche}</p>
-                    <p className="section-texte">{s.texte}</p>
+                    <p className="section-accroche">{t(L, s.accroche)}</p>
+                    <p className="section-texte">{t(L, s.texte)}</p>
                     <div className="est-actions">
                       {s.cta && (
-                        <a className="btn btn-clair" href={`${B}${s.cta.href}`}>
-                          {s.cta.label}
+                        <a className="btn btn-clair" href={lien(`${s.cta.href}`)}>
+                          {t(L, s.cta.label)}
                         </a>
                       )}
                       {s.cta2 && (
-                        <a className="btn btn-clair-ghost" href={`${B}${s.cta2.href}`}>
-                          {s.cta2.label}
+                        <a className="btn btn-clair-ghost" href={lien(`${s.cta2.href}`)}>
+                          {t(L, s.cta2.label)}
                         </a>
                       )}
                     </div>
@@ -344,26 +358,22 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              Portail immobilier territorial — pilote Crozon, presqu'île du
-              Finistère. Gratuit, accompagné, lisible par les IA.
-              La structuration améliore les chances de compréhension et de
-              découverte ; elle ne garantit pas qu'un assistant IA indexera,
-              recommandera ou citera une annonce.
+              {t(L, "Portail immobilier territorial — pilote Crozon, presqu'île du Finistère. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
             </p>
             <ContactForm />
           </div>
-          <nav className="footer-nav" aria-label="Pied de page">
-            <a href={`${B}/annonces/crozon`}>Annonces</a>
-            <a href={`${B}/estimation`}>Estimation indicative</a>
-            <a href={`${B}/territoire/crozon`}>Territoire</a>
-            <a href={`${B}/publier`}>Publier — gratuit</a>
-            <a href={`${B}/approche`}>Notre approche</a>
-            <a href={`${B}/pros`}>Professionnels & services de l'habitat</a>
-            <a href={`${B}/espace-pro`}>Rejoindre le référentiel</a>
-            <a href={`${B}/messagerie`}>Ma messagerie</a>
-            <a href={`${B}/mes-annonces`}>Mes annonces</a>
-            <a href={`${B}/approche`}>À propos</a>
-            <a href={`${B}/mentions-legales`}>Mentions légales</a>
+          <nav className="footer-nav" aria-label={t(L, "Pied de page")}>
+            <a href={lien(`/annonces/crozon`)}>{t(L, "Annonces")}</a>
+            <a href={lien(`/estimation`)}>{t(L, "Estimation indicative")}</a>
+            <a href={lien(`/territoire/crozon`)}>{t(L, "Territoire")}</a>
+            <a href={lien(`/publier`)}>{t(L, "Publier — gratuit")}</a>
+            <a href={lien(`/approche`)}>{t(L, "Notre approche")}</a>
+            <a href={lien(`/pros`)}>{t(L, "Professionnels & services de l'habitat")}</a>
+            <a href={lien(`/espace-pro`)}>{t(L, "Rejoindre le référentiel")}</a>
+            <a href={lien(`/messagerie`)}>{t(L, "Ma messagerie")}</a>
+            <a href={lien(`/mes-annonces`)}>{t(L, "Mes annonces")}</a>
+            <a href={lien(`/approche`)}>{t(L, "À propos")}</a>
+            <a href={lien(`/mentions-legales`)}>{t(L, "Mentions légales")}</a>
           </nav>
         </div>
       </footer>

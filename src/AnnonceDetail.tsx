@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Annonce } from "./annonces";
-import { baseUrl } from "./router";
+import { baseUrl, langueCourante } from "./router";
+import { t } from "./i18n";
 import { ouvrirConversation } from "./messagerieDonnees";
+import { demanderSejour, sejourSurAnnonce, type Sejour } from "./sejoursDonnees";
 import { annonceLocaleParId } from "./annoncesLocales";
 
 // JSON-LD RealEstateListing (schema.org) : le cœur du pilier « Lisible
@@ -45,11 +47,76 @@ function JsonLd({ annonce }: { annonce: Annonce }) {
   );
 }
 
+// ⭐ POURQUOI OS SUR UNE IFRAME, PAS UNE BIBLIOTHÈQUE DE CARTES.
+// 1. DOCTRINE SOUVERAINE : OpenStreetMap est un fond de carte libre, hébergé
+//    par une fondation européenne — pas une tuile cloud américaine. Et
+//    l'embed officiel dispense d'ajouter Leaflet/MapLibre au bundle : la
+//    fiche reste un pré-rendu léger, lisible, rapide sur mobile rural.
+// 2. DOCTRINE ANTI-ADRESSE : PAS de marqueur. La géoloc des annonces est
+//    LARGE (au quartier, voir 001_init.sql) et la carte dézoome d'office —
+//    un marqueur transformerait un quartier en adresse. Le lien sortant
+//    ouvre OSM sur la même zone, pas sur le bien.
+function CarteOsm({ annonce }: { annonce: Annonce }) {
+  const L = langueCourante();
+  if (!annonce.geoloc) return null;
+  const { lat, lon } = annonce.geoloc;
+  // ~1,5 km de côté : la carte montre le QUARTIER, jamais la porte.
+  const demi = 0.008;
+  const bbox = `${lon - demi},${lat - demi},${lon + demi},${lat + demi}`;
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik`;
+  return (
+    <section className="fiche-carte" aria-label={t(L, "Carte du quartier")}>
+      <p className="apercu-label">{t(L, "Carte du quartier")}</p>
+      <iframe
+        title={t(L, "Carte du quartier")}
+        src={src}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+      />
+      <p className="fiche-carte-note">
+        {t(L, "Localisation approximative au quartier, posée sur OpenStreetMap — la carte ne désigne jamais l'adresse précise du bien.")}{" "}
+        <a
+          href={`https://www.openstreetmap.org/#map=13/${lat}/${lon}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t(L, "Voir sur OpenStreetMap")}
+        </a>
+      </p>
+    </section>
+  );
+}
+
+// Le cycle du séjour, dit au voyageur — le même vocabulaire que la base.
+const STATUT_VOYAGEUR: Record<string, string> = {
+  demande_envoyee: "Demande envoyée — l'hôte vous répond prochainement.",
+  acceptee: "Demande acceptée — l'hôte attend votre paiement (directement auprès de lui).",
+  paiement_attendu: "Paiement attendu — directement auprès de l'hôte.",
+  confirmee: "Séjour confirmé. Les nuitées sont bloquées.",
+  annulee: "Séjour annulé.",
+  cloturee: "Séjour terminé.",
+};
+// une erreur brute ne doit jamais atteindre l'écran : chaque cas a sa phrase.
+const MESSAGE_ERREUR: Record<string, string> = {
+  "dates invalides": "Vérifiez vos dates : arrivée avant départ, dates réelles.",
+  "voyageurs invalides": "Indiquez au moins un voyageur.",
+  "nuitées bloquées": "Ces dates ne sont pas disponibles pour ce logement.",
+  "demande déjà en cours": "Vous avez déjà une demande en cours pour ce logement.",
+};
+
 export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
   const [premierMessage, setPremierMessage] = useState("");
   const [lienCopie, setLienCopie] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const locale = annonceLocaleParId(annonce.id);
+  // Demande de réservation (locations courtes durée) : le cycle du séjour
+  // est dans sejoursDonnees — miroir front de la table sejours (007). Ce
+  // formulaire n'encaisse RIEN : le paiement vit chez le PSP de l'hôte.
+  const [sejour, setSejour] = useState<Sejour | undefined>(() => sejourSurAnnonce(annonce.id));
+  const [arrivee, setArrivee] = useState("");
+  const [depart, setDepart] = useState("");
+  const [voyageurs, setVoyageurs] = useState(2);
+  const [erreurSejour, setErreurSejour] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = `${annonce.titre} — MANAhome`;
@@ -169,6 +236,8 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
 
           <p className="fiche-description">{annonce.description}</p>
 
+          <CarteOsm annonce={annonce} />
+
           <div className="fiche-pied">
             {annonce.source === "import_pro" ? (
               <span className="badge-source pro">
@@ -178,6 +247,60 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
               <span className="badge-source">Annonce directe de particulier</span>
             )}
           </div>
+          {annonce.transaction === "location" && (
+            <section className="publier-panel fiche-reserver" aria-label="Demander une réservation">
+              <p className="apercu-label">{t(langueCourante(), "Demander une réservation")}</p>
+              {sejour ? (
+                <p className="champ-aide" role="status">
+                  {t(langueCourante(), STATUT_VOYAGEUR[sejour.statut])}{" "}
+                  ({sejour.arrivee} → {sejour.depart})
+                </p>
+              ) : (
+                <>
+                  <div className="champ-grid">
+                    <div className="champ">
+                      <label htmlFor="sejour-arrivee">{t(langueCourante(), "Arrivée")}</label>
+                      <input id="sejour-arrivee" type="date" value={arrivee}
+                        onChange={(e) => setArrivee(e.target.value)} />
+                    </div>
+                    <div className="champ">
+                      <label htmlFor="sejour-depart">{t(langueCourante(), "Départ")}</label>
+                      <input id="sejour-depart" type="date" value={depart}
+                        onChange={(e) => setDepart(e.target.value)} />
+                    </div>
+                    <div className="champ">
+                      <label htmlFor="sejour-voyageurs">{t(langueCourante(), "Voyageurs")}</label>
+                      <input id="sejour-voyageurs" type="number" min={1} value={voyageurs}
+                        onChange={(e) => setVoyageurs(Number(e.target.value))} />
+                    </div>
+                  </div>
+                  {erreurSejour && <p className="est-erreur" role="alert">{erreurSejour}</p>}
+                  <div className="est-actions">
+                    <button type="button" className="btn btn-primary"
+                      onClick={() => {
+                        const r = demanderSejour({
+                          annonceId: annonce.id,
+                          annonceTitre: annonce.titre,
+                          arrivee, depart, voyageursNb: voyageurs,
+                        });
+                        if (r.ok && r.sejour) {
+                          setSejour(r.sejour);
+                          setErreurSejour(null);
+                        } else {
+                          setErreurSejour(t(langueCourante(), MESSAGE_ERREUR[r.erreur ?? ""] ?? r.erreur ?? ""));
+                        }
+                      }}
+                    >
+                      {t(langueCourante(), "Envoyer ma demande")}
+                    </button>
+                  </div>
+                  <p className="champ-aide">
+                    {t(langueCourante(), "La demande n'est pas un paiement : vous réglerez l'hôte directement, via son propre moyen de paiement. Aucun encaissement ne passe par MANAhome.")}
+                  </p>
+                </>
+              )}
+            </section>
+          )}
           <section
             id="contacter"
             className="publier-panel fiche-contacter"

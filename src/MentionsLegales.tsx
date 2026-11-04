@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 
 // Mentions légales — page minimale, honnête : pas d'acte loi Hoguet,
 // pas de revente de données, hébergement GitHub Pages.
@@ -58,10 +58,10 @@ export function MentionsLegales() {
         </section>
 
         <div className="est-actions">
-          <a className="btn btn-ghost" href={`${B}/approche`}>
+          <a className="btn btn-ghost" href={lien(`/approche`)}>
             Notre approche
           </a>
-          <a className="btn btn-primary" href={`${B}/`}>
+          <a className="btn btn-primary" href={lien(`/`)}>
             Retour à l'accueil
           </a>
         </div>

@@ -1,0 +1,12 @@
+{
+  "name": "manahome-app-service",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node serveur.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

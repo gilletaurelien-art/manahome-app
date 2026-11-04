@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien, langueCourante} from "./router";
+import { t } from "./i18n";
+import { Calendrier } from "./Calendrier";
 import {
   AnnonceLocale,
   lireAnnoncesLocales,
@@ -57,11 +59,11 @@ export function MesAnnonces() {
             <div className="est-actions">
               <a
                 className="btn btn-primary"
-                href={`${B}/annonce/${publieeId}`}
+                href={lien(`/annonce/${publieeId}`)}
               >
                 Voir ma fiche publique
               </a>
-              <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
+              <a className="btn btn-ghost" href={lien(`/annonces/crozon`)}>
                 Voir le catalogue
               </a>
             </div>
@@ -75,7 +77,7 @@ export function MesAnnonces() {
               commission — trois étapes suffisent.
             </p>
             <div className="est-actions">
-              <a className="btn btn-primary" href={`${B}/publier`}>
+              <a className="btn btn-primary" href={lien(`/publier`)}>
                 Publier mon annonce — gratuit
               </a>
             </div>
@@ -86,6 +88,14 @@ export function MesAnnonces() {
               <li key={a.id} className="annonce-vendeur">
                 <div>
                   <p className="fiche-lieu">{a.lieu}</p>
+                  {a.transaction === "location" && (
+                    <div className="annonce-vendeur-calendrier">
+                      <p className="apercu-label">
+                        {t(langueCourante(), "Calendrier de mes nuitées")}
+                      </p>
+                      <Calendrier annonceId={a.id} />
+                    </div>
+                  )}
                   <p className="annonce-vendeur-titre">{a.titre}</p>
                   <p className="annonce-vendeur-meta">
                     {a.prix.toLocaleString("fr-FR")} €
@@ -96,7 +106,7 @@ export function MesAnnonces() {
                 </div>
                 <div className="annonce-vendeur-actions">
                   {a.statut === "publiee" && (
-                    <a className="btn btn-ghost" href={`${B}/annonce/${a.id}`}>
+                    <a className="btn btn-ghost" href={lien(`/annonce/${a.id}`)}>
                       Voir
                     </a>
                   )}
