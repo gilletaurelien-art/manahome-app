@@ -25,6 +25,7 @@ import {
 import { inscrire, connecter, validerIdentifiants } from "./auth.mjs";
 import { trierNuits, delta } from "./indispos.mjs";
 import { validerDemande, traduireErreurSejour, traduireTransition, sqlDuGeste } from "./sejours.mjs";
+import { validerMessage, sqlOuvrirConversation, sqlListeConversations } from "./messagerieApi.mjs";
 import { plageValide as plageValideRequete } from "./requetes.mjs";
 
 const PORT = Number(process.env.PORT ?? 3000);
@@ -347,6 +348,144 @@ export function creerServeur() {
         } finally {
           c.release();
         }
+      }
+
+      // ===== Messagerie (chantier 6) =====
+      // ⭐ Le vendeur est DÉRIVÉ de l'annonce dans le SQL — un client ne
+      // choisit jamais son interlocuteur. Les participants sont vérifiés
+      // dans le SQL : la conversation d'un autre n'existe pas ici. Et le
+      // service ne simule AUCUNE réponse : le front démo jouait l'hôte,
+      // jamais le service.
+      const mOuvrir = url.pathname.match(/^\/api\/annonces\/([\w-]+)\/conversations$/);
+      if (mOuvrir && req.method === "POST") {
+        if (!UUID.test(mOuvrir[1])) return json(res, 404, { erreur: "route inconnue" });
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const c = await transactionAuth(uid);
+        try {
+          const r = await c.query(sqlOuvrirConversation(), [mOuvrir[1]]);
+          if (r.rows.length === 0) {
+            // annonce inconnue ou non publiée : le même 404, jamais
+            // d'annuaire des brouillons
+            await c.query("ROLLBACK");
+            return json(res, 404, { erreur: "annonce inconnue" });
+          }
+          await c.query("COMMIT");
+          return json(res, 201, r.rows[0]);
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          // une conversation existe déjà pour (annonce, acheteur) : on la
+          // rend au lieu d'en créer une seconde — la contrainte UNIQUE
+          // de la 001 décide, l'API traduit
+          if (e?.code === "23505") {
+            const existante = await c.query(
+              `SELECT id FROM conversations
+               WHERE annonce_id = $1 AND acheteur = auth.uid()`,
+              [mOuvrir[1]]
+            );
+            if (existante.rows[0]) {
+              return json(res, 200, existante.rows[0]);
+            }
+          }
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      if (url.pathname === "/api/conversations" && req.method === "GET") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const c = await transactionAuth(uid);
+        try {
+          const r = await c.query(sqlListeConversations());
+          await c.query("COMMIT");
+          return json(res, 200, { conversations: r.rows });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      const mMessages = url.pathname.match(/^\/api\/conversations\/([\w-]+)\/messages$/);
+      if (mMessages) {
+        if (!UUID.test(mMessages[1])) return json(res, 404, { erreur: "route inconnue" });
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+
+        // les deux méthodes partagent le même verrou de participation :
+        // acheteur ou vendeur, dans le SQL — rien d'autre ne se lit
+        const participant = async (c) =>
+          (await c.query(
+            `SELECT 1 FROM conversations
+             WHERE id = $1 AND (acheteur = auth.uid() OR vendeur = auth.uid())`,
+            [mMessages[1]]
+          )).rows.length > 0;
+
+        if (req.method === "GET") {
+          const c = await transactionAuth(uid);
+          try {
+            if (!(await participant(c))) {
+              await c.query("ROLLBACK");
+              // inconnue ou pas à moi : le même 404, jamais 403 — une
+              // conversation qui n'est pas la mienne n'existe pas pour moi
+              return json(res, 404, { erreur: "conversation inconnue" });
+            }
+            const r = await c.query(
+              `SELECT m.auteur, m.corps, m.created_at
+               FROM messages m
+               JOIN conversations c2 ON c2.id = m.conversation_id
+               WHERE m.conversation_id = $1
+                 AND (c2.acheteur = auth.uid() OR c2.vendeur = auth.uid())
+               ORDER BY m.created_at`,
+              [mMessages[1]]
+            );
+            await c.query("COMMIT");
+            return json(res, 200, { messages: r.rows });
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        if (req.method === "POST") {
+          const corpsRequ = await corps(req);
+          const v = validerMessage(corpsRequ.corps);
+          if (!v.ok) return json(res, 400, { erreur: v.erreur });
+          const c = await transactionAuth(uid);
+          try {
+            if (!(await participant(c))) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "conversation inconnue" });
+            }
+            const r = await c.query(
+              `INSERT INTO messages (conversation_id, auteur, corps)
+               SELECT $1, auth.uid()::uuid, $2
+               WHERE EXISTS (SELECT 1 FROM conversations
+                             WHERE id = $1
+                               AND (acheteur = auth.uid() OR vendeur = auth.uid()))
+               RETURNING auteur, corps, created_at`,
+              [mMessages[1], v.corps]
+            );
+            if (r.rows.length === 0) {
+              await c.query("ROLLBACK");
+              return json(res, 404, { erreur: "conversation inconnue" });
+            }
+            await c.query("COMMIT");
+            return json(res, 201, r.rows[0]);
+          } catch (e) {
+            await c.query("ROLLBACK").catch(() => {});
+            throw e;
+          } finally {
+            c.release();
+          }
+        }
+
+        return json(res, 405, { erreur: "méthode non permise" });
       }
 
       // ===== Authentification =====
