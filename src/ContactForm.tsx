@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GlyphPersonne, GlyphEmail, GlyphDescription, GlyphValidation } from "./Glyphs";
 
 // Formulaire de contact du footer — vers contact@manahome.org.
 // Démo : l'envoi est simulé (aucun backend). En prod : API + rate-limit
@@ -48,7 +49,8 @@ export function ContactForm() {
   if (envoye) {
     return (
       <div className="contact-form" role="status">
-        <p className="contact-merci">
+        <p className="contact-merci label-icone">
+          <GlyphValidation size={18} />
           Merci {form.prenom}, votre message a bien été envoyé. Nous
           répondons à <strong>{form.courriel}</strong> très vite.
         </p>
@@ -74,19 +76,23 @@ export function ContactForm() {
         envoyer();
       }}
     >
-      <p className="apercu-label">Écrire à MANAhome</p>
+      <p className="apercu-label label-icone">
+        <GlyphEmail size={18} />
+        Nous écrire :<br />
+        contact@manahome.org
+      </p>
       <div className="contact-grid">
         <div className="champ">
-          <label htmlFor="contact-nom">Nom *</label>
+          <label htmlFor="contact-nom" className="label-icone"><GlyphPersonne size={15} />Nom *</label>
           <input id="contact-nom" type="text" autoComplete="family-name" {...champ("nom")} />
         </div>
         <div className="champ">
-          <label htmlFor="contact-prenom">Prénom *</label>
+          <label htmlFor="contact-prenom" className="label-icone"><GlyphPersonne size={15} />Prénom *</label>
           <input id="contact-prenom" type="text" autoComplete="given-name" {...champ("prenom")} />
         </div>
       </div>
       <div className="champ">
-        <label htmlFor="contact-courriel">Courriel *</label>
+        <label htmlFor="contact-courriel" className="label-icone"><GlyphEmail size={15} />Courriel *</label>
         <input
           id="contact-courriel"
           type="email"
@@ -96,7 +102,7 @@ export function ContactForm() {
         />
       </div>
       <div className="champ">
-        <label htmlFor="contact-message">Message *</label>
+        <label htmlFor="contact-message" className="label-icone"><GlyphDescription size={15} />Message *</label>
         <textarea id="contact-message" rows={4} {...champ("message")} />
       </div>
       <div className="est-actions">
@@ -104,10 +110,6 @@ export function ContactForm() {
           Envoyer
         </button>
       </div>
-      <p className="contact-note">
-        Votre message part vers contact@manahome.org. Aucune donnée n'est
-        revendue ; vous pouvez demander la suppression à tout moment.
-      </p>
     </form>
   );
 }

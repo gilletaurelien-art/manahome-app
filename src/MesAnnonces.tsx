@@ -9,6 +9,8 @@ import {
   changerStatut,
   supprimerAnnonceLocale,
 } from "./annoncesLocales";
+import { tarifsListe, libelleTarif } from "./annonces";
+import { GlyphSemaine as GlyphCalendrier } from "./Glyphs";
 
 // /mes-annonces — gestion démo de mes annonces déposées (localStorage).
 // Miroir du back : une annonce particulier se dépublie et se supprime
@@ -54,8 +56,8 @@ export function MesAnnonces() {
         {publieeId && (
           <section className="publier-panel">
             <p className="est-resultat">
-              Annonce publiée. Elle apparaît dès maintenant dans le catalogue
-              du pilote, derrière le badge « Annonce directe de particulier ».
+              Annonce publiée. Elle apparaît dès maintenant dans le catalogue,
+              derrière le badge « Annonce directe de particulier ».
             </p>
             <div className="est-actions">
               <a
@@ -93,7 +95,8 @@ export function MesAnnonces() {
                   <p className="fiche-lieu">{a.lieu}</p>
                   {a.transaction === "location" && (
                     <div className="annonce-vendeur-calendrier">
-                      <p className="apercu-label">
+                      <p className="apercu-label label-icone">
+                        <GlyphCalendrier size={16} />
                         {t(langueCourante(), "Calendrier de mes nuitées")}
                       </p>
                       <Calendrier annonceId={a.id} />
@@ -101,7 +104,7 @@ export function MesAnnonces() {
                   )}
                   <p className="annonce-vendeur-titre">{a.titre}</p>
                   <p className="annonce-vendeur-meta">
-                    {a.prix.toLocaleString("fr-FR")} €
+                    {tarifsListe(a.tarifs).map((t) => libelleTarif(t.montant, t.unite)).join(" · ")}
                     {a.surface ? ` · ${a.surface.toLocaleString("fr-FR")} m²` : ""}
                     {a.pieces ? ` · ${a.pieces} pièces` : ""} ·{" "}
                     {STATUT_LABEL[a.statut]}

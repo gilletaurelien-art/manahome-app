@@ -11,7 +11,14 @@ const LIGNE_LOCATION: LigneAnnonce = {
   description: "Maison de ville lumineuse.",
   offre: "location_courte_duree",
   tarif_nuit: 85,
+  tarif_semaine: null,
+  tarif_mois: null,
   capacite: 6,
+  couchages: 5,
+  parking: true,
+  piscine: false,
+  jardin: true,
+  balcon: false,
   code_insee: "29042",
   source: "directe_particulier",
   source_id: null,
@@ -33,8 +40,30 @@ describe("le mapping ligne publique → Annonce est honnête", () => {
   it("une location courte durée devient une location au tarif/nuit", () => {
     const a = versAnnonce(LIGNE_LOCATION);
     expect(a.transaction).toBe("location");
-    expect(a.prix).toBe(85);
+    expect(a.tarifs.nuit).toBe(85);
     expect(a.lieu).toContain("6 voyageurs");
+  });
+
+  it("libre choix des paliers (04/11/2026) : un palier absent reste absent, jamais déduit", () => {
+    const a = versAnnonce(LIGNE_LOCATION);
+    expect(a.tarifs.semaine).toBeUndefined();
+    expect(a.tarifs.mois).toBeUndefined();
+  });
+
+  it("couchages et équipements (04/11/2026) : seuls les équipements VRAIS entrent dans la liste", () => {
+    const a = versAnnonce(LIGNE_LOCATION);
+    expect(a.couchages).toBe(5);
+    expect(a.equipements).toEqual(["parking", "jardin"]);
+  });
+
+  it("aucun équipement vrai → equipements absent, pas un tableau vide qui traîne", () => {
+    const a = versAnnonce({ ...LIGNE_LOCATION, parking: false, jardin: false });
+    expect(a.equipements).toBeUndefined();
+  });
+
+  it("les trois paliers se mappent ensemble quand les trois sont renseignés", () => {
+    const a = versAnnonce({ ...LIGNE_LOCATION, tarif_semaine: 390, tarif_mois: 1200 });
+    expect(a.tarifs).toEqual({ nuit: 85, semaine: 390, mois: 1200 });
   });
 
   it("le titre est descriptif, jamais inventé", () => {

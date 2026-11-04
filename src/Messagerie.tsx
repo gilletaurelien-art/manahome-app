@@ -232,7 +232,7 @@ export function Messagerie() {
             </p>
             <div className="est-actions">
               <a className="btn btn-primary" href={lien(`/annonces/crozon`)}>
-                Voir les annonces du pilote
+                Voir les annonces
               </a>
             </div>
           </section>

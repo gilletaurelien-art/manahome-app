@@ -603,6 +603,7 @@ html { background: var(--sand); }
 }
 .etapes li.on { opacity: 1; border-bottom-color: var(--primary); }
 .etapes li.done { opacity: 0.8; border-bottom-color: var(--or); }
+.etapes li.label-icone { justify-content: center; }
 
 .publier-panel {
   background: rgb(255 255 255 / 92%);
@@ -619,6 +620,16 @@ html { background: var(--sand); }
   margin-bottom: var(--sp-1);
   color: var(--ink);
 }
+/* Icône + libellé, même geste que .nav a (04/11/2026) : l'icône signe, elle
+   ne décore pas — jamais seule, toujours à côté d'un texte lisible. */
+.label-icone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.label-icone svg { flex: none; color: var(--primary); }
+.ia-bloc h3.label-icone { justify-content: center; margin-bottom: var(--sp-1); }
+.apercu-label.label-icone, .hero-label.label-icone { justify-content: center; }
 .champ input, .champ select, .champ textarea {
   width: 100%;
   padding: 12px 14px;
@@ -649,6 +660,16 @@ html { background: var(--sand); }
 }
 .dpe-btn.on { border-color: var(--primary); }
 .dpe-NC { background: var(--ecume); color: var(--ink); }
+/* Boutons d'équipement (icône + libellé) — même famille que .dpe-btn,
+   juste plus de place pour un mot entier qu'une seule lettre. */
+.dpe-btn.label-icone {
+  padding: 8px 14px;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink);
+  border-radius: 999px;
+}
+.dpe-btn.label-icone.on { background: rgb(201 162 39 / 10%); }
 .publier-nav {
   display: flex;
   justify-content: space-between;

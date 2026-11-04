@@ -1,4 +1,5 @@
-import type { Annonce, Transaction } from "./annonces";
+import type { Annonce, Equipement, Tarifs, Transaction } from "./annonces";
+import { EQUIPEMENTS } from "./annonces";
 
 // Client du module annonces — le premier maillon de la bascule FEATURE_BACK
 // (docs/branchement-back.md). ⭐ QUATRE RÈGLES :
@@ -27,8 +28,21 @@ export interface LigneAnnonce {
   dpe: string | null;
   description: string | null;
   offre: "vente" | "location_courte_duree";
+  // Trois paliers indépendants (migration 011) : le propriétaire en choisit
+  // au moins un, jamais déduit l'un de l'autre.
   tarif_nuit: number | null;
+  tarif_semaine: number | null;
+  tarif_mois: number | null;
   capacite: number | null;
+  // Couchages et équipements (migration 012). Les quatre équipements sont
+  // des booléens NOT NULL en base : « non coché » EST un fait (pas de
+  // piscine), contrairement à `couchages`, qui reste NULL tant que le
+  // propriétaire ne l'a pas renseigné.
+  couchages: number | null;
+  parking: boolean;
+  piscine: boolean;
+  jardin: boolean;
+  balcon: boolean;
   code_insee: string | null;
   source: "directe_particulier" | "import_pro";
   source_id: string | null;
@@ -61,15 +75,34 @@ export function lieuDeLigne(l: LigneAnnonce): string {
  * ligne `offre: "vente"` est une erreur d'appelant — filtrer AVANT
  * (voir `chargerAnnonces`), jamais ici.
  */
+/** Les équipements PRÉSENTS — un booléen false n'entre jamais dans la liste. */
+function equipementsDeLigne(l: LigneAnnonce): Equipement[] {
+  const presents: Record<Equipement, boolean> = {
+    parking: l.parking,
+    piscine: l.piscine,
+    jardin: l.jardin,
+    balcon: l.balcon,
+  };
+  return EQUIPEMENTS.filter((e) => presents[e]);
+}
+
 export function versAnnonce(l: LigneAnnonce): Annonce {
+  const tarifs: Tarifs = {
+    ...(l.tarif_nuit != null ? { nuit: l.tarif_nuit } : {}),
+    ...(l.tarif_semaine != null ? { semaine: l.tarif_semaine } : {}),
+    ...(l.tarif_mois != null ? { mois: l.tarif_mois } : {}),
+  };
+  const equipements = equipementsDeLigne(l);
   return {
     id: l.id,
     titre: titreDeLigne(l),
     lieu: lieuDeLigne(l),
-    prix: l.tarif_nuit ?? 0,
+    tarifs,
     transaction: "location",
     surface: l.surface_m2 ?? undefined,
     pieces: l.pieces ?? undefined,
+    couchages: l.couchages ?? undefined,
+    ...(equipements.length > 0 ? { equipements } : {}),
     dpe: l.dpe ?? undefined,
     description: l.description ?? "",
     datePublication: l.created_at.slice(0, 10),

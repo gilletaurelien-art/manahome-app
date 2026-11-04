@@ -49,7 +49,7 @@ export function t(langue: Langue, texte: string): string {
  */
 const DICO_EN: Record<string, string> = {
   // ── Barre de navigation ──
-  "Annonces": "Listings",
+  "Vacances": "Stays",
   "Territoire": "Territory",
   "Publier": "Publish",
   "Changer de langue": "Switch language",
@@ -68,9 +68,9 @@ const DICO_EN: Record<string, string> = {
   // ── Sections de l'accueil ──
   "Découvrez les séjours": "Explore the stays",
   "Des locations de vacances, près de chez vous": "Holiday rentals, near you",
-  "Un accès direct aux annonces, sans compte à créer. En pilote, le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête.":
-    "Direct access to listings, no account needed. As a pilot, the catalogue is deliberately small and carefully kept — every listing is structured, sourced, honest.",
-  "Parcourir le catalogue du pilote": "Browse the pilot catalogue",
+  "Un accès direct aux annonces, sans compte à créer. Le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête.":
+    "Direct access to listings, no account needed. The catalogue is deliberately small and carefully kept — every listing is structured, sourced, honest.",
+  "Parcourir le catalogue": "Browse the catalogue",
   "Louez votre logement avec MANA": "List your property with MANA",
   "Vous gardez la main. MANA vous accompagne.": "You stay in charge. MANA supports you.",
   "Préparation de l'annonce, documents à prévoir (déclaration de meublé touristique, attestation d'assurance), calendrier de réservation : le propriétaire reste maître de son bien.":
@@ -87,7 +87,7 @@ const DICO_EN: Record<string, string> = {
     "One place, one page: life around the stay.",
   "Transports, commerces, écoles, services, nature : chaque commune du territoire présentée honnêtement, avec des informations vérifiées lorsque c'est possible.":
     "Transport, shops, schools, services, nature: every town of the territory presented honestly, with verified information wherever possible.",
-  "Découvrir le territoire de Crozon": "Discover the Crozon territory",
+  "Découvrir le territoire": "Discover the territory",
 
   // ── Le séjour (cycle de vie) ──
   "Voyageurs": "Guests",
@@ -195,6 +195,6 @@ const DICO_EN: Record<string, string> = {
   "À propos": "About",
   "Mentions légales": "Legal notice",
   "Pied de page": "Footer",
-  "Portail de locations de vacances, entre propriétaires et vacanciers — pilote Crozon, presqu'île du Finistère. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.":
-    "A holiday rental portal, between owners and guests — Crozon pilot, Finistère peninsula. Free, supported, AI-readable. Structuring improves the chances of understanding and discovery; it does not guarantee that an AI assistant will index, recommend or cite a listing.",
+  "Portail de locations de vacances, entre propriétaires et vacanciers. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.":
+    "A holiday rental portal, between owners and guests. Free, supported, AI-readable. Structuring improves the chances of understanding and discovery; it does not guarantee that an AI assistant will index, recommend or cite a listing.",
 };

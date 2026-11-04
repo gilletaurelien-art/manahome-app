@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
 import type { Annonce } from "./annonces";
+import {
+  tarifsListe, libelleTarif, LIBELLE_EQUIPEMENT,
+  type UniteTarif, type Equipement,
+} from "./annonces";
+import {
+  GlyphNuit, GlyphSemaine, GlyphMois,
+  GlyphSurface, GlyphPieces, GlyphDpe, GlyphCouchage,
+  GlyphMessagerie, GlyphVoyageurs, GlyphLien,
+  GlyphParking, GlyphPiscine, GlyphJardin, GlyphBalconEquip,
+} from "./Glyphs";
 import { baseUrl, langueCourante } from "./router";
 import { t } from "./i18n";
 import { ouvrirConversation } from "./messagerieDonnees";
@@ -7,6 +17,19 @@ import { demanderSejour, sejourSurAnnonce, type Sejour } from "./sejoursDonnees"
 import { demanderSejourApi } from "./apiSejours";
 import { ouvrirConversationApi } from "./apiMessagerie";
 import { annonceLocaleParId } from "./annoncesLocales";
+
+const ICONE_UNITE: Record<UniteTarif, (p: { size?: number }) => JSX.Element> = {
+  nuit: GlyphNuit,
+  semaine: GlyphSemaine,
+  mois: GlyphMois,
+};
+
+const ICONE_EQUIPEMENT: Record<Equipement, (p: { size?: number }) => JSX.Element> = {
+  parking: GlyphParking,
+  piscine: GlyphPiscine,
+  jardin: GlyphJardin,
+  balcon: GlyphBalconEquip,
+};
 
 // JSON-LD RealEstateListing (schema.org) : le cœur du pilier « Lisible
 // par les IA ». Données structurées sur chaque fiche, URL stable.
@@ -17,12 +40,15 @@ function JsonLd({ annonce }: { annonce: Annonce }) {
     name: annonce.titre,
     url: `${window.location.origin}${baseUrl()}/annonce/${annonce.id}`,
     datePosted: annonce.datePublication,
-    offers: {
+    // Un Offer PAR PALIER renseigné (schema.org accepte un tableau) — jamais
+    // un seul prix choisi arbitrairement quand plusieurs existent.
+    offers: tarifsListe(annonce.tarifs).map((tar) => ({
       "@type": "Offer",
-      price: annonce.prix,
+      price: tar.montant,
       priceCurrency: "EUR",
       availability: "https://schema.org/InStock",
-    },
+      description: `par ${tar.unite}`,
+    })),
     ...(annonce.surface
       ? {
           floorSize: {
@@ -34,6 +60,18 @@ function JsonLd({ annonce }: { annonce: Annonce }) {
       : {}),
     ...(annonce.pieces != null
       ? { numberOfRooms: annonce.pieces }
+      : {}),
+    ...(annonce.couchages != null ? { occupancy: { "@type": "QuantitativeValue", value: annonce.couchages } } : {}),
+    // Un LocationFeatureSpecification PAR équipement PRÉSENT — jamais une
+    // entrée "false" pour un équipement non déclaré (schema.org officiel).
+    ...(annonce.equipements && annonce.equipements.length > 0
+      ? {
+          amenityFeature: annonce.equipements.map((e) => ({
+            "@type": "LocationFeatureSpecification",
+            name: LIBELLE_EQUIPEMENT[e],
+            value: true,
+          })),
+        }
       : {}),
     ...(annonce.dpe ? { description: `DPE ${annonce.dpe}` } : {}),
     address: {
@@ -135,11 +173,11 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
       [
         "property",
         "og:description",
-        `${annonce.lieu} — ${annonce.prix.toLocaleString("fr-FR")} €${
-          annonce.transaction === "location" ? "/mois" : ""
-        }${
+        `${annonce.lieu} — ${tarifsListe(annonce.tarifs)
+          .map((tar) => libelleTarif(tar.montant, tar.unite))
+          .join(" · ")}${
           annonce.surface ? `, ${annonce.surface} m²` : ""
-        }. Annonce directe de particulier, gratuite, sur le portail territorial MANAhome.`,
+        }. Annonce directe de particulier, gratuite, sur le portail MANAhome.`,
       ],
       ["property", "og:url", url],
       ["name", "twitter:card", "summary"],
@@ -210,16 +248,21 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           <p className="fiche-lieu">{annonce.lieu}</p>
           <h1 className="fiche-titre">{annonce.titre}</h1>
 
-          {/* Les 4 chiffres : lecture en 2 secondes */}
+          {/* Un bloc tarif par palier renseigné — jamais un seul choisi
+              arbitrairement quand le propriétaire en propose plusieurs. */}
           <dl className="fiche-chiffres">
-            <div>
-              <dt>Prix</dt>
-              <dd className="canon">{annonce.prix.toLocaleString("fr-FR")} €{annonce.transaction === "location" &&
-                <span className="prix-mois">/mois</span>}</dd>
-            </div>
+            {tarifsListe(annonce.tarifs).map((tar) => {
+              const Icone = ICONE_UNITE[tar.unite];
+              return (
+                <div key={tar.unite}>
+                  <dt className="label-icone"><Icone size={16} />Tarif / {tar.unite}</dt>
+                  <dd className="canon">{tar.montant.toLocaleString("fr-FR")} €</dd>
+                </div>
+              );
+            })}
             {annonce.surface && (
               <div>
-                <dt>Surface</dt>
+                <dt className="label-icone"><GlyphSurface size={16} />Surface</dt>
                 <dd>
                   {annonce.surface.toLocaleString("fr-FR")} m²
                 </dd>
@@ -227,19 +270,38 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
             )}
             {annonce.pieces != null && (
               <div>
-                <dt>Pièces</dt>
+                <dt className="label-icone"><GlyphPieces size={16} />Pièces</dt>
                 <dd>{annonce.pieces}</dd>
+              </div>
+            )}
+            {annonce.couchages != null && (
+              <div>
+                <dt className="label-icone"><GlyphCouchage size={16} />Couchages</dt>
+                <dd>{annonce.couchages}</dd>
               </div>
             )}
             {annonce.dpe && (
               <div>
-                <dt>DPE</dt>
+                <dt className="label-icone"><GlyphDpe size={16} />DPE</dt>
                 <dd>
                   <span className={`dpe dpe-${annonce.dpe}`}>{annonce.dpe}</span>
                 </dd>
               </div>
             )}
           </dl>
+
+          {annonce.equipements && annonce.equipements.length > 0 && (
+            <div className="meta fiche-equipements">
+              {annonce.equipements.map((e) => {
+                const Icone = ICONE_EQUIPEMENT[e];
+                return (
+                  <span key={e} className="label-icone">
+                    <Icone size={17} />{LIBELLE_EQUIPEMENT[e]}
+                  </span>
+                );
+              })}
+            </div>
+          )}
 
           <p className="fiche-description">{annonce.description}</p>
 
@@ -256,7 +318,7 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           </div>
           {annonce.transaction === "location" && (
             <section className="publier-panel fiche-reserver" aria-label="Demander une réservation">
-              <p className="apercu-label">{t(langueCourante(), "Demander une réservation")}</p>
+              <p className="apercu-label label-icone"><GlyphVoyageurs size={18} />{t(langueCourante(), "Demander une réservation")}</p>
               {featureBack && sejourApi ? (
                 <p className="champ-aide" role="status">
                   {t(langueCourante(), STATUT_VOYAGEUR[sejourApi.statut] ?? sejourApi.statut)}{" "}
@@ -281,7 +343,7 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
                         onChange={(e) => setDepart(e.target.value)} />
                     </div>
                     <div className="champ">
-                      <label htmlFor="sejour-voyageurs">{t(langueCourante(), "Voyageurs")}</label>
+                      <label htmlFor="sejour-voyageurs" className="label-icone"><GlyphVoyageurs size={15} />{t(langueCourante(), "Voyageurs")}</label>
                       <input id="sejour-voyageurs" type="number" min={1} value={voyageurs}
                         onChange={(e) => setVoyageurs(Number(e.target.value))} />
                     </div>
@@ -329,9 +391,9 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           <section
             id="contacter"
             className="publier-panel fiche-contacter"
-            aria-label="Contacter le vendeur"
+            aria-label="Contacter le propriétaire"
           >
-            <p className="apercu-label">Contacter le vendeur</p>
+            <p className="apercu-label label-icone"><GlyphMessagerie size={18} />Contacter le propriétaire</p>
             <div className="champ">
               <label htmlFor="premier-message">Votre premier message</label>
               <textarea
@@ -353,7 +415,7 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
                 onClick={() => {
                   if (premierMessage.trim()) {
                     if (featureBack) {
-                      // le serveur dérive le vendeur de l'annonce dans le
+                      // le serveur dérive le propriétaire de l'annonce dans le
                       // SQL — le client ne choisit jamais son interlocuteur
                       ouvrirConversationApi(annonce.id);
                     } else {
@@ -372,7 +434,7 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
               className="btn btn-ghost"
               onClick={copierLien}
             >
-              {lienCopie ? "Lien copié ✓" : "Copier le lien de l'annonce"}
+              <span className="label-icone"><GlyphLien size={15} />{lienCopie ? "Lien copié ✓" : "Copier le lien de l'annonce"}</span>
             </button>
             {locale && (
               <a className="btn btn-ghost" href={`${baseUrl()}/mes-annonces`}>
@@ -382,7 +444,7 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           </div>
           <p className="fiche-note">
             La mise en relation se fait par messagerie interne : les
-            coordonnées du vendeur ne sont jamais publiées.
+            coordonnées du propriétaire ne sont jamais publiées.
           </p>
         </div>
       </main>
