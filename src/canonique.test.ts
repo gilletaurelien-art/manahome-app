@@ -41,7 +41,7 @@ describe("la carte des routes est la source unique", () => {
   it("une redirection se canonicalise vers sa DESTINATION, jamais elle-même", () => {
     for (const [ancienne, cible] of Object.entries(REDIRIGEES)) {
       expect(canonique(`/${ancienne}`, "https://manahome.org", "/")).toBe(
-        `https://manahome.org/${cible}`,
+        `https://manahome.org/fr/${cible}`,
       );
     }
   });
@@ -106,8 +106,44 @@ describe("la carte des routes est la source unique", () => {
 
   it("une fiche dynamique se canonicalise sur elle-même", () => {
     expect(canonique("/territoire/crozon", "https://manahome.org", "/")).toBe(
-      "https://manahome.org/territoire/crozon",
+      "https://manahome.org/fr/territoire/crozon",
     );
+  });
+
+  // ── BILINGUE ────────────────────────────────────────────────
+  it("chaque route existe canoniquement dans les deux langues", () => {
+    // les redirections se canonicalisent vers leur destination (test dédié)
+    const routes = ROUTES_PLATES.filter((s) => !(s in REDIRIGEES));
+    for (const s of routes) {
+      expect(canonique(`/${s}`, "https://manahome.org", "/", "en")).toBe(
+        `https://manahome.org/en/${s}`,
+      );
+      expect(canonique(`/${s}`, "https://manahome.org", "/", "fr")).toBe(
+        `https://manahome.org/fr/${s}`,
+      );
+    }
+  });
+
+  // Les URLs nues indexées avant le bilingue ne deviennent pas orphelines :
+  // elles se canonicalisent vers leur version /fr.
+  it("un chemin nu se canonicalise vers sa version /fr, pas vers lui-même", () => {
+    expect(canonique("/approche", "https://manahome.org", "/")).toBe(
+      "https://manahome.org/fr/approche",
+    );
+  });
+
+  it("une route a son titre dans chaque langue, suffixé par la marque", () => {
+    expect(titreDeLaRoute("/approche", "fr")).toBe("Notre approche — MANAhome");
+    expect(titreDeLaRoute("/approche", "en")).toBe("Our approach — MANAhome");
+    expect(titreDeLaRoute("/", "en")).toBe("MANAhome — Free. Supported. AI-readable.");
+  });
+
+  it("le plan du site porte les hreflang des deux langues sur chaque entrée", () => {
+    const xml = construireSitemap("https://manahome.org", "/");
+    const fr = xml.match(/hreflang="fr" href="https:\/\/manahome.org\/fr\/approche"/);
+    const en = xml.match(/hreflang="en" href="https:\/\/manahome.org\/en\/approche"/);
+    const xdef = xml.match(/hreflang="x-default" href="https:\/\/manahome.org\/fr\/approche"/);
+    expect(fr && en && xdef).toBeTruthy();
   });
 
   // Les écrans d'application n'ont rien à offrir à un moteur : ni au plan de
@@ -116,8 +152,11 @@ describe("la carte des routes est la source unique", () => {
     const xml = construireSitemap("https://manahome.org", "/");
     const locs = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]);
     expect(locs).toEqual([
-      "https://manahome.org/",
-      ...PAGES_PUBLIQUES.map((s) => `https://manahome.org/${s}`),
+      "https://manahome.org/fr/",
+      ...PAGES_PUBLIQUES.flatMap((s) => [
+        `https://manahome.org/fr/${s}`,
+        `https://manahome.org/en/${s}`,
+      ]),
     ]);
   });
 

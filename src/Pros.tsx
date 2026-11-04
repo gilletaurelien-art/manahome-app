@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "./router";
+import { baseUrl , lien} from "./router";
 import { PROS } from "./prosDonnees";
 import {
   CATEGORIES_SERVICE,
@@ -179,13 +179,13 @@ export function Pros() {
         </section>
 
         <div className="est-actions">
-          <a className="btn btn-primary" href={`${B}/espace-pro`}>
+          <a className="btn btn-primary" href={lien(`/espace-pro`)}>
             Rejoindre le référentiel
           </a>
-          <a className="btn btn-ghost" href={`${B}/annonces/crozon`}>
+          <a className="btn btn-ghost" href={lien(`/annonces/crozon`)}>
             Voir les annonces du pilote
           </a>
-          <a className="btn btn-ghost" href={`${B}/approche`}>
+          <a className="btn btn-ghost" href={lien(`/approche`)}>
             Notre approche
           </a>
         </div>
