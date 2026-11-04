@@ -4,6 +4,7 @@ import { baseUrl, langueCourante } from "./router";
 import { t } from "./i18n";
 import { ouvrirConversation } from "./messagerieDonnees";
 import { demanderSejour, sejourSurAnnonce, type Sejour } from "./sejoursDonnees";
+import { demanderSejourApi } from "./apiSejours";
 import { annonceLocaleParId } from "./annoncesLocales";
 
 // JSON-LD RealEstateListing (schema.org) : le cœur du pilier « Lisible
@@ -113,6 +114,11 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
   // est dans sejoursDonnees — miroir front de la table sejours (007). Ce
   // formulaire n'encaisse RIEN : le paiement vit chez le PSP de l'hôte.
   const [sejour, setSejour] = useState<Sejour | undefined>(() => sejourSurAnnonce(annonce.id));
+  // ⭐ FEATURE_BACK (module séjours) : sous le flag, la demande part au
+  // service — la base tranche (disponibilité, unicité), le front traduit.
+  // L'état affiché est le même : le voyageur voit où en est son séjour.
+  const [sejourApi, setSejourApi] = useState<{ statut: string; arrivee: string; depart: string } | null>(null);
+  const featureBack = typeof __FEATURE_BACK__ !== "undefined" && __FEATURE_BACK__;
   const [arrivee, setArrivee] = useState("");
   const [depart, setDepart] = useState("");
   const [voyageurs, setVoyageurs] = useState(2);
@@ -250,7 +256,12 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           {annonce.transaction === "location" && (
             <section className="publier-panel fiche-reserver" aria-label="Demander une réservation">
               <p className="apercu-label">{t(langueCourante(), "Demander une réservation")}</p>
-              {sejour ? (
+              {featureBack && sejourApi ? (
+                <p className="champ-aide" role="status">
+                  {t(langueCourante(), STATUT_VOYAGEUR[sejourApi.statut] ?? sejourApi.statut)}{" "}
+                  ({sejourApi.arrivee} → {sejourApi.depart})
+                </p>
+              ) : !featureBack && sejour ? (
                 <p className="champ-aide" role="status">
                   {t(langueCourante(), STATUT_VOYAGEUR[sejour.statut])}{" "}
                   ({sejour.arrivee} → {sejour.depart})
@@ -277,7 +288,20 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
                   {erreurSejour && <p className="est-erreur" role="alert">{erreurSejour}</p>}
                   <div className="est-actions">
                     <button type="button" className="btn btn-primary"
-                      onClick={() => {
+                      onClick={async () => {
+                        if (featureBack) {
+                          const r = await demanderSejourApi({
+                            annonceId: annonce.id,
+                            arrivee, depart, voyageursNb: voyageurs,
+                          });
+                          if (r.ok && r.sejour) {
+                            setSejourApi({ statut: r.sejour.statut, arrivee: r.sejour.arrivee, depart: r.sejour.depart });
+                            setErreurSejour(null);
+                          } else {
+                            setErreurSejour(t(langueCourante(), r.erreur ?? ""));
+                          }
+                          return;
+                        }
                         const r = demanderSejour({
                           annonceId: annonce.id,
                           annonceTitre: annonce.titre,

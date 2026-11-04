@@ -146,6 +146,13 @@ const DICO_EN: Record<string, string> = {
   "annulé": "cancelled",
   "terminé": "completed",
 
+  // ── Bascule FEATURE_BACK (module séjours) ──
+  "Ces dates viennent d'être réservées ailleurs.":
+    "These dates have just been booked elsewhere.",
+  "Ce séjour n'est plus dans l'état attendu pour ce geste.":
+    "This stay is no longer in the state expected for this action.",
+  "Une erreur est survenue.": "Something went wrong.",
+
   // ── Bascule FEATURE_BACK (session + calendrier) ──
   "Mon compte": "My account",
   "Se déconnecter": "Sign out",

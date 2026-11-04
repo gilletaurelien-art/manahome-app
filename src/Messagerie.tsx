@@ -17,6 +17,7 @@ import {
   cloreSejour,
   type Sejour,
 } from "./sejoursDonnees";
+import { lireSejoursApi, gesteSejourApi, type SejourApi } from "./apiSejours";
 
 // Page /messagerie — boîte de réception de l'acheteur (démo : stockage
 // local, aucun compte). Règle gravée : coordonnées jamais publiées, la
@@ -32,16 +33,27 @@ const STATUT_SEJOUR: Record<string, string> = {
   cloturee: "terminé",
 };
 
+// ⭐ FEATURE_BACK (module séjours, côté gestion) : sous le flag, la liste
+// et les gestes partent au service — le cycle affiché est le même, la base
+// tranche (trigger 007), le front traduit. Repli démo intégral.
+const featureBack = typeof __FEATURE_BACK__ !== "undefined" && __FEATURE_BACK__;
+
 export function Messagerie() {
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [active, setActive] = useState<string | null>(null);
   const [brouillon, setBrouillon] = useState("");
   const [sejours, setSejours] = useState<Sejour[]>([]);
+  const [sejoursApi, setSejoursApi] = useState<SejourApi[] | null>(null);
 
   useEffect(() => {
     setConversations(lireConversations());
     setSejours(lireSejours());
+    if (featureBack) {
+      lireSejoursApi().then((r) => {
+        if (r.ok && r.sejours) setSejoursApi(r.sejours);
+      });
+    }
     const params = new URLSearchParams(window.location.search);
     const annonce = params.get("annonce");
     if (annonce) setActive(annonce);
@@ -52,6 +64,11 @@ export function Messagerie() {
   // confirmation bloque les dates (miroir du trigger 007) et l'écran des
   // annonces doit le refléter au prochain montage — pas mentir par cache.
   const rafraichirSejours = () => setSejours(lireSejours());
+  const rafraichirApi = () => {
+    lireSejoursApi().then((r) => {
+      if (r.ok && r.sejours) setSejoursApi(r.sejours);
+    });
+  };
   const courante = conversations.find((c) => c.annonceId === active);
 
   const envoyerMessage = () => {
@@ -80,6 +97,48 @@ export function Messagerie() {
             <p className="champ-aide">
               {t(langueCourante(), "Démo locale : ce navigateur joue les deux rôles — vous voyez la demande du voyageur ET les commandes de l'hôte. En production, chaque côté ne voit que le sien, et aucun paiement ne transite ici.")}
             </p>
+            {sejoursApi !== null ? (
+            <ul className="sejours-liste">
+              {sejoursApi.map((s) => (
+                <li key={s.id} className="sejour-item">
+                  <div>
+                    <p className="annonce-vendeur-titre">{s.titre ?? s.annonce_id}</p>
+                    <p className="annonce-vendeur-meta">
+                      {s.arrivee} → {s.depart} · {s.voyageurs_nb}{" "}
+                      {t(langueCourante(), "voyageur(s)")} ·{" "}
+                      {t(langueCourante(), STATUT_SEJOUR[s.statut] ?? s.statut)}
+                    </p>
+                  </div>
+                  <div className="annonce-vendeur-actions">
+                    {s.statut === "demande_envoyee" && (
+                      <button type="button" className="btn btn-ghost"
+                        onClick={() => gesteSejourApi(s.id, "accepter").then(rafraichirApi)}>
+                        {t(langueCourante(), "Accepter")}
+                      </button>
+                    )}
+                    {(s.statut === "acceptee" || s.statut === "paiement_attendu") && (
+                      <button type="button" className="btn btn-primary"
+                        onClick={() => gesteSejourApi(s.id, "confirmer").then(rafraichirApi)}>
+                        {t(langueCourante(), "Confirmer le séjour")}
+                      </button>
+                    )}
+                    {s.statut === "confirmee" && (
+                      <button type="button" className="btn btn-ghost"
+                        onClick={() => gesteSejourApi(s.id, "cloturer").then(rafraichirApi)}>
+                        {t(langueCourante(), "Clôturer")}
+                      </button>
+                    )}
+                    {s.statut !== "annulee" && s.statut !== "cloturee" && (
+                      <button type="button" className="btn btn-ghost"
+                        onClick={() => gesteSejourApi(s.id, "annuler").then(rafraichirApi)}>
+                        {t(langueCourante(), "Annuler")}
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+            ) : (
             <ul className="sejours-liste">
               {sejours.map((s) => (
                 <li key={s.id} className="sejour-item">
@@ -120,6 +179,7 @@ export function Messagerie() {
                 </li>
               ))}
             </ul>
+            )}
           </section>
         )}
 
