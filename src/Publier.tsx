@@ -4,7 +4,7 @@ import { enregistrerAnnonceLocale } from "./annoncesLocales";
 import { creerAnnonceApi, poserJustificatifApi, publierAnnonceApi } from "./apiDepot";
 import { compresserPhoto, LIMITE_PHOTOS } from "./photos";
 
-// Pré-remplissage depuis /estimation (et liens profonds) : /publier?type=…&lieu=…
+// Pré-remplissage depuis un lien profond : /publier?type=…&lieu=…
 function paramsPublier(): Partial<FormBien> {
   const p = new URLSearchParams(window.location.search);
   const get = (k: string) => p.get(k) ?? "";
@@ -18,8 +18,10 @@ function paramsPublier(): Partial<FormBien> {
   };
 }
 
-// Parcours vendeur : dépôt GRATUIT, aucune friction inutile (doctrine :
+// Parcours propriétaire : dépôt GRATUIT, aucune friction inutile (doctrine :
 // « aucun champ obligatoire inutile »). 3 étapes max, ton chaleureux.
+// MANAhome ne porte plus que la location de vacances (séjours courts) :
+// un seul parcours, pas de choix vente/location.
 // Le backend branchera : auth particuliers, sauvegarde brouillon,
 // rédaction assistée Mistral, pipeline photo S3.
 
@@ -27,7 +29,6 @@ type Etape = 1 | 2 | 3;
 
 interface FormBien {
   type: string;
-  transaction: string;
   surface: string;
   pieces: string;
   prix: string;
@@ -48,7 +49,6 @@ export function Publier() {
   const [etape, setEtape] = useState<Etape>(1);
   const [bien, setBien] = useState<FormBien>({
     ...paramsPublier(),
-    transaction: "vente",
     dpe: "",
   } as FormBien);
   const [description, setDescription] = useState("");
@@ -98,7 +98,7 @@ export function Publier() {
         bien.type && bien.lieu
           ? `${TYPES.find((t) => t.v === bien.type)?.l ?? bien.type} à ${bien.lieu}`
           : "Votre annonce",
-      prix: bien.prix ? `${Number(bien.prix).toLocaleString("fr-FR")} €` : "Prix à définir",
+      prix: bien.prix ? `${Number(bien.prix).toLocaleString("fr-FR")} € / nuit` : "Tarif à définir",
       surface: bien.surface ? `${bien.surface} m²` : null,
       pieces: bien.pieces ? `${bien.pieces} pièces` : null,
       dpe: bien.dpe && bien.dpe !== "NC" ? bien.dpe : null,
@@ -126,9 +126,9 @@ export function Publier() {
     try {
       const corps: Record<string, unknown> = {
         type_bien: bien.type === "terrain" ? "terrain" : bien.type === "appartement" ? "appartement" : "maison",
-        offre: bien.transaction === "location" ? "location_courte_duree" : "vente",
-        prix_eur: bien.transaction === "location" ? null : Number(bien.prix),
-        tarif_nuit: bien.transaction === "location" ? Number(bien.prix) : null,
+        offre: "location_courte_duree",
+        prix_eur: null,
+        tarif_nuit: Number(bien.prix),
         surface_m2: bien.surface ? Number(bien.surface) : null,
         pieces: bien.pieces ? Number(bien.pieces) : null,
         dpe: bien.dpe || null,
@@ -190,7 +190,7 @@ export function Publier() {
       return;
     }
     const a = enregistrerAnnonceLocale({
-      transaction: bien.transaction === "location" ? "location" : "vente",
+      transaction: "location",
       titre: apercu.titre,
       lieu: bien.lieu,
       prix: Number(bien.prix),
@@ -222,25 +222,6 @@ export function Publier() {
 
         {etape === 1 && (
           <section className="publier-panel">
-            <div className="champ">
-              <label>Je souhaite…</label>
-              <div className="dpe-choix">
-                <button
-                  type="button"
-                  className={`dpe-btn ${bien.transaction !== "location" ? "on" : ""}`}
-                  onClick={() => setBien({ ...bien, transaction: "vente" })}
-                >
-                  Vendre mon bien
-                </button>
-                <button
-                  type="button"
-                  className={`dpe-btn ${bien.transaction === "location" ? "on" : ""}`}
-                  onClick={() => setBien({ ...bien, transaction: "location" })}
-                >
-                  Mettre en location
-                </button>
-              </div>
-            </div>
             <div className="champ champ-recherche">
               <label htmlFor="type">Type de bien *</label>
               <input
@@ -292,21 +273,18 @@ export function Publier() {
             </div>
             <div className="champ-grid">
               <div className="champ">
-                <label htmlFor="prix">{bien.transaction === "location" ? "Loyer mensuel *" : "Prix de vente *"}</label>
+                <label htmlFor="prix">Tarif par nuit (€) *</label>
                 <input
                   id="prix"
                   type="number"
                   min={0}
-                  placeholder="245 000"
+                  placeholder="85"
                   value={bien.prix}
                   onChange={(e) => setBien({ ...bien, prix: e.target.value })}
                 />
                 <p className="champ-aide">
-                  Pas d'idée ?{" "}
-                  <a className="champ-lien" href={`${baseUrl()}/estimation`}>
-                    Estimation indicative
-                  </a>{" "}
-                  — gratuite, sans compte.
+                  Vous pourrez ajuster vos tarifs par période depuis votre
+                  calendrier, après publication.
                 </p>
               </div>
               <div className="champ">
@@ -436,7 +414,7 @@ export function Publier() {
               <h2 className="fiche-titre">{apercu.titre}</h2>
               <dl className="fiche-chiffres">
                 <div>
-                  <dt>Prix</dt>
+                  <dt>Tarif</dt>
                   <dd className="canon">{apercu.prix}</dd>
                 </div>
                 {apercu.surface && (
@@ -474,14 +452,14 @@ export function Publier() {
               />
               <p className="champ-aide">
                 Jamais publié, jamais revendu. La mise en relation avec les
-                acheteurs se fera par messagerie interne.
+                voyageurs se fera par messagerie interne.
               </p>
             </div>
 
             {featureBack && refusPublication && (
               <div className="champ" role="alert">
                 <p className="est-erreur">{refusPublication}</p>
-                {brouillonId && bien.transaction === "location" && (
+                {brouillonId && (
                   <>
                     <label htmlFor="num-declaration">Numéro de déclaration de meublé touristique</label>
                     <input
@@ -542,7 +520,7 @@ export function Publier() {
         <p className="publier-note">
           Aucune carte bancaire, aucune commission : la publication est
           gratuite pour les particuliers. MANA ne réalise aucun acte
-          réglementé — vous restez maître de votre vente.
+          réglementé — vous restez maître de votre location.
         </p>
       </div>
     </main>

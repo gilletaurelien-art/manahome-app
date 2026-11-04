@@ -3,13 +3,10 @@ User-agent: *
 Allow: /
 # Les écrans d'application n'ont rien à offrir à un moteur.
 Disallow: /messagerie
-Disallow: /espace-pro
 Disallow: /mes-annonces
 Disallow: /fr/messagerie
-Disallow: /fr/espace-pro
 Disallow: /fr/mes-annonces
 Disallow: /en/messagerie
-Disallow: /en/espace-pro
 Disallow: /en/mes-annonces
 
 # Blocage des crawlers non autorisés ; jamais Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot.

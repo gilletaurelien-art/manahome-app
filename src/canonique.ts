@@ -40,15 +40,12 @@ export interface Page {
  */
 export const PAGES_PUBLIQUES_T: readonly Page[] = [
   { slug: "approche", titre: "Notre approche", titreEn: "Our approach" },
-  { slug: "pros", titre: "Professionnels & services de l'habitat", titreEn: "Housing professionals & services" },
   { slug: "publier", titre: "Publier mon annonce", titreEn: "Publish my listing" },
-  { slug: "estimation", titre: "Estimer mon bien", titreEn: "Value my property" },
   { slug: "mentions-legales", titre: "Mentions légales", titreEn: "Legal notice" },
 ];
 
 export const PAGES_PRIVEES_T: readonly Page[] = [
   { slug: "messagerie", titre: "Ma messagerie", titreEn: "My inbox" },
-  { slug: "espace-pro", titre: "Espace professionnels", titreEn: "Professional area" },
   { slug: "mes-annonces", titre: "Mes annonces", titreEn: "My listings" },
 ];
 
@@ -66,8 +63,20 @@ export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p
  */
 export const PAGES_PRIVEES: readonly string[] = PAGES_PRIVEES_T.map((p) => p.slug);
 
-/** Anciennes routes : elles redirigent, et se canonicalisent vers leur DESTINATION. */
-export const REDIRIGEES: Record<string, string> = { services: "pros" };
+/**
+ * Anciennes routes : elles redirigent, et se canonicalisent vers leur DESTINATION.
+ * ⚠️ `pros`, `estimation` et `espace-pro` ont quitté le produit le 04/11/2026
+ * (repositionnement vers la location de vacances entre propriétaires et
+ * vacanciers — MANAhome n'a plus d'offre de vente, de pros de l'habitat ni
+ * d'estimation) : elles redirigent vers `approche`, la page la plus proche
+ * en sens, plutôt que de disparaître en 404 sur une URL déjà indexée.
+ */
+export const REDIRIGEES: Record<string, string> = {
+  services: "approche",
+  pros: "approche",
+  estimation: "approche",
+  "espace-pro": "approche",
+};
 
 /**
  * Les familles de pages dynamiques (fiches annonce, listes, territoires). Elles

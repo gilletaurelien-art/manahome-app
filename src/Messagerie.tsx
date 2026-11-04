@@ -26,7 +26,7 @@ import {
   type MessageApi,
 } from "./apiMessagerie";
 
-// Page /messagerie — boîte de réception de l'acheteur (démo : stockage
+// Page /messagerie — boîte de réception du voyageur (démo : stockage
 // local, aucun compte). Règle gravée : coordonnées jamais publiées, la
 // mise en relation passe uniquement par ici.
 
@@ -128,7 +128,7 @@ export function Messagerie() {
         <p className="hero-label">Mise en relation protégée</p>
         <h1 className="fiche-titre">Ma messagerie</h1>
         <p className="territoire-intro">
-          Les échanges entre acheteurs et vendeurs passent par la messagerie
+          Les échanges entre voyageurs et propriétaires passent par la messagerie
           interne : aucune coordonnée n'est exposée, rien n'est revendu.
         </p>
 
@@ -227,7 +227,7 @@ export function Messagerie() {
         {(conversationsApi !== null ? conversationsApi.length === 0 : conversations.length === 0) ? (
           <section className="publier-panel">
             <p className="est-erreur">
-              Aucune conversation pour l'instant. Contactez un vendeur depuis
+              Aucune conversation pour l'instant. Contactez un propriétaire depuis
               une fiche d'annonce pour ouvrir la messagerie.
             </p>
             <div className="est-actions">

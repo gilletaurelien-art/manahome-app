@@ -39,11 +39,12 @@ export function MentionsLegales() {
         <section className="publier-panel">
           <p className="apercu-label">Nature du service</p>
           <p className="territoire-intro">
-            MANAhome est une plateforme d'affichage et d'accompagnement. Elle
-            ne réalise aucun acte réglementé par la loi Hoguet (n° 70-9) :
-            pas de mandat, pas de négociation, pas de transaction. Les
-            estimations fournies sont indicatives et sans valeur
-            contractuelle.
+            MANAhome est une plateforme de mise en relation pour la location
+            de vacances, entre propriétaires et vacanciers. Elle ne réalise
+            aucun acte réglementé par la loi Hoguet (n° 70-9) : pas de
+            mandat, pas de négociation, pas d'encaissement pour compte de
+            tiers. Les paiements se font directement entre le propriétaire
+            et le vacancier, par leur propre moyen.
           </p>
         </section>
 
