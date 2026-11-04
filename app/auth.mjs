@@ -13,7 +13,7 @@
 // - la correspondance haché <-> utilisateur vit dans auth_local (008),
 //   révoquée à anon, jamais dans une vue publique.
 
-import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
+import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 
 export function hacherMotDePasse(motDePasse) {
   const sel = randomBytes(16);
@@ -46,16 +46,22 @@ export function validerIdentifiants(email, motDePasse) {
  * orphelins.
  */
 export async function inscrire(db, email, motDePasse) {
+  // ⭐ SOUS RLS (010), le compte se crée SOI-MÊME : l'uuid est généré ICI,
+  // posé comme app.utilisateur, et les policies p_self_insert exigeant
+  // id = auth.uid() passent. Un service compromis ne peut pas fabriquer
+  // un autre compte que celui qu'il crée — la base l'interdit.
+  const uid = randomUUID();
   const client = await db.connect();
   try {
     await client.query("BEGIN");
+    await client.query("SELECT set_config('app.utilisateur', $1, true)", [uid]);
     const u = await client.query(
-      "INSERT INTO utilisateurs (email) VALUES ($1) RETURNING id, email",
-      [email.trim().toLowerCase()]
+      "INSERT INTO utilisateurs (id, email) VALUES ($1, $2) RETURNING id, email",
+      [uid, email.trim().toLowerCase()]
     );
     await client.query(
       "INSERT INTO auth_local (utilisateur_id, mot_de_passe_hash) VALUES ($1, $2)",
-      [u.rows[0].id, hacherMotDePasse(motDePasse)]
+      [uid, hacherMotDePasse(motDePasse)]
     );
     await client.query("COMMIT");
     return { ok: true, utilisateur: u.rows[0] };
@@ -74,10 +80,11 @@ export async function inscrire(db, email, motDePasse) {
 export async function connecter(db, email, motDePasse) {
   const client = await db.connect();
   try {
+    // ⭐ SOUS RLS, le service ne sait pas encore QUI appelle : la lecture
+    // passe par auth.identifiants() (010) — SECURITY DEFINER, search_path
+    // figé, exécutable par le seul service. Le scrypt reste côté Node.
     const r = await client.query(
-      `SELECT u.id, u.email, a.mot_de_passe_hash
-       FROM utilisateurs u JOIN auth_local a ON a.utilisateur_id = u.id
-       WHERE lower(u.email) = $1 AND u.deleted_at IS NULL`,
+      "SELECT id, email, mot_de_passe_hash FROM auth.identifiants($1)",
       [email.trim().toLowerCase()]
     );
     const ligne = r.rows[0];
