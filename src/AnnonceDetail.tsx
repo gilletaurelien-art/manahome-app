@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import type { Annonce } from "./annonces";
 import {
-  tarifsListe, libelleTarif, LIBELLE_EQUIPEMENT,
+  tarifsListe, LIBELLE_EQUIPEMENT, LIBELLE_UNITE,
   type UniteTarif, type Equipement,
 } from "./annonces";
 import {
   GlyphNuit, GlyphSemaine, GlyphMois,
   GlyphSurface, GlyphPieces, GlyphDpe, GlyphCouchage,
-  GlyphMessagerie, GlyphVoyageurs, GlyphLien,
+  GlyphMessagerie, GlyphVoyageurs, GlyphLien, GlyphArrivee, GlyphDepart,
   GlyphParking, GlyphPiscine, GlyphJardin, GlyphBalconEquip,
 } from "./Glyphs";
 import { baseUrl, langueCourante } from "./router";
@@ -174,10 +174,10 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
         "property",
         "og:description",
         `${annonce.lieu} — ${tarifsListe(annonce.tarifs)
-          .map((tar) => libelleTarif(tar.montant, tar.unite))
+          .map((tar) => `${tar.montant.toLocaleString("fr-FR")} €/${t(langueCourante(), LIBELLE_UNITE[tar.unite])}`)
           .join(" · ")}${
           annonce.surface ? `, ${annonce.surface} m²` : ""
-        }. Annonce directe de particulier, gratuite, sur le portail MANAhome.`,
+        }. ${t(langueCourante(), "Annonce directe de particulier, gratuite, sur le portail MANAhome.")}`,
       ],
       ["property", "og:url", url],
       ["name", "twitter:card", "summary"],
@@ -212,7 +212,7 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
       <JsonLd annonce={annonce} />
       <main className="fiche">
         <a className="retour" href={`${baseUrl()}/`}>
-          ← Toutes les annonces
+          ← {t(langueCourante(), "Toutes les annonces")}
         </a>
 
         <div className="fiche-galerie">
@@ -310,10 +310,10 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
           <div className="fiche-pied">
             {annonce.source === "import_pro" ? (
               <span className="badge-source pro">
-                Annonce professionnelle — importée
+                {t(langueCourante(), "Annonce professionnelle — importée")}
               </span>
             ) : (
-              <span className="badge-source">Annonce directe de particulier</span>
+              <span className="badge-source">{t(langueCourante(), "Annonce directe de particulier")}</span>
             )}
           </div>
           {annonce.transaction === "location" && (
@@ -333,12 +333,12 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
                 <>
                   <div className="champ-grid">
                     <div className="champ">
-                      <label htmlFor="sejour-arrivee">{t(langueCourante(), "Arrivée")}</label>
+                      <label htmlFor="sejour-arrivee" className="label-icone"><GlyphArrivee size={15} />{t(langueCourante(), "Arrivée")}</label>
                       <input id="sejour-arrivee" type="date" value={arrivee}
                         onChange={(e) => setArrivee(e.target.value)} />
                     </div>
                     <div className="champ">
-                      <label htmlFor="sejour-depart">{t(langueCourante(), "Départ")}</label>
+                      <label htmlFor="sejour-depart" className="label-icone"><GlyphDepart size={15} />{t(langueCourante(), "Départ")}</label>
                       <input id="sejour-depart" type="date" value={depart}
                         onChange={(e) => setDepart(e.target.value)} />
                     </div>
@@ -399,7 +399,7 @@ export function AnnonceDetail({ annonce }: { annonce: Annonce }) {
               <textarea
                 id="premier-message"
                 rows={3}
-                placeholder="Bonjour, votre bien m'intéresse, serait-il possible de visiter ?"
+                placeholder={t(langueCourante(), "Bonjour, votre bien m'intéresse, serait-il possible de visiter ?")}
                 value={premierMessage}
                 onChange={(e) => setPremierMessage(e.target.value)}
               />

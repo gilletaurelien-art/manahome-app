@@ -40,12 +40,15 @@ export function NavTerritoire({ size = 20 }: GlyphProps) {
   );
 }
 
+// Publier : un « + », jamais une maison — le header porte déjà celle de
+// la marque, juste à côté (05/11/2026). Même silhouette = même icône pour
+// deux actions différentes, une vraie collision trouvée à l'écran.
 export function NavPublier({ size = 20 }: GlyphProps) {
   return (
     <svg {...base} width={size} height={size} aria-hidden="true">
-      <path d="M4 11.2 12 4.5l8 6.7" />
-      <path d="M5.5 10.2V19a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-8.8" />
-      <path d="M12 10.6v4.6M9.8 12.8h4.4" />
+      <circle cx="12" cy="12" r="8.4" />
+      <path d="M12 7.8v8.4M7.8 12h8.4" />
+      <Accent cx={12} cy={12} r={0} />
     </svg>
   );
 }

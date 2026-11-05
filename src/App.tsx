@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { poserCanonique } from "./canonique";
 import { annonceLocaleParId, enAnnonce } from "./annoncesLocales";
 import {
+  GlyphMaison,
   GlyphCompas,
   GlyphStructure,
   GlyphAccompagnement,
@@ -122,8 +123,8 @@ export default function App() {
     <>
       <header className="site-header">
         <div className="wrap">
-          <a className="brand" href={lien(`/`)}>
-            MANA<em>home</em>
+          <a className="brand brand-icone" href={lien(`/`)} aria-label="MANAhome">
+            <GlyphMaison size={28} />
           </a>
           <nav className="nav">
             <a href={lien(`/annonces/crozon`)}>

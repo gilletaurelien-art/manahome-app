@@ -108,6 +108,17 @@ html { background: var(--sand); }
   text-decoration: none;
 }
 .brand em { color: var(--or); font-style: normal; }
+/* Le logo du header : une icône seule, plus de mot-symbole (05/11/2026). */
+.brand-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  padding: 6px;
+  border-radius: 999px;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+.brand-icone:hover { background: rgb(201 162 39 / 10%); transform: translateY(-1px); }
 /* Nav : icône AU-DESSUS du libellé (desktop/tablette), empilées */
 .nav { display: flex; gap: var(--sp-1); align-items: center; }
 .nav a {

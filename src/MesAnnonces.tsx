@@ -9,7 +9,7 @@ import {
   changerStatut,
   supprimerAnnonceLocale,
 } from "./annoncesLocales";
-import { tarifsListe, libelleTarif } from "./annonces";
+import { tarifsListe, LIBELLE_UNITE } from "./annonces";
 import { GlyphSemaine as GlyphCalendrier } from "./Glyphs";
 
 // /mes-annonces — gestion démo de mes annonces déposées (localStorage).
@@ -24,6 +24,7 @@ const STATUT_LABEL: Record<string, string> = {
 export function MesAnnonces() {
   const [annonces, setAnnonces] = useState<AnnonceLocale[] | null>(null);
   const [publieeId, setPublieeId] = useState<string | null>(null);
+  const L = langueCourante();
 
   // Le titre est posé par App depuis la table de routes (src/canonique.ts) —
   // plus ici : il doit aussi être injecté dans le HTML livré, et deux copies de
@@ -45,29 +46,26 @@ export function MesAnnonces() {
   return (
     <main className="publier">
       <div className="wrap">
-        <p className="hero-label">Espace vendeur — démo locale</p>
-        <h1 className="fiche-titre">Mes annonces</h1>
+        <p className="hero-label">{t(L, "Espace vendeur — démo locale")}</p>
+        <h1 className="fiche-titre">{t(L, "Mes annonces")}</h1>
         <p className="territoire-intro">
-          Vos annonces déposées depuis ce navigateur. Démo locale : en
-          production, elles vivront derrière votre compte, avec la même
-          liberté — dépublier, remettre en ligne, supprimer définitivement.
+          {t(L, "Vos annonces déposées depuis ce navigateur. Démo locale : en production, elles vivront derrière votre compte, avec la même liberté — dépublier, remettre en ligne, supprimer définitivement.")}
         </p>
 
         {publieeId && (
           <section className="publier-panel">
             <p className="est-resultat">
-              Annonce publiée. Elle apparaît dès maintenant dans le catalogue,
-              derrière le badge « Annonce directe de particulier ».
+              {t(L, "Annonce publiée. Elle apparaît dès maintenant dans le catalogue, derrière le badge « Annonce directe de particulier ».")}
             </p>
             <div className="est-actions">
               <a
                 className="btn btn-primary"
                 href={lien(`/annonce/${publieeId}`)}
               >
-                Voir ma fiche publique
+                {t(L, "Voir ma fiche publique")}
               </a>
               <a className="btn btn-ghost" href={lien(`/annonces/crozon`)}>
-                Voir le catalogue
+                {t(L, "Voir le catalogue")}
               </a>
             </div>
           </section>
@@ -78,12 +76,11 @@ export function MesAnnonces() {
         {annonces.length === 0 ? (
           <section className="publier-panel">
             <p className="territoire-intro">
-              Aucune annonce pour l'instant. La publication est gratuite, sans
-              commission — trois étapes suffisent.
+              {t(L, "Aucune annonce pour l'instant. La publication est gratuite, sans commission — trois étapes suffisent.")}
             </p>
             <div className="est-actions">
               <a className="btn btn-primary" href={lien(`/publier`)}>
-                Publier mon annonce — gratuit
+                {t(L, "Publier mon annonce — gratuit")}
               </a>
             </div>
           </section>
@@ -97,23 +94,23 @@ export function MesAnnonces() {
                     <div className="annonce-vendeur-calendrier">
                       <p className="apercu-label label-icone">
                         <GlyphCalendrier size={16} />
-                        {t(langueCourante(), "Calendrier de mes nuitées")}
+                        {t(L, "Calendrier de mes nuitées")}
                       </p>
                       <Calendrier annonceId={a.id} />
                     </div>
                   )}
                   <p className="annonce-vendeur-titre">{a.titre}</p>
                   <p className="annonce-vendeur-meta">
-                    {tarifsListe(a.tarifs).map((t) => libelleTarif(t.montant, t.unite)).join(" · ")}
+                    {tarifsListe(a.tarifs).map((tar) => `${tar.montant.toLocaleString("fr-FR")} €/${t(L, LIBELLE_UNITE[tar.unite])}`).join(" · ")}
                     {a.surface ? ` · ${a.surface.toLocaleString("fr-FR")} m²` : ""}
-                    {a.pieces ? ` · ${a.pieces} pièces` : ""} ·{" "}
-                    {STATUT_LABEL[a.statut]}
+                    {a.pieces ? ` · ${t(L, "{n} pièces").replace("{n}", String(a.pieces))}` : ""} ·{" "}
+                    {t(L, STATUT_LABEL[a.statut])}
                   </p>
                 </div>
                 <div className="annonce-vendeur-actions">
                   {a.statut === "publiee" && (
                     <a className="btn btn-ghost" href={lien(`/annonce/${a.id}`)}>
-                      Voir
+                      {t(L, "Voir")}
                     </a>
                   )}
                   <button
@@ -127,7 +124,7 @@ export function MesAnnonces() {
                       rafraichir();
                     }}
                   >
-                    {a.statut === "publiee" ? "Dépublier" : "Remettre en ligne"}
+                    {a.statut === "publiee" ? t(L, "Dépublier") : t(L, "Remettre en ligne")}
                   </button>
                   <button
                     type="button"
@@ -137,7 +134,7 @@ export function MesAnnonces() {
                       rafraichir();
                     }}
                   >
-                    Supprimer
+                    {t(L, "Supprimer")}
                   </button>
                 </div>
               </li>
@@ -146,9 +143,7 @@ export function MesAnnonces() {
         )}
 
         <p className="publier-note">
-          Aucune donnée identifiante n'est stockée : l'e-mail saisi au dépôt
-          n'est pas conservé, la mise en relation se fait par messagerie
-          interne. Suppression = exclusion définitive.
+          {t(L, "Aucune donnée identifiante n'est stockée : l'e-mail saisi au dépôt n'est pas conservé, la mise en relation se fait par messagerie interne. Suppression = exclusion définitive.")}
         </p>
       </div>
     </main>

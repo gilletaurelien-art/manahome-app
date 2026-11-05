@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import type { Territoire } from "./territoires";
-import { baseUrl } from "./router";
+import { baseUrl, langueCourante } from "./router";
+import { t as tr } from "./i18n";
 
 // JSON-LD Place : le territoire aussi est lisible par les IA —
 // c'est la couche d'enrichissement de la table `territoires`.
@@ -53,7 +54,7 @@ const FACETTES = [
 ];
 
 // Graphique de prix en SVG pur : ~30 lignes, aucune lib de charts.
-function PrixChart({ data }: { data: { annee: number; prixM2: number }[] }) {
+function PrixChart({ data, L }: { data: { annee: number; prixM2: number }[]; L: "fr" | "en" }) {
   const W = 640;
   const H = 220;
   const PAD = 36;
@@ -67,7 +68,7 @@ function PrixChart({ data }: { data: { annee: number; prixM2: number }[] }) {
       viewBox={`0 0 ${W} ${H}`}
       className="prix-chart"
       role="img"
-      aria-label="Prix moyen au mètre carré sur les dix dernières années"
+      aria-label={tr(L, "Prix moyen au mètre carré sur les dix dernières années")}
     >
       <polyline points={points} fill="none" stroke="var(--primary)" strokeWidth="2.5" />
       {data.map((d, i) => (
@@ -92,37 +93,38 @@ function PrixChart({ data }: { data: { annee: number; prixM2: number }[] }) {
 
 export function TerritoireDetail({ territoire }: { territoire: Territoire }) {
   const t = territoire;
+  const L = langueCourante();
   useEffect(() => {
-    document.title = `${t.nom} — Territoire — MANAhome`;
+    document.title = `${t.nom} — ${tr(L, "Territoire")} — MANAhome`;
     return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
+      document.title = tr(L, "MANAhome — Gratuit. Accompagné. Lisible par les IA.");
     };
-  }, [t]);
+  }, [t, L]);
 
   return (
     <>
       <JsonLdTerritoire t={t} />
       <main className="fiche territoire">
         <a className="retour" href={`${baseUrl()}/`}>
-          ← Accueil
+          ← {tr(L, "Accueil")}
         </a>
 
-        <p className="hero-label">Choisir un lieu, pas seulement un logement</p>
+        <p className="hero-label">{tr(L, "Choisir un lieu, pas seulement un logement")}</p>
         <h1 className="fiche-titre">{t.nom}</h1>
         <p className="territoire-intro">{t.description}</p>
 
         {/* Chiffres-clés : lecture en 2 secondes, sous le titre */}
         <dl className="territoire-chiffres">
           <div>
-            <dt>Habitants</dt>
+            <dt>{tr(L, "Habitants")}</dt>
             <dd>{t.chiffres.habitants}</dd>
           </div>
           <div>
-            <dt>Commerces</dt>
+            <dt>{tr(L, "Commerces")}</dt>
             <dd>{t.chiffres.commerces}</dd>
           </div>
           <div>
-            <dt>Associations</dt>
+            <dt>{tr(L, "Associations")}</dt>
             <dd>{t.chiffres.associations}</dd>
           </div>
         </dl>
@@ -140,8 +142,8 @@ export function TerritoireDetail({ territoire }: { territoire: Territoire }) {
             return (
               <div key={f.cle} className="territoire-bloc">
                 <div className="territoire-bloc-tete">
-                  <h3>{f.titre}</h3>
-                  <p>{f.sous}</p>
+                  <h3>{tr(L, f.titre)}</h3>
+                  <p>{tr(L, f.sous)}</p>
                 </div>
                 <p className="territoire-texte">{texte}</p>
               </div>
@@ -152,32 +154,29 @@ export function TerritoireDetail({ territoire }: { territoire: Territoire }) {
         {/* Prix sur 10 ans : graphique SVG maison, zéro dépendance */}
         <section className="territoire-prix">
           <div className="territoire-bloc-tete">
-            <h3>Prix de l'immobilier</h3>
-            <p>Moyenne indicative au m² (maisons), 10 dernières années</p>
+            <h3>{tr(L, "Prix de l'immobilier")}</h3>
+            <p>{tr(L, "Moyenne indicative au m² (maisons), 10 dernières années")}</p>
           </div>
-          <PrixChart data={t.prixHistorique} />
+          <PrixChart data={t.prixHistorique} L={L} />
           <p className="territoire-note">
-            Données de démonstration — le jour venu, la source sera un flux
-            contractualisé (DVF ou partenaire), jamais du scraping.
+            {tr(L, "Données de démonstration — le jour venu, la source sera un flux contractualisé (DVF ou partenaire), jamais du scraping.")}
           </p>
         </section>
 
         {/* Géorisques : synthèse honnête + lien officiel */}
         <section className="territoire-bloc georisk">
           <div className="territoire-bloc-tete">
-            <h3>Risques naturels</h3>
-            <p>Synthèse Géorisques — vérifiez chaque adresse</p>
+            <h3>{tr(L, "Risques naturels")}</h3>
+            <p>{tr(L, "Synthèse Géorisques — vérifiez chaque adresse")}</p>
           </div>
           <p className="territoire-texte">{t.georisk.synthese}</p>
           <a className="btn btn-ghost" href={t.georisk.url} target="_blank" rel="noopener noreferrer">
-            Consulter Géorisques pour {t.nom}
+            {tr(L, "Consulter Géorisques pour {lieu}").replace("{lieu}", t.nom)}
           </a>
         </section>
 
         <p className="territoire-note">
-          Informations présentées avec honnêteté : elles sont enrichies et
-          vérifiées lorsque c'est possible, et mises à jour au fil du pilotage
-          du territoire.
+          {tr(L, "Informations présentées avec honnêteté : elles sont enrichies et vérifiées lorsque c'est possible, et mises à jour à mesure que le territoire s'enrichit.")}
         </p>
       </main>
     </>

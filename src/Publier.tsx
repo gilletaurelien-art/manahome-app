@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { baseUrl } from "./router";
+import { baseUrl, langueCourante } from "./router";
+import { t as tr } from "./i18n";
 import { enregistrerAnnonceLocale } from "./annoncesLocales";
 import { creerAnnonceApi, poserJustificatifApi, publierAnnonceApi } from "./apiDepot";
 import { compresserPhoto, LIMITE_PHOTOS } from "./photos";
@@ -81,10 +82,17 @@ const TYPES = [
   { v: "autre", l: "Autre" },
 ];
 
+const LIBELLE_UNITE_TARIF: Record<UniteTarif, string> = {
+  nuit: "nuit",
+  semaine: "semaine",
+  mois: "mois",
+};
+
 const DPES = ["A", "B", "C", "D", "E", "F", "G", "NC"];
 
 export function Publier() {
   const [etape, setEtape] = useState<Etape>(1);
+  const L = langueCourante();
   const [bien, setBien] = useState<FormBien>({
     type: "",
     surface: "",
@@ -131,7 +139,7 @@ export function Publier() {
     setPhotoErreur("");
     const restant = LIMITE_PHOTOS - photos.length;
     if (restant <= 0) {
-      setPhotoErreur(`Jusqu'à ${LIMITE_PHOTOS} photos par annonce.`);
+      setPhotoErreur(tr(L, "Jusqu'à {n} photos par annonce.").replace("{n}", String(LIMITE_PHOTOS)));
       return;
     }
     const aTraiter = Array.from(fichiers).slice(0, restant);
@@ -139,7 +147,7 @@ export function Publier() {
       const compressees = await Promise.all(aTraiter.map(compresserPhoto));
       setPhotos((p) => [...p, ...compressees]);
     } catch {
-      setPhotoErreur("Certaines photos n'ont pas pu être lues. Réessayez.");
+      setPhotoErreur(tr(L, "Certaines photos n'ont pas pu être lues. Réessayez."));
     }
   };
 
@@ -150,7 +158,7 @@ export function Publier() {
       titre:
         bien.type && bien.lieu
           ? `${TYPES.find((t) => t.v === bien.type)?.l ?? bien.type} à ${bien.lieu}`
-          : "Votre annonce",
+          : tr(L, "Votre annonce"),
       tarifs: tarifsListe(tarifsDuFormulaire(bien)),
       surface: bien.surface ? `${bien.surface} m²` : null,
       pieces: bien.pieces ? `${bien.pieces} pièces` : null,
@@ -200,7 +208,7 @@ export function Publier() {
       };
       const cree = await creerAnnonceApi(corps);
       if (!cree.ok || !cree.id) {
-        setRefusPublication(cree.erreur ?? "Une erreur est survenue.");
+        setRefusPublication(cree.erreur ?? tr(L, "Une erreur est survenue."));
         return;
       }
       setBrouillonId(cree.id);
@@ -211,7 +219,7 @@ export function Publier() {
       }
       // refus du verrou : la phrase dit ce qui manque, le panneau
       // justificatifs n'apparaît QUE si le serveur l'a demandé
-      setRefusPublication(pub.erreur ?? "Une erreur est survenue.");
+      setRefusPublication(pub.erreur ?? tr(L, "Une erreur est survenue."));
     } finally {
       setEnvoiEnCours(false);
     }
@@ -239,7 +247,7 @@ export function Publier() {
         window.location.assign(`${baseUrl()}/mes-annonces?publiee=${brouillonId}`);
         return;
       }
-      setRefusPublication(pub.erreur ?? "Une erreur est survenue.");
+      setRefusPublication(pub.erreur ?? tr(L, "Une erreur est survenue."));
     } finally {
       setEnvoiEnCours(false);
     }
@@ -271,24 +279,23 @@ export function Publier() {
   return (
     <main className="publier">
       <div className="wrap">
-        <p className="hero-label">Gratuit, sans commission</p>
-        <h1 className="fiche-titre">Publier mon annonce</h1>
+        <p className="hero-label">{tr(L, "Gratuit, sans commission")}</p>
+        <h1 className="fiche-titre">{tr(L, "Publier mon annonce")}</h1>
         <p className="territoire-intro">
-          Trois étapes, aucun engagement. Vous gardez la main à tout moment :
-          votre annonce n'est publiée que lorsque vous la validez.
+          {tr(L, "Trois étapes, aucun engagement. Vous gardez la main à tout moment : votre annonce n'est publiée que lorsque vous la validez.")}
         </p>
 
         {/* Étapes */}
         <ol className="etapes">
-          <li className={`label-icone ${etape === 1 ? "on" : etape > 1 ? "done" : ""}`}><GlyphMaison size={16} />Le bien</li>
-          <li className={`label-icone ${etape === 2 ? "on" : etape > 2 ? "done" : ""}`}><GlyphDescription size={16} />La description</li>
-          <li className={`label-icone ${etape === 3 ? "on" : ""}`}><GlyphValidation size={16} />Validation</li>
+          <li className={`label-icone ${etape === 1 ? "on" : etape > 1 ? "done" : ""}`}><GlyphMaison size={16} />{tr(L, "Le bien")}</li>
+          <li className={`label-icone ${etape === 2 ? "on" : etape > 2 ? "done" : ""}`}><GlyphDescription size={16} />{tr(L, "La description")}</li>
+          <li className={`label-icone ${etape === 3 ? "on" : ""}`}><GlyphValidation size={16} />{tr(L, "Validation")}</li>
         </ol>
 
         {etape === 1 && (
           <section className="publier-panel">
             <div className="champ champ-recherche">
-              <label htmlFor="type" className="label-icone"><GlyphMaison size={15} />Type de bien *</label>
+              <label htmlFor="type" className="label-icone"><GlyphMaison size={15} />{tr(L, "Type de bien *")}</label>
               <input
                 id="type"
                 type="text"
@@ -296,7 +303,7 @@ export function Publier() {
                 aria-expanded={typeOuvert}
                 aria-controls="type-suggestions"
                 autoComplete="off"
-                placeholder="Rechercher : maison, appartement, terrain…"
+                placeholder={tr(L, "Rechercher : maison, appartement, terrain…")}
                 value={typeRecherche}
                 onChange={(e) => {
                   setTypeRecherche(e.target.value);
@@ -309,13 +316,13 @@ export function Publier() {
               />
               {typeOuvert && suggestionsType.length > 0 && (
                 <ul id="type-suggestions" className="suggestions" role="listbox">
-                  {suggestionsType.map((t) => (
-                    <li key={t.v} role="option" aria-selected={bien.type === t.v}>
+                  {suggestionsType.map((opt) => (
+                    <li key={opt.v} role="option" aria-selected={bien.type === opt.v}>
                       <button
                         type="button"
-                        onClick={() => choisirType(t)}
+                        onClick={() => choisirType(opt)}
                       >
-                        {t.l}
+                        {tr(L, opt.l)}
                       </button>
                     </li>
                   ))}
@@ -323,28 +330,27 @@ export function Publier() {
               )}
               {bien.type && !typeOuvert && (
                 <p className="champ-aide">
-                  Sélection : {TYPES.find((t) => t.v === bien.type)?.l}
+                  {tr(L, "Sélection :")} {tr(L, TYPES.find((opt) => opt.v === bien.type)?.l ?? "")}
                 </p>
               )}
             </div>
             <div className="champ">
-              <label htmlFor="lieu" className="label-icone"><GlyphCompas size={15} />Commune ou secteur *</label>
+              <label htmlFor="lieu" className="label-icone"><GlyphCompas size={15} />{tr(L, "Commune ou secteur *")}</label>
               <input
                 id="lieu"
-                placeholder="Ex : nom de la commune ou du secteur"
+                placeholder={tr(L, "Ex : nom de la commune ou du secteur")}
                 value={bien.lieu}
                 onChange={(e) => setBien({ ...bien, lieu: e.target.value })}
               />
             </div>
             <div className="champ">
-              <label className="label-icone"><GlyphNuit size={15} />Vos tarifs — au moins un des trois *</label>
+              <label className="label-icone"><GlyphNuit size={15} />{tr(L, "Vos tarifs — au moins un des trois *")}</label>
               <p className="champ-aide">
-                Libre à vous de ne proposer qu'un seul palier, ou les trois.
-                Les montants n'ont pas besoin d'être proportionnels entre eux.
+                {tr(L, "Libre à vous de ne proposer qu'un seul palier, ou les trois. Les montants n'ont pas besoin d'être proportionnels entre eux.")}
               </p>
               <div className="champ-grid">
                 <div className="champ">
-                  <label htmlFor="tarif-nuit" className="label-icone"><GlyphNuit size={15} />Par nuit (€)</label>
+                  <label htmlFor="tarif-nuit" className="label-icone"><GlyphNuit size={15} />{tr(L, "Par nuit (€)")}</label>
                   <input
                     id="tarif-nuit"
                     type="number"
@@ -355,7 +361,7 @@ export function Publier() {
                   />
                 </div>
                 <div className="champ">
-                  <label htmlFor="tarif-semaine" className="label-icone"><GlyphSemaine size={15} />Par semaine (€)</label>
+                  <label htmlFor="tarif-semaine" className="label-icone"><GlyphSemaine size={15} />{tr(L, "Par semaine (€)")}</label>
                   <input
                     id="tarif-semaine"
                     type="number"
@@ -366,7 +372,7 @@ export function Publier() {
                   />
                 </div>
                 <div className="champ">
-                  <label htmlFor="tarif-mois" className="label-icone"><GlyphMois size={15} />Par mois (€)</label>
+                  <label htmlFor="tarif-mois" className="label-icone"><GlyphMois size={15} />{tr(L, "Par mois (€)")}</label>
                   <input
                     id="tarif-mois"
                     type="number"
@@ -380,7 +386,7 @@ export function Publier() {
             </div>
             <div className="champ-grid">
               <div className="champ">
-                <label htmlFor="surface" className="label-icone"><GlyphSurface size={15} />Surface (m²)</label>
+                <label htmlFor="surface" className="label-icone"><GlyphSurface size={15} />{tr(L, "Surface (m²)")}</label>
                 <input
                   id="surface"
                   type="number"
@@ -390,7 +396,7 @@ export function Publier() {
                 />
               </div>
               <div className="champ">
-                <label htmlFor="pieces" className="label-icone"><GlyphPieces size={15} />Pièces</label>
+                <label htmlFor="pieces" className="label-icone"><GlyphPieces size={15} />{tr(L, "Pièces")}</label>
                 <input
                   id="pieces"
                   type="number"
@@ -400,23 +406,21 @@ export function Publier() {
                 />
               </div>
               <div className="champ">
-                <label htmlFor="couchages" className="label-icone"><GlyphCouchage size={15} />Couchages</label>
+                <label htmlFor="couchages" className="label-icone"><GlyphCouchage size={15} />{tr(L, "Couchages")}</label>
                 <input
                   id="couchages"
                   type="number"
                   min={0}
-                  placeholder="Ex : 4"
+                  placeholder={tr(L, "Ex : 4")}
                   value={bien.couchages}
                   onChange={(e) => setBien({ ...bien, couchages: e.target.value })}
                 />
               </div>
             </div>
             <div className="champ">
-              <label className="label-icone"><GlyphParking size={15} />Équipements</label>
+              <label className="label-icone"><GlyphParking size={15} />{tr(L, "Équipements")}</label>
               <p className="champ-aide">
-                Cochez uniquement ce qui est réellement présent — un
-                équipement non coché n'est pas affiché comme absent, il
-                n'est juste pas annoncé.
+                {tr(L, "Cochez uniquement ce qui est réellement présent — un équipement non coché n'est pas affiché comme absent, il n'est juste pas annoncé.")}
               </p>
               <div className="dpe-choix">
                 {EQUIPEMENTS.map((e) => {
@@ -430,14 +434,14 @@ export function Publier() {
                       onClick={() => basculerEquipement(e)}
                     >
                       <Icone size={16} />
-                      {LIBELLE_EQUIPEMENT[e]}
+                      {tr(L, LIBELLE_EQUIPEMENT[e])}
                     </button>
                   );
                 })}
               </div>
             </div>
             <div className="champ">
-              <label className="label-icone"><GlyphDpe size={15} />DPE (diagnostic de performance énergétique)</label>
+              <label className="label-icone"><GlyphDpe size={15} />{tr(L, "DPE (diagnostic de performance énergétique)")}</label>
               <div className="dpe-choix">
                 {DPES.map((d) => (
                   <button
@@ -458,7 +462,7 @@ export function Publier() {
                 disabled={!etape1Valide}
                 onClick={() => setEtape(2)}
               >
-                Continuer
+                {tr(L, "Continuer")}
               </button>
             </div>
           </section>
@@ -467,7 +471,7 @@ export function Publier() {
         {etape === 2 && (
           <section className="publier-panel">
             <div className="champ">
-              <label htmlFor="photos" className="label-icone"><GlyphPhoto size={15} />Les photos de votre bien</label>
+              <label htmlFor="photos" className="label-icone"><GlyphPhoto size={15} />{tr(L, "Les photos de votre bien")}</label>
               <input
                 id="photos"
                 type="file"
@@ -479,9 +483,7 @@ export function Publier() {
                 }}
               />
               <p className="champ-aide">
-                Jusqu'à {LIMITE_PHOTOS} photos, compressées dans votre
-                navigateur avant tout envoi. La première fera la vitrine de
-                l'annonce. (Démo locale : rien ne quitte votre appareil.)
+                {tr(L, "Jusqu'à {n} photos, compressées dans votre navigateur avant tout envoi. La première fera la vitrine de l'annonce. (Démo locale : rien ne quitte votre appareil.)").replace("{n}", String(LIMITE_PHOTOS))}
               </p>
               {photoErreur && <p className="est-erreur">{photoErreur}</p>}
               {photos.length > 0 && (
@@ -489,10 +491,10 @@ export function Publier() {
                   {photos.map((p, i) => (
                     <li key={i}>
                       <img src={p} alt={`Photo ${i + 1}`} />
-                      {i === 0 && <span className="photos-vitrine">Vitrine</span>}
+                      {i === 0 && <span className="photos-vitrine">{tr(L, "Vitrine")}</span>}
                       <button
                         type="button"
-                        aria-label={`Retirer la photo ${i + 1}`}
+                        aria-label={tr(L, "Retirer la photo {n}").replace("{n}", String(i + 1))}
                         onClick={() =>
                           setPhotos((tab) => tab.filter((_, j) => j !== i))
                         }
@@ -505,25 +507,24 @@ export function Publier() {
               )}
             </div>
             <div className="champ">
-              <label htmlFor="desc" className="label-icone"><GlyphDescription size={15} />Décrivez votre bien, comme vous le raconteriez</label>
+              <label htmlFor="desc" className="label-icone"><GlyphDescription size={15} />{tr(L, "Décrivez votre bien, comme vous le raconteriez")}</label>
               <textarea
                 id="desc"
                 rows={7}
-                placeholder="Maison lumineuse à deux pas du port, jardin clos, cuisine ouverte…"
+                placeholder={tr(L, "Maison lumineuse à deux pas du port, jardin clos, cuisine ouverte…")}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
               <p className="champ-aide">
-                Pas inspiré ? La rédaction assistée arrive avec votre compte :
-                elle transforme vos mots en annonce chaleureuse et factuelle.
+                {tr(L, "Pas inspiré ? La rédaction assistée arrive avec votre compte : elle transforme vos mots en annonce chaleureuse et factuelle.")}
               </p>
             </div>
             <div className="publier-nav">
               <button className="btn btn-ghost" onClick={() => setEtape(1)}>
-                ← Retour
+                ← {tr(L, "Retour")}
               </button>
               <button className="btn btn-primary" onClick={() => setEtape(3)}>
-                Continuer
+                {tr(L, "Continuer")}
               </button>
             </div>
           </section>
@@ -531,10 +532,10 @@ export function Publier() {
 
         {etape === 3 && (
           <section className="publier-panel">
-            <p className="apercu-label label-icone"><GlyphValidation size={18} />Aperçu de votre annonce</p>
+            <p className="apercu-label label-icone"><GlyphValidation size={18} />{tr(L, "Aperçu de votre annonce")}</p>
             {photos.length > 0 && (
               <div className="apercu-photo">
-                <img src={photos[0]} alt="Photo principale" />
+                <img src={photos[0]} alt={tr(L, "Photo principale")} />
               </div>
             )}
             <div className="fiche-corps apercu">
@@ -542,42 +543,42 @@ export function Publier() {
               <h2 className="fiche-titre">{apercu.titre}</h2>
               <dl className="fiche-chiffres">
                 {apercu.tarifs.length > 0 ? (
-                  apercu.tarifs.map((t) => {
-                    const Icone = ICONE_UNITE[t.unite];
+                  apercu.tarifs.map((tar) => {
+                    const Icone = ICONE_UNITE[tar.unite];
                     return (
-                      <div key={t.unite}>
-                        <dt className="label-icone"><Icone size={16} />Tarif / {t.unite}</dt>
-                        <dd className="canon">{t.montant.toLocaleString("fr-FR")} €</dd>
+                      <div key={tar.unite}>
+                        <dt className="label-icone"><Icone size={16} />{tr(L, "Tarif / {unite}").replace("{unite}", tr(L, LIBELLE_UNITE_TARIF[tar.unite]))}</dt>
+                        <dd className="canon">{tar.montant.toLocaleString("fr-FR")} €</dd>
                       </div>
                     );
                   })
                 ) : (
                   <div>
-                    <dt className="label-icone"><GlyphNuit size={16} />Tarif</dt>
-                    <dd className="canon">À définir</dd>
+                    <dt className="label-icone"><GlyphNuit size={16} />{tr(L, "Tarif")}</dt>
+                    <dd className="canon">{tr(L, "À définir")}</dd>
                   </div>
                 )}
                 {apercu.surface && (
                   <div>
-                    <dt className="label-icone"><GlyphSurface size={16} />Surface</dt>
+                    <dt className="label-icone"><GlyphSurface size={16} />{tr(L, "Surface")}</dt>
                     <dd>{apercu.surface}</dd>
                   </div>
                 )}
                 {apercu.pieces && (
                   <div>
-                    <dt className="label-icone"><GlyphPieces size={16} />Pièces</dt>
+                    <dt className="label-icone"><GlyphPieces size={16} />{tr(L, "Pièces")}</dt>
                     <dd>{apercu.pieces}</dd>
                   </div>
                 )}
                 {apercu.couchages && (
                   <div>
-                    <dt className="label-icone"><GlyphCouchage size={16} />Couchages</dt>
+                    <dt className="label-icone"><GlyphCouchage size={16} />{tr(L, "Couchages")}</dt>
                     <dd>{apercu.couchages}</dd>
                   </div>
                 )}
                 {apercu.dpe && (
                   <div>
-                    <dt className="label-icone"><GlyphDpe size={16} />DPE</dt>
+                    <dt className="label-icone"><GlyphDpe size={16} />{tr(L, "DPE")}</dt>
                     <dd>
                       <span className={`dpe dpe-${apercu.dpe}`}>{apercu.dpe}</span>
                     </dd>
@@ -590,7 +591,7 @@ export function Publier() {
                     const Icone = ICONE_EQUIPEMENT[e];
                     return (
                       <span key={e} className="label-icone">
-                        <Icone size={15} />{LIBELLE_EQUIPEMENT[e]}
+                        <Icone size={15} />{tr(L, LIBELLE_EQUIPEMENT[e])}
                       </span>
                     );
                   })}
@@ -600,7 +601,7 @@ export function Publier() {
             </div>
 
             <div className="champ">
-              <label htmlFor="email" className="label-icone"><GlyphEmail size={15} />Votre e-mail (pour retrouver votre brouillon) *</label>
+              <label htmlFor="email" className="label-icone"><GlyphEmail size={15} />{tr(L, "Votre e-mail (pour retrouver votre brouillon) *")}</label>
               <input
                 id="email"
                 type="email"
@@ -609,8 +610,7 @@ export function Publier() {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <p className="champ-aide">
-                Jamais publié, jamais revendu. La mise en relation avec les
-                voyageurs se fera par messagerie interne.
+                {tr(L, "Jamais publié, jamais revendu. La mise en relation avec les voyageurs se fera par messagerie interne.")}
               </p>
             </div>
 
@@ -619,21 +619,21 @@ export function Publier() {
                 <p className="est-erreur">{refusPublication}</p>
                 {brouillonId && (
                   <>
-                    <label htmlFor="num-declaration">Numéro de déclaration de meublé touristique</label>
+                    <label htmlFor="num-declaration">{tr(L, "Numéro de déclaration de meublé touristique")}</label>
                     <input
                       id="num-declaration"
                       value={numeroDeclaration}
-                      placeholder="Ex : 29160 123456 2026 1 1"
+                      placeholder={tr(L, "Ex : 29160 123456 2026 1 1")}
                       onChange={(e) => setNumeroDeclaration(e.target.value)}
                     />
-                    <label htmlFor="ref-assurance">Référence de l'attestation d'assurance</label>
+                    <label htmlFor="ref-assurance">{tr(L, "Référence de l'attestation d'assurance")}</label>
                     <input
                       id="ref-assurance"
                       value={referenceAssurance}
-                      placeholder="Ex : ATL-2026-12345"
+                      placeholder={tr(L, "Ex : ATL-2026-12345")}
                       onChange={(e) => setReferenceAssurance(e.target.value)}
                     />
-                    <label htmlFor="assurance-expire">Validité de l'assurance (date)</label>
+                    <label htmlFor="assurance-expire">{tr(L, "Validité de l'assurance (date)")}</label>
                     <input
                       id="assurance-expire"
                       type="date"
@@ -647,13 +647,11 @@ export function Publier() {
                         disabled={envoiEnCours || !numeroDeclaration.trim() || !referenceAssurance.trim()}
                         onClick={envoyerJustificatifs}
                       >
-                        Déposer mes justificatifs et publier
+                        {tr(L, "Déposer mes justificatifs et publier")}
                       </button>
                     </div>
                     <p className="champ-aide">
-                      Votre annonce est enregistrée en brouillon — gratuite,
-                      sans condition. Elle passera en ligne dès que le
-                      serveur aura vérifié la présence des justificatifs.
+                      {tr(L, "Votre annonce est enregistrée en brouillon — gratuite, sans condition. Elle passera en ligne dès que le serveur aura vérifié la présence des justificatifs.")}
                     </p>
                   </>
                 )}
@@ -662,23 +660,21 @@ export function Publier() {
 
             <div className="publier-nav">
               <button className="btn btn-ghost" onClick={() => setEtape(2)}>
-                ← Retour
+                ← {tr(L, "Retour")}
               </button>
               <button
                 className="btn btn-primary"
                 disabled={!email.includes("@") || envoiEnCours}
                 onClick={publier}
               >
-                Publier mon annonce — gratuit
+                {tr(L, "Publier mon annonce — gratuit")}
               </button>
             </div>
           </section>
         )}
 
         <p className="publier-note">
-          Aucune carte bancaire, aucune commission : la publication est
-          gratuite pour les particuliers. MANA ne réalise aucun acte
-          réglementé — vous restez maître de votre location.
+          {tr(L, "Aucune carte bancaire, aucune commission : la publication est gratuite pour les particuliers. MANA ne réalise aucun acte réglementé — vous restez maître de votre location.")}
         </p>
       </div>
     </main>

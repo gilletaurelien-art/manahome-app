@@ -81,7 +81,7 @@ export function tarifAffiche(t: Tarifs): { montant: number; unite: UniteTarif } 
   return tarifsListe(t)[0] ?? null;
 }
 
-const LIBELLE_UNITE: Record<UniteTarif, string> = {
+export const LIBELLE_UNITE: Record<UniteTarif, string> = {
   nuit: "nuit",
   semaine: "semaine",
   mois: "mois",

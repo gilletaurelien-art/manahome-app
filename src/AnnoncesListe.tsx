@@ -11,7 +11,7 @@ import { chargerAnnonces } from "./apiAnnonces";
 import { baseUrl } from "./router";
 import {
   GlyphStructure, GlyphMaison, GlyphAppartement, GlyphTerrain,
-  GlyphCompas, GlyphBudget, GlyphVoyageurs,
+  GlyphCompas, GlyphBudget, GlyphArrivee, GlyphDepart,
 } from "./Glyphs";
 
 // Page catalogue /annonces/:territoire — miroir front de la vue SQL
@@ -75,13 +75,17 @@ export function AnnoncesListe({ slug }: { slug: string }) {
   const [annoncesApi, setAnnoncesApi] = useState<Annonce[] | null>(null);
   const [apiEchouee, setApiEchouee] = useState(false);
 
+  const L = langueCourante();
+
   useEffect(() => {
-    const t = territoireParSlug(slug);
-    document.title = `Annonces ${t ? t.nom : ""} — MANAhome`;
+    const ter = territoireParSlug(slug);
+    document.title = ter
+      ? `${t(L, "Annonces")} ${ter.nom} — MANAhome`
+      : t(L, "MANAhome — Gratuit. Accompagné. Lisible par les IA.");
     return () => {
-      document.title = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
+      document.title = t(L, "MANAhome — Gratuit. Accompagné. Lisible par les IA.");
     };
-  }, [slug]);
+  }, [slug, L]);
 
   const territoire = territoireParSlug(slug);
 
@@ -156,27 +160,26 @@ export function AnnoncesListe({ slug }: { slug: string }) {
       <div className="wrap">
         {territoire && <p className="hero-label">{territoire.nom}</p>}
         <h1 className="fiche-titre">
-          {territoire ? `Les annonces à ${territoire.nom}` : "Les annonces"}
+          {territoire ? `${t(L, "Les annonces à")} ${territoire.nom}` : t(L, "Les annonces")}
         </h1>
         <p className="territoire-intro">
-          Un catalogue volontairement restreint et soigné. Chaque annonce est
-          structurée pour être comprise, y compris par les outils compatibles IA.
+          {t(L, "Un catalogue volontairement restreint et soigné. Chaque annonce est structurée pour être comprise, y compris par les outils compatibles IA.")}
         </p>
 
-        <section className="publier-panel recherche-panel" aria-label="Recherche">
+        <section className="publier-panel recherche-panel" aria-label={t(L, "Recherche")}>
           <div className="champ-grid">
             <div className="champ">
-              <label htmlFor="recherche" className="label-icone"><GlyphCompas size={15} />Commune ou secteur</label>
+              <label htmlFor="recherche" className="label-icone"><GlyphCompas size={15} />{t(L, "Commune ou secteur")}</label>
               <input
                 id="recherche"
                 type="search"
-                placeholder="Ex : nom de la commune, quartier, port…"
+                placeholder={t(L, "Ex : nom de la commune, quartier, port…")}
                 value={recherche}
                 onChange={(e) => setRecherche(e.target.value)}
               />
             </div>
             <div className="champ">
-              <label htmlFor="date-arrivee" className="label-icone"><GlyphVoyageurs size={15} />Arrivée</label>
+              <label htmlFor="date-arrivee" className="label-icone"><GlyphArrivee size={15} />{t(L, "Arrivée")}</label>
               <input
                 id="date-arrivee"
                 type="date"
@@ -185,7 +188,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               />
             </div>
             <div className="champ">
-              <label htmlFor="date-depart" className="label-icone"><GlyphVoyageurs size={15} />Départ</label>
+              <label htmlFor="date-depart" className="label-icone"><GlyphDepart size={15} />{t(L, "Départ")}</label>
               <input
                 id="date-depart"
                 type="date"
@@ -194,12 +197,12 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               />
             </div>
             <div className="champ">
-              <label htmlFor="prix-max" className="label-icone"><GlyphBudget size={15} />Budget max (€/nuit)</label>
+              <label htmlFor="prix-max" className="label-icone"><GlyphBudget size={15} />{t(L, "Budget max (€/nuit)")}</label>
               <input
                 id="prix-max"
                 type="number"
                 min={0}
-                placeholder="Ex : 100"
+                placeholder={t(L, "Ex : 100")}
                 value={prixMax}
                 onChange={(e) => setPrixMax(e.target.value)}
               />
@@ -209,7 +212,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
 
         {featureBack && apiEchouee && (
           <p className="recherche-dates" role="status">
-            {t(langueCourante(), "Le service des annonces est momentanément indisponible — le catalogue de démonstration s'affiche.")}
+            {t(L, "Le service des annonces est momentanément indisponible — le catalogue de démonstration s'affiche.")}
           </p>
         )}
 
@@ -220,7 +223,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
           </p>
         )}
 
-        <div className="annonces-filtres" role="group" aria-label="Filtrer par type">
+        <div className="annonces-filtres" role="group" aria-label={t(L, "Filtrer par type")}>
           {TYPES_FILTRE.map((opt) => (
             <button
               key={opt.v}
@@ -230,7 +233,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
               onClick={() => setFiltre(opt.v)}
             >
               <opt.glyphe size={16} />
-              {opt.l}
+              {t(L, opt.l)}
             </button>
           ))}
         </div>
@@ -238,11 +241,10 @@ export function AnnoncesListe({ slug }: { slug: string }) {
         {annonces.length === 0 ? (
           <section className="publier-panel">
             <p className="est-erreur">
-              Aucune annonce de ce type pour l'instant sur ce territoire.
+              {t(L, "Aucune annonce de ce type pour l'instant sur ce territoire.")}
             </p>
             <p className="territoire-intro">
-              Catalogue de démarrage : il est volontairement restreint.
-              Revenez bientôt, ou explorez le territoire pendant ce temps.
+              {t(L, "Catalogue de démarrage : il est volontairement restreint. Revenez bientôt, ou explorez le territoire pendant ce temps.")}
             </p>
           </section>
         ) : (
@@ -255,18 +257,16 @@ export function AnnoncesListe({ slug }: { slug: string }) {
 
         {!featureBack && (
           <p className="catalogue-note">
-            Annonces de démonstration — les annonces réelles arriveront avec les
-            premiers propriétaires. Les annonces professionnelles importées
-            sont toujours affichées après les dépôts directs, à qualité égale.
+            {t(L, "Annonces de démonstration — les annonces réelles arriveront avec les premiers propriétaires. Les annonces professionnelles importées sont toujours affichées après les dépôts directs, à qualité égale.")}
           </p>
         )}
 
         <div className="est-actions">
           <a className="btn btn-ghost" href={lien(`/territoire/${slug}`)}>
-            Découvrir le territoire
+            {t(L, "Découvrir le territoire")}
           </a>
           <a className="btn btn-primary" href={lien(`/publier`)}>
-            Publier mon annonce — gratuit
+            {t(L, "Publier mon annonce — gratuit")}
           </a>
         </div>
       </div>
