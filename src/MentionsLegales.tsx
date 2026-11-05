@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { baseUrl , lien} from "./router";
+import { baseUrl , lien, langueCourante} from "./router";
+import { t } from "./i18n";
 import { GlyphStructure, GlyphHebergement, GlyphBouclier, GlyphCadenas } from "./Glyphs";
 
 // Mentions légales — page minimale, honnête : pas d'acte loi Hoguet,
@@ -10,60 +11,48 @@ import { GlyphStructure, GlyphHebergement, GlyphBouclier, GlyphCadenas } from ".
 export function MentionsLegales() {
 
   const B = baseUrl();
+  const L = langueCourante();
 
   return (
     <main className="publier">
       <div className="wrap">
-        <p className="hero-label">Informations légales</p>
-        <h1 className="fiche-titre">Mentions légales</h1>
+        <p className="hero-label">{t(L, "Informations légales")}</p>
+        <h1 className="fiche-titre">{t(L, "Mentions légales")}</h1>
 
         <section className="publier-panel">
-          <p className="apercu-label label-icone"><GlyphStructure size={18} />Éditeur</p>
+          <p className="apercu-label label-icone"><GlyphStructure size={18} />{t(L, "Éditeur")}</p>
           <p className="territoire-intro">
-            MANAhome est édité par l'écosystème MANA (mana.bzh, mana.love,
-            manafrance.org). Les coordonnées complètes de l'éditeur seront
-            publiées avec la structure juridique définitive du projet.
+            {t(L, "MANAhome est édité par l'écosystème MANA (mana.bzh, mana.love, manafrance.org). Les coordonnées complètes de l'éditeur seront publiées avec la structure juridique définitive du projet.")}
           </p>
         </section>
 
         <section className="publier-panel">
-          <p className="apercu-label label-icone"><GlyphHebergement size={18} />Hébergement</p>
+          <p className="apercu-label label-icone"><GlyphHebergement size={18} />{t(L, "Hébergement")}</p>
           <p className="territoire-intro">
-            Site statique hébergé sur GitHub Pages (GitHub, Inc.). Aucune
-            donnée personnelle n'est collectée par le site en l'état : les
-            fonctionnalités de démonstration (annonces, messagerie) restent
-            locales à votre navigateur.
+            {t(L, "Site statique hébergé sur GitHub Pages (GitHub, Inc.). Aucune donnée personnelle n'est collectée par le site en l'état : les fonctionnalités de démonstration (annonces, messagerie) restent locales à votre navigateur.")}
           </p>
         </section>
 
         <section className="publier-panel">
-          <p className="apercu-label label-icone"><GlyphBouclier size={18} />Nature du service</p>
+          <p className="apercu-label label-icone"><GlyphBouclier size={18} />{t(L, "Nature du service")}</p>
           <p className="territoire-intro">
-            MANAhome est une plateforme de mise en relation pour la location
-            de vacances, entre propriétaires et vacanciers. Elle ne réalise
-            aucun acte réglementé par la loi Hoguet (n° 70-9) : pas de
-            mandat, pas de négociation, pas d'encaissement pour compte de
-            tiers. Les paiements se font directement entre le propriétaire
-            et le vacancier, par leur propre moyen.
+            {t(L, "MANAhome est une plateforme de mise en relation pour la location de vacances, entre propriétaires et vacanciers. Elle ne réalise aucun acte réglementé par la loi Hoguet (n° 70-9) : pas de mandat, pas de négociation, pas d'encaissement pour compte de tiers. Les paiements se font directement entre le propriétaire et le vacancier, par leur propre moyen.")}
           </p>
         </section>
 
         <section className="publier-panel">
-          <p className="apercu-label label-icone"><GlyphCadenas size={18} />Données personnelles</p>
+          <p className="apercu-label label-icone"><GlyphCadenas size={18} />{t(L, "Données personnelles")}</p>
           <p className="territoire-intro">
-            Aucune donnée ni lead n'est revendu. Les coordonnées ne sont
-            jamais publiées : la mise en relation se fait par messagerie
-            interne. Vous pouvez demander la suppression de vos données à
-            tout moment — la suppression est une exclusion définitive.
+            {t(L, "Aucune donnée ni lead n'est revendu. Les coordonnées ne sont jamais publiées : la mise en relation se fait par messagerie interne. Vous pouvez demander la suppression de vos données à tout moment — la suppression est une exclusion définitive.")}
           </p>
         </section>
 
         <div className="est-actions">
           <a className="btn btn-ghost" href={lien(`/approche`)}>
-            Notre approche
+            {t(L, "Notre approche")}
           </a>
           <a className="btn btn-primary" href={lien(`/`)}>
-            Retour à l'accueil
+            {t(L, "Retour à l'accueil")}
           </a>
         </div>
       </div>

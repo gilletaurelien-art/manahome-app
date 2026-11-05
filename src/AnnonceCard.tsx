@@ -1,6 +1,7 @@
 import type { Annonce } from "./annonces";
-import { tarifsListe, libelleTarif, type UniteTarif } from "./annonces";
-import { baseUrl } from "./router";
+import { tarifsListe, LIBELLE_UNITE, type UniteTarif } from "./annonces";
+import { baseUrl, langueCourante } from "./router";
+import { t } from "./i18n";
 import {
   GlyphNuit, GlyphSemaine, GlyphMois, GlyphSurface, GlyphPieces, GlyphCouchage,
   GlyphParking, GlyphPiscine, GlyphJardin, GlyphBalconEquip,
@@ -25,6 +26,7 @@ const ICONE_UNITE: Record<UniteTarif, (p: { size?: number }) => JSX.Element> = {
 export function AnnonceCard({ annonce }: { annonce: Annonce }) {
   const lieu = annonce.lieu;
   const tarifs = tarifsListe(annonce.tarifs);
+  const L = langueCourante();
   return (
     <li className="card">
       <a href={`${baseUrl()}/annonce/${annonce.id}`}>
@@ -34,7 +36,7 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
           </div>
         ) : (
           <div className="photo" aria-hidden="true">
-            photo du bien
+            {t(L, "photo du bien")}
           </div>
         )}
         <div className="body">
@@ -43,18 +45,18 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
           {/* Chaque palier renseigné, et uniquement ceux-là — le propriétaire
               choisit librement nuit / semaine / mois (04/11/2026). */}
           <p className="prix">
-            {tarifs.map((t, i) => {
-              const Icone = ICONE_UNITE[t.unite];
+            {tarifs.map((tar, i) => {
+              const Icone = ICONE_UNITE[tar.unite];
               return (
-                <span key={t.unite} className="label-icone">
+                <span key={tar.unite} className="label-icone">
                   {i > 0 && <span className="sep"> · </span>}
                   <Icone size={16} />
-                  {libelleTarif(t.montant, t.unite)}
+                  {tar.montant.toLocaleString("fr-FR")} €/{t(L, LIBELLE_UNITE[tar.unite])}
                 </span>
               );
             })}
           </p>
-          <p className="meta"><span className="badge-source">Location</span></p>
+          <p className="meta"><span className="badge-source">{t(L, "Location")}</span></p>
           <div className="meta">
             {annonce.surface && (
               <span className="label-icone"><GlyphSurface size={15} />{annonce.surface} m²</span>
@@ -62,13 +64,13 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
             {annonce.pieces != null && (
               <>
                 <span className="sep">·</span>
-                <span className="label-icone"><GlyphPieces size={15} />{annonce.pieces} pièces</span>
+                <span className="label-icone"><GlyphPieces size={15} />{t(L, "{n} pièces").replace("{n}", String(annonce.pieces))}</span>
               </>
             )}
             {annonce.couchages != null && (
               <>
                 <span className="sep">·</span>
-                <span className="label-icone"><GlyphCouchage size={15} />{annonce.couchages} couchages</span>
+                <span className="label-icone"><GlyphCouchage size={15} />{t(L, "{n} couchages").replace("{n}", String(annonce.couchages))}</span>
               </>
             )}
             {annonce.dpe && (
@@ -85,7 +87,7 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
               {annonce.equipements.map((e) => {
                 const Icone = ICONE_EQUIPEMENT[e];
                 return (
-                  <span key={e} title={LIBELLE_EQUIPEMENT[e]} aria-label={LIBELLE_EQUIPEMENT[e]}>
+                  <span key={e} title={t(L, LIBELLE_EQUIPEMENT[e])} aria-label={t(L, LIBELLE_EQUIPEMENT[e])}>
                     <Icone size={16} />
                   </span>
                 );
@@ -94,7 +96,7 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
           )}
           {annonce.source === "import_pro" && (
             <p>
-              <span className="badge-source pro">Annonce professionnelle</span>
+              <span className="badge-source pro">{t(L, "Annonce professionnelle")}</span>
             </p>
           )}
         </div>

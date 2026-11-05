@@ -125,15 +125,14 @@ export function Messagerie() {
   return (
     <main className="publier">
       <div className="wrap">
-        <p className="hero-label">Mise en relation protégée</p>
-        <h1 className="fiche-titre">Ma messagerie</h1>
+        <p className="hero-label">{t(langueCourante(), "Mise en relation protégée")}</p>
+        <h1 className="fiche-titre">{t(langueCourante(), "Ma messagerie")}</h1>
         <p className="territoire-intro">
-          Les échanges entre voyageurs et propriétaires passent par la messagerie
-          interne : aucune coordonnée n'est exposée, rien n'est revendu.
+          {t(langueCourante(), "Les échanges entre voyageurs et propriétaires passent par la messagerie interne : aucune coordonnée n'est exposée, rien n'est revendu.")}
         </p>
 
         {sejours.length > 0 && (
-          <section className="publier-panel" aria-label="Mes séjours">
+          <section className="publier-panel" aria-label={t(langueCourante(), "Mes séjours")}>
             <p className="apercu-label">{t(langueCourante(), "Mes séjours")}</p>
             <p className="champ-aide">
               {t(langueCourante(), "Démo locale : ce navigateur joue les deux rôles — vous voyez la demande du voyageur ET les commandes de l'hôte. En production, chaque côté ne voit que le sien, et aucun paiement ne transite ici.")}
@@ -227,18 +226,17 @@ export function Messagerie() {
         {(conversationsApi !== null ? conversationsApi.length === 0 : conversations.length === 0) ? (
           <section className="publier-panel">
             <p className="est-erreur">
-              Aucune conversation pour l'instant. Contactez un propriétaire depuis
-              une fiche d'annonce pour ouvrir la messagerie.
+              {t(langueCourante(), "Aucune conversation pour l'instant. Contactez un propriétaire depuis une fiche d'annonce pour ouvrir la messagerie.")}
             </p>
             <div className="est-actions">
               <a className="btn btn-primary" href={lien(`/annonces/crozon`)}>
-                Voir les annonces
+                {t(langueCourante(), "Voir les annonces")}
               </a>
             </div>
           </section>
         ) : (
           <div className="messagerie-grille">
-            <aside className="messagerie-liste" aria-label="Conversations">
+            <aside className="messagerie-liste" aria-label={t(langueCourante(), "Conversations")}>
               {conversationsApi !== null
                 ? conversationsApi.map((c) => (
                     <button
@@ -274,7 +272,7 @@ export function Messagerie() {
             <section className="publier-panel messagerie-fil" aria-live="polite">
               {conversationsApi !== null && !couranteApi ? (
                 <p className="territoire-intro">
-                  Choisissez une conversation à gauche.
+                  {t(langueCourante(), "Choisissez une conversation à gauche.")}
                 </p>
               ) : conversationsApi !== null && couranteApi && messagesApi !== null ? (
                 <>
@@ -289,8 +287,8 @@ export function Messagerie() {
                   <div className="messagerie-envoi">
                     <input
                       value={brouillon}
-                      placeholder="Votre message…"
-                      aria-label="Votre message"
+                      placeholder={t(langueCourante(), "Votre message…")}
+                      aria-label={t(langueCourante(), "Votre message")}
                       onChange={(e) => setBrouillon(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && envoyerMessage()}
                     />
@@ -299,13 +297,13 @@ export function Messagerie() {
                       onClick={envoyerMessage}
                       disabled={!brouillon.trim()}
                     >
-                      Envoyer
+                      {t(langueCourante(), "Envoyer")}
                     </button>
                   </div>
                 </>
               ) : !courante ? (
                 <p className="territoire-intro">
-                  Choisissez une conversation à gauche.
+                  {t(langueCourante(), "Choisissez une conversation à gauche.")}
                 </p>
               ) : (
                 <>
@@ -320,8 +318,8 @@ export function Messagerie() {
                   <div className="messagerie-envoi">
                     <input
                       value={brouillon}
-                      placeholder="Votre message…"
-                      aria-label="Votre message"
+                      placeholder={t(langueCourante(), "Votre message…")}
+                      aria-label={t(langueCourante(), "Votre message")}
                       onChange={(e) => setBrouillon(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && envoyerMessage()}
                     />
@@ -330,7 +328,7 @@ export function Messagerie() {
                       onClick={envoyerMessage}
                       disabled={!brouillon.trim()}
                     >
-                      Envoyer
+                      {t(langueCourante(), "Envoyer")}
                     </button>
                   </div>
                   {!featureBack && (

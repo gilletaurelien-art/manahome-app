@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { baseUrl , lien} from "./router";
+import { baseUrl , lien, langueCourante} from "./router";
+import { t } from "./i18n";
 import {
   GlyphCadeau, GlyphBouclier, GlyphCadenas,
   GlyphStructure, GlyphBalance, GlyphVieLocale,
@@ -56,40 +57,38 @@ const PILIERS = [
 export function Approche() {
 
   const B = baseUrl();
+  const L = langueCourante();
 
   return (
     <main className="publier">
       <div className="wrap">
-        <p className="hero-label">Notre approche</p>
+        <p className="hero-label">{t(L, "Notre approche")}</p>
         <h1 className="fiche-titre">
-          Des locations de vacances honnêtes, structurées, territoriales
+          {t(L, "Des locations de vacances honnêtes, structurées, territoriales")}
         </h1>
         <p className="territoire-intro">
-          MANAhome est un portail de location de vacances, entre
-          propriétaires et vacanciers. Voici, noir sur blanc, ce
-          que nous faisons — et ce que nous ne ferons jamais.
+          {t(L, "MANAhome est un portail de location de vacances, entre propriétaires et vacanciers. Voici, noir sur blanc, ce que nous faisons — et ce que nous ne ferons jamais.")}
         </p>
 
         <div className="ia-grid">
           {PILIERS.map((p) => (
             <div key={p.titre} className="ia-bloc">
-              <h3 className="label-icone"><p.glyphe size={22} />{p.titre}</h3>
-              <p>{p.texte}</p>
+              <h3 className="label-icone"><p.glyphe size={22} />{t(L, p.titre)}</h3>
+              <p>{t(L, p.texte)}</p>
             </div>
           ))}
         </div>
 
         <p className="ia-disclaimer">
-          MANAhome fait partie de l'écosystème MANA (mana.bzh, mana.love,
-          manafrance.org).
+          {t(L, "MANAhome fait partie de l'écosystème MANA (mana.bzh, mana.love, manafrance.org).")}
         </p>
 
         <div className="est-actions">
           <a className="btn btn-ghost" href={lien(`/annonces/crozon`)}>
-            Voir les annonces
+            {t(L, "Voir les annonces")}
           </a>
           <a className="btn btn-primary" href={lien(`/publier`)}>
-            Publier mon annonce — gratuit
+            {t(L, "Publier mon annonce — gratuit")}
           </a>
         </div>
       </div>
