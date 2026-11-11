@@ -31,6 +31,9 @@ import { ContactForm } from "./ContactForm";
 import { IconePixel } from "./IconePixel";
 import { SondeGeo } from "./SondeGeo";
 import { CompteurAgentsIa } from "./CompteurAgentsIa";
+// Le logo du hero. Importé, pas écrit en CSS : il PORTE le nom de la marque,
+// donc c'est une image de contenu, et Vite lui donne son empreinte.
+import logo from "./assets/logo.webp";
 // ⭐ Les prix ne vivent plus ici : ils sont dans src/offres.ts, lu AUSSI par
 //    vite.config.ts pour le JSON-LD. Deux lecteurs, une seule source.
 // ⛔ 11/11/2026 — OFFRES_MANA n'est plus importé ici : la section « Les autres
@@ -149,7 +152,7 @@ const SECTIONS = [
     titre: "La maison des IA",
     accroche: "Les machines interrogent. MANA tient le registre honnête.",
     texte:
-      "Pourquoi nous croire ? Parce que nous ne vendons pas ce que nous mesurons. Le registre territorial de l'écosystème est non marchand : aucune mise en avant payante, aucun ordre achetable. L'audit reste indépendant de toute prestation d'optimisation — aucun achat ne peut en modifier les conclusions. Nous mesurons d'abord sur nos propres sites avant de le proposer aux vôtres. Et nous disons ce que nous ne savons pas faire : la structuration améliore les chances d'être compris et trouvé, elle ne garantit pas qu'un assistant indexera ou citera une page.",
+      "Vous repartez avec une mesure que vous pouvez défendre : les réponses brutes, leurs sources, la date et le protocole. Personne ne peut l'acheter — ni vous, ni vos concurrents : le registre territorial de l'écosystème est non marchand, sans mise en avant payante ni ordre négociable. C'est ce qui rend le résultat opposable le jour où votre conseil, votre direction ou votre financeur vous demandera d'où il sort.",
     cta: { label: "Comprendre notre approche", href: "/approche" } },
 ];
 
@@ -253,9 +256,15 @@ export default function App() {
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
               <p className="hero-label">{t(L, "Le GEO, par Alliance MANA")}</p>
-              <h1 className="brand-grand">
-                MANA<em>home</em>
-              </h1>
+              {/* ⚠️ `alt=""` à dessein : le logo porte déjà le mot MANAHOME, et
+                  le <h1> juste à côté le porte aussi. Le décrire ferait
+                  entendre le nom deux fois à un lecteur d'écran. */}
+              <div className="hero-marque">
+                <img className="hero-logo" src={logo} alt="" width={1024} height={1024} />
+                <h1 className="brand-grand">
+                  MANA<em>home</em>
+                </h1>
+              </div>
               <p className="section-accroche">
                 {t(L, "Vos clients demandent à ChatGPT. Savez-vous ce qu'il répond sur vous ? Testez votre site en 30 secondes, gratuitement — puis mesurez votre visibilité réelle à partir de 149 €.")}
               </p>
@@ -457,7 +466,7 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "Vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.")}
+              {t(L, "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par Alliance MANA, association loi 1901. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.")}
             </p>
             {/* ⚠️ /approche porte DÉJÀ le formulaire, en pleine page : l'y
                 répéter dans le pied donnait deux formulaires identiques

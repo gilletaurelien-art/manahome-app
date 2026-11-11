@@ -91,12 +91,17 @@ export function MentionsLegales() {
 
         <h2 className="tarif-sous-titre">{t(L, "Prix et commandes")}</h2>
         <p className="section-texte">
-          {t(L, "Les prix affichés sont des prix arrêtés, hors taxes. Aucune commande n'est enregistrée depuis ce site : une demande ouvre votre logiciel de courriel, et rien n'est transmis avant que vous ne l'envoyiez vous-même. Toute prestation fait l'objet d'un devis ou d'une facture émise par la structure qui la réalise.")}
+          {t(L, "Les prix affichés sont des prix publics, hors taxes. Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par Alliance MANA, que vous acceptez avant tout travail.")}
+        </p>
+
+        <h2 className="tarif-sous-titre">{t(L, "Le test gratuit")}</h2>
+        <p className="section-texte">
+          {t(L, "L'adresse que vous saisissez dans le test de lisibilité est envoyée à notre serveur, qui consulte la page publique correspondante comme le ferait un moteur de recherche. Aucun compte, aucune adresse de courriel, aucun suivi : le test ne conserve rien de vous.")}
         </p>
 
         <h2 className="tarif-sous-titre">{t(L, "Données personnelles")}</h2>
         <p className="section-texte">
-          {t(L, "Ce site ne dépose aucun traceur et ne collecte aucune donnée personnelle par lui-même : il n'a ni compte, ni formulaire enregistré côté serveur. Les informations que vous saisissez dans le formulaire de demande restent dans votre navigateur jusqu'à ce que vous les envoyiez par votre propre messagerie. Aucune donnée ni aucun contact n'est revendu.")}
+          {t(L, "Ce site ne dépose aucun traceur et n'a pas de compte utilisateur. Les informations que vous saisissez dans le formulaire ne quittent votre navigateur qu'au moment où vous cliquez sur « Envoyer » : elles sont alors enregistrées sur nos serveurs, en France, pour traiter votre demande et vous répondre. Aucune donnée, aucun contact n'est revendu, et vous pouvez en demander la suppression à tout moment.")}
         </p>
         <p className="section-texte">
           {t(L, "Pour exercer vos droits d'accès, de rectification ou de suppression sur un échange déjà engagé, écrivez à")} <a href={`mailto:${EDITEUR.email}`}>{EDITEUR.email}</a>.

@@ -55,8 +55,8 @@ export const PAGES_PRIVEES_T: readonly Page[] = [
  * n'est plus la plateforme de location saisonnière. Le titre porte la promesse
  * GEO ; les prix affichés sur le site sont uniquement les prix ARRÊTÉS.
  */
-export const TITRE_GENERIQUE = "MANAhome — Le GEO : être trouvé par les IA. Infrastructure, audits, offres arrêtées.";
-export const TITRE_GENERIQUE_EN = "MANAhome — GEO: being found by AIs. Infrastructure, audits, fixed offers.";
+export const TITRE_GENERIQUE = "MANAhome — Savoir ce que les IA répondent sur vous. Audits dès 149 €.";
+export const TITRE_GENERIQUE_EN = "MANAhome — Know what AIs answer about you. Audits from €149.";
 
 /** Les pages publiques, indexables. Elles seules entrent au plan de site. */
 export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p.slug);

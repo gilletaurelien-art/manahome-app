@@ -26,16 +26,16 @@ import {
 
 const PILIERS = [
   {
-    titre: "Nous mesurons, nous ne promettons pas",
+    titre: "Vous saurez où vous en êtes, vraiment",
     glyphe: GlyphBalance,
     texte:
-      "Aucune agence ne peut garantir qu'un assistant IA vous recommandera : personne ne contrôle ce que répond ChatGPT. Nous mesurons ce qu'ils répondent vraiment, nous le documentons, et nous expliquons pourquoi.",
+      "Vous verrez, noir sur blanc, ce que ChatGPT, Gemini, Claude et Perplexity répondent quand on leur demande un professionnel comme vous — et pourquoi ils citent qui ils citent. Aucune agence ne peut garantir une recommandation ; nous, nous pouvons vous montrer la réalité.",
   },
   {
-    titre: "L'audit ne se vend pas lui-même",
+    titre: "Un résultat que personne ne peut acheter",
     glyphe: GlyphBouclier,
     texte:
-      "Nous ne vendons pas ce que nous mesurons. Aucune prestation d'optimisation ne peut modifier les conclusions d'un audit — c'est la seule façon qu'un audit vaille quelque chose.",
+      "Ni vous ni vos concurrents ne pouvez infléchir un audit en achetant quoi que ce soit. C'est ce qui vous permet de le poser sur la table d'un conseil d'administration ou d'un financeur sans qu'on vous demande qui l'a payé.",
   },
   {
     titre: "Vous recevez les réponses, pas un score",
@@ -44,19 +44,19 @@ const PILIERS = [
       "Les questions exactes, les réponses intégrales des assistants, les sources citées, les concurrents nommés à votre place. Un indice qu'on ne peut pas vérifier ne vaut rien ; une réponse qu'on peut relire se discute.",
   },
   {
-    titre: "Reproductible, ou ce n'est pas une mesure",
+    titre: "Un audit que vous pouvez rejouer",
     glyphe: GlyphCadenas,
     texte:
       "Date, heure, langue, localisation, environnement de collecte, version du modèle, nombre de répétitions. Une réponse d'IA varie d'un essai à l'autre : sans protocole, une variation du hasard se vend comme un progrès.",
   },
   {
-    titre: "Ce que nous ne savons pas faire, nous le disons",
+    titre: "Vous saurez ce qui a été mesuré",
     glyphe: GlyphCadeau,
     texte:
-      "Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer sans gratter leur interface. Ils sont déclarés « non testés » dans nos rapports — jamais comptés comme une absence de votre entreprise.",
+      "Chaque réponse du rapport porte son moteur, sa date et son mode de collecte. Copilot et Google AI Overviews n'offrent aucun accès mesurable : ils apparaissent en « non testé », et ne pèsent jamais contre vous dans le résultat.",
   },
   {
-    titre: "Nous mesurons d'abord chez nous",
+    titre: "Une méthode déjà éprouvée en vrai",
     glyphe: GlyphVieLocale,
     texte:
       "Du 20 septembre au 11 novembre 2026 — 52 jours — nos journaux ont compté 14 853 183 requêtes d'agents IA sur mana.bzh et manafrance.org. Nous ne vous proposons rien que nous n'ayons posé sur nos propres sites d'abord.",
@@ -77,7 +77,7 @@ export function Approche() {
       <section className="landing-section bulle">
         <p className="hero-label">{t(L, "Notre approche")}</p>
         <h1 className="section-title">
-          {t(L, "Mesurer ce que les IA répondent. Rien de plus, rien de moins.")}
+          {t(L, "Ce que les IA disent de vous, mesuré et documenté.")}
         </h1>
         <p className="section-accroche">
           {t(L, "Le GEO, par Alliance MANA — pour les pros et les structures.")}

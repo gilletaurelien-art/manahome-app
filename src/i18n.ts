@@ -119,6 +119,30 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── Relecture commerciale du 11/11/2026 ──
+  "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par Alliance MANA, association loi 1901. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.":
+    "MANAhome measures what AI assistants answer about organisations: one-off audits, monthly monitoring, machine-readable infrastructure. Published by Alliance MANA, a French non-profit association. Being better understood improves your odds of being cited; no AI can be made to cite you.",
+  "Vous repartez avec une mesure que vous pouvez défendre : les réponses brutes, leurs sources, la date et le protocole. Personne ne peut l'acheter — ni vous, ni vos concurrents : le registre territorial de l'écosystème est non marchand, sans mise en avant payante ni ordre négociable. C'est ce qui rend le résultat opposable le jour où votre conseil, votre direction ou votre financeur vous demandera d'où il sort.":
+    "You leave with a measurement you can defend: the raw answers, their sources, the date and the protocol. Nobody can buy it — neither you nor your competitors: the ecosystem's territorial registry is non-commercial, with no paid placement and no negotiable ranking. That is what makes the result hold up the day your board, your management or your funder asks where it came from.",
+  "Ce que les IA disent de vous, mesuré et documenté.": "What AIs say about you, measured and documented.",
+  "Vous saurez où vous en êtes, vraiment": "You will know where you really stand",
+  "Vous verrez, noir sur blanc, ce que ChatGPT, Gemini, Claude et Perplexity répondent quand on leur demande un professionnel comme vous — et pourquoi ils citent qui ils citent. Aucune agence ne peut garantir une recommandation ; nous, nous pouvons vous montrer la réalité.":
+    "You will see, in black and white, what ChatGPT, Gemini, Claude and Perplexity answer when someone asks for a professional like you — and why they cite whom they cite. No agency can guarantee a recommendation; we can show you the reality.",
+  "Un résultat que personne ne peut acheter": "A result nobody can buy",
+  "Ni vous ni vos concurrents ne pouvez infléchir un audit en achetant quoi que ce soit. C'est ce qui vous permet de le poser sur la table d'un conseil d'administration ou d'un financeur sans qu'on vous demande qui l'a payé.":
+    "Neither you nor your competitors can sway an audit by buying anything. That is what lets you put it on the table of a board or a funder without being asked who paid for it.",
+  "Un audit que vous pouvez rejouer": "An audit you can replay",
+  "Vous saurez ce qui a été mesuré": "You will know what was measured",
+  "Chaque réponse du rapport porte son moteur, sa date et son mode de collecte. Copilot et Google AI Overviews n'offrent aucun accès mesurable : ils apparaissent en « non testé », et ne pèsent jamais contre vous dans le résultat.":
+    "Every answer in the report carries its engine, its date and its collection mode. Copilot and Google AI Overviews offer no measurable access: they appear as not tested, and never count against you in the result.",
+  "Une méthode déjà éprouvée en vrai": "A method already proven in the field",
+  "Les prix affichés sont des prix publics, hors taxes. Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par Alliance MANA, que vous acceptez avant tout travail.":
+    "The prices shown are public prices, excluding tax. A request sent from this site is recorded on our servers, and you receive an email confirmation. It is not an order: every service is covered by a quote or an invoice issued by Alliance MANA, which you accept before any work begins.",
+  "Le test gratuit": "The free test",
+  "L'adresse que vous saisissez dans le test de lisibilité est envoyée à notre serveur, qui consulte la page publique correspondante comme le ferait un moteur de recherche. Aucun compte, aucune adresse de courriel, aucun suivi : le test ne conserve rien de vous.":
+    "The address you type into the readability test is sent to our server, which fetches the matching public page the way a search engine would. No account, no email address, no tracking: the test keeps nothing about you.",
+  "Ce site ne dépose aucun traceur et n'a pas de compte utilisateur. Les informations que vous saisissez dans le formulaire ne quittent votre navigateur qu'au moment où vous cliquez sur « Envoyer » : elles sont alors enregistrées sur nos serveurs, en France, pour traiter votre demande et vous répondre. Aucune donnée, aucun contact n'est revendu, et vous pouvez en demander la suppression à tout moment.":
+    "This site sets no tracker and has no user account. What you type into the form leaves your browser only when you click Send: it is then recorded on our servers, in France, to handle your request and reply to you. No data and no contact is ever resold, and you can ask for deletion at any time.",
   // ── Compteur vivant, objet statutaire, formulaire branché (11/11/2026) ──
   "sur l'ensemble de l'écosystème MANA, depuis": "across the whole MANA ecosystem, for the past",
   "jours": "days",

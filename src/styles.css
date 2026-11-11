@@ -2260,3 +2260,25 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
 .btn-clair:active,
 .btn-clair-ghost:active { box-shadow: 0 0 0 0 var(--relief-bouton); }
 .nav .nav-cta { box-shadow: 2px 2px 0 0 var(--relief-bouton); }
+
+/* Le logo du hero, devant la marque — 11/11/2026.
+   ⚠️ `aspect-ratio` ET les attributs width/height : sans eux, la carte se
+   replie au chargement et tout ce qui suit saute d'un cran. */
+.hero-marque {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-1);
+}
+.hero-logo {
+  flex: 0 0 auto;
+  width: clamp(48px, 14vw, 88px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--ink);
+  border-radius: var(--rayon);
+  background: var(--ink);
+  /* L'image est en pixels : on les garde nets plutôt que lissés. */
+  image-rendering: pixelated;
+}
+.hero-marque .brand-grand { margin: 0; }
