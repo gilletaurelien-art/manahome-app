@@ -50,8 +50,8 @@ export const PAGES_PRIVEES_T: readonly Page[] = [
 ];
 
 /** Le titre générique, dans les deux langues : l'accueil et les pages d'erreur. */
-export const TITRE_GENERIQUE = "MANAhome — Gratuit. Accompagné. Lisible par les IA.";
-export const TITRE_GENERIQUE_EN = "MANAhome — Free. Supported. AI-readable.";
+export const TITRE_GENERIQUE = "MANAhome — La maison des IA. Gratuit. Accompagné. Lisible par les IA.";
+export const TITRE_GENERIQUE_EN = "MANAhome — The house of AIs. Free. Supported. AI-readable.";
 
 /** Les pages publiques, indexables. Elles seules entrent au plan de site. */
 export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p.slug);
