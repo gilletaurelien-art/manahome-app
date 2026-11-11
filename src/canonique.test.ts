@@ -7,6 +7,7 @@ import {
   ROUTES_PLATES,
   TOUTES_LES_PAGES,
   TITRE_GENERIQUE,
+  TITRE_GENERIQUE_EN,
   canonique,
   construireSitemap,
   titreDeLaRoute,
