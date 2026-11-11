@@ -135,7 +135,7 @@ describe("la carte des routes est la source unique", () => {
   it("une route a son titre dans chaque langue, suffixé par la marque", () => {
     expect(titreDeLaRoute("/approche", "fr")).toBe("Notre approche — MANAhome");
     expect(titreDeLaRoute("/approche", "en")).toBe("Our approach — MANAhome");
-    expect(titreDeLaRoute("/", "en")).toBe("MANAhome — Free. Supported. AI-readable.");
+    expect(titreDeLaRoute("/", "en")).toBe(TITRE_GENERIQUE_EN); // verrou sur la constante, pas le littéral
   });
 
   it("le plan du site porte les hreflang des deux langues sur chaque entrée", () => {
