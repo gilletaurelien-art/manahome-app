@@ -142,6 +142,46 @@ const OFFRES_GEO = [
 ];
 
 // Les prix déjà arrêtés de l'écosystème, inchangés.
+// ⛔ MAQUETTE ILLUSTRATIVE — aucun résultat réel, aucune entreprise réelle.
+//    Elle montre la FORME du livrable, rien d'autre. Trois règles tenues ici,
+//    et chacune pour une raison :
+//    1. Aucun nom d'entreprise, même inventé : un nom inventé finit par
+//       ressembler à quelqu'un, et un lecteur pressé le prend pour un client.
+//    2. Autant d'échecs que de succès. Une maquette où l'entreprise est
+//       toujours citée n'illustre pas un audit, elle PROMET un résultat — et
+//       MANA GEO ne vend aucune recommandation.
+//    3. Les deux moteurs non mesurables y figurent en « non testé » plutôt
+//       que d'être masqués : les retirer laisserait croire qu'on couvre tout.
+const EXEMPLE_QUESTION = "Quels hébergements recommandez-vous pour un week-end en presqu'île de Crozon ?";
+const EXEMPLE_LIGNES = [
+  { moteur: "ChatGPT", etat: "cite",
+    constat: "Citée en 3ᵉ position. Activité correctement décrite, horaires absents.",
+    concurrents: "2 cités avant", sources: "site officiel, office de tourisme" },
+  { moteur: "Gemini", etat: "partiel",
+    constat: "Citée, mais confondue avec un établissement du même nom à 40 km.",
+    concurrents: "4 cités avant", sources: "annuaire tiers, avis" },
+  { moteur: "Claude", etat: "absent",
+    constat: "Non citée. Aucune source la concernant n'apparaît dans la réponse.",
+    concurrents: "5 cités", sources: "guides régionaux" },
+  { moteur: "Perplexity", etat: "cite",
+    constat: "Citée en 1ʳᵉ position, avec un lien direct vers le site.",
+    concurrents: "3 cités après", sources: "site officiel, presse locale" },
+  { moteur: "Microsoft Copilot", etat: "non-teste",
+    constat: "Non testé : aucun accès ne permet de le mesurer sans gratter son interface.",
+    concurrents: "—", sources: "—" },
+  { moteur: "Google AI Overviews", etat: "non-teste",
+    constat: "Non testé, même raison. Une absence de test n'est jamais comptée comme une absence de l'entreprise.",
+    concurrents: "—", sources: "—" },
+];
+const EXEMPLE_PROTOCOLE = [
+  "Date et heure exactes du test",
+  "Langue et localisation de la question",
+  "Environnement : API du modèle, ou assistant public",
+  "Recherche web activée ou non",
+  "Version du modèle lorsqu'elle est exposée",
+  "Nombre de répétitions, car une réponse varie d'un essai à l'autre",
+];
+
 const FAMILLES = [
   { cle: "ponctuel", titre: "Les audits — une commande, un livrable" },
   { cle: "recurrent", titre: "La surveillance — chaque mois, le même protocole" },
@@ -330,6 +370,48 @@ export default function App() {
                   {/* ⭐ 11/11/2026 — plus d'encadré bleu : le contenu vit directement dans le conteneur clair. */}
                   <p className="section-accroche">{t(L, s.accroche)}</p>
                   <p className="section-texte">{t(L, s.texte)}</p>
+                  {s.num === "02" && (
+                    <div className="rapport">
+                      <p className="rapport-avertissement">
+                        {t(L, "Exemple illustratif — aucune entreprise réelle, aucun résultat réel. Cette maquette montre la forme du livrable.")}
+                      </p>
+                      <p className="rapport-question">
+                        <span className="rapport-etiquette">{t(L, "La question posée")}</span>
+                        {t(L, EXEMPLE_QUESTION)}
+                      </p>
+                      <div className="rapport-table-enveloppe">
+                        <table className="rapport-table">
+                          <thead>
+                            <tr>
+                              <th>{t(L, "Assistant")}</th>
+                              <th>{t(L, "Ce qu'il a répondu")}</th>
+                              <th>{t(L, "Concurrents")}</th>
+                              <th>{t(L, "Sources citées")}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {EXEMPLE_LIGNES.map((r) => (
+                              <tr key={r.moteur} className={`rapport-${r.etat}`}>
+                                <th scope="row">{r.moteur}</th>
+                                <td>{t(L, r.constat)}</td>
+                                <td>{t(L, r.concurrents)}</td>
+                                <td>{t(L, r.sources)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <p className="rapport-legende">
+                        {t(L, "Vous recevez la réponse intégrale de chaque assistant, pas ce résumé — et avec elle, tout ce qui permet de la rejouer :")}
+                      </p>
+                      <ul className="rapport-protocole">
+                        {EXEMPLE_PROTOCOLE.map((x) => (<li key={x}>{t(L, x)}</li>))}
+                      </ul>
+                      <p className="rapport-legende">
+                        {t(L, "C'est ce qui sépare une mesure d'une impression : un audit qu'on ne peut pas rejouer ne prouve rien, et un score seul ne se vérifie pas.")}
+                      </p>
+                    </div>
+                  )}
                   {s.num === "03" && (
                     <>
                       {/* ⭐ Deux familles, pas une grille de six. Un audit

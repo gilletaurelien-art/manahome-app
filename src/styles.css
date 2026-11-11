@@ -186,8 +186,16 @@ html { background: var(--sand); }
 }
 /* Mobile : icônes seules — le libellé passe en sr-only pour l'accessibilité */
 @media (max-width: 900px) {
-  /* 5 items icônes seules : gap réduit pour tenir jusqu'à 320px */
-  .nav { gap: var(--sp-1); }
+  /* 5 items icônes seules : gap réduit pour tenir jusqu'à 320px.
+     ⚠️ 11/11/2026 — ce réglage a été CASSÉ par le passage aux icônes pixel :
+     elles font 24 px là où les <svg> en faisaient moins, et la barre
+     débordait de 8 px à 321 px de large. Le débordement ne se voyait pas à
+     l'œil — c'est `scrollWidth - clientWidth` qui l'a dit. La compensation
+     se fait sur le RESTE (rembourrage, écart, pastille de langue), pas sur
+     la taille de l'icône : une icône pixel réduite perd ses carrés nets. */
+  .nav { gap: 4px; }
+  .nav a { padding: 8px 10px; }
+  .nav .nav-langue { padding: 8px; }
   .site-header .wrap { padding-left: var(--sp-2); padding-right: var(--sp-2); }
   /* ⚠️ 11/11/2026 — ce sélecteur visait `span` tout court. Il était juste
      tant que l'icône était un <svg> : seul le libellé était un span. Le jour
@@ -1628,3 +1636,107 @@ html { background: var(--sand); }
   color: var(--primary-deep);
   margin: 0;
 }
+
+/* ───────────────────────────────────────────────────────────────────────
+   Maquette de rapport GEO — posée le 11/11/2026 (§4 de la mission).
+   ⛔ Elle doit se LIRE comme un spécimen, pas comme un résultat de client.
+   D'où l'avertissement en tête, en rayé diagonal : un bandeau discret se
+   perd, et un lecteur pressé prend alors une maquette pour une preuve.
+   ⭐ L'état de chaque ligne est porté par une PASTILLE DE TEXTE autant que
+   par une couleur : « non testé » doit rester lisible en noir et blanc, et
+   pour qui ne distingue pas le vert du rouge.
+   ─────────────────────────────────────────────────────────────────────── */
+.rapport {
+  margin: var(--sp-4) 0 0;
+  text-align: left;
+  border: 2px dashed var(--primary);
+  border-radius: 18px;
+  padding: var(--sp-2);
+  background: var(--blanc-chaud);
+}
+.rapport-avertissement {
+  font-family: var(--titre);
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary-deep);
+  background: repeating-linear-gradient(
+    45deg, rgb(201 162 39 / 12%) 0 10px, transparent 10px 20px);
+  border-radius: 10px;
+  padding: var(--sp-1);
+  margin: 0 0 var(--sp-2);
+}
+.rapport-etiquette {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+  margin-bottom: 4px;
+}
+.rapport-question {
+  font-family: var(--sans);
+  font-size: var(--t-m);
+  color: var(--ink);
+  margin: 0 0 var(--sp-2);
+}
+/* Une table large ne fait JAMAIS défiler la page : elle défile chez elle. */
+.rapport-table-enveloppe { overflow-x: auto; }
+.rapport-table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+}
+.rapport-table th,
+.rapport-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--sp-1);
+  border-bottom: 1px solid var(--ecume);
+}
+.rapport-table thead th {
+  font-family: var(--titre);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+  border-bottom: 2px solid var(--ecume);
+}
+.rapport-table tbody th {
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* La pastille est écrite, pas seulement colorée. */
+.rapport-table tbody th::after {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.rapport-cite      tbody th::after,
+tr.rapport-cite      th::after { content: "citée"; color: #2f6b3a; }
+tr.rapport-partiel   th::after { content: "partielle"; color: var(--primary-deep); }
+tr.rapport-absent    th::after { content: "absente"; color: var(--alerte); }
+tr.rapport-non-teste th::after { content: "non testé"; color: var(--ink); opacity: 0.6; }
+tr.rapport-non-teste td { opacity: 0.68; font-style: italic; }
+.rapport-legende {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  opacity: 0.84;
+  margin: var(--sp-2) 0 0;
+}
+.rapport-protocole {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  margin: var(--sp-1) 0 0;
+  padding-left: 1.1em;
+}
+.rapport-protocole li { margin-bottom: 3px; }

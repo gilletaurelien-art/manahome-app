@@ -119,6 +119,48 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── Maquette de rapport GEO (11/11/2026) ──
+  "Exemple illustratif — aucune entreprise réelle, aucun résultat réel. Cette maquette montre la forme du livrable.":
+    "Illustrative example — no real company, no real results. This mock-up shows the shape of the deliverable.",
+  "La question posée": "The question asked",
+  "Quels hébergements recommandez-vous pour un week-end en presqu'île de Crozon ?":
+    "Which places to stay would you recommend for a weekend on the Crozon peninsula?",
+  "Assistant": "Assistant",
+  "Ce qu'il a répondu": "What it answered",
+  "Concurrents": "Competitors",
+  "Sources citées": "Sources cited",
+  "Citée en 3ᵉ position. Activité correctement décrite, horaires absents.":
+    "Cited in 3rd place. Activity correctly described, opening hours missing.",
+  "2 cités avant": "2 cited before",
+  "site officiel, office de tourisme": "official site, tourist office",
+  "Citée, mais confondue avec un établissement du même nom à 40 km.":
+    "Cited, but confused with a same-named business 40 km away.",
+  "4 cités avant": "4 cited before",
+  "annuaire tiers, avis": "third-party directory, reviews",
+  "Non citée. Aucune source la concernant n'apparaît dans la réponse.":
+    "Not cited. No source about it appears in the answer.",
+  "5 cités": "5 cited",
+  "guides régionaux": "regional guides",
+  "Citée en 1ʳᵉ position, avec un lien direct vers le site.":
+    "Cited in 1st place, with a direct link to the site.",
+  "3 cités après": "3 cited after",
+  "site officiel, presse locale": "official site, local press",
+  "Non testé : aucun accès ne permet de le mesurer sans gratter son interface.":
+    "Not tested: no access allows measuring it without scraping its interface.",
+  "Non testé, même raison. Une absence de test n'est jamais comptée comme une absence de l'entreprise.":
+    "Not tested, same reason. A missing test is never counted as the company being missing.",
+  "Vous recevez la réponse intégrale de chaque assistant, pas ce résumé — et avec elle, tout ce qui permet de la rejouer :":
+    "You receive each assistant's full answer, not this summary — and with it, everything needed to replay it:",
+  "Date et heure exactes du test": "Exact date and time of the test",
+  "Langue et localisation de la question": "Language and location of the question",
+  "Environnement : API du modèle, ou assistant public":
+    "Environment: the model's API, or the public assistant",
+  "Recherche web activée ou non": "Web search on or off",
+  "Version du modèle lorsqu'elle est exposée": "Model version when it is exposed",
+  "Nombre de répétitions, car une réponse varie d'un essai à l'autre":
+    "Number of repetitions, because an answer varies from one run to the next",
+  "C'est ce qui sépare une mesure d'une impression : un audit qu'on ne peut pas rejouer ne prouve rien, et un score seul ne se vérifie pas.":
+    "This is what separates a measurement from an impression: an audit you cannot replay proves nothing, and a score on its own cannot be checked.",
   "Les audits — une commande, un livrable": "The audits — one order, one deliverable",
   "La surveillance — chaque mois, le même protocole": "The monitoring — the same protocol, every month",
   "Option sur GEO Expert": "Add-on to GEO Expert",
