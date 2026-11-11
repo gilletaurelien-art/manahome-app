@@ -50,6 +50,85 @@ export function t(langue: Langue, texte: string): string {
  * sans toucher au reste de l'app.
  */
 const DICO_EN: Record<string, string> = {
+  // ── Grille tarifaire GEO (11/11/2026) ── ⚠️ Les NOMS de produits et les
+  // PRIX ne sont pas ici : une marque ne se traduit pas, un montant non plus.
+  // `t()` rend la clé quand elle manque — c'est le comportement voulu.
+  "HT · paiement unique": "excl. VAT · one-off payment",
+  "HT · option sur GEO Expert": "excl. VAT · add-on to GEO Expert",
+  "HT par mois · abonnement": "excl. VAT per month · subscription",
+  "HT · audit complémentaire ponctuel": "excl. VAT · one-off add-on audit",
+  "HT par mois · complément de GEO Monitoring": "excl. VAT per month · add-on to GEO Monitoring",
+  "HT par mois et PAR HUMAIN, jamais par structure": "excl. VAT per month and PER HUMAN, never per organisation",
+  "HT": "excl. VAT",
+  "Pour une photographie rapide de sa présence dans les IA.":
+    "For a quick snapshot of your presence inside AI assistants.",
+  "Pour comprendre sa position réelle sur son marché.":
+    "To understand your real position in your market.",
+  "Pour mesurer sa visibilité sur un marché étranger.":
+    "To measure your visibility in a foreign market.",
+  "Pour suivre son évolution, mois après mois.": "To track your progress, month after month.",
+  "Pour savoir ce que les IA chinoises disent de vous.":
+    "To find out what Chinese AIs say about you.",
+  "Pour suivre la visibilité chinoise dans le temps.":
+    "To track Chinese visibility over time.",
+  "Exploration automatisée du site": "Automated crawl of your site",
+  "Identification de l'entreprise et de ses activités": "Identification of the company and its activities",
+  "Panel de questions commerciales": "A panel of commercial questions",
+  "Vérification de la présence et de l'exactitude des réponses":
+    "Check of presence and accuracy of the answers",
+  "Rapport synthétique et premières recommandations": "Summary report and first recommendations",
+  "Exploration technique et sémantique approfondie": "In-depth technical and semantic crawl",
+  "Panel correspondant aux intentions réelles des acheteurs":
+    "A panel matching what buyers actually ask",
+  "Comparaison avec les concurrents": "Comparison against competitors",
+  "Analyse des sources citées par les assistants": "Analysis of the sources assistants cite",
+  "Détection des informations absentes, erronées ou contradictoires":
+    "Detection of missing, wrong or contradictory information",
+  "Analyse des données structurées et de la lisibilité machine":
+    "Analysis of structured data and machine readability",
+  "Plan d'amélioration hiérarchisé": "A prioritised improvement plan",
+  "Audit complémentaire sur un marché étranger": "Additional audit on a foreign market",
+  "Analyse dans une autre langue": "Analysis in another language",
+  "Comparaison des concurrents locaux": "Comparison of local competitors",
+  "Identification des sources et informations manquantes":
+    "Identification of missing sources and information",
+  "Le même panel de questions rejoué chaque mois": "The same question panel replayed every month",
+  "Suivi des concurrents et des changements de position":
+    "Tracking of competitors and position changes",
+  "Repérage des nouvelles sources citées": "Spotting of newly cited sources",
+  "Détection des réponses erronées ou des disparitions":
+    "Detection of wrong answers or disappearances",
+  "Rapport comparatif mensuel et historique conservé":
+    "Monthly comparative report, with history kept",
+  "Sept moteurs chinois : DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM":
+    "Seven Chinese engines: DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM",
+  "Questions posées EN chinois simplifié, pas traduites du français":
+    "Questions asked IN simplified Chinese, not translated from French",
+  "Réponses analysées en chinois avant d'être restituées en français":
+    "Answers analysed in Chinese before being reported back",
+  "Concurrents chinois et internationaux cités": "Chinese and international competitors cited",
+  "Sources locales identifiées": "Local sources identified",
+  "Recommandations pour améliorer sa visibilité en Chine":
+    "Recommendations to improve your visibility in China",
+  "Les mêmes sept moteurs, les mêmes questions, chaque mois":
+    "The same seven engines, the same questions, every month",
+  "Évolution de la visibilité chinoise": "Change in Chinese visibility",
+  "Nouveaux concurrents et nouvelles sources": "New competitors and new sources",
+  "L'assistant": "The assistant",
+  "La fiche pro": "The pro page",
+  "L'antenne": "The antenna",
+  "Offre recommandée": "Recommended",
+  "Les autres prix arrêtés": "The other fixed prices",
+  "Commander un audit": "Order an audit",
+  "Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer honnêtement : ils sont déclarés « non testés », jamais comptés comme une absence.":
+    "Four Western assistants are queried: ChatGPT, Gemini, Claude and Perplexity. Microsoft Copilot and Google AI Overviews expose no access that would let us measure them honestly: they are reported as \u00ab not tested \u00bb, never counted as an absence.",
+  "MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement — et aucune prestation d'optimisation ne peut en modifier les conclusions.":
+    "MANA GEO never guarantees a recommendation by an AI, and does not sell one. It measures, documents and explains what the assistants actually answer — and no optimisation service can change its conclusions.",
+  "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit interroge quatre assistants — ChatGPT, Gemini, Claude et Perplexity — avec un panel de questions que vos acheteurs poseraient vraiment, et vous rend leurs réponses intégrales, leurs sources, et les concurrents cités à votre place.":
+    "Where do you stand inside AI assistants? What stops you from being understood, found, cited? The audit queries four assistants — ChatGPT, Gemini, Claude and Perplexity — with a panel of questions your buyers would really ask, and hands you their full answers, their sources, and the competitors named in your place.",
+  "Tout ce qui est affiché ici est arrêté. Ce qui ne l'est pas n'apparaît pas : le site n'invente aucune grille, et ne vous laisse pas découvrir le prix après le devis.":
+    "Everything shown here is settled. What is not, does not appear: the site invents no price list, and does not leave you to discover the price after the quote.",
+
   // ── Vitrine GEO (11/11/2026) ── ⚠️ « Notre approche » existe DÉJÀ plus bas
   // dans ce dictionnaire : le redéclarer ici fait refuser tsc (TS1117).
   "Offres & tarifs": "Offers & pricing",

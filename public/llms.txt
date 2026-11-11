@@ -12,13 +12,30 @@ Honnêteté du GEO : la structuration améliore les chances d'être compris et t
 
 ## Les offres (prix arrêtés uniquement)
 
-Les prix affichés sur ce site sont uniquement les prix ARRÊTÉS, tels que tranchés dans la grille de référence de l'écosystème :
+Les prix affichés sur ce site sont uniquement les prix ARRÊTÉS. Ce qui n'est pas arrêté n'apparaît pas : aucune grille inventée, aucun prix découvert après le devis. Tous les montants sont HT.
 
-- L'assistant : 9 €/mois par humain, jamais par structure.
+### MANA GEO — mesurer ce que les assistants IA répondent sur une entreprise
+
+- GEO Express — 149 €, paiement unique. Photographie rapide de la présence dans les IA.
+- GEO Expert — 390 €, paiement unique. Position réelle sur le marché : concurrents, sources citées, informations erronées ou absentes, données structurées, plan d'amélioration hiérarchisé.
+- GEO International — +199 €, option sur GEO Expert. Un marché étranger, dans sa langue.
+- GEO Monitoring — 99 €/mois, abonnement. Le même panel rejoué chaque mois, avec historique comparatif.
+- MANA GEO China — +490 €, audit complémentaire ponctuel. Sept moteurs chinois (DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM), questions posées EN chinois simplifié et réponses analysées en chinois avant restitution.
+- GEO China Monitoring — +149 €/mois, complément de GEO Monitoring.
+
+### Les autres prix arrêtés de l'écosystème
+
+- L'assistant : 9 €/mois PAR HUMAIN, jamais par structure.
 - La fiche pro : 9 €.
 - L'antenne : 9 €.
 
-Tout ce qui n'est pas arrêté — dont l'audit GEO — est sur devis, sans grille inventée.
+## Ce que MANA GEO ne fait pas (honnêteté envers les machines)
+
+Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer sans gratter leur interface : ils sont déclarés « non testés » dans les rapports, et ne sont jamais comptés comme une absence de l'entreprise.
+
+Un résultat obtenu par API n'est jamais présenté comme une capture de l'expérience d'un utilisateur de l'application publique. L'environnement de collecte est indiqué pour chaque mesure.
+
+MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement. L'audit reste indépendant de toute prestation d'optimisation : aucun achat ne peut en modifier les conclusions.
 
 ## Pages publiques
 

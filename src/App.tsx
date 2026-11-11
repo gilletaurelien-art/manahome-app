@@ -54,6 +54,94 @@ import { ContactForm } from "./ContactForm";
 //    restent SERVIES — leur retrait est un chantier séparé qui dépend de
 //    l'arbitrage « faut-il jamais déployer la stack applicative sur le
 //    KS-5 ». Elles ne sont simplement plus LIÉES depuis la vitrine.
+// ⭐ 11/11/2026 — les prix GEO sont ARRÊTÉS (décision d'Aurélien). La page
+// disait « aucun prix n'est arrêté à ce jour » : c'est devenu faux le jour
+// même, et une phrase pareille sur une page de vente est un faux témoin.
+// ⚠️ Les prix vivent ICI, en donnée, et NULLE PART ailleurs dans le gabarit :
+//    un prix recopié à deux endroits diverge au premier changement.
+const OFFRES_GEO = [
+  {
+    nom: "GEO Express",
+    prix: "149 €",
+    unite: "HT · paiement unique",
+    pour: "Pour une photographie rapide de sa présence dans les IA.",
+    points: [
+      "Exploration automatisée du site",
+      "Identification de l'entreprise et de ses activités",
+      "Panel de questions commerciales",
+      "Vérification de la présence et de l'exactitude des réponses",
+      "Rapport synthétique et premières recommandations",
+    ] },
+  {
+    nom: "GEO Expert",
+    prix: "390 €",
+    unite: "HT · paiement unique",
+    recommande: true,
+    pour: "Pour comprendre sa position réelle sur son marché.",
+    points: [
+      "Exploration technique et sémantique approfondie",
+      "Panel correspondant aux intentions réelles des acheteurs",
+      "Comparaison avec les concurrents",
+      "Analyse des sources citées par les assistants",
+      "Détection des informations absentes, erronées ou contradictoires",
+      "Analyse des données structurées et de la lisibilité machine",
+      "Plan d'amélioration hiérarchisé",
+    ] },
+  {
+    nom: "GEO International",
+    prix: "+199 €",
+    unite: "HT · option sur GEO Expert",
+    pour: "Pour mesurer sa visibilité sur un marché étranger.",
+    points: [
+      "Audit complémentaire sur un marché étranger",
+      "Analyse dans une autre langue",
+      "Comparaison des concurrents locaux",
+      "Identification des sources et informations manquantes",
+    ] },
+  {
+    nom: "GEO Monitoring",
+    prix: "99 €",
+    unite: "HT par mois · abonnement",
+    pour: "Pour suivre son évolution, mois après mois.",
+    points: [
+      "Le même panel de questions rejoué chaque mois",
+      "Suivi des concurrents et des changements de position",
+      "Repérage des nouvelles sources citées",
+      "Détection des réponses erronées ou des disparitions",
+      "Rapport comparatif mensuel et historique conservé",
+    ] },
+  {
+    nom: "MANA GEO China",
+    prix: "+490 €",
+    unite: "HT · audit complémentaire ponctuel",
+    pour: "Pour savoir ce que les IA chinoises disent de vous.",
+    points: [
+      "Sept moteurs chinois : DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM",
+      "Questions posées EN chinois simplifié, pas traduites du français",
+      "Réponses analysées en chinois avant d'être restituées en français",
+      "Concurrents chinois et internationaux cités",
+      "Sources locales identifiées",
+      "Recommandations pour améliorer sa visibilité en Chine",
+    ] },
+  {
+    nom: "GEO China Monitoring",
+    prix: "+149 €",
+    unite: "HT par mois · complément de GEO Monitoring",
+    pour: "Pour suivre la visibilité chinoise dans le temps.",
+    points: [
+      "Les mêmes sept moteurs, les mêmes questions, chaque mois",
+      "Évolution de la visibilité chinoise",
+      "Nouveaux concurrents et nouvelles sources",
+    ] },
+];
+
+// Les prix déjà arrêtés de l'écosystème, inchangés.
+const OFFRES_MANA = [
+  { nom: "L'assistant", prix: "9 €", unite: "HT par mois et PAR HUMAIN, jamais par structure" },
+  { nom: "La fiche pro", prix: "9 €", unite: "HT" },
+  { nom: "L'antenne", prix: "9 €", unite: "HT" },
+];
+
 const SECTIONS = [
   {
     glyphe: GlyphCompas,
@@ -68,7 +156,7 @@ const SECTIONS = [
     titre: "L'audit GEO de votre structure",
     accroche: "Mairies, associations, offices de tourisme, entreprises.",
     texte:
-      "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit mesure l'état réel, puis la mise en œuvre suit : structuration, exposition, interrogeabilité. Sur devis — aucun prix n'est arrêté à ce jour, et nous n'en affichons pas.",
+      "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit interroge quatre assistants — ChatGPT, Gemini, Claude et Perplexity — avec un panel de questions que vos acheteurs poseraient vraiment, et vous rend leurs réponses intégrales, leurs sources, et les concurrents cités à votre place.",
     cta: { label: "Demander un audit", href: "/approche" } },
   {
     glyphe: GlyphAccompagnement,
@@ -76,7 +164,7 @@ const SECTIONS = [
     titre: "Les offres arrêtées",
     accroche: "Les prix tranchés, rien d'autre.",
     texte:
-      "L'assistant : 9 €/mois par humain, jamais par structure. La fiche pro : 9 €. L'antenne : 9 €. Ces prix sont arrêtés — tout ce qui ne l'est pas reste sur devis, et le site ne l'invente pas.",
+      "Tout ce qui est affiché ici est arrêté. Ce qui ne l'est pas n'apparaît pas : le site n'invente aucune grille, et ne vous laisse pas découvrir le prix après le devis.",
     // ⭐ Pas de `cta` ici, à dessein : cette section PORTE l'ancre #offres.
     // Un bouton « Voir les offres » y pointant renverrait sur elle-même —
     // le hero et la navigation l'utilisent pour DESCENDRE jusqu'ici.
@@ -235,10 +323,62 @@ export default function App() {
                   <div className="sous-bulle">
                     <p className="section-accroche">{t(L, s.accroche)}</p>
                     <p className="section-texte">{t(L, s.texte)}</p>
+                    {s.num === "03" && (
+                      <>
+                        <div className="tarifs">
+                          {OFFRES_GEO.map((o) => (
+                            <article
+                              key={o.nom}
+                              className={`tarif-carte${o.recommande ? " tarif-recommande" : ""}`}
+                            >
+                              {o.recommande && (
+                                <p className="tarif-fanion">{t(L, "Offre recommandée")}</p>
+                              )}
+                              <h3 className="tarif-nom">{o.nom}</h3>
+                              <p className="tarif-prix">{o.prix}</p>
+                              <p className="tarif-unite">{t(L, o.unite)}</p>
+                              <p className="tarif-pour">{t(L, o.pour)}</p>
+                              <ul className="tarif-points">
+                                {o.points.map((pt) => (
+                                  <li key={pt}>{t(L, pt)}</li>
+                                ))}
+                              </ul>
+                            </article>
+                          ))}
+                        </div>
+                        {/* ⚠️ Cette note n'est pas de la prudence juridique
+                            décorative : elle dit ce que le produit ne PEUT
+                            pas faire. Copilot et Google AI Overviews n'ont
+                            pas d'accès permettant de les mesurer sans les
+                            gratter — les annoncer serait vendre six moteurs
+                            et en livrer quatre. */}
+                        <p className="tarif-note">
+                          {t(L, "Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer honnêtement : ils sont déclarés « non testés », jamais comptés comme une absence.")}
+                        </p>
+                        <p className="tarif-note">
+                          {t(L, "MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement — et aucune prestation d'optimisation ne peut en modifier les conclusions.")}
+                        </p>
+                        <h3 className="tarif-sous-titre">{t(L, "Les autres prix arrêtés")}</h3>
+                        <ul className="tarifs-simples">
+                          {OFFRES_MANA.map((o) => (
+                            <li key={o.nom}>
+                              <strong>{t(L, o.nom)}</strong>
+                              <span className="tarif-prix-simple">{o.prix}</span>
+                              <span className="tarif-unite">{t(L, o.unite)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
                     <div className="est-actions">
                       {s.cta && (
                         <a className="btn btn-clair" href={lien(`${s.cta.href}`)}>
                           {t(L, s.cta.label)}
+                        </a>
+                      )}
+                      {s.num === "03" && (
+                        <a className="btn btn-clair" href={lien(`/#contact`)}>
+                          {t(L, "Commander un audit")}
                         </a>
                       )}
                     </div>

@@ -1461,3 +1461,119 @@ html { background: var(--sand); }
   .calendrier-nuit { border-color: rgba(255,255,255,0.2); }
   .calendrier-nuit.bloquee { background: rgba(255,255,255,0.85); color: #000; }
 }
+
+/* ───────────────────────────────────────────────────────────────────────
+   Grille tarifaire — posée le 11/11/2026 quand les prix GEO ont été
+   arrêtés. Tout vient des variables de la charte : aucune couleur, aucune
+   taille inventée ici, sinon la grille divergerait du reste au premier
+   changement de charte.
+   ⭐ `auto-fit` + `minmax` plutôt qu'un nombre de colonnes : six cartes de
+   largeurs inégales sur trois tailles d'écran, c'est la grille qui compte,
+   pas nous.
+   ─────────────────────────────────────────────────────────────────────── */
+.tarifs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--sp-2);
+  margin: var(--sp-4) 0 var(--sp-2);
+  text-align: left;
+}
+.tarif-carte {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-2);
+  border: 1px solid var(--ecume);
+  border-radius: 18px;
+  background: var(--blanc-chaud);
+}
+/* Une seule carte est mise en avant, et c'est la bordure qui le dit —
+   pas une couleur de fond, qui ferait lire les cinq autres comme éteintes. */
+.tarif-recommande {
+  border: 2px solid var(--or);
+}
+.tarif-fanion {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+  margin: 0;
+}
+.tarif-nom {
+  font-family: var(--titre);
+  font-size: var(--t-l);
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+.tarif-prix {
+  font-family: var(--titre);
+  font-size: var(--t-2xl);
+  line-height: 1;
+  color: var(--primary);
+  margin: 0;
+  /* Les prix s'alignent en colonne : chiffres à chasse fixe. */
+  font-variant-numeric: tabular-nums;
+}
+.tarif-unite {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  opacity: 0.72;
+  margin: 0;
+}
+.tarif-pour {
+  font-family: var(--sans);
+  font-size: var(--t-s);
+  color: var(--ink);
+  margin: var(--sp-1) 0 0;
+}
+.tarif-points {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  margin: var(--sp-1) 0 0;
+  padding-left: 1.1em;
+}
+.tarif-points li { margin-bottom: 4px; }
+.tarif-note {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  opacity: 0.78;
+  text-align: left;
+  margin: var(--sp-2) 0 0;
+}
+.tarif-sous-titre {
+  font-family: var(--titre);
+  font-size: var(--t-m);
+  font-weight: 400;
+  color: var(--ink);
+  text-align: left;
+  margin: var(--sp-4) 0 var(--sp-1);
+}
+.tarifs-simples {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-family: var(--sans);
+  font-size: var(--t-s);
+}
+.tarifs-simples li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1);
+  padding: var(--sp-1) 0;
+  border-bottom: 1px solid var(--ecume);
+}
+.tarifs-simples li:last-child { border-bottom: 0; }
+.tarif-prix-simple {
+  font-family: var(--titre);
+  font-size: var(--t-m);
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
