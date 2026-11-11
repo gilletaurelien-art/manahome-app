@@ -6,7 +6,7 @@
 
 MANAhome n'est plus une plateforme de location saisonnière : c'est la vitrine B2B du GEO et des offres de l'écosystème MANA, pour les pros et les structures — mairies, associations, offices de tourisme, entreprises.
 
-TEMPOsystem vend l'infrastructure machine-readable elle-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve vivante : manafrance.org, plus de 4,3 millions de visites d'agents IA mesurées.
+TEMPOsystem vend l'infrastructure machine-readable elle-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve mesurée : du 20 septembre au 11 novembre 2026, les journaux du serveur ont compté 5 922 180 requêtes d'agents IA sur manafrance.org — ClaudeBot (1 992 315), Applebot (1 639 944), GPTBot (1 185 967) et dix autres agents. Ce sont des REQUÊTES, pas des visites : un agent qui explore mille pages en fait mille. Mesure relevée dans la table de fréquentation du serveur, pas estimée.
 
 Honnêteté du GEO : la structuration améliore les chances d'être compris et trouvé ; elle ne garantit ni indexation, ni citation, ni recommandation par un assistant.
 

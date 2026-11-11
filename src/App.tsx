@@ -59,6 +59,7 @@ import { IconePixel } from "./IconePixel";
 const OFFRES_GEO = [
   {
     nom: "GEO Express",
+    famille: "ponctuel",
     prix: "149 €",
     unite: "HT · paiement unique",
     pour: "Pour une photographie rapide de sa présence dans les IA.",
@@ -71,6 +72,7 @@ const OFFRES_GEO = [
     ] },
   {
     nom: "GEO Expert",
+    famille: "ponctuel",
     prix: "390 €",
     unite: "HT · paiement unique",
     recommande: true,
@@ -86,6 +88,8 @@ const OFFRES_GEO = [
     ] },
   {
     nom: "GEO International",
+    famille: "ponctuel",
+    depend: "Option sur GEO Expert",
     prix: "+199 €",
     unite: "HT · option sur GEO Expert",
     pour: "Pour mesurer sa visibilité sur un marché étranger.",
@@ -97,6 +101,7 @@ const OFFRES_GEO = [
     ] },
   {
     nom: "GEO Monitoring",
+    famille: "recurrent",
     prix: "99 €",
     unite: "HT par mois · abonnement",
     pour: "Pour suivre son évolution, mois après mois.",
@@ -109,6 +114,8 @@ const OFFRES_GEO = [
     ] },
   {
     nom: "MANA GEO China",
+    famille: "ponctuel",
+    depend: "Audit complémentaire — se commande seul ou après un GEO Expert",
     prix: "+490 €",
     unite: "HT · audit complémentaire ponctuel",
     pour: "Pour savoir ce que les IA chinoises disent de vous.",
@@ -122,6 +129,8 @@ const OFFRES_GEO = [
     ] },
   {
     nom: "GEO China Monitoring",
+    famille: "recurrent",
+    depend: "Complément de GEO Monitoring",
     prix: "+149 €",
     unite: "HT par mois · complément de GEO Monitoring",
     pour: "Pour suivre la visibilité chinoise dans le temps.",
@@ -133,6 +142,11 @@ const OFFRES_GEO = [
 ];
 
 // Les prix déjà arrêtés de l'écosystème, inchangés.
+const FAMILLES = [
+  { cle: "ponctuel", titre: "Les audits — une commande, un livrable" },
+  { cle: "recurrent", titre: "La surveillance — chaque mois, le même protocole" },
+] as const;
+
 const OFFRES_MANA = [
   { nom: "L'assistant", prix: "9 €", unite: "HT par mois et PAR HUMAIN, jamais par structure" },
   { nom: "La fiche pro", prix: "9 €", unite: "HT" },
@@ -145,7 +159,7 @@ const SECTIONS = [
     titre: "Être trouvé par les IA",
     accroche: "Le GEO : la visibilité qui se construit, pas celle qui s'achète.",
     texte:
-      "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve vivante : manafrance.org, plus de 4,3 millions de visites d'agents IA mesurées." },
+      "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve se mesure : du 20 septembre au 11 novembre 2026, nos journaux ont compté 5 922 180 requêtes d'agents IA sur manafrance.org — ClaudeBot, Applebot, GPTBot et dix autres. Des requêtes, pas des « visites » : un agent qui explore mille pages en fait mille." },
   {
     num: "02",
     titre: "L'audit GEO de votre structure",
@@ -318,8 +332,16 @@ export default function App() {
                   <p className="section-texte">{t(L, s.texte)}</p>
                   {s.num === "03" && (
                     <>
+                      {/* ⭐ Deux familles, pas une grille de six. Un audit
+                          qu'on paie une fois et un abonnement mensuel ne se
+                          comparent pas : les aligner côte à côte oblige le
+                          lecteur à faire ce tri lui-même, et c'est justement
+                          le tri qui décide de l'achat. */}
+                      {FAMILLES.map((fam) => (
+                      <div key={fam.cle} className="tarifs-famille">
+                      <h3 className="tarif-sous-titre">{t(L, fam.titre)}</h3>
                       <div className="tarifs">
-                        {OFFRES_GEO.map((o) => (
+                        {OFFRES_GEO.filter((o) => o.famille === fam.cle).map((o) => (
                           <article
                             key={o.nom}
                             className={`tarif-carte${o.recommande ? " tarif-recommande" : ""}`}
@@ -330,6 +352,7 @@ export default function App() {
                             <h3 className="tarif-nom">{o.nom}</h3>
                             <p className="tarif-prix">{o.prix}</p>
                             <p className="tarif-unite">{t(L, o.unite)}</p>
+                            {o.depend && <p className="tarif-depend">{t(L, o.depend)}</p>}
                             <p className="tarif-pour">{t(L, o.pour)}</p>
                             <ul className="tarif-points">
                               {o.points.map((pt) => (
@@ -339,6 +362,8 @@ export default function App() {
                           </article>
                         ))}
                       </div>
+                      </div>
+                      ))}
                       {/* ⚠️ Cette note n'est pas de la prudence juridique
                           décorative : elle dit ce que le produit ne PEUT
                           pas faire. Copilot et Google AI Overviews n'ont

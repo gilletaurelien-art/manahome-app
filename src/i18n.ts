@@ -119,6 +119,12 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  "Les audits — une commande, un livrable": "The audits — one order, one deliverable",
+  "La surveillance — chaque mois, le même protocole": "The monitoring — the same protocol, every month",
+  "Option sur GEO Expert": "Add-on to GEO Expert",
+  "Audit complémentaire — se commande seul ou après un GEO Expert":
+    "Additional audit — ordered on its own or after a GEO Expert",
+  "Complément de GEO Monitoring": "Add-on to GEO Monitoring",
   "Commander un audit": "Order an audit",
   "Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer honnêtement : ils sont déclarés « non testés », jamais comptés comme une absence.":
     "Four Western assistants are queried: ChatGPT, Gemini, Claude and Perplexity. Microsoft Copilot and Google AI Overviews expose no access that would let us measure them honestly: they are reported as \u00ab not tested \u00bb, never counted as an absence.",
@@ -141,8 +147,8 @@ const DICO_EN: Record<string, string> = {
   "Être trouvé par les IA": "Be found by AIs",
   "Le GEO : la visibilité qui se construit, pas celle qui s'achète.":
     "GEO: visibility you build, not visibility you buy.",
-  "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve vivante : manafrance.org, plus de 4,3 millions de visites d'agents IA mesurées.":
-    "llms.txt, Model Context Protocol, structured data: TEMPOsystem sells the machine-readable infrastructure itself — what neither content agencies nor measurement dashboards offer. The living proof: manafrance.org, over 4.3 million measured AI-agent visits.",
+  "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve se mesure : du 20 septembre au 11 novembre 2026, nos journaux ont compté 5 922 180 requêtes d'agents IA sur manafrance.org — ClaudeBot, Applebot, GPTBot et dix autres. Des requêtes, pas des « visites » : un agent qui explore mille pages en fait mille.":
+    "llms.txt, Model Context Protocol, structured data: TEMPOsystem sells the machine-readable infrastructure itself — what neither content agencies nor measurement dashboards offer. The proof is measured: between 20 September and 11 November 2026 our logs counted 5,922,180 AI-agent requests on manafrance.org — ClaudeBot, Applebot, GPTBot and ten others. Requests, not \u00ab visits \u00bb: an agent crawling a thousand pages makes a thousand of them.",
   "L'audit GEO de votre structure": "The GEO audit of your organisation",
   "Mairies, associations, offices de tourisme, entreprises.":
     "Town halls, associations, tourist offices, businesses.",

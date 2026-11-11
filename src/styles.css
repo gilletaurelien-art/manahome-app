@@ -1617,3 +1617,14 @@ html { background: var(--sand); }
   -webkit-mask: var(--icone) center / contain no-repeat;
   mask: var(--icone) center / contain no-repeat;
 }
+
+/* Deux familles d'offres — posées le 11/11/2026. Chacune a son titre et sa
+   propre grille : un audit ponctuel et un abonnement ne se comparent pas. */
+.tarifs-famille + .tarifs-famille { margin-top: var(--sp-4); }
+.tarif-depend {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  color: var(--primary-deep);
+  margin: 0;
+}
