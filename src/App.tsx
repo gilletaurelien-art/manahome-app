@@ -121,6 +121,78 @@ const EXEMPLE_PROTOCOLE = [
   "Nombre de répétitions, car une réponse varie d'un essai à l'autre",
 ];
 
+// ── Repris de GEO Expert (alliancemana.com), le 11/11/2026 ─────────────────
+// ⛔ REPRIS, PAS RECOPIÉ. Trois choses y ont été changées, et chacune pour une
+//    raison qui se défend devant un client :
+//    1. Les PRIX sont ceux de manahome.org (149/390/99…), pas ceux de
+//       alliancemana.com (1 990/299…). Décision d'Aurélien.
+//    2. QUATRE moteurs, pas cinq. GEO Expert annonçait Copilot parmi les
+//       assistants interrogés ; ici il est « non testé », faute d'accès
+//       mesurable. Deux sites du même écosystème ne peuvent pas se
+//       contredire là-dessus devant le même client.
+//    3. « IA hébergée en France » est PRÉCISÉ. L'ANALYSE tourne sur nos
+//       modèles, en France — mais les assistants INTERROGÉS sont américains
+//       par nature, et c'est justement leur réponse qu'on achète. Laisser
+//       croire l'inverse serait le raccourci que notre propre audit détecte.
+const DIFFERENCES = [
+  {
+    titre: "Une chaîne souveraine, et ce qui ne l'est pas",
+    texte:
+      "Nos audits, notre surveillance et nos rapports tournent sur une infrastructure française, avec des modèles d'analyse hébergés en France. Aucun contenu client ne part vers un outil de mesure américain. En revanche, les assistants que nous interrogeons — ChatGPT, Gemini, Claude, Perplexity — sont américains : c'est leur réponse que vous achetez, et nous ne pouvons pas l'obtenir autrement qu'en les interrogeant.",
+  },
+  {
+    titre: "Un écosystème de sources, pas un site isolé",
+    texte:
+      "Les IA citent les organisations qu'elles rencontrent plusieurs fois, sur des sources indépendantes. Nous exploitons les nôtres — un annuaire national, des plateformes de données, des sites thématiques — que les modèles ont appris à consulter. Y rendre votre information présente et vérifiable est le cœur du travail.",
+  },
+  {
+    titre: "Une surveillance qui ne s'arrête pas au rapport",
+    texte:
+      "La plupart des missions se terminent avec le document. L'abonnement de surveillance rejoue chaque mois le même panel de questions, suit vos concurrents, et vous alerte quand une réponse devient fausse ou qu'un nouveau nom apparaît à votre place.",
+  },
+  {
+    titre: "Des délais annoncés, pas promis",
+    texte:
+      "Les moteurs absorbent un contenu nouveau sur quatre à douze semaines. Un site déjà bien référencé voit ses premières citations en trois à huit semaines ; un site récent doit d'abord construire ses fondations. Nous vous dirons dans quel cas vous êtes, avec les chiffres — jamais une date de citation garantie, parce que personne ne peut honnêtement en donner une.",
+  },
+];
+
+// ⭐ « Ce qu'on ne vous dira pas ailleurs » — la section la plus commerciale
+//    du lot : elle arme le lecteur contre les offres concurrentes sans jamais
+//    les nommer, et lui laisse deux questions à poser. Un client qui repart
+//    avec une question à poser revient.
+const FRANCHISE = [
+  {
+    titre: "« Recommandé par ChatGPT en 30 jours »",
+    texte:
+      "Vous croiserez cette promesse, parfois avec un remboursement à la clé sur le même délai. Elle ne peut pas être tenue de bonne foi : les modèles absorbent les contenus sur des cycles de quatre à douze semaines. Nous préférons vous montrer des courbes mesurées, des captures datées et des délais réels. C'est plus lent à vendre, et c'est la seule chose qui tienne.",
+  },
+  {
+    titre: "La surveillance IA à moins de 100 € par mois",
+    texte:
+      "Elle existe. Regardez la chaîne avant de signer : dans la plupart des cas, votre contenu et les réponses transitent par un outil américain, et le « rapport » est un document produit sans aucune intervention humaine. Posez toujours deux questions — où sont hébergées les données, et qui écrit le rapport.",
+  },
+];
+
+const FAQ = [
+  { q: "Sous combien de temps verrai-je un résultat ?",
+    r: "Quatre à douze semaines selon l'état de départ : trois à huit semaines pour un site déjà bien référencé, davantage pour un site récent qui doit d'abord construire ses fondations. L'audit vous dit dans quel cas vous êtes, avec les chiffres." },
+  { q: "Le GEO remplace-t-il le référencement classique ?",
+    r: "Non. Un site invisible pour Google l'est aussi pour les assistants, qui s'appuient largement sur le web indexé. Le GEO s'ajoute : il travaille la compréhension par les machines là où le SEO travaille le classement." },
+  { q: "Où sont hébergées mes données ?",
+    r: "En France, sur un serveur dédié chez OVH, à Roubaix. Le site, les analyses et les rapports tiennent sur une seule machine. Les assistants interrogés, eux, sont américains : c'est leur réponse que nous mesurons, nous ne pouvons pas l'obtenir ailleurs." },
+  { q: "Nous sommes une petite structure — est-ce pour nous ?",
+    r: "Oui, et c'est là que l'écart se creuse le plus vite. Commencez par l'Express à 149 € : vous saurez si vous existez pour les assistants avant d'engager quoi que ce soit de plus." },
+  { q: "Que se passe-t-il si une IA raconte quelque chose de faux sur nous ?",
+    r: "Nous le documentons avec la réponse brute et sa date, puis nous remontons à la source que le modèle a utilisée. Corriger la source est le seul levier réel : personne ne peut éditer la réponse d'un assistant." },
+  { q: "Puis-je arrêter la surveillance ?",
+    r: "Oui, sans préavis ni engagement de durée. L'historique de vos mesures vous reste." },
+  { q: "Qui êtes-vous ?",
+    r: "Alliance MANA, association déclarée loi 1901 (RNA W292008256), dont l'objet est de rendre les territoires et leurs acteurs lisibles par tout moyen numérique, y compris l'intelligence artificielle. Nous mesurons d'abord sur nos propres sites." },
+  { q: "Facturation et TVA ?",
+    r: "Tous les prix affichés sont hors taxes. La facture est émise par Alliance MANA, et vous l'acceptez avant tout travail." },
+];
+
 // FAMILLES et OFFRES_MANA vivent désormais dans src/offres.ts (voir l'import).
 
 const SECTIONS = [
@@ -335,6 +407,19 @@ export default function App() {
                   <p className="section-accroche">{t(L, s.accroche)}</p>
                   <p className="section-texte">{t(L, s.texte)}</p>
                   {s.num === "02" && (
+                    <div className="differences">
+                      <h3 className="tarif-sous-titre">{t(L, "Ce que nous faisons autrement")}</h3>
+                      <ul className="differences-liste">
+                        {DIFFERENCES.map((d) => (
+                          <li key={d.titre}>
+                            <strong>{t(L, d.titre)}</strong>
+                            <span>{t(L, d.texte)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {s.num === "02" && (
                     <div className="rapport">
                       <p className="rapport-avertissement">
                         {t(L, "Exemple illustratif — aucune entreprise réelle, aucun résultat réel. Cette maquette montre la forme du livrable.")}
@@ -439,6 +524,33 @@ export default function App() {
                       <p className="tarif-note">
                         {t(L, "Personne ne peut garantir qu'une IA vous recommandera. Nous vendons la mesure, pas la promesse : vous recevez ce que les assistants répondent vraiment, avec leurs sources. Et aucun achat ne peut modifier les conclusions d'un audit — c'est précisément ce qui les rend utilisables face à votre direction ou à votre conseil.")}
                       </p>
+                      {/* ⭐ Après les prix, avant le départ : c'est le moment
+                          où le lecteur se demande « et les autres ? ». On lui
+                          répond nous-mêmes, en lui laissant deux questions à
+                          poser — chez nous comme ailleurs. */}
+                      <div className="franchise">
+                        <h3 className="tarif-sous-titre">{t(L, "Ce qu'on ne vous dira pas ailleurs")}</h3>
+                        {FRANCHISE.map((f) => (
+                          <div key={f.titre} className="franchise-bloc">
+                            <p className="franchise-titre">{t(L, f.titre)}</p>
+                            <p className="franchise-texte">{t(L, f.texte)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      {/* ⚠️ La FAQ en <details> natifs : elle se déplie sans
+                          JavaScript, donc elle est lisible par un robot et par
+                          qui a coupé le script. Une FAQ que les machines ne
+                          voient pas, sur un site qui vend la lisibilité
+                          machine, serait difficile à défendre. */}
+                      <div className="faq">
+                        <h3 className="tarif-sous-titre">{t(L, "Questions fréquentes")}</h3>
+                        {FAQ.map((x) => (
+                          <details key={x.q} className="faq-item">
+                            <summary>{t(L, x.q)}</summary>
+                            <p>{t(L, x.r)}</p>
+                          </details>
+                        ))}
+                      </div>
                     </>
                   )}
                   <div className="est-actions">

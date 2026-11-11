@@ -2309,3 +2309,35 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
 }
 /* Le logo seul : il se centre, puisqu'il n'a plus de voisin. */
 .hero-marque { justify-content: center; }
+
+/* ── Repris de GEO Expert : différences, franchise, FAQ (11/11/2026) ────── */
+.differences { margin-top: var(--sp-4); text-align: left; }
+.differences-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--sp-2); }
+.differences-liste li { display: grid; gap: 4px; padding-bottom: var(--sp-1); border-bottom: 1px solid var(--ecume); }
+.differences-liste li:last-child { border-bottom: 0; }
+.differences-liste strong { font-family: var(--sans); font-size: var(--t-s); color: var(--ink); }
+.differences-liste span { font-family: var(--sans); font-size: var(--t-xs); color: var(--doux); }
+
+.franchise { margin-top: var(--entre-conteneurs); text-align: left; }
+.franchise-bloc { margin-bottom: var(--sp-2); }
+.franchise-titre { font-family: var(--sans); font-size: var(--t-s); font-weight: 700; color: var(--ink); margin: 0 0 4px; }
+.franchise-texte { font-family: var(--sans); font-size: var(--t-xs); color: var(--doux); margin: 0; }
+
+.faq { margin-top: var(--entre-conteneurs); text-align: left; }
+.faq-item { border-bottom: 1px solid var(--ecume); }
+.faq-item:last-child { border-bottom: 0; }
+.faq-item summary {
+  font-family: var(--sans);
+  font-size: var(--t-s);
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  padding: var(--sp-1) 0;
+  list-style: none;
+}
+/* La flèche, dessinée plutôt que laissée au navigateur : le marqueur natif
+   diffère d'un moteur à l'autre et casse l'alignement. */
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::before { content: "+ "; font-weight: 400; color: var(--doux); }
+.faq-item[open] summary::before { content: "− "; }
+.faq-item p { font-family: var(--sans); font-size: var(--t-xs); color: var(--doux); margin: 0 0 var(--sp-1); padding-left: 1.1em; }

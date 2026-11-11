@@ -119,6 +119,69 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── Repris de GEO Expert (11/11/2026) ──
+  "Ce que nous faisons autrement":
+    "What we do differently",
+  "Ce qu'on ne vous dira pas ailleurs":
+    "What nobody else will tell you",
+  "Questions fréquentes":
+    "Frequently asked questions",
+  "Une chaîne souveraine, et ce qui ne l'est pas":
+    "A sovereign chain — and what isn't",
+  "Nos audits, notre surveillance et nos rapports tournent sur une infrastructure française, avec des modèles d'analyse hébergés en France. Aucun contenu client ne part vers un outil de mesure américain. En revanche, les assistants que nous interrogeons — ChatGPT, Gemini, Claude, Perplexity — sont américains : c'est leur réponse que vous achetez, et nous ne pouvons pas l'obtenir autrement qu'en les interrogeant.":
+    "Our audits, our monitoring and our reports run on French infrastructure, with analysis models hosted in France. No client content is ever sent to an American measurement tool. The assistants we query — ChatGPT, Gemini, Claude, Perplexity — are American, however: their answer is what you are buying, and there is no way to obtain it other than by asking them.",
+  "Un écosystème de sources, pas un site isolé":
+    "An ecosystem of sources, not an isolated site",
+  "Les IA citent les organisations qu'elles rencontrent plusieurs fois, sur des sources indépendantes. Nous exploitons les nôtres — un annuaire national, des plateformes de données, des sites thématiques — que les modèles ont appris à consulter. Y rendre votre information présente et vérifiable est le cœur du travail.":
+    "AIs cite organisations they meet repeatedly, across independent sources. We run our own — a national directory, data platforms, thematic sites — which the models have learned to consult. Making your information present and verifiable there is the heart of the work.",
+  "Une surveillance qui ne s'arrête pas au rapport":
+    "Monitoring that does not stop at the report",
+  "La plupart des missions se terminent avec le document. L'abonnement de surveillance rejoue chaque mois le même panel de questions, suit vos concurrents, et vous alerte quand une réponse devient fausse ou qu'un nouveau nom apparaît à votre place.":
+    "Most engagements end with the document. The monitoring subscription replays the same question panel every month, tracks your competitors, and alerts you when an answer turns wrong or a new name appears in your place.",
+  "Des délais annoncés, pas promis":
+    "Timelines stated, not promised",
+  "Les moteurs absorbent un contenu nouveau sur quatre à douze semaines. Un site déjà bien référencé voit ses premières citations en trois à huit semaines ; un site récent doit d'abord construire ses fondations. Nous vous dirons dans quel cas vous êtes, avec les chiffres — jamais une date de citation garantie, parce que personne ne peut honnêtement en donner une.":
+    "Engines absorb new content over four to twelve weeks. An already well-ranked site sees its first citations within three to eight weeks; a recent site must build foundations first. We will tell you which case is yours, with the numbers — never a guaranteed citation date, because nobody can honestly give one.",
+  "« Recommandé par ChatGPT en 30 jours »":
+    "\u201cRecommended by ChatGPT in 30 days\u201d",
+  "Vous croiserez cette promesse, parfois avec un remboursement à la clé sur le même délai. Elle ne peut pas être tenue de bonne foi : les modèles absorbent les contenus sur des cycles de quatre à douze semaines. Nous préférons vous montrer des courbes mesurées, des captures datées et des délais réels. C'est plus lent à vendre, et c'est la seule chose qui tienne.":
+    "You will meet this promise, sometimes with a money-back guarantee on the same timeframe. It cannot be honoured in good faith: models absorb content over four-to-twelve-week cycles. We would rather show you measured curves, dated captures and real timelines. It is slower to sell, and it is the only thing that holds.",
+  "La surveillance IA à moins de 100 € par mois":
+    "AI monitoring for under €100 a month",
+  "Elle existe. Regardez la chaîne avant de signer : dans la plupart des cas, votre contenu et les réponses transitent par un outil américain, et le « rapport » est un document produit sans aucune intervention humaine. Posez toujours deux questions — où sont hébergées les données, et qui écrit le rapport.":
+    "It exists. Look at the chain before signing: in most cases your content and the answers travel through an American tool, and the \u201creport\u201d is a document produced with no human involvement at all. Always ask two questions — where the data is hosted, and who writes the report.",
+  "Sous combien de temps verrai-je un résultat ?":
+    "How soon will I see a result?",
+  "Quatre à douze semaines selon l'état de départ : trois à huit semaines pour un site déjà bien référencé, davantage pour un site récent qui doit d'abord construire ses fondations. L'audit vous dit dans quel cas vous êtes, avec les chiffres.":
+    "Four to twelve weeks depending on your starting point: three to eight weeks for an already well-ranked site, longer for a recent one that must build foundations first. The audit tells you which case is yours, with the numbers.",
+  "Le GEO remplace-t-il le référencement classique ?":
+    "Does GEO replace traditional SEO?",
+  "Non. Un site invisible pour Google l'est aussi pour les assistants, qui s'appuient largement sur le web indexé. Le GEO s'ajoute : il travaille la compréhension par les machines là où le SEO travaille le classement.":
+    "No. A site invisible to Google is invisible to the assistants too, since they lean heavily on the indexed web. GEO is additive: it works on machine understanding where SEO works on ranking.",
+  "Où sont hébergées mes données ?":
+    "Where is my data hosted?",
+  "En France, sur un serveur dédié chez OVH, à Roubaix. Le site, les analyses et les rapports tiennent sur une seule machine. Les assistants interrogés, eux, sont américains : c'est leur réponse que nous mesurons, nous ne pouvons pas l'obtenir ailleurs.":
+    "In France, on a dedicated server at OVH in Roubaix. The site, the analyses and the reports all run on one machine. The assistants we query are American: their answer is what we measure, and it cannot be obtained anywhere else.",
+  "Nous sommes une petite structure — est-ce pour nous ?":
+    "We are a small organisation — is this for us?",
+  "Oui, et c'est là que l'écart se creuse le plus vite. Commencez par l'Express à 149 € : vous saurez si vous existez pour les assistants avant d'engager quoi que ce soit de plus.":
+    "Yes, and this is where the gap widens fastest. Start with Express at €149: you will know whether you exist for the assistants before committing to anything more.",
+  "Que se passe-t-il si une IA raconte quelque chose de faux sur nous ?":
+    "What if an AI says something false about us?",
+  "Nous le documentons avec la réponse brute et sa date, puis nous remontons à la source que le modèle a utilisée. Corriger la source est le seul levier réel : personne ne peut éditer la réponse d'un assistant.":
+    "We document it with the raw answer and its date, then trace back to the source the model used. Correcting the source is the only real lever: nobody can edit an assistant's answer.",
+  "Puis-je arrêter la surveillance ?":
+    "Can I stop the monitoring?",
+  "Oui, sans préavis ni engagement de durée. L'historique de vos mesures vous reste.":
+    "Yes, with no notice period and no minimum term. The history of your measurements stays yours.",
+  "Qui êtes-vous ?":
+    "Who are you?",
+  "Alliance MANA, association déclarée loi 1901 (RNA W292008256), dont l'objet est de rendre les territoires et leurs acteurs lisibles par tout moyen numérique, y compris l'intelligence artificielle. Nous mesurons d'abord sur nos propres sites.":
+    "Alliance MANA, a declared French association under the 1901 law (register number W292008256), whose object is to make territories and their actors legible by any digital means, including artificial intelligence. We measure on our own sites first.",
+  "Facturation et TVA ?":
+    "Invoicing and VAT?",
+  "Tous les prix affichés sont hors taxes. La facture est émise par Alliance MANA, et vous l'acceptez avant tout travail.":
+    "All prices shown exclude tax. The invoice is issued by Alliance MANA, and you accept it before any work begins.",
   // ── Relecture commerciale du 11/11/2026 ──
   "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par Alliance MANA, association loi 1901. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.":
     "MANAhome measures what AI assistants answer about organisations: one-off audits, monthly monitoring, machine-readable infrastructure. Published by Alliance MANA, a French non-profit association. Being better understood improves your odds of being cited; no AI can be made to cite you.",
