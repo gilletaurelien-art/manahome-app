@@ -1,18 +1,44 @@
-/* ===== MANAhome — design system « Lumière » =====
-   Bleu nuit, blanc chaud, or discret. L'intelligence se voit dans le service,
-   pas dans les effets visuels. Budget < 15 Ko, zéro dépendance UI. */
+/* ===== MANAhome — charte « atelier » =====
+   ⭐ 11/11/2026 — reprise de la charte de manafamily.org, à la demande
+   d'Aurélien : noir et blanc, claire, geeky. Les valeurs ci-dessous ne sont
+   pas inventées : elles ont été RELEVÉES sur manafamily.org en lisant les
+   styles calculés, pas estimées à l'œil.
+
+   ⛔ ZÉRO WEBFONT. manafamily n'en charge aucune, et c'est une décision de
+   fond, pas une économie : la police système est déjà installée, donc la
+   page s'affiche à la première image, sans clignotement. Mesuré avant la
+   bascule : les cinq polices pesaient 359 Ko, soit 58 % du poids de la page.
+
+   ⚠️ Les déclarations @font-face de Marelle, Press Start 2P, Pixelify Sans
+   et Rubik ont été RETIRÉES, pas commentées : une @font-face qui reste
+   déclarée se recharge au premier usage oublié ailleurs. Les fichiers
+   restent dans src/fonts/ — ils ne pèsent rien tant que rien ne les
+   importe, et les y laisser permet de revenir en arrière. */
 
 :root {
-  /* Palette : bleu nuit + blanc chaud + touche dorée */
-  --ink: #1b2a4a;
-  --primary: #b08a2e;
-  --primary-deep: #8f6d1f;
-  --sand: #faf8f3;
+  /* Palette relevée sur manafamily.org */
+  --ink: #1d1d1f;           /* l'encre, presque noire */
+  --doux: #6e6e73;          /* le texte secondaire */
+  --primary: #1d1d1f;       /* pas d'accent coloré : le noir EST l'accent */
+  --primary-deep: #1d1d1f;
+  --sand: #ffffff;
   --blanc-chaud: #ffffff;
-  --ecume: #e9e5dc;
-  --or: #c9a227;
-  --alerte: #b0413e;
-  --shadow: 0 4px 32px rgb(44 47 33 / 10%);
+  --ecume: #e3e3e6;         /* la grille, et les filets */
+  --or: #1d1d1f;
+  --alerte: #b0413e;        /* la seule couleur conservée : une alerte DOIT se voir */
+  --biseau: #9a9a9a;        /* le liseré interne bas-droite des cartes */
+
+  /* ⭐ LA SIGNATURE DE LA CHARTE, en un seul jeton. Un anneau dur de 1 px et
+     une ombre portée dure de 3 px, plus deux biseaux internes : c'est ce
+     relief-là qui fait tout le caractère, et il doit être IDENTIQUE partout.
+     Écrit ici, il ne peut plus diverger d'une carte à l'autre. */
+  --relief:
+    inset 1px 1px 0 0 #ffffff,
+    inset -1px -1px 0 0 var(--biseau),
+    0 0 0 1px var(--ink),
+    3px 3px 0 0 var(--ink);
+  --shadow: var(--relief);
+  --rayon: 6px;
 
   /* Échelle typographique stricte (rem) */
   --t-xs: 0.875rem;
@@ -29,59 +55,16 @@
   --sp-6: 48px;
   --sp-12: 96px;
 
-  /* --titre : les titres de section. --logo : la marque, et elle seule.
-     --sans : le corps. Les trois se changent ICI, jamais au point d'usage. */
-  --titre: "Pixelify Sans", "Marelle Baton 2", Georgia, serif;
-  --logo: "Press Start 2P", "Pixelify Sans", monospace;
-  --serif: "Marelle Baton 2", Georgia, serif;
-  --sans: "Rubik", system-ui, sans-serif;
+  /* Une seule famille, celle du système. Les quatre jetons existent encore
+     parce que 60 règles les nomment — ils pointent tous au même endroit. */
+  --systeme: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --titre: var(--systeme);
+  --logo: var(--systeme);
+  --serif: var(--systeme);
+  --sans: var(--systeme);
 }
 
 * { box-sizing: border-box; }
-
-/* Marelle Bâton 2 : cursive libre (OFL, Éducation nationale) — le titre
-   MANAhome s'écrit à la main : chaleureux, accompagné, humain. */
-@font-face {
-  font-family: "Marelle Baton 2";
-  src: url("./fonts/MarelleBaton2-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-/* ⭐ 11/11/2026 — charte typographique : TITRE = pixel art, CORPS = Rubik.
-   Deux polices pixel, pas une, et le partage est délibéré :
-   — Press Start 2P est réservée au LOGO. C'est une police d'arcade, très
-     large et sans minuscules utiles : sur « L'audit GEO de votre structure »
-     elle tiendrait quatre lignes.
-   — Pixelify Sans porte les titres de section : clairement pixel, mais aux
-     proportions d'une police de texte.
-   ⚠️ Les deux ne portent que le sous-ensemble `latin` (U+0000–00FF) — les
-   accents français passent, le reste retombe en silence sur le secours.
-   Marelle Baton 2 reste déclarée : d'autres surfaces du dépôt s'en servent. */
-@font-face {
-  font-family: "Press Start 2P";
-  src: url("./fonts/PressStart2P-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Pixelify Sans";
-  src: url("./fonts/PixelifySans-Variable.woff2") format("woff2-variations");
-  font-weight: 400 700;
-  font-display: swap;
-}
-/* Rubik (OFL) : sous-titres en gras + texte courant */
-@font-face {
-  font-family: "Rubik";
-  src: url("./fonts/Rubik-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Rubik";
-  src: url("./fonts/Rubik-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-display: swap;
-}
 
 body {
   margin: 0;
@@ -89,12 +72,24 @@ body {
   font-size: var(--t-s);
   line-height: 1.6;
   color: var(--ink);
-  background: transparent;
+  /* ⭐ 11/11/2026 — le fond est l'illustration noir et blanc à l'accent or
+     (bwgoldmanahome.webp), demandée par Aurélien à la place du papier
+     quadrillé de manafamily.
+     ⚠️ Elle est SOMBRE. Ce qui rend ce choix tenable, c'est que les
+     conteneurs sont désormais OPAQUES : jusqu'à ce soir ils étaient blancs
+     à 76 % avec un flou, et le texte se lisait sur le bruit de l'image.
+     Poser cette image sur l'ancienne charte aurait été illisible.
+     ⭐ `fixed` : l'illustration reste en place pendant le défilement, donc
+     elle ne se répète ni ne s'étire sur une page longue. */
+  background-color: #0e0e10;
+  background-image: url("./assets/hero.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   hyphens: auto;
 }
-/* L'image vit derrière TOUTE la page : les sections deviennent
-   des panneaux translucides, plus des aplats opaques. */
-html { background: var(--sand); }
+html { background: #0e0e10; }
 
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--sp-4); }
 
@@ -112,16 +107,12 @@ html { background: var(--sand); }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-4);
-  background: rgb(250 248 243 / 92%);
-  border: 1px solid var(--ecume);
-  border-radius: 999px;
-  box-shadow:
-    inset 0 2px 6px rgb(255 255 255 / 85%),
-    0 4px 12px rgb(27 42 74 / 10%),
-    0 0 0 4px rgb(201 162 39 / 14%),
-    0 36px 80px rgb(27 42 74 / 26%);
-  padding: var(--sp-1) var(--sp-4);
+  gap: var(--sp-2);
+  background: #ffffff;
+  border: 0;
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
+  padding: var(--sp-1) var(--sp-2);
   max-width: 1080px;
   width: fit-content;
 }
@@ -133,7 +124,11 @@ html { background: var(--sand); }
   margin: 0;
   text-decoration: none;
 }
-.brand em { color: var(--or); font-style: normal; }
+/* ⚠️ En retirant l'or, « MANA » et « home » sont devenus de la même couleur :
+   le logo avait perdu sa distinction sans que rien ne le signale. La charte
+   manafamily n'a pas d'accent coloré — mais elle a un gris secondaire, et
+   c'est lui qui porte la deuxième moitié du nom. */
+.brand em { color: var(--doux); font-style: normal; }
 /* Le logo du header : une icône seule, plus de mot-symbole (05/11/2026). */
 .brand-icone {
   display: inline-flex;
@@ -148,7 +143,8 @@ html { background: var(--sand); }
 /* Nav : icône AU-DESSUS du libellé (desktop/tablette), empilées */
 .nav { display: flex; gap: var(--sp-1); align-items: center; }
 .nav a {
-  color: var(--ink);
+  color: var(--doux);
+  font-weight: 600;
   text-decoration: none;
   display: inline-flex;
   flex-direction: row;
@@ -170,14 +166,17 @@ html { background: var(--sand); }
     0 3px 8px rgb(27 42 74 / 12%);
   transform: translateY(-1px);
 }
+/* ⚠️ Cette règle portait DEUX fois `color` et `background` après ma première
+   passe : les secondes gagnaient en silence. Une collision de cascade ne
+   lève aucune erreur — elle rend juste la modification sans effet. */
 .nav .nav-cta {
-  color: var(--primary);
-  background: rgb(255 255 255 / 70%);
-  border-color: var(--ecume);
-  box-shadow:
-    inset 0 1px 2px rgb(255 255 255 / 90%),
-    0 3px 10px rgb(27 42 74 / 14%);
+  background: var(--ink);
+  color: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: var(--rayon);
+  box-shadow: 2px 2px 0 0 var(--ink);
 }
+.nav .nav-cta:hover { background: #000000; color: #ffffff; }
 .nav .nav-cta:hover {
   box-shadow:
     inset 0 1px 2px rgb(255 255 255 / 90%),
@@ -217,7 +216,10 @@ html { background: var(--sand); }
 /* ===== Hero : image brute SANS retouche, fixe au scroll via un calque
    fixed plein écran — aucun voile crème, la photo vit derrière, partout. ===== */
 .hero {
-  min-height: 92vh;
+  /* ⚠️ 92vh auparavant : un écran entier avant la moindre information. Le
+     visiteur devait faire défiler pour savoir ce qu'on vend. */
+  min-height: 0;
+  padding: var(--sp-6) 0 var(--sp-4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -225,17 +227,12 @@ html { background: var(--sand); }
   position: relative;
   background: transparent;
 }
-.hero::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  /* ⭐ 11/11/2026 — fond remplacé : la carte du monde pixel-art « maison
-     des IA » (manahomeIA.webp). Elle est SOMBRE là où la photo d'intérieur
-     était claire : le texte du hero tient parce qu'il vit dans `.bulle-xl`,
-     pas directement sur le fond. */
-  background: url("./assets/hero.webp") center / cover no-repeat;
-  z-index: -2;
-}
+/* ⛔ 11/11/2026 — le calque d'image plein écran est RETIRÉ. Il posait la
+   carte pixel derrière toute la page ; la charte manafamily veut du papier
+   quadrillé, et le fond est désormais sur `body`. La règle n'est pas
+   commentée mais supprimée : un `position: fixed; inset: 0` laissé en place
+   capte les clics et ne se voit pas. */
+
 .hero .wrap {
   position: relative;
   max-width: 860px;
@@ -265,7 +262,7 @@ html { background: var(--sand); }
   margin: 0 auto var(--sp-2);
   color: var(--ink);
 }
-.hero h1.brand-grand em { color: var(--or); font-style: normal; }
+.hero h1.brand-grand em { color: var(--doux); font-style: normal; }
 .hero .lede {
   font-size: var(--t-m);
   max-width: 40ch;
@@ -281,19 +278,19 @@ html { background: var(--sand); }
    bulles de contenu partagent une largeur commune de 860px. */
 /* Forme synapse : blob organique (rayons mixtes), anneau or,
    reflet superieur, ombre de levitation — la signature MANAhome. */
+/* ⚠️ Les bulles étaient TRANSLUCIDES (blanc à 90 %) avec des rayons
+   irréguliers « dessinés à la main ». Sur le papier quadrillé comme sur
+   l'ancienne image, le texte se lisait sur du bruit. Elles deviennent des
+   cartes opaques au relief dur — la signature de la charte. */
 .bulle,
 .bulle-xl,
 .bulle-sm {
-  background: rgb(255 255 255 / 90%);
-  border: 1px solid var(--ecume);
-  border-radius: 44px 56px 40px 52px / 52px 42px 56px 46px;
-  box-shadow:
-    inset 0 2px 6px rgb(255 255 255 / 85%),
-    0 4px 12px rgb(27 42 74 / 10%),
-    0 0 0 4px rgb(201 162 39 / 14%),
-    0 36px 80px rgb(27 42 74 / 26%);
-  padding: var(--sp-2) var(--sp-4) var(--sp-2);
-  text-align: center;
+  background: #ffffff;
+  border: 0;
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
+  padding: var(--sp-4);
+  text-align: left;
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
@@ -821,25 +818,27 @@ html { background: var(--sand); }
 
 /* Footer bulle : posé sur la photo fixe, lisible partout */
 .site-footer {
-  border-top: none;
+  /* Le pied n'est plus un aplat sombre : un filet suffit sur le papier. */
+  border-top: 1px solid var(--ecume);
+  color: var(--ink);
   padding: var(--sp-4) 0 var(--sp-6);
   font-size: var(--t-xs);
   opacity: 1;
 }
+/* ⚠️ Le pied était un APLAT ENCRE, et c'est ce qui rendait son texte blanc.
+   Passé en carte blanche, tout le texte clair qu'il contenait devenait
+   invisible — mesuré : six éléments à un rapport de contraste de 1,00,
+   c'est-à-dire la couleur exacte de leur fond. */
 .site-footer > .wrap {
-  background: var(--ink);
-  border: 1px solid var(--ecume);
-  border-radius: 44px 56px 40px 52px / 52px 42px 56px 46px;
-  box-shadow:
-    inset 0 2px 6px rgb(255 255 255 / 85%),
-    0 4px 12px rgb(27 42 74 / 10%),
-    0 0 0 4px rgb(201 162 39 / 14%),
-    0 36px 80px rgb(27 42 74 / 26%);
-  padding: var(--sp-4) var(--sp-6);
+  background: #ffffff;
+  border: 0;
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
+  padding: var(--sp-4);
   max-width: 1080px;
 }
 @media (max-width: 720px) {
-  .site-footer > .wrap { padding: var(--sp-4); border-radius: 20px 28px 18px 26px; }
+  .site-footer > .wrap { padding: var(--sp-2); border-radius: var(--rayon); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1402,28 +1401,36 @@ html { background: var(--sand); }
 }
 
 /* Boutons dans la sous-bulle encre : blanc plein et blanc contour */
+/* Les deux boutons de la charte : plein encre, ou contour encre. Tous deux
+   portent l'ombre dure de 3 px, et s'enfoncent au clic plutôt que de
+   changer de couleur — le relief EST l'interaction. */
 .btn-clair {
-  background: var(--blanc-chaud);
-  color: var(--ink);
-  border-color: var(--blanc-chaud);
-  box-shadow:
-    inset 0 1px 2px rgb(255 255 255 / 90%),
-    0 6px 18px rgb(27 42 74 / 25%);
+  background: var(--ink);
+  color: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: var(--rayon);
+  font-weight: 700;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  transition: transform 90ms ease, box-shadow 90ms ease;
 }
-.btn-clair:hover {
-  background: var(--sand);
-  color: var(--primary);
-  border-color: var(--sand);
+.btn-clair:hover { background: #000000; color: #ffffff; border-color: #000000; }
+.btn-clair:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 var(--ink);
 }
 .btn-clair-ghost {
-  background: transparent;
-  color: var(--sand);
-  border-color: rgb(255 255 255 / 45%);
+  background: #ffffff;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--rayon);
+  font-weight: 700;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  transition: transform 90ms ease, box-shadow 90ms ease;
 }
-.btn-clair-ghost:hover {
-  background: rgb(255 255 255 / 12%);
-  color: #fff;
-  border-color: rgb(255 255 255 / 70%);
+.btn-clair-ghost:hover { background: var(--ecume); color: var(--ink); }
+.btn-clair-ghost:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 var(--ink);
 }
 
 /* Formulaire de contact du footer : dans la colonne, thème sous-bulle */
@@ -1465,7 +1472,9 @@ html { background: var(--sand); }
 .contact-note { font-size: var(--t-xs); opacity: 0.6; margin-top: var(--sp-2); }
 
 /* Brand du footer : MANA blanc, home or — sur fond encre */
-.site-footer .brand { color: #fff; }
+/* ⚠️ Le pied était sombre : la marque y était BLANCHE. Sur le papier
+   quadrillé elle aurait disparu sans bruit. */
+.site-footer .brand { color: var(--ink); }
 
 /* Calendrier de blocage — miroir front de annonces_indisponibilites (007).
    L'état se lit aussi en texte (aria-pressed), jamais en couleur seule. */
@@ -1851,3 +1860,141 @@ tr.rapport-non-teste td { opacity: 0.68; font-style: italic; }
   color: var(--ink);
   opacity: 0.86;
 }
+
+/* ───────────────────────────────────────────────────────────────────────
+   Charte « atelier » — les reprises du 11/11/2026.
+   ⚠️ Ce bloc est en FIN de fichier à dessein : il reprend des surfaces
+   dessinées pour un fond SOMBRE (le pied de page et le formulaire vivaient
+   dans un aplat encre). Les y corriger une par une plus haut aurait laissé
+   des règles contradictoires éparpillées ; ici, la raison tient en un
+   paragraphe et le prochain lecteur sait quoi défaire.
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* Le formulaire : étiquettes et champs sur papier, plus sur encre. */
+.contact-form label,
+.contact-form .champ label,
+.contact-form .apercu-label { color: var(--ink); }
+.contact-form label {
+  display: block;
+  font-size: var(--t-xs);
+  font-weight: 700;
+  margin: var(--sp-1) 0 4px;
+}
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: var(--rayon);
+  padding: 6px 10px;
+}
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.contact-apercu {
+  background: var(--ecume);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+}
+.contact-merci { color: var(--ink); font-weight: 700; }
+
+/* Le pied : du texte sur papier. */
+.site-footer,
+.site-footer a,
+.site-footer p,
+.footer-note { color: var(--ink); }
+.footer-nav a {
+  color: var(--doux);
+  font-weight: 600;
+  text-decoration: none;
+}
+.footer-nav a:hover { color: var(--ink); text-decoration: underline; }
+
+/* Les cartes de l'accueil prennent le relief de la charte. */
+.tarif-carte,
+.rapport {
+  background: #ffffff;
+  border: 0;
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
+}
+/* La carte recommandée se distingue par une ombre PLUS FRANCHE, pas par une
+   couleur : la charte est monochrome, et un aplat coloré la trahirait. */
+.tarif-recommande { box-shadow: var(--relief), 7px 7px 0 0 var(--ecume); }
+.tarif-fanion { color: var(--ink); }
+.tarif-prix, .tarif-prix-simple, .constat-chiffre, .collecte-cle { color: var(--ink); }
+.tarif-unite, .tarif-note, .rapport-legende, .constat-quoi, .collecte-quoi { color: var(--doux); opacity: 1; }
+.tarif-depend, .constat-unite, .rapport-etiquette { color: var(--doux); }
+
+/* L'avertissement de la maquette : hachures grises, pas dorées. */
+.rapport-avertissement {
+  color: var(--ink);
+  background: repeating-linear-gradient(
+    45deg, var(--ecume) 0 10px, transparent 10px 20px);
+  border: 1px solid var(--ink);
+}
+
+/* Les titres reprennent de l'air : la police système n'a plus besoin d'être
+   bridée comme Press Start 2P, qui débordait à 320 px. */
+.section-title {
+  font-size: var(--t-l);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  line-height: 1.25;
+}
+.tarif-nom, .tarif-sous-titre, .collecte-titre { font-weight: 700; }
+.hero h1.brand-grand { font-size: clamp(2rem, 9vw, 3.5rem); font-weight: 700; letter-spacing: -0.02em; }
+.hero-label { color: var(--doux); }
+.section-accroche { color: var(--ink); font-weight: 700; }
+
+
+/* ───────────────────────────────────────────────────────────────────────
+   Hiérarchie — repris le 11/11/2026 en regardant l'écran.
+   ⚠️ L'accroche était à var(--t-l) EN GRAS, c'est-à-dire exactement la
+   taille du titre de section : les deux se disputaient le premier rang, et
+   l'œil ne savait plus lequel lire d'abord. Un titre doit dominer, une
+   accroche doit introduire.
+   ─────────────────────────────────────────────────────────────────────── */
+.section-title {
+  font-size: clamp(1.5rem, 4.5vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 var(--sp-2);
+}
+.bulle .section-accroche,
+.section-accroche {
+  font-size: var(--t-m);
+  font-weight: 600;
+  color: var(--doux);
+  margin: 0 0 var(--sp-2);
+}
+.bulle .section-texte,
+.section-texte { font-size: var(--t-s); color: var(--ink); opacity: 1; }
+
+/* Le hero : il faisait 798 px de haut sur un téléphone — un écran entier
+   avant la moindre information. Il tient maintenant à son contenu. */
+.hero { padding: var(--sp-4) 0 var(--sp-2); }
+.hero .bulle-xl { padding: var(--sp-4); }
+.hero .section-accroche { font-size: var(--t-s); }
+.hero-label {
+  font-size: var(--t-xs);
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-1);
+}
+.hero .est-actions { margin-top: var(--sp-2); }
+
+/* Les sous-titres de famille et les noms d'offre : nets, pas décoratifs. */
+.tarif-sous-titre { font-size: var(--t-m); font-weight: 700; margin: var(--sp-4) 0 var(--sp-2); }
+.tarif-nom { font-size: var(--t-m); font-weight: 700; }
+.tarif-prix { font-size: var(--t-xl); font-weight: 700; }
+.constat-chiffre { font-size: var(--t-xl); font-weight: 700; }
+
+

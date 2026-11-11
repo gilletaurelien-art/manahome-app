@@ -1,51 +1,50 @@
 /* ====================================================================
-   COUCHE « MAISON 2030 » — premium calm-tech (12/11/2026)
-   Importée APRÈS styles.css : chaque règle surcharge la couche « Lumière »,
-   ne la remplace pas. Trois gestes : verre dépoli (profondeur douce),
-   mouvement discret (reveal au scroll, respecté de prefers-reduced-motion),
-   focus soigné. ~4 Ko, zéro dépendance, zéro JS de plus. */
+   COUCHE « ATELIER » — importée APRÈS styles.css, donc elle GAGNE.
+   ⭐ Elle s'appelait « Maison 2030 » et posait du verre dépoli : fonds
+   blancs à 68-84 %, `backdrop-filter: blur(18px)`, ombres douces, cartes
+   qui se soulèvent au survol. C'est elle — et non styles.css — qui rendait
+   les conteneurs translucides, et c'est elle qui écrasait en silence les
+   corrections faites plus haut : la bulle du hero restait à 76 % alors que
+   `.bulle { background: #ffffff }` venait d'être posée.
+
+   🔴 LA LEÇON, parce qu'elle reviendra. On cherchait la règle du MAUVAIS
+   FICHIER. `grep backdrop-filter src/styles.css` ne rendait rien, et cette
+   absence ressemblait à une preuve. Elle ne prouvait qu'une chose : qu'on
+   regardait ailleurs. ⭐ Pour savoir ce qui s'applique, on ne lit pas une
+   feuille de style — on demande à la page la valeur CALCULÉE, puis on
+   remonte à la règle qui gagne.
+
+   11/11/2026 — la charte passe au noir et blanc de manafamily.org. Le verre
+   et les ombres douces sont RETIRÉS, pas neutralisés : une règle de verre
+   laissée en place redeviendrait active au premier conteneur ajouté.
+   Ce qui reste ci-dessous a survécu parce que c'est encore juste.
+   ==================================================================== */
 
 :root {
   --ease-maison: cubic-bezier(0.22, 1, 0.36, 1);
-  --shadow-xl:
-    0 8px 24px rgb(27 42 74 / 12%),
-    0 32px 72px rgb(27 42 74 / 22%);
 }
 
-@supports (backdrop-filter: blur(4px)) {
-  .site-header .wrap {
-    background: rgb(250 248 243 / 68%);
-    -webkit-backdrop-filter: blur(18px) saturate(1.4);
-    backdrop-filter: blur(18px) saturate(1.4);
-  }
-  .bulle,
-  .bulle-xl,
-  .bulle-sm {
-    background: rgb(255 255 255 / 76%);
-    -webkit-backdrop-filter: blur(16px) saturate(1.25);
-    backdrop-filter: blur(16px) saturate(1.25);
-  }
-  .moteur-barre { background: rgb(255 255 255 / 82%); }
-  .card { background: rgb(255 255 255 / 84%); }
-}
+::selection { background: var(--ink); color: #ffffff; }
 
-::selection { background: var(--ink); color: var(--sand); }
-
+/* Le focus clavier : il tenait déjà, il garde juste la nouvelle encre. */
 :where(a, button, input, select, textarea, summary):focus-visible {
-  outline: 2px solid var(--or);
+  outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
 
+/* Les cartes prennent le relief dur de la charte et s'enfoncent au clic
+   plutôt que de léviter : la profondeur est dessinée, pas simulée. */
 .card {
-  border-radius: 16px 22px 14px 20px;
-  transition: transform 240ms var(--ease-maison), box-shadow 240ms var(--ease-maison);
+  background: #ffffff;
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
+  transition: transform 90ms ease, box-shadow 90ms ease;
 }
-.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-xl); }
+.card:active { transform: translate(3px, 3px); box-shadow: 0 0 0 0 var(--ink); }
 
-.btn { transition: all 190ms var(--ease-maison); }
-.btn:active { transform: translateY(0) scale(0.97); }
-.moteur-fleche:active { transform: translateX(2px) scale(0.95); }
+.btn { transition: transform 90ms ease, box-shadow 90ms ease; }
 
+/* Le rythme vertical des sections — inchangé, il était juste. */
 .landing-section { padding: var(--sp-6) 0; }
 .landing-section + .landing-section { margin-top: var(--sp-12); }
 @media (max-width: 640px) {
@@ -53,39 +52,16 @@
   .landing-section + .landing-section { margin-top: var(--sp-6); }
 }
 
+/* Les deux points autour de l'étiquette du hero, en gris. */
 .hero-label::before,
 .hero-label::after {
   content: "·";
   margin: 0 12px;
-  color: var(--or);
-  opacity: 0.7;
+  color: var(--doux);
 }
 
-.sous-bulle {
-  box-shadow:
-    inset 0 0 0 1px rgb(201 162 39 / 22%),
-    inset 0 1px 3px rgb(255 255 255 / 12%),
-    0 3px 10px rgb(27 42 74 / 14%);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .landing-section,
-    .territoire-bloc,
-    .promesse,
-    .publier-panel {
-      animation: maison-apparait linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 45%;
-    }
-    @keyframes maison-apparait {
-      from { opacity: 0.12; translate: 0 28px; }
-      to { opacity: 1; translate: 0 0; }
-    }
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .card:hover .glyphe { transform: rotate(-3deg) scale(1.05); }
-  .glyphe { transition: transform 240ms var(--ease-maison); }
-}
+/* ⛔ L'APPARITION AU DÉFILEMENT EST RETIRÉE. Elle partait d'`opacity: 0.12`
+   et ne remontait qu'une fois la section entrée dans l'écran : la première
+   image de la page — celle que voient une vignette, un lien partagé et un
+   lecteur pressé — montrait donc des sections presque effacées. Une page
+   doit être entièrement lisible à l'arrêt. */
