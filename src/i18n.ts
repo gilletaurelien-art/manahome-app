@@ -303,14 +303,14 @@ const DICO_EN: Record<string, string> = {
     "Additional audit — ordered on its own or after a GEO Expert",
   "Complément de GEO Monitoring": "Add-on to GEO Monitoring",
   "Commander un audit": "Order an audit",
-  "Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer honnêtement : ils sont déclarés « non testés », jamais comptés comme une absence.":
-    "Four Western assistants are queried: ChatGPT, Gemini, Claude and Perplexity. Microsoft Copilot and Google AI Overviews expose no access that would let us measure them honestly: they are reported as \u00ab not tested \u00bb, never counted as an absence.",
-  "MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement — et aucune prestation d'optimisation ne peut en modifier les conclusions.":
-    "MANA GEO never guarantees a recommendation by an AI, and does not sell one. It measures, documents and explains what the assistants actually answer — and no optimisation service can change its conclusions.",
+  "Nous interrogeons les quatre assistants que vos clients utilisent vraiment : ChatGPT, Gemini, Claude et Perplexity. Copilot et Google AI Overviews n'offrent aucun accès mesurable — nous l'écrivons dans le rapport plutôt que d'inventer un chiffre. Vous saurez toujours ce qui a été mesuré, et ce qui ne l'a pas été.":
+    "We query the four assistants your customers actually use: ChatGPT, Gemini, Claude and Perplexity. Copilot and Google AI Overviews offer no measurable access — we write that in the report rather than invent a figure. You will always know what was measured, and what was not.",
+  "Personne ne peut garantir qu'une IA vous recommandera. Nous vendons la mesure, pas la promesse : vous recevez ce que les assistants répondent vraiment, avec leurs sources. Et aucun achat ne peut modifier les conclusions d'un audit — c'est précisément ce qui les rend utilisables face à votre direction ou à votre conseil.":
+    "Nobody can guarantee an AI will recommend you. We sell the measurement, not the promise: you receive what the assistants actually answer, with their sources. And no purchase can change an audit's conclusions — which is exactly what makes them usable in front of your board.",
   "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit interroge quatre assistants — ChatGPT, Gemini, Claude et Perplexity — avec un panel de questions que vos acheteurs poseraient vraiment, et vous rend leurs réponses intégrales, leurs sources, et les concurrents cités à votre place.":
     "Where do you stand inside AI assistants? What stops you from being understood, found, cited? The audit queries four assistants — ChatGPT, Gemini, Claude and Perplexity — with a panel of questions your buyers would really ask, and hands you their full answers, their sources, and the competitors named in your place.",
-  "Tout ce qui est affiché ici est arrêté. Ce qui ne l'est pas n'apparaît pas : le site n'invente aucune grille, et ne vous laisse pas découvrir le prix après le devis.":
-    "Everything shown here is settled. What is not, does not appear: the site invents no price list, and does not leave you to discover the price after the quote.",
+  "Commencez par l'Express à 149 € pour voir où vous en êtes. Passez à l'Expert à 390 € quand vous voulez savoir qui est cité à votre place, et pourquoi. Chaque audit se commande seul : pas d'abonnement imposé, pas d'engagement, et vous connaissez le prix avant de nous écrire. Vous recevez un rapport, les réponses intégrales des assistants, et un plan d'action hiérarchisé.":
+    "Start with Express at €149 to see where you stand. Move to Expert at €390 when you want to know who is cited in your place, and why. Each audit is ordered on its own: no forced subscription, no commitment, and you know the price before writing to us. You receive a report, the assistants' full answers, and a prioritised action plan.",
 
   // ── Vitrine GEO (11/11/2026) ── ⚠️ « Notre approche » existe DÉJÀ plus bas
   // dans ce dictionnaire : le redéclarer ici fait refuser tsc (TS1117).
@@ -319,8 +319,8 @@ const DICO_EN: Record<string, string> = {
   "Voir les offres": "See the offers",
   "Contact": "Contact",
   "Le GEO, par Alliance MANA": "GEO, by Alliance MANA",
-  "Être trouvé par les assistants IA : l'infrastructure machine-readable, les audits, et les offres arrêtées de l'écosystème MANA.":
-    "Be found by AI assistants: machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem.",
+  "Vos clients demandent à ChatGPT. Savez-vous ce qu'il répond sur vous ? Testez votre site en 30 secondes, gratuitement — puis mesurez votre visibilité réelle à partir de 149 €.":
+    "Your customers ask ChatGPT. Do you know what it answers about you? Test your site in 30 seconds, free — then measure your real visibility from €149.",
   "Être trouvé par les IA": "Be found by AIs",
   "Vos clients ne cherchent plus seulement. Ils demandent.":
     "Your customers no longer just search. They ask.",
@@ -331,8 +331,9 @@ const DICO_EN: Record<string, string> = {
     "Town halls, associations, tourist offices, businesses.",
   "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit mesure l'état réel, puis la mise en œuvre suit : structuration, exposition, interrogeabilité. Sur devis — aucun prix n'est arrêté à ce jour, et nous n'en affichons pas.":
     "Where do you stand in AI assistants? What stops you from being understood, found, cited? The audit measures the real state, then implementation follows: structuring, exposure, queryability. On quote — no price has been fixed to this day, and we display none.",
-  "Les offres arrêtées": "The fixed offers",
-  "Les prix tranchés, rien d'autre.": "Decided prices, nothing else.",
+  "Combien ça coûte, et ce que vous recevez": "What it costs, and what you get",
+  "Des prix publics, un livrable daté, aucun devis à attendre.":
+    "Public prices, a dated deliverable, no quote to wait for.",
   "L'assistant : 9 €/mois par humain, jamais par structure. La fiche pro : 9 €. L'antenne : 9 €. Ces prix sont arrêtés — tout ce qui ne l'est pas reste sur devis, et le site ne l'invente pas.":
     "The assistant: €9/month per human, never per organisation. The pro page: €9. The antenna: €9. These prices are fixed — everything that is not remains on quote, and the site invents none.",
   "Les machines interrogent. MANA tient le registre honnête.":

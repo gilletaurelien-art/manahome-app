@@ -136,10 +136,10 @@ const SECTIONS = [
     cta: { label: "Demander un audit", href: "/approche" } },
   {
     num: "03",
-    titre: "Les offres arrêtées",
-    accroche: "Les prix tranchés, rien d'autre.",
+    titre: "Combien ça coûte, et ce que vous recevez",
+    accroche: "Des prix publics, un livrable daté, aucun devis à attendre.",
     texte:
-      "Tout ce qui est affiché ici est arrêté. Ce qui ne l'est pas n'apparaît pas : le site n'invente aucune grille, et ne vous laisse pas découvrir le prix après le devis.",
+      "Commencez par l'Express à 149 € pour voir où vous en êtes. Passez à l'Expert à 390 € quand vous voulez savoir qui est cité à votre place, et pourquoi. Chaque audit se commande seul : pas d'abonnement imposé, pas d'engagement, et vous connaissez le prix avant de nous écrire. Vous recevez un rapport, les réponses intégrales des assistants, et un plan d'action hiérarchisé.",
     // ⭐ Pas de `cta` ici, à dessein : cette section PORTE l'ancre #offres.
     // Un bouton « Voir les offres » y pointant renverrait sur elle-même —
     // le hero et la navigation l'utilisent pour DESCENDRE jusqu'ici.
@@ -257,7 +257,7 @@ export default function App() {
                 MANA<em>home</em>
               </h1>
               <p className="section-accroche">
-                {t(L, "Être trouvé par les assistants IA : l'infrastructure machine-readable, les audits, et les offres arrêtées de l'écosystème MANA.")}
+                {t(L, "Vos clients demandent à ChatGPT. Savez-vous ce qu'il répond sur vous ? Testez votre site en 30 secondes, gratuitement — puis mesurez votre visibilité réelle à partir de 149 €.")}
               </p>
               <div className="est-actions">
                 <a className="btn btn-clair" href={lien(`/approche`)}>
@@ -425,10 +425,10 @@ export default function App() {
                           gratter — les annoncer serait vendre six moteurs
                           et en livrer quatre. */}
                       <p className="tarif-note">
-                        {t(L, "Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer honnêtement : ils sont déclarés « non testés », jamais comptés comme une absence.")}
+                        {t(L, "Nous interrogeons les quatre assistants que vos clients utilisent vraiment : ChatGPT, Gemini, Claude et Perplexity. Copilot et Google AI Overviews n'offrent aucun accès mesurable — nous l'écrivons dans le rapport plutôt que d'inventer un chiffre. Vous saurez toujours ce qui a été mesuré, et ce qui ne l'a pas été.")}
                       </p>
                       <p className="tarif-note">
-                        {t(L, "MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement — et aucune prestation d'optimisation ne peut en modifier les conclusions.")}
+                        {t(L, "Personne ne peut garantir qu'une IA vous recommandera. Nous vendons la mesure, pas la promesse : vous recevez ce que les assistants répondent vraiment, avec leurs sources. Et aucun achat ne peut modifier les conclusions d'un audit — c'est précisément ce qui les rend utilisables face à votre direction ou à votre conseil.")}
                       </p>
                     </>
                   )}
