@@ -265,6 +265,13 @@ export default function App() {
                   MANA<em>home</em>
                 </h1>
               </div>
+              {/* ⭐ La sonde est le premier geste possible, donc elle vient
+                  tout de suite après le logo — avant même la promesse. Un
+                  produit d'appel placé après deux paragraphes et deux boutons
+                  n'appelle plus personne.
+                  ⚠️ Elle était d'abord dans le header, où son enveloppe
+                  héritait du gabarit de la barre : 116 px de débordement. */}
+              <SondeGeo />
               <p className="section-accroche">
                 {t(L, "Vos clients demandent à ChatGPT. Savez-vous ce qu'il répond sur vous ? Testez votre site en 30 secondes, gratuitement — puis mesurez votre visibilité réelle à partir de 149 €.")}
               </p>
@@ -276,13 +283,6 @@ export default function App() {
                   {t(L, "Voir les offres")}
                 </a>
               </div>
-              {/* ⭐ La sonde est DANS le hero : c'est le produit d'appel, et la
-                  première chose qu'un visiteur peut faire sans rien donner.
-                  ⚠️ Elle était d'abord dans le header, où son enveloppe
-                  héritait du gabarit de la barre — 116 px de débordement. Ici
-                  elle vit dans la carte du hero et n'a plus de largeur à
-                  calculer. */}
-              <SondeGeo />
             </div>
           </section>
 

@@ -2276,10 +2276,15 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
 }
 .hero-logo {
   flex: 0 0 auto;
-  /* ⭐ Triplé le 11/11/2026 (Aurélien : « doit tripler de volume pour être
-     lisible »). Il portait clamp(48px, 14vw, 88px) et rendait 60 px — à cette
-     taille, le mot MANAHOME gravé dans l'image était illisible. */
-  width: clamp(144px, 42vw, 264px);
+  /* ⭐ 11/11/2026 — agrandi deux fois dans la soirée, à la demande d'Aurélien :
+     clamp(48px, 14vw, 88px) rendait 60 px et le mot MANAHOME gravé dans
+     l'image y était illisible ; puis doublé encore. Il porte désormais seul
+     le nom de la marque, le titre texte étant masqué.
+     ⚠️ `max-width: 100%` n'est pas décoratif : à 320 px de large, le plancher
+     de la clamp (240 px) dépasse l'espace utile de la carte (≈256 px moins
+     ses marges). Sans lui, le logo débordait sur les petits téléphones. */
+  width: clamp(240px, 84vw, 528px);
+  max-width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
   border: 1px solid var(--ink);
@@ -2288,4 +2293,19 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
   /* L'image est en pixels : on les garde nets plutôt que lissés. */
   image-rendering: pixelated;
 }
-.hero-marque .brand-grand { margin: 0; }
+/* ⛔ Le titre texte « MANAhome » est MASQUÉ, pas supprimé (Aurélien,
+   11/11/2026) : le logo porte le nom, et l'afficher deux fois faisait
+   doublon. Mais c'est le SEUL <h1> de la page — le retirer du DOM priverait
+   un lecteur d'écran et les robots du titre de niveau 1. Il reste donc lu,
+   simplement hors de l'écran. */
+.hero-marque .brand-grand {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  margin: 0;
+}
+/* Le logo seul : il se centre, puisqu'il n'a plus de voisin. */
+.hero-marque { justify-content: center; }
