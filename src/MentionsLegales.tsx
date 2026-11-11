@@ -78,7 +78,7 @@ export function MentionsLegales() {
 
         <h2 className="tarif-sous-titre">{t(L, "Nature du service")}</h2>
         <p className="section-texte">
-          {t(L, "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.")}
+          {t(L, "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.")}
         </p>
         <p className="section-texte">
           {t(L, "MANAhome ne garantit ni indexation, ni citation, ni recommandation par un assistant IA : personne ne contrôle ce que répond un modèle. L'audit mesure et documente — il ne vend aucune position. Il reste indépendant de toute prestation d'optimisation.")}

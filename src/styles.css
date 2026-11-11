@@ -2113,3 +2113,84 @@ body { overflow-x: hidden; }
 }
 .mentions-liste li { padding: 4px 0; border-bottom: 1px solid var(--ecume); }
 .mentions-liste li:last-child { border-bottom: 0; }
+
+/* ───────────────────────────────────────────────────────────────────────
+   La sonde GEO, dans le header — 11/11/2026.
+   Elle porte le même gabarit que tous les encadrés : largeur de la barre,
+   rayon 6 px, relief dur. Elle n'invente aucune valeur.
+   ─────────────────────────────────────────────────────────────────────── */
+/* ⚠️ La sonde vit DANS la carte du hero, qui porte déjà le relief dur.
+   Lui en donner un second ferait une carte dans une carte : un filet et un
+   fond légèrement teinté suffisent à la détacher. */
+.sonde {
+  width: 100%;
+  margin: var(--sp-2) 0 0;
+  background: var(--ecume);
+  border: 1px solid var(--ink);
+  border-radius: var(--rayon);
+  padding: var(--sp-2);
+  text-align: left;
+}
+.sonde-etiquette {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.sonde-ligne { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+.sonde-ligne input {
+  flex: 1 1 14ch;
+  min-width: 0;          /* sinon un flex-item refuse de rétrécir sous 320 px */
+  font: inherit;
+  color: var(--ink);
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: var(--rayon);
+  padding: 6px 10px;
+}
+.sonde-ligne button { flex: 0 0 auto; white-space: nowrap; }
+.sonde-ligne button[disabled] { opacity: 0.6; cursor: progress; }
+.sonde-resultat { margin-top: var(--sp-2); border-top: 1px solid var(--ecume); padding-top: var(--sp-1); }
+.sonde-score {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--doux);
+  margin: 0 0 var(--sp-1);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.sonde-score strong {
+  font-size: var(--t-xl);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.sonde-cible { margin-left: auto; word-break: break-all; }
+.sonde-liste,
+.sonde-detail {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  margin: 0;
+  padding-left: 1.1em;
+}
+.sonde-detail { padding-left: 0; }
+.sonde-liste li { margin-bottom: 4px; }
+/* La frontière avec l'offre payante : elle doit se lire, pas se deviner. */
+.sonde-limite {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--doux);
+  margin: var(--sp-1) 0 0;
+  padding-top: var(--sp-1);
+  border-top: 1px dashed var(--ecume);
+}
+.sonde-erreur {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--alerte);
+  margin: var(--sp-1) 0 0;
+}

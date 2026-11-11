@@ -119,11 +119,21 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── La sonde GEO du header (11/11/2026) ──
+  "Testez la lisibilité machine de votre site": "Test how machine-readable your site is",
+  "Tester — gratuit, 30 s": "Test it — free, 30 s",
+  "Analyse…": "Analysing…",
+  "Les dix critères de lisibilité machine sont satisfaits.":
+    "All ten machine-readability criteria are met.",
+  "Le test n'a pas abouti. Cela peut venir de la sonde ou de l'adresse saisie — pas forcément de votre site. Réessayez dans un instant.":
+    "The test did not complete. That may come from the probe or from the address entered — not necessarily from your site. Try again in a moment.",
+  "Ce test lit votre page : llms.txt, robots.txt, données structurées, canonique, langue, fraîcheur. Il n'interroge aucun assistant et ne dit rien de ce que ChatGPT ou Gemini répondent à votre sujet — c'est l'objet de l'audit.":
+    "This test reads your page: llms.txt, robots.txt, structured data, canonical, language, freshness. It queries no assistant and says nothing about what ChatGPT or Gemini answer about you — that is what the audit is for.",
   // ── /approche et /mentions-legales, refaites pour le GEO (11/11/2026) ──
   "Mesurer ce que les IA répondent. Rien de plus, rien de moins.":
     "Measuring what AIs answer. Nothing more, nothing less.",
-  "Le GEO, par TEMPOsystem — pour les pros et les structures.":
-    "GEO, by TEMPOsystem — for professionals and organisations.",
+  "Le GEO, par Alliance MANA — pour les pros et les structures.":
+    "GEO, by Alliance MANA — for professionals and organisations.",
   "Voici, noir sur blanc, ce que nous faisons et ce que nous ne ferons jamais. Si un point vous paraît trop prudent, c'est voulu : une promesse qu'on ne peut pas tenir se paie au premier client.":
     "Here, in black and white, is what we do and what we will never do. If a point reads as over-cautious, that is deliberate: a promise you cannot keep is paid for with the first client.",
   "Voir les offres et les prix": "See the offers and prices",
@@ -164,8 +174,8 @@ const DICO_EN: Record<string, string> = {
     "Declared on 10 August 2026 with the Sub-prefecture of Brest",
   "Serveur dédié situé en France. Le site, les interfaces et les données tiennent sur une seule machine.":
     "Dedicated server located in France. The site, the interfaces and the data all run on one machine.",
-  "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.":
-    "MANAhome is the showcase of the GEO and the offers of the MANA ecosystem, operated by TEMPOsystem. GEO means measuring what AI assistants answer about an organisation, and making that organisation understandable to those machines.",
+  "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.":
+    "MANAhome is the showcase of the GEO and the offers of the MANA ecosystem, published by Alliance MANA. GEO means measuring what AI assistants answer about an organisation, and making that organisation understandable to those machines.",
   "MANAhome ne garantit ni indexation, ni citation, ni recommandation par un assistant IA : personne ne contrôle ce que répond un modèle. L'audit mesure et documente — il ne vend aucune position. Il reste indépendant de toute prestation d'optimisation.":
     "MANAhome guarantees neither indexing, nor citation, nor recommendation by an AI assistant: nobody controls what a model answers. The audit measures and documents — it sells no position. It stays independent of any optimisation service.",
   "Les prix affichés sont des prix arrêtés, hors taxes. Aucune commande n'est enregistrée depuis ce site : une demande ouvre votre logiciel de courriel, et rien n'est transmis avant que vous ne l'envoyiez vous-même. Toute prestation fait l'objet d'un devis ou d'une facture émise par la structure qui la réalise.":
@@ -285,14 +295,14 @@ const DICO_EN: Record<string, string> = {
   "Demander un audit": "Request an audit",
   "Voir les offres": "See the offers",
   "Contact": "Contact",
-  "Le GEO, par TEMPOsystem": "GEO, by TEMPOsystem",
+  "Le GEO, par Alliance MANA": "GEO, by Alliance MANA",
   "Être trouvé par les assistants IA : l'infrastructure machine-readable, les audits, et les offres arrêtées de l'écosystème MANA.":
     "Be found by AI assistants: machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem.",
   "Être trouvé par les IA": "Be found by AIs",
   "Vos clients ne cherchent plus seulement. Ils demandent.":
     "Your customers no longer just search. They ask.",
-  "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. TEMPOsystem vend cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent.":
-    "When someone asks ChatGPT or Gemini for a professional like you, the assistant answers with what it has read and retained from the web. If it has not understood you, it cites someone else — and you will never know: there is no ranking to consult, no account to open. GEO means making an organisation understandable to these machines: llms.txt, Model Context Protocol, structured data. TEMPOsystem sells that infrastructure itself — what neither content agencies nor measurement dashboards offer.",
+  "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. Alliance MANA produit cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent.":
+    "When someone asks ChatGPT or Gemini for a professional like you, the assistant answers with what it has read and retained from the web. If it has not understood you, it cites someone else — and you will never know: there is no ranking to consult, no account to open. GEO means making an organisation understandable to these machines: llms.txt, Model Context Protocol, structured data. Alliance MANA builds that infrastructure itself — what neither content agencies nor measurement dashboards offer.",
   "L'audit GEO de votre structure": "The GEO audit of your organisation",
   "Mairies, associations, offices de tourisme, entreprises.":
     "Town halls, associations, tourist offices, businesses.",
@@ -304,8 +314,8 @@ const DICO_EN: Record<string, string> = {
     "The assistant: €9/month per human, never per organisation. The pro page: €9. The antenna: €9. These prices are fixed — everything that is not remains on quote, and the site invents none.",
   "Les machines interrogent. MANA tient le registre honnête.":
     "Machines ask questions. MANA keeps the honest registry.",
-  "Vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.":
-    "Showcase of the GEO and the offers of the MANA ecosystem, operated by TEMPOsystem. Prices shown: fixed prices only — everything else is on quote. GEO improves the odds of being understood and found by AI assistants; it guarantees neither indexing, nor citation, nor recommendation.",
+  "Vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.":
+    "Showcase of the GEO and the offers of the MANA ecosystem, published by Alliance MANA. Prices shown: fixed prices only — everything else is on quote. GEO improves the odds of being understood and found by AI assistants; it guarantees neither indexing, nor citation, nor recommendation.",
 
   // ── Barre de navigation ──
   "Vacances": "Stays",

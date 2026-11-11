@@ -80,7 +80,7 @@ export function Approche() {
           {t(L, "Mesurer ce que les IA répondent. Rien de plus, rien de moins.")}
         </h1>
         <p className="section-accroche">
-          {t(L, "Le GEO, par TEMPOsystem — pour les pros et les structures.")}
+          {t(L, "Le GEO, par Alliance MANA — pour les pros et les structures.")}
         </p>
         <p className="section-texte">
           {t(L, "Voici, noir sur blanc, ce que nous faisons et ce que nous ne ferons jamais. Si un point vous paraît trop prudent, c'est voulu : une promesse qu'on ne peut pas tenir se paie au premier client.")}

@@ -224,7 +224,22 @@ export function hreflang(
  * chacun portant ses hreflang. ⚠️ Ni les écrans d'application, ni les fiches
  * de démonstration.
  */
-export function construireSitemap(siteUrl: string, base: string): string {
+/**
+ * ⭐ `lastmod` — ajouté le 11/11/2026, et c'est NOTRE PROPRE SONDE qui l'a
+ *    exigé : interrogée sur manahome.org, elle rendait 90/100 avec un seul
+ *    défaut — « le sitemap ne porte aucune date <lastmod>, une machine ne
+ *    sait pas si le contenu a bougé ». Un site qui vend la lisibilité
+ *    machine ne peut pas rater ce critère-là sur lui-même.
+ *
+ * ⚠️ La date est celle du BUILD, pas une valeur saisie. Un `lastmod` écrit à
+ *    la main ment dès le déploiement suivant — et un `lastmod` qui ment est
+ *    pire qu'absent : il dit à une machine que rien n'a bougé.
+ * ⚠️ Elle est passée en PARAMÈTRE plutôt que lue par `new Date()` dans la
+ *    fonction : sinon le test devient non déterministe, et une suite qui
+ *    dépend de l'heure finit par échouer la nuit.
+ */
+export function construireSitemap(siteUrl: string, base: string, lastmod?: string): string {
+  const jour = (lastmod ?? new Date().toISOString()).slice(0, 10);
   const racine =
     (siteUrl.replace(/\/$/, "") + "/" + base.replace(/^\/|\/$/g, "")).replace(/\/$/, "") + "/";
   const alternates = (chemin: string): string =>
@@ -233,11 +248,11 @@ export function construireSitemap(siteUrl: string, base: string): string {
       .join("");
   const prio = (s: string) => (s === "mentions-legales" ? "0.3" : "0.8");
   const lignes = [
-    `  <url><loc>${racine}${LANGUE_PAR_DEFAUT}/</loc>${alternates("/")}<priority>1.0</priority></url>`,
+    `  <url><loc>${racine}${LANGUE_PAR_DEFAUT}/</loc>${alternates("/")}<lastmod>${jour}</lastmod><priority>1.0</priority></url>`,
     ...PAGES_PUBLIQUES.flatMap((s) =>
       LOCALES.map(
         (l) =>
-          `  <url><loc>${racine}${l}/${s}</loc>${alternates(`/${s}`)}<priority>${prio(s)}</priority></url>`,
+          `  <url><loc>${racine}${l}/${s}</loc>${alternates(`/${s}`)}<lastmod>${jour}</lastmod><priority>${prio(s)}</priority></url>`,
       ),
     ),
   ];

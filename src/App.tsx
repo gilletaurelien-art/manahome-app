@@ -29,6 +29,7 @@ import { MesAnnonces } from "./MesAnnonces";
 import { MentionsLegales } from "./MentionsLegales";
 import { ContactForm } from "./ContactForm";
 import { IconePixel } from "./IconePixel";
+import { SondeGeo } from "./SondeGeo";
 // ⭐ Les prix ne vivent plus ici : ils sont dans src/offres.ts, lu AUSSI par
 //    vite.config.ts pour le JSON-LD. Deux lecteurs, une seule source.
 import { OFFRES_GEO, OFFRES_MANA, FAMILLES, prixAffiche } from "./offres";
@@ -123,7 +124,7 @@ const SECTIONS = [
     titre: "Être trouvé par les IA",
     accroche: "Vos clients ne cherchent plus seulement. Ils demandent.",
     texte:
-      "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. TEMPOsystem vend cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent." },
+      "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. Alliance MANA produit cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent." },
   {
     num: "02",
     titre: "L'audit GEO de votre structure",
@@ -249,7 +250,7 @@ export default function App() {
               de recherche depuis le 11/11/2026 : la vitrine vend le GEO. */}
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
-              <p className="hero-label">{t(L, "Le GEO, par TEMPOsystem")}</p>
+              <p className="hero-label">{t(L, "Le GEO, par Alliance MANA")}</p>
               <h1 className="brand-grand">
                 MANA<em>home</em>
               </h1>
@@ -264,6 +265,13 @@ export default function App() {
                   {t(L, "Voir les offres")}
                 </a>
               </div>
+              {/* ⭐ La sonde est DANS le hero : c'est le produit d'appel, et la
+                  première chose qu'un visiteur peut faire sans rien donner.
+                  ⚠️ Elle était d'abord dans le header, où son enveloppe
+                  héritait du gabarit de la barre — 116 px de débordement. Ici
+                  elle vit dans la carte du hero et n'a plus de largeur à
+                  calculer. */}
+              <SondeGeo />
             </div>
           </section>
 
@@ -453,7 +461,7 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "Vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.")}
+              {t(L, "Vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.")}
             </p>
             {/* ⚠️ /approche porte DÉJÀ le formulaire, en pleine page : l'y
                 répéter dans le pied donnait deux formulaires identiques
