@@ -1,0 +1,18 @@
+Polices pixel de MANAhome — SIL Open Font License 1.1
+=====================================================
+
+Press Start 2P   — Copyright (c) CodeMan38. Réservé au LOGO « MANAhome ».
+                   https://fonts.google.com/specimen/Press+Start+2P
+Pixelify Sans    — Copyright (c) Stefie Justprince. Titres de section.
+                   https://fonts.google.com/specimen/Pixelify+Sans
+
+Les deux sont publiées sous la SIL Open Font License, Version 1.1 — le même
+régime que Rubik et Marelle Baton 2, déjà dans ce dossier (voir
+RUBIK-OFL-LICENSE.txt et MARELLE-OFL-LICENSE.txt pour le texte intégral,
+identique).
+
+⚠️ Les deux fichiers ne portent QUE le sous-ensemble `latin` (U+0000–00FF) :
+il couvre les accents français — é è ê à ç ô û ï œ — mais PAS le cyrillique,
+le grec, ni le latin étendu. Un texte hors de cette plage retombe sur la
+police de secours sans prévenir. Téléchargés depuis fonts.gstatic.com le
+11/11/2026 ; auto-hébergés, aucun appel CDN à l'exécution.

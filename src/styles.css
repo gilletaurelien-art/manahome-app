@@ -29,6 +29,10 @@
   --sp-6: 48px;
   --sp-12: 96px;
 
+  /* --titre : les titres de section. --logo : la marque, et elle seule.
+     --sans : le corps. Les trois se changent ICI, jamais au point d'usage. */
+  --titre: "Pixelify Sans", "Marelle Baton 2", Georgia, serif;
+  --logo: "Press Start 2P", "Pixelify Sans", monospace;
   --serif: "Marelle Baton 2", Georgia, serif;
   --sans: "Rubik", system-ui, sans-serif;
 }
@@ -41,6 +45,28 @@
   font-family: "Marelle Baton 2";
   src: url("./fonts/MarelleBaton2-Regular.woff2") format("woff2");
   font-weight: 400;
+  font-display: swap;
+}
+/* ⭐ 11/11/2026 — charte typographique : TITRE = pixel art, CORPS = Rubik.
+   Deux polices pixel, pas une, et le partage est délibéré :
+   — Press Start 2P est réservée au LOGO. C'est une police d'arcade, très
+     large et sans minuscules utiles : sur « L'audit GEO de votre structure »
+     elle tiendrait quatre lignes.
+   — Pixelify Sans porte les titres de section : clairement pixel, mais aux
+     proportions d'une police de texte.
+   ⚠️ Les deux ne portent que le sous-ensemble `latin` (U+0000–00FF) — les
+   accents français passent, le reste retombe en silence sur le secours.
+   Marelle Baton 2 reste déclarée : d'autres surfaces du dépôt s'en servent. */
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("./fonts/PressStart2P-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pixelify Sans";
+  src: url("./fonts/PixelifySans-Variable.woff2") format("woff2-variations");
+  font-weight: 400 700;
   font-display: swap;
 }
 /* Rubik (OFL) : sous-titres en gras + texte courant */
@@ -100,7 +126,7 @@ html { background: var(--sand); }
   width: fit-content;
 }
 .brand {
-  font-family: "Marelle Baton 2", var(--serif);
+  font-family: var(--logo);
   font-size: var(--t-m);
   font-weight: 400;
   color: var(--ink);
@@ -187,7 +213,11 @@ html { background: var(--sand); }
   content: "";
   position: fixed;
   inset: 0;
-  background: url("./assets/hero.jpg") center / cover no-repeat;
+  /* ⭐ 11/11/2026 — fond remplacé : la carte du monde pixel-art « maison
+     des IA » (manahomeIA.webp). Elle est SOMBRE là où la photo d'intérieur
+     était claire : le texte du hero tient parce qu'il vit dans `.bulle-xl`,
+     pas directement sur le fond. */
+  background: url("./assets/hero.webp") center / cover no-repeat;
   z-index: -2;
 }
 .hero .wrap {
@@ -203,9 +233,16 @@ html { background: var(--sand); }
 }
 /* Grand logo hero : identique au header, MANA bleu marine + home or */
 .hero h1.brand-grand {
-  font-family: "Marelle Baton 2", var(--serif);
-  /* Fige sur 1 ligne partout : la cursive ne doit jamais se replier */
-  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  font-family: var(--logo);
+  /* Fige sur 1 ligne partout : le logo ne doit jamais se replier.
+     ⚠️ 11/11/2026 — l'ancienne borne basse (2.4rem) débordait la bulle dès
+     le passage à Press Start 2P : cette police avance d'environ 1 em PAR
+     CARACTÈRE, « MANAhome » fait donc 8 em de large là où la cursive en
+     faisait la moitié. Le plancher descend et la pente monte en conséquence.
+     ⭐ Une taille de titre n'est pas une valeur de charte : elle dépend de
+     la LARGEUR de la police. Changer de police, c'est reprendre la clamp. */
+  font-size: clamp(1.2rem, 8.5vw, 4rem);
+  max-width: 100%;
   white-space: nowrap;
   line-height: 1.1;
   font-weight: 400;
@@ -372,7 +409,7 @@ html { background: var(--sand); }
   margin: 0 0 var(--sp-1);
 }
 .section-title {
-  font-family: "Marelle Baton 2", var(--serif);
+  font-family: var(--titre);
   font-weight: 400;
   font-size: var(--t-xl);
   line-height: 1.2;
@@ -381,7 +418,9 @@ html { background: var(--sand); }
   margin: 0 0 var(--sp-4);
 }
 .section-accroche {
-  font-family: "Marelle Baton 2", var(--serif);
+  /* ⭐ L'accroche porte une phrase entière, pas un titre : elle passe au
+     corps (Rubik) le 11/11/2026, quand les titres sont devenus pixel. */
+  font-family: var(--sans);
   font-size: var(--t-xl);
   font-weight: 400;
   color: var(--primary);
