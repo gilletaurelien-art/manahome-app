@@ -119,6 +119,28 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── Formulaire de demande (§8, 11/11/2026) ──
+  "Demander un audit, ou poser une question": "Request an audit, or ask a question",
+  "Organisation": "Organisation",
+  "Site web": "Website",
+  "Courriel": "Email",
+  "Offre souhaitée": "Offer wanted",
+  "— choisir —": "— choose —",
+  "Je ne sais pas encore": "I don't know yet",
+  "Secteur d'activité": "Sector",
+  "Territoire ou marché visé": "Territory or market",
+  "Votre message": "Your message",
+  "Préparer ma demande": "Prepare my request",
+  "Demande": "Request",
+  "Le bouton ouvre votre logiciel de courriel avec la demande déjà rédigée. Rien n'est transmis avant que vous l'envoyiez vous-même.":
+    "The button opens your email client with the request already written. Nothing is sent until you send it yourself.",
+  "Votre logiciel de courriel vient de s'ouvrir avec votre demande. Elle ne part que lorsque vous cliquez sur « Envoyer » chez vous — rien n'a encore été transmis.":
+    "Your email client has just opened with your request. It is only sent when you click Send on your side — nothing has been transmitted yet.",
+  "Rien ne s'est ouvert ? Écrivez-nous directement à": "Nothing opened? Write to us directly at",
+  "en recopiant ce texte :": "copying this text:",
+  "Copier le texte": "Copy the text",
+  "Texte copié": "Text copied",
+  "Faire une autre demande": "Make another request",
   // ── §3 : le constat, en faits mesurés ──
   "requêtes d'agents IA": "AI-agent requests",
   "sur manafrance.org, du 20 septembre au 11 novembre 2026. Ils passent, qu'on le sache ou non.":
@@ -476,7 +498,7 @@ const DICO_EN: Record<string, string> = {
     "No conversation yet. Contact an owner from a listing page to open messaging.",
   "Conversations": "Conversations",
   "Choisissez une conversation à gauche.": "Choose a conversation on the left.",
-  "Votre message": "Your message",
+  // « Votre message » existe déjà plus haut — ne pas la redéclarer (TS1117).
   "Votre message…": "Your message…",
   "Démo : stockage local, aucune donnée transmise. En production, chaque message passe par le serveur, chiffré en transit, visible uniquement des participants (RLS).":
     "Demo: local storage, no data transmitted. In production, every message goes through the server, encrypted in transit, visible only to participants (RLS).",

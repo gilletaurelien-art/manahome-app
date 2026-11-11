@@ -1,69 +1,123 @@
 import { useState } from "react";
 import { GlyphPersonne, GlyphEmail, GlyphDescription, GlyphValidation } from "./Glyphs";
+import { t } from "./i18n";
+import { langueCourante } from "./router";
+import { OFFRES_GEO, OFFRES_MANA } from "./offres";
 
-// Formulaire de contact du footer — vers contact@manahome.org.
-// Démo : l'envoi est simulé (aucun backend). En prod : API + rate-limit
-// anti-spam. Aucune donnée ne quitte le navigateur en l'état.
+/**
+ * Le formulaire de demande d'audit.
+ *
+ * 🔴 CE QU'IL FAISAIT JUSQU'AU 11/11/2026, EN PRODUCTION : rien. Il écrivait
+ *    la demande dans le `localStorage` DU VISITEUR, puis affichait « votre
+ *    message a bien été envoyé. Nous répondons très vite. » Personne ne
+ *    recevait jamais rien, et le visiteur repartait convaincu du contraire.
+ *    Un commentaire disait « Démo : l'envoi est simulé » — il était juste, et
+ *    il n'a empêché personne : une description fidèle occupe la place d'un
+ *    garde sans en être un. C'est l'écran qui mentait, pas le code.
+ *
+ * ⛔ IL N'Y A AUCUN SERVEUR. Mesuré : /api/* rend la coquille avec un 404, et
+ *    aucun conteneur manahome ne tourne sur le KS-5. On ne peut donc pas
+ *    « envoyer » — alors on ne le dit pas. Le formulaire COMPOSE la demande
+ *    et ouvre la messagerie du visiteur : le message part vraiment, par son
+ *    propre compte, et il le voit partir.
+ * ⭐ D'où la règle qui tient ce fichier : la confirmation décrit ce qui S'EST
+ *    PASSÉ, jamais ce qu'on aurait voulu qu'il se passe. Tant qu'il n'y a pas
+ *    d'accusé de réception, il n'y a pas de « message envoyé ».
+ */
 
-interface ContactState {
-  nom: string;
-  prenom: string;
+const DESTINATAIRE = "contact@manahome.org";
+
+type Etat = {
+  organisation: string;
+  site: string;
   courriel: string;
+  offre: string;
+  secteur: string;
+  territoire: string;
   message: string;
-}
+};
+
+const VIDE: Etat = {
+  organisation: "", site: "", courriel: "", offre: "", secteur: "", territoire: "", message: "",
+};
 
 export function ContactForm() {
-  const [form, setForm] = useState<ContactState>({
-    nom: "",
-    prenom: "",
-    courriel: "",
-    message: "",
-  });
-  const [envoye, setEnvoye] = useState(false);
+  const L = langueCourante();
+  const [form, setForm] = useState<Etat>(VIDE);
+  const [compose, setCompose] = useState<string | null>(null);
+  const [copie, setCopie] = useState(false);
 
   const valide =
-    form.nom.trim() &&
-    form.prenom.trim() &&
+    form.organisation.trim() !== "" &&
     form.courriel.includes("@") &&
-    form.message.trim();
+    form.offre !== "";
+
+  const corps = () =>
+    [
+      `${t(L, "Organisation")} : ${form.organisation}`,
+      `${t(L, "Site web")} : ${form.site || "—"}`,
+      `${t(L, "Courriel")} : ${form.courriel}`,
+      `${t(L, "Offre souhaitée")} : ${form.offre}`,
+      `${t(L, "Secteur d'activité")} : ${form.secteur || "—"}`,
+      `${t(L, "Territoire ou marché visé")} : ${form.territoire || "—"}`,
+      "",
+      form.message || "—",
+    ].join("\n");
 
   const envoyer = () => {
     if (!valide) return;
-    try {
-      const cle = "manahome-contact-demo";
-      const existant = JSON.parse(localStorage.getItem(cle) ?? "[]");
-      existant.push({ ...form, date: new Date().toISOString() });
-      localStorage.setItem(cle, JSON.stringify(existant));
-    } catch {
-      // démo : échec de stockage non bloquant
-    }
-    setEnvoye(true);
+    const texte = corps();
+    const url =
+      `mailto:${DESTINATAIRE}` +
+      `?subject=${encodeURIComponent(`${t(L, "Demande")} — ${form.offre} — ${form.organisation}`)}` +
+      `&body=${encodeURIComponent(texte)}`;
+    setCompose(texte);
+    // ⚠️ Ouvrir la messagerie PEUT ne rien faire (webmail non configuré, client
+    // absent). L'écran suivant ne dit donc jamais « envoyé » : il explique, et
+    // il donne l'adresse et le texte à recopier si rien ne s'est ouvert.
+    window.location.href = url;
   };
 
-  const champ = (k: keyof ContactState) => ({
+  const champ = (k: keyof Etat) => ({
     value: form[k],
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setForm({ ...form, [k]: e.target.value }),
   });
 
-  if (envoye) {
+  if (compose !== null) {
     return (
       <div className="contact-form" role="status">
         <p className="contact-merci label-icone">
           <GlyphValidation size={18} />
-          Merci {form.prenom}, votre message a bien été envoyé. Nous
-          répondons à <strong>{form.courriel}</strong> très vite.
+          {t(L, "Votre logiciel de courriel vient de s'ouvrir avec votre demande. Elle ne part que lorsque vous cliquez sur « Envoyer » chez vous — rien n'a encore été transmis.")}
         </p>
-        <button
-          type="button"
-          className="btn btn-clair-ghost"
-          onClick={() => {
-            setEnvoye(false);
-            setForm({ nom: "", prenom: "", courriel: "", message: "" });
-          }}
-        >
-          Écrire un autre message
-        </button>
+        <p className="contact-repli">
+          {t(L, "Rien ne s'est ouvert ? Écrivez-nous directement à")}{" "}
+          <a href={`mailto:${DESTINATAIRE}`}>{DESTINATAIRE}</a>{" "}
+          {t(L, "en recopiant ce texte :")}
+        </p>
+        <pre className="contact-apercu">{compose}</pre>
+        <div className="contact-actions">
+          <button
+            type="button"
+            className="btn btn-clair"
+            onClick={() => {
+              navigator.clipboard?.writeText(compose).then(
+                () => setCopie(true),
+                () => setCopie(false),
+              );
+            }}
+          >
+            {copie ? t(L, "Texte copié") : t(L, "Copier le texte")}
+          </button>
+          <button
+            type="button"
+            className="btn btn-clair-ghost"
+            onClick={() => { setCompose(null); setCopie(false); setForm(VIDE); }}
+          >
+            {t(L, "Faire une autre demande")}
+          </button>
+        </div>
       </div>
     );
   }
@@ -71,45 +125,55 @@ export function ContactForm() {
   return (
     <form
       className="contact-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        envoyer();
-      }}
+      onSubmit={(e) => { e.preventDefault(); envoyer(); }}
     >
       <p className="apercu-label label-icone">
-        <GlyphEmail size={18} />
-        Nous écrire :<br />
-        contact@manahome.org
+        <GlyphDescription size={15} />
+        {t(L, "Demander un audit, ou poser une question")}
       </p>
-      <div className="contact-grid">
-        <div className="champ">
-          <label htmlFor="contact-nom" className="label-icone"><GlyphPersonne size={15} />Nom *</label>
-          <input id="contact-nom" type="text" autoComplete="family-name" {...champ("nom")} />
+
+      <label htmlFor="c-organisation" className="label-icone">
+        <GlyphPersonne size={15} />{t(L, "Organisation")} *
+      </label>
+      <input id="c-organisation" type="text" autoComplete="organization" required {...champ("organisation")} />
+
+      <label htmlFor="c-site">{t(L, "Site web")}</label>
+      <input id="c-site" type="url" inputMode="url" placeholder="https://" autoComplete="url" {...champ("site")} />
+
+      <label htmlFor="c-courriel" className="label-icone">
+        <GlyphEmail size={15} />{t(L, "Courriel")} *
+      </label>
+      <input id="c-courriel" type="email" autoComplete="email" required placeholder="vous@exemple.fr" {...champ("courriel")} />
+
+      <label htmlFor="c-offre">{t(L, "Offre souhaitée")} *</label>
+      <select id="c-offre" required {...champ("offre")}>
+        <option value="">{t(L, "— choisir —")}</option>
+        {[...OFFRES_GEO, ...OFFRES_MANA].map((o) => (
+          <option key={o.nom} value={o.nom}>{o.nom}</option>
+        ))}
+        <option value={t(L, "Je ne sais pas encore")}>{t(L, "Je ne sais pas encore")}</option>
+      </select>
+
+      <div className="contact-duo">
+        <div>
+          <label htmlFor="c-secteur">{t(L, "Secteur d'activité")}</label>
+          <input id="c-secteur" type="text" {...champ("secteur")} />
         </div>
-        <div className="champ">
-          <label htmlFor="contact-prenom" className="label-icone"><GlyphPersonne size={15} />Prénom *</label>
-          <input id="contact-prenom" type="text" autoComplete="given-name" {...champ("prenom")} />
+        <div>
+          <label htmlFor="c-territoire">{t(L, "Territoire ou marché visé")}</label>
+          <input id="c-territoire" type="text" {...champ("territoire")} />
         </div>
       </div>
-      <div className="champ">
-        <label htmlFor="contact-courriel" className="label-icone"><GlyphEmail size={15} />Courriel *</label>
-        <input
-          id="contact-courriel"
-          type="email"
-          autoComplete="email"
-          placeholder="vous@exemple.fr"
-          {...champ("courriel")}
-        />
-      </div>
-      <div className="champ">
-        <label htmlFor="contact-message" className="label-icone"><GlyphDescription size={15} />Message *</label>
-        <textarea id="contact-message" rows={4} {...champ("message")} />
-      </div>
-      <div className="est-actions">
-        <button type="submit" className="btn btn-clair" disabled={!valide}>
-          Envoyer
-        </button>
-      </div>
+
+      <label htmlFor="c-message">{t(L, "Votre message")}</label>
+      <textarea id="c-message" rows={3} {...champ("message")} />
+
+      <button type="submit" className="btn btn-clair" disabled={!valide}>
+        {t(L, "Préparer ma demande")}
+      </button>
+      <p className="contact-repli">
+        {t(L, "Le bouton ouvre votre logiciel de courriel avec la demande déjà rédigée. Rien n'est transmis avant que vous l'envoyiez vous-même.")}
+      </p>
     </form>
   );
 }

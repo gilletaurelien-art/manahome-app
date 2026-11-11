@@ -1791,3 +1791,33 @@ tr.rapport-non-teste td { opacity: 0.68; font-style: italic; }
   .constats li { grid-template-columns: 1fr; row-gap: 2px; }
   .constat-chiffre { grid-row: auto; }
 }
+
+/* Formulaire de demande (§8) — réécrit le 11/11/2026. */
+.contact-form select {
+  font: inherit;
+  width: 100%;
+}
+.contact-duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-1); }
+@media (max-width: 520px) { .contact-duo { grid-template-columns: 1fr; } }
+.contact-repli {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  opacity: 0.85;
+  margin: var(--sp-1) 0 0;
+}
+/* L'aperçu montre EXACTEMENT ce qui part : pas un résumé rassurant. */
+.contact-apercu {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--t-xs);
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 10px;
+  padding: var(--sp-1);
+  margin: var(--sp-1) 0 0;
+  max-height: 16em;
+  overflow: auto;
+}
+.contact-actions { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
+.contact-form button[disabled] { opacity: 0.5; cursor: not-allowed; }
