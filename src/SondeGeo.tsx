@@ -5,11 +5,15 @@ import { langueCourante } from "./router";
 /**
  * La sonde GEO — le test gratuit, dans le header.
  *
- * Elle appelle le même service que la page d'Alliance MANA :
- * `POST https://alliancemana.com/api/geo`, qui rend un score sur 100 et le
- * détail des critères. Vérifié avant d'écrire une ligne : l'endpoint répond en
- * 3 s, et ses en-têtes portent `access-control-allow-origin: *` — l'appel
- * depuis manahome.org est donc permis, sans relais à construire.
+ * Elle appelle `POST /api/geo` sur manahome.org même, relayé par Caddy vers
+ * la fonction `sonde-lisibilite`. Elle rend un score sur 100 et le détail des
+ * dix critères.
+ *
+ * 🔴 CE COMMENTAIRE A ÉTÉ FAUX PENDANT UNE HEURE : il annonçait un appel vers
+ *    `https://alliancemana.com/api/geo`, exact à l'écriture, périmé dès que la
+ *    constante est passée en même origine — et définitivement faux depuis que
+ *    ce domaine redirige vers .org (12/11/2026). La description vivait à côté
+ *    du code qu'elle décrivait, sans rien pour les tenir ensemble.
  *
  * ⛔ CE QU'ELLE NE FAIT PAS, ET IL FAUT QUE ÇA SE LISE. Elle inspecte la PAGE
  *    (llms.txt, robots.txt, JSON-LD, canonique, langue, fraîcheur du
