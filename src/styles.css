@@ -189,7 +189,15 @@ html { background: var(--sand); }
   /* 5 items icônes seules : gap réduit pour tenir jusqu'à 320px */
   .nav { gap: var(--sp-1); }
   .site-header .wrap { padding-left: var(--sp-2); padding-right: var(--sp-2); }
-  .nav a > span {
+  /* ⚠️ 11/11/2026 — ce sélecteur visait `span` tout court. Il était juste
+     tant que l'icône était un <svg> : seul le libellé était un span. Le jour
+     où l'icône est devenue un <span> masqué (IconePixel), la règle l'a
+     avalée avec le libellé — position absolue, 1 px, découpée. Le lien se
+     dimensionnait alors comme s'il était VIDE (34x18 px), et aucune erreur
+     n'était levée : trois icônes simplement absentes de l'écran.
+     ⭐ Une règle qui désigne une BALISE désigne en fait « tout ce qui, un
+     jour, portera cette balise ». Ici elle doit désigner le LIBELLÉ. */
+  .nav a > span:not(.icone-pixel) {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -409,12 +417,18 @@ html { background: var(--sand); }
   margin: 0 0 var(--sp-1);
 }
 .section-title {
-  font-family: var(--titre);
+  /* ⭐ 11/11/2026 — même police que le titre MANAhome (décision d'Aurélien).
+     ⚠️ Press Start 2P avance d'environ 1 em PAR CARACTÈRE :
+     « L'AUDIT GEO DE VOTRE STRUCTURE » fait 29 caractères, donc 29 em. À
+     var(--t-xl) elle réclamait 812 px — plus large que le conteneur. La
+     taille descend et l'interlignage monte en conséquence, et la lettre
+     n'a plus besoin d'être espacée : la police l'est déjà. */
+  font-family: var(--logo);
   font-weight: 400;
-  font-size: var(--t-xl);
-  line-height: 1.2;
+  font-size: clamp(0.72rem, 2.6vw, 1.05rem);
+  line-height: 1.7;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   margin: 0 0 var(--sp-4);
 }
 .section-accroche {
@@ -1361,14 +1375,21 @@ html { background: var(--sand); }
   }
   .bulle.landing-section { padding-bottom: 0; }
 }
-.sous-bulle .section-accroche {
+/* ⛔ 11/11/2026 — `.sous-bulle` (l'encadré bleu) a été RETIRÉE du gabarit.
+   Ses règles de couleur sont mortes avec elle : elles posaient du texte
+   CLAIR, juste sur fond encre, faux sur le conteneur blanc. Elles ne sont
+   pas supprimées en silence — elles sont remplacées par les règles du
+   conteneur clair, ci-dessous, pour que la raison reste lisible.
+   ⚠️ Si une sous-bulle réapparaît un jour ailleurs, son texte sera
+   illisible : c'est le gabarit qui porte la couleur, plus la boîte. */
+.bulle .section-accroche {
   font-size: var(--t-l);
-  color: var(--sand);
+  color: var(--primary-deep);
 }
-.sous-bulle .section-texte {
+.bulle .section-texte {
   font-size: var(--t-s);
   line-height: 1.7;
-  color: #fff;
+  color: var(--ink);
   opacity: 0.92;
 }
 
@@ -1576,4 +1597,23 @@ html { background: var(--sand); }
   font-size: var(--t-m);
   color: var(--primary);
   font-variant-numeric: tabular-nums;
+}
+
+
+/* ───────────────────────────────────────────────────────────────────────
+   Icônes pixel du header — le jeu « points » de mana.love.
+   ⭐ Les fichiers sont BLANCS sur transparent. Ils servent de MASQUE : la
+   forme vient de l'image, la couleur de `currentColor`. Une seule image
+   sert donc le repos, le survol, le fond clair et le fond sombre — là où
+   une variante par couleur aurait divergé au premier changement de charte.
+   ⚠️ `image-rendering: pixelated` n'a aucun effet sur un masque ; c'est
+   `mask-size: contain` sur une image déjà en points qui garde les carrés
+   nets. Les deux préfixes sont là : Safari ne lit toujours que -webkit-.
+   ─────────────────────────────────────────────────────────────────────── */
+.icone-pixel {
+  display: inline-block;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  -webkit-mask: var(--icone) center / contain no-repeat;
+  mask: var(--icone) center / contain no-repeat;
 }

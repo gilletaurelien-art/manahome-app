@@ -1,16 +1,12 @@
 import { useEffect } from "react";
 import { poserCanonique } from "./canonique";
 import { annonceLocaleParId, enAnnonce } from "./annoncesLocales";
-import {
-  GlyphMaison,
-  GlyphCompas,
-  GlyphStructure,
-  GlyphAccompagnement,
-  GlyphTerritoire } from "./Glyphs";
-import {
-  NavAnnonces,
-  NavTerritoire,
-  NavPublier } from "./NavGlyphs";
+// ⛔ 11/11/2026 — les imports de ./Glyphs et ./NavGlyphs sont retirés.
+// Le header porte désormais les icônes pixel (voir IconePixel) ; et le champ
+// `glyphe:` des SECTIONS était déclaré sur les quatre sections sans être
+// AFFICHÉ nulle part — de la donnée morte qui avait l'air vivante, et quatre
+// composants SVG embarqués dans le bundle pour rien. Les deux fichiers
+// restent : d'autres pages s'en servent.
 import {
   usePath,
   routeAnnonce,
@@ -32,6 +28,7 @@ import { Messagerie } from "./Messagerie";
 import { MesAnnonces } from "./MesAnnonces";
 import { MentionsLegales } from "./MentionsLegales";
 import { ContactForm } from "./ContactForm";
+import { IconePixel } from "./IconePixel";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -144,14 +141,12 @@ const OFFRES_MANA = [
 
 const SECTIONS = [
   {
-    glyphe: GlyphCompas,
     num: "01",
     titre: "Être trouvé par les IA",
     accroche: "Le GEO : la visibilité qui se construit, pas celle qui s'achète.",
     texte:
       "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve vivante : manafrance.org, plus de 4,3 millions de visites d'agents IA mesurées." },
   {
-    glyphe: GlyphStructure,
     num: "02",
     titre: "L'audit GEO de votre structure",
     accroche: "Mairies, associations, offices de tourisme, entreprises.",
@@ -159,7 +154,6 @@ const SECTIONS = [
       "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit interroge quatre assistants — ChatGPT, Gemini, Claude et Perplexity — avec un panel de questions que vos acheteurs poseraient vraiment, et vous rend leurs réponses intégrales, leurs sources, et les concurrents cités à votre place.",
     cta: { label: "Demander un audit", href: "/approche" } },
   {
-    glyphe: GlyphAccompagnement,
     num: "03",
     titre: "Les offres arrêtées",
     accroche: "Les prix tranchés, rien d'autre.",
@@ -170,7 +164,6 @@ const SECTIONS = [
     // le hero et la navigation l'utilisent pour DESCENDRE jusqu'ici.
     },
   {
-    glyphe: GlyphTerritoire,
     num: "04",
     titre: "La maison des IA",
     accroche: "Les machines interrogent. MANA tient le registre honnête.",
@@ -208,19 +201,19 @@ export default function App() {
       <header className="site-header">
         <div className="wrap">
           <a className="brand brand-icone" href={lien(`/`)} aria-label="MANAhome">
-            <GlyphMaison size={28} />
+            <IconePixel nom="maison" taille={26} />
           </a>
           <nav className="nav">
             <a href={lien(`/approche`)}>
-              <NavTerritoire />
+              <IconePixel nom="structure" />
               <span>{t(L, "Notre approche")}</span>
             </a>
             <a href={lien(`/#offres`)}>
-              <NavAnnonces />
+              <IconePixel nom="grille" />
               <span>{t(L, "Offres & tarifs")}</span>
             </a>
             <a href={lien(`/#contact`)} className="nav-cta">
-              <NavPublier />
+              <IconePixel nom="etoile" />
               <span>{t(L, "Demander un audit")}</span>
             </a>
             {/* Sélecteur de langue : l'autre version de la MÊME page, jamais
@@ -298,17 +291,17 @@ export default function App() {
                 un lien se change dans la DONNÉE, plus dans le gabarit. */}
             <section className="landing-section bulle">
               <h2 className="section-title">{t(L, SECTIONS[0].titre)}</h2>
-              <div className="sous-bulle">
-                <p className="section-accroche">{t(L, SECTIONS[0].accroche)}</p>
-                <p className="section-texte">{t(L, SECTIONS[0].texte)}</p>
-                {SECTIONS[0].cta && (
-                  <div className="est-actions">
-                    <a className="btn btn-clair" href={lien(`${SECTIONS[0].cta.href}`)}>
-                      {t(L, SECTIONS[0].cta.label)}
-                    </a>
-                  </div>
-                )}
-              </div>
+              {/* ⭐ 11/11/2026 — l'encadré bleu (.sous-bulle) est retiré : le
+                  contenu vit directement dans le conteneur clair. */}
+              <p className="section-accroche">{t(L, SECTIONS[0].accroche)}</p>
+              <p className="section-texte">{t(L, SECTIONS[0].texte)}</p>
+              {SECTIONS[0].cta && (
+                <div className="est-actions">
+                  <a className="btn btn-clair" href={lien(`${SECTIONS[0].cta.href}`)}>
+                    {t(L, SECTIONS[0].cta.label)}
+                  </a>
+                </div>
+              )}
             </section>
 
             {/* 02 → 04 — la section Offres porte l'ancre #offres, citée par
@@ -320,68 +313,67 @@ export default function App() {
                   className="landing-section alt bulle"
                 >
                   <h2 className="section-title">{t(L, s.titre)}</h2>
-                  <div className="sous-bulle">
-                    <p className="section-accroche">{t(L, s.accroche)}</p>
-                    <p className="section-texte">{t(L, s.texte)}</p>
-                    {s.num === "03" && (
-                      <>
-                        <div className="tarifs">
-                          {OFFRES_GEO.map((o) => (
-                            <article
-                              key={o.nom}
-                              className={`tarif-carte${o.recommande ? " tarif-recommande" : ""}`}
-                            >
-                              {o.recommande && (
-                                <p className="tarif-fanion">{t(L, "Offre recommandée")}</p>
-                              )}
-                              <h3 className="tarif-nom">{o.nom}</h3>
-                              <p className="tarif-prix">{o.prix}</p>
-                              <p className="tarif-unite">{t(L, o.unite)}</p>
-                              <p className="tarif-pour">{t(L, o.pour)}</p>
-                              <ul className="tarif-points">
-                                {o.points.map((pt) => (
-                                  <li key={pt}>{t(L, pt)}</li>
-                                ))}
-                              </ul>
-                            </article>
-                          ))}
-                        </div>
-                        {/* ⚠️ Cette note n'est pas de la prudence juridique
-                            décorative : elle dit ce que le produit ne PEUT
-                            pas faire. Copilot et Google AI Overviews n'ont
-                            pas d'accès permettant de les mesurer sans les
-                            gratter — les annoncer serait vendre six moteurs
-                            et en livrer quatre. */}
-                        <p className="tarif-note">
-                          {t(L, "Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer honnêtement : ils sont déclarés « non testés », jamais comptés comme une absence.")}
-                        </p>
-                        <p className="tarif-note">
-                          {t(L, "MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement — et aucune prestation d'optimisation ne peut en modifier les conclusions.")}
-                        </p>
-                        <h3 className="tarif-sous-titre">{t(L, "Les autres prix arrêtés")}</h3>
-                        <ul className="tarifs-simples">
-                          {OFFRES_MANA.map((o) => (
-                            <li key={o.nom}>
-                              <strong>{t(L, o.nom)}</strong>
-                              <span className="tarif-prix-simple">{o.prix}</span>
-                              <span className="tarif-unite">{t(L, o.unite)}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </>
+                  {/* ⭐ 11/11/2026 — plus d'encadré bleu : le contenu vit directement dans le conteneur clair. */}
+                  <p className="section-accroche">{t(L, s.accroche)}</p>
+                  <p className="section-texte">{t(L, s.texte)}</p>
+                  {s.num === "03" && (
+                    <>
+                      <div className="tarifs">
+                        {OFFRES_GEO.map((o) => (
+                          <article
+                            key={o.nom}
+                            className={`tarif-carte${o.recommande ? " tarif-recommande" : ""}`}
+                          >
+                            {o.recommande && (
+                              <p className="tarif-fanion">{t(L, "Offre recommandée")}</p>
+                            )}
+                            <h3 className="tarif-nom">{o.nom}</h3>
+                            <p className="tarif-prix">{o.prix}</p>
+                            <p className="tarif-unite">{t(L, o.unite)}</p>
+                            <p className="tarif-pour">{t(L, o.pour)}</p>
+                            <ul className="tarif-points">
+                              {o.points.map((pt) => (
+                                <li key={pt}>{t(L, pt)}</li>
+                              ))}
+                            </ul>
+                          </article>
+                        ))}
+                      </div>
+                      {/* ⚠️ Cette note n'est pas de la prudence juridique
+                          décorative : elle dit ce que le produit ne PEUT
+                          pas faire. Copilot et Google AI Overviews n'ont
+                          pas d'accès permettant de les mesurer sans les
+                          gratter — les annoncer serait vendre six moteurs
+                          et en livrer quatre. */}
+                      <p className="tarif-note">
+                        {t(L, "Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer honnêtement : ils sont déclarés « non testés », jamais comptés comme une absence.")}
+                      </p>
+                      <p className="tarif-note">
+                        {t(L, "MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement — et aucune prestation d'optimisation ne peut en modifier les conclusions.")}
+                      </p>
+                      <h3 className="tarif-sous-titre">{t(L, "Les autres prix arrêtés")}</h3>
+                      <ul className="tarifs-simples">
+                        {OFFRES_MANA.map((o) => (
+                          <li key={o.nom}>
+                            <strong>{t(L, o.nom)}</strong>
+                            <span className="tarif-prix-simple">{o.prix}</span>
+                            <span className="tarif-unite">{t(L, o.unite)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  <div className="est-actions">
+                    {s.cta && (
+                      <a className="btn btn-clair" href={lien(`${s.cta.href}`)}>
+                        {t(L, s.cta.label)}
+                      </a>
                     )}
-                    <div className="est-actions">
-                      {s.cta && (
-                        <a className="btn btn-clair" href={lien(`${s.cta.href}`)}>
-                          {t(L, s.cta.label)}
-                        </a>
-                      )}
-                      {s.num === "03" && (
-                        <a className="btn btn-clair" href={lien(`/#contact`)}>
-                          {t(L, "Commander un audit")}
-                        </a>
-                      )}
-                    </div>
+                    {s.num === "03" && (
+                      <a className="btn btn-clair" href={lien(`/#contact`)}>
+                        {t(L, "Commander un audit")}
+                      </a>
+                    )}
                   </div>
                 </section>
             ))}
