@@ -2366,15 +2366,19 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
   image-rendering: pixelated;
 }
 
-/* La bannière de /approche — 11/11/2026.
-   ⛔ ELLE EST EN COULEUR À DESSEIN, ET C'EST LA SEULE DU SITE. Décision
-   d'Aurélien, posée après que la question lui a été signalée : tout le reste
-   est en noir et blanc, elle est l'unique accent, et c'est ce qui lui donne
-   sa force.
+/* Les bannières de /approche — 11/11/2026.
+   ⛔ ELLES SONT EN COULEUR À DESSEIN, dans une charte par ailleurs
+   entièrement noir et blanc. Décision d'Aurélien, posée après que la
+   question lui a été signalée, puis confirmée en en ajoutant une seconde :
+   /approche est la page où la couleur est admise.
    ⭐ Écrit ici parce qu'un état VOULU qui ressemble à un oubli se fait
-   réparer. Quelqu'un ouvrira ce fichier, verra une image colorée dans une
+   réparer. Quelqu'un ouvrira ce fichier, verra des images colorées dans une
    charte monochrome, et ajoutera `filter: grayscale(1)` en croyant corriger.
-   Ce n'est pas un oubli. Ne pas la désaturer. */
+   Ce n'est pas un oubli. Ne pas les désaturer.
+   🔴 ET CE COMMENTAIRE A DÉJÀ ÉTÉ FAUX UNE FOIS : il annonçait « la SEULE
+   image colorée du site », vrai dix minutes, faux à la seconde image. Il dit
+   désormais la RÈGLE (la couleur est admise sur /approche) et non un
+   décompte — un nombre dans un commentaire se périme, une règle non. */
 .approche-banniere {
   display: block;
   width: 100%;

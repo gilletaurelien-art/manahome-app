@@ -5,6 +5,7 @@ import { ContactForm } from "./ContactForm";
 // La bannière de /approche. Importée, pas écrite en CSS : Vite lui donne son
 // empreinte, et une image de page mérite ses attributs de dimension.
 import banniere from "./assets/approche-banniere.webp";
+import banniereContact from "./assets/approche-contact.webp";
 import {
   GlyphCadeau, GlyphBouclier, GlyphCadenas,
   GlyphStructure, GlyphBalance, GlyphVieLocale,
@@ -131,6 +132,17 @@ export function Approche() {
           demander un clic de plus, c'est le perdre. */}
       <section className="landing-section bulle" id="contact">
         <h2 className="section-title">{t(L, "Demander un audit")}</h2>
+        {/* ⚠️ `alt=""` : image d'ambiance, elle n'ajoute aucune information
+            que le texte ne porte déjà. */}
+        <img
+          className="approche-banniere"
+          src={banniereContact}
+          alt=""
+          width={1024}
+          height={572}
+          loading="lazy"
+          decoding="async"
+        />
         <p className="section-texte">
           {t(L, "Dites-nous qui vous êtes et ce que vous cherchez. Nous répondons avec un devis ou une commande, jamais avec une relance automatique.")}
         </p>
