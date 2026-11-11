@@ -12,6 +12,8 @@
 //    canonicalisées vers /fr/… : aucun lien partagé ne casse, Google consolide.
 // 3. /fr EST EXPLICITE, MÊME PAR DÉFAUT. Deux langues à parité, aucune
 //    « langue invisible » : le hreflang se pose sur les deux.
+// 12/11/2026 : la position « maison des IA » remplace l'ancien hero et la
+// section 03 — les clés suivent, l'ancien libellé disparaît proprement.
 
 export const LOCALES = ["fr", "en"] as const;
 export type Langue = (typeof LOCALES)[number];
@@ -62,8 +64,8 @@ const DICO_EN: Record<string, string> = {
   "Commune ou code postal": "Town or postcode",
   "Rechercher": "Search",
 
-  // ── Hero ──
-  "Les vacances, autrement": "Holidays, differently",
+  // ── Hero (repositionné 12/11/2026 : la maison des IA) ──
+  "La maison des IA": "The house of AIs",
 
   // ── Sections de l'accueil ──
   "Découvrez les séjours": "Explore the stays",
@@ -76,11 +78,10 @@ const DICO_EN: Record<string, string> = {
   "Préparation de l'annonce, documents à prévoir (déclaration de meublé touristique, attestation d'assurance), calendrier de réservation : le propriétaire reste maître de son bien.":
     "Listing preparation, documents to plan (short-term rental declaration, insurance certificate), booking calendar: the owner stays in charge of their property.",
   "Publier mon annonce": "Publish my listing",
-  "Annonces pour les IA": "Listings for AIs",
-  "Votre logement mérite d'être trouvé, pas noyé.":
-    "Your property deserves to be found, not drowned.",
-  "Caractéristiques organisées, informations utiles, page publique accessible aux moteurs et assistants compatibles.":
-    "Organised characteristics, useful information, a public page accessible to search engines and compatible assistants.",
+  "Les machines interrogent. MANAhome tient le registre honnête.":
+    "The machines ask. MANAhome keeps the honest registry.",
+  "Caractéristiques organisées, données structurées, page publique en accès libre : ce registre territorial est non marchand — aucune mise en avant payante, aucun ordre achetable, une annonce importée ne passe jamais devant une directe à adéquation égale. La structuration améliore les chances d'être compris et trouvé ; elle ne garantit pas qu'un assistant indexera ou citera une annonce.":
+    "Organised characteristics, structured data, a public page in open access: this territorial registry is non-commercial — no paid placement, no purchasable ranking, an imported listing never ranks above a direct one at equal match. Structuring improves the chances of being understood and found; it does not guarantee that an assistant will index or cite a listing.",
   "Comprendre notre approche": "Understand our approach",
   "L'index des communes": "The index of towns",
   "Un lieu, une fiche : la vie autour du séjour.":
@@ -195,8 +196,8 @@ const DICO_EN: Record<string, string> = {
   "À propos": "About",
   "Mentions légales": "Legal notice",
   "Pied de page": "Footer",
-  "Portail de locations de vacances, entre propriétaires et vacanciers. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.":
-    "A holiday rental portal, between owners and guests. Free, supported, AI-readable. Structuring improves the chances of understanding and discovery; it does not guarantee that an AI assistant will index, recommend or cite a listing.",
+  "La maison des IA : un registre territorial non marchand, lisible par toutes les familles d'assistants. Portail de locations de vacances, entre propriétaires et vacanciers. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.":
+    "The house of AIs: a non-commercial territorial registry, readable by every family of assistants. A holiday rental portal, between owners and guests. Free, supported, AI-readable. Structuring improves the chances of understanding and discovery; it does not guarantee that an AI assistant will index, recommend or cite a listing.",
 
   // ── Traduction des 7 pages restantes (04/11/2026) : Approche, Publier,
   // MentionsLegales, AnnoncesListe, TerritoireDetail, Messagerie,
@@ -418,6 +419,6 @@ const DICO_EN: Record<string, string> = {
   "DPE": "Energy rating",
   "Budget max (€/nuit)": "Max budget (€/night)",
   "Publier mon annonce — gratuit": "Publish my listing — free",
-  "MANAhome — Gratuit. Accompagné. Lisible par les IA.": "MANAhome — Free. Supported. AI-readable.",
+  "MANAhome — La maison des IA. Gratuit. Accompagné. Lisible par les IA.": "MANAhome — The house of AIs. Free. Supported. AI-readable.",
   "Aucune annonce de ce type pour l'instant sur ce territoire.": "No listing of this type yet in this territory.",
 };
