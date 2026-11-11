@@ -1009,6 +1009,13 @@ html { background: var(--sand); }
 
 /* Location : loyer /mois + badge */
 .prix-mois { font-size: var(--t-xs); font-weight: 400; opacity: 0.7; margin-left: 2px; }
+/* L'adresse d'un établissement importé — discrète sous le lieu, jamais
+   concurrente du titre. ⚠️ Un dépôt de particulier n'en a jamais. */
+.adresse { font-size: var(--t-xs); opacity: 0.72; margin: 2px 0 0; }
+/* ⛔ Un tarif absent s'annonce au lieu de laisser un blanc : un champ vide
+   se lit comme un défaut du site, un champ qui parle se lit comme une
+   honnêteté. Volontairement en graisse normale — ce n'est pas un prix. */
+.prix-absent { font-size: var(--t-xs); font-weight: 400; opacity: 0.68; font-style: italic; }
 
 /* Champ de recherche à suggestions (type de bien) */
 .champ-recherche { position: relative; }

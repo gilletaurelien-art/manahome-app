@@ -411,6 +411,9 @@ const DICO_EN: Record<string, string> = {
   "Annonce professionnelle — importée": "Professional listing — imported",
   "Bonjour, votre bien m'intéresse, serait-il possible de visiter ?": "Hello, I'm interested in your property, would it be possible to visit?",
   "Location": "Rental",
+  // ⛔ Un tarif absent se DIT. Les établissements importés du catalogue
+  // moissonné n'ont aucun prix : personne ne les a déposés.
+  "Tarif à demander": "Price on request",
   "Toutes les annonces": "All listings",
   "photo du bien": "property photo",
   "{n} couchages": "{n} sleeping places",

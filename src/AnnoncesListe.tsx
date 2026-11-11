@@ -8,6 +8,7 @@ import { langueCourante } from "./router";
 import { lireIndispos } from "./calendrierDonnees";
 import { estDisponible, libellePlage, plageValide, type Plage } from "./disponibilite";
 import { chargerAnnonces } from "./apiAnnonces";
+import { chercherDesHebergements, CLE_CATALOGUE, type HebergementImporte } from "./apiHebergements";
 import { baseUrl } from "./router";
 import {
   GlyphStructure, GlyphMaison, GlyphAppartement, GlyphTerrain,
@@ -113,12 +114,40 @@ export function AnnoncesListe({ slug }: { slug: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtre, recherche, prixMax, arrivee, depart]);
 
+  /**
+   * ⭐ LE CATALOGUE MOISSONNÉ — les établissements du territoire, `import_pro`.
+   * 1 108 926 fiches de sources publiques (OpenStreetMap, DATAtourisme, les
+   * registres régionaux italiens et flamand), dont 282 153 avec une adresse.
+   * ⛔ Ce ne sont pas des annonces : personne ne les a déposées, aucune n'a de
+   * prix. Elles passent donc TOUJOURS après les dépôts directs — la règle qui
+   * existe déjà ici, appliquée à une source de plus.
+   * ⚠️ Et le repli est silencieux par construction : `chercherDesHebergements`
+   * rend `[]` sur une panne, jamais une exception. Un catalogue de démarrage
+   * qui disparaît vaut mieux qu'une page blanche.
+   */
+  const [importes, setImportes] = useState<HebergementImporte[]>([]);
+  useEffect(() => {
+    const ou = (recherche || territoireParSlug(slug)?.nom || "").trim();
+    let ignore = false;
+    chercherDesHebergements(ou, CLE_CATALOGUE, {
+      limite: 24,
+      personnes: undefined,
+    }).then((r) => { if (!ignore) setImportes(r); });
+    return () => { ignore = true; };
+  }, [recherche, slug]);
+
   const annonces = useMemo(() => {
     const directes = [
       ...annoncesPublieesLocales().map(enAnnonce),
       ...ANNONCES_DEMO.filter((a) => a.source === "directe_particulier"),
     ];
-    const importees = ANNONCES_DEMO.filter((a) => a.source === "import_pro");
+    // ⚠️ Les fixtures de démonstration restent TANT QUE la moisson ne répond
+    //    pas : un catalogue vide à l'écran serait pris pour une panne. Dès
+    //    qu'elle répond, c'est la vraie donnée qui parle — on n'additionne pas
+    //    du faux et du vrai dans la même liste.
+    const importees: Annonce[] = importes.length
+      ? importes
+      : ANNONCES_DEMO.filter((a) => a.source === "import_pro");
     const triees = [...directes, ...importees];
     const parType =
       filtre === "tous" ? triees : triees.filter((a) => typeDe(a) === filtre);
@@ -149,7 +178,7 @@ export function AnnoncesListe({ slug }: { slug: string }) {
       ? parPrix.filter((a) => estDisponible(lireIndispos(a.id), plage))
       : parPrix;
     return parDates;
-  }, [filtre, recherche, prixMax, arrivee, depart, featureBack, annoncesApi, apiEchouee]);
+  }, [filtre, recherche, prixMax, arrivee, depart, importes]);
 
   const B = baseUrl();
 

@@ -1,5 +1,8 @@
 import type { Annonce } from "./annonces";
 import { tarifsListe, LIBELLE_UNITE, type UniteTarif } from "./annonces";
+import { adresseLisible } from "./adresse";
+import { PAYS_DU_CATALOGUE } from "./apiHebergements";
+import type { HebergementImporte } from "./apiHebergements";
 import { baseUrl, langueCourante } from "./router";
 import { t } from "./i18n";
 import {
@@ -26,6 +29,10 @@ const ICONE_UNITE: Record<UniteTarif, (p: { size?: number }) => JSX.Element> = {
 export function AnnonceCard({ annonce }: { annonce: Annonce }) {
   const lieu = annonce.lieu;
   const tarifs = tarifsListe(annonce.tarifs);
+  const importe = annonce as Partial<HebergementImporte>;
+  const adresse = annonce.source === "import_pro"
+    ? adresseLisible(importe.adresseParts, PAYS_DU_CATALOGUE)
+    : null;
   const L = langueCourante();
   return (
     <li className="card">
@@ -41,10 +48,34 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
         )}
         <div className="body">
           <p className="lieu">{lieu}</p>
+          {/* ⭐ L'ADRESSE, mise en forme SELON LA SOURCE : « 12 rue de la Paix »
+              en France, « Hauptstraße 12 » ailleurs. La moisson garde les
+              parties séparées justement pour que ce choix se fasse ici.
+              ⚠️ Jamais sur un dépôt de particulier : seuls les établissements
+              importés en portent une, et deux contraintes de base le
+              garantissent côté serveur. */}
+
           <h3>{annonce.titre}</h3>
+          {/* ⭐ L'ADRESSE SOUS LE NOM, jamais au-dessus : « Crozon / Route de
+              l'Aber 50 / Camping de l'Aber » se lisait à l'envers — on nomme
+              l'établissement, puis on dit où il est.
+              ⚠️ Jamais sur un dépôt de particulier : seuls les établissements
+              importés en portent une, et deux contraintes de base le
+              garantissent côté serveur. */}
+          {adresse && <p className="adresse">{adresse}</p>}
           {/* Chaque palier renseigné, et uniquement ceux-là — le propriétaire
               choisit librement nuit / semaine / mois (04/11/2026). */}
+          {/* ⛔ UN TARIF ABSENT SE DIT, IL NE SE LAISSE PAS EN BLANC.
+              Les établissements importés du catalogue moissonné n'ont AUCUN
+              prix — personne ne les a déposés, personne n'en a fixé un. Sans
+              cette ligne, `tarifs` vide rendait un `<p class="prix">` vide :
+              un champ manquant qui s'affiche en blanc se lit comme un défaut
+              du site, un champ manquant qui s'annonce se lit comme une
+              honnêteté. */}
           <p className="prix">
+            {tarifs.length === 0 && (
+              <span className="prix-absent">{t(L, "Tarif à demander")}</span>
+            )}
             {tarifs.map((tar, i) => {
               const Icone = ICONE_UNITE[tar.unite];
               return (
