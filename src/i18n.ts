@@ -119,6 +119,19 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── §6 : les trois environnements de collecte ──
+  "Trois environnements de collecte, jamais confondus": "Three collection environments, never conflated",
+  "L'API du modèle": "The model's API",
+  "On interroge le modèle directement. Reproductible, horodaté, rejouable — mais ce n'est pas l'écran que voit un utilisateur.":
+    "The model is queried directly. Reproducible, timestamped, replayable — but it is not the screen a user sees.",
+  "L'assistant public": "The public assistant",
+  "Le produit tel qu'il est réellement utilisé, avec sa recherche et ses réglages. Plus proche du vrai, moins facile à rejouer à l'identique.":
+    "The product as it is actually used, with its search and its settings. Closer to reality, harder to replay identically.",
+  "La recherche locale": "Local search",
+  "Baidu et les plateformes éditoriales chinoises, selon le secteur : ce que l'écosystème rend accessible aux moteurs.":
+    "Baidu and Chinese editorial platforms, depending on the sector: what the ecosystem makes accessible to engines.",
+  "Chaque réponse du rapport indique l'environnement qui l'a produite. Les sept moteurs chinois ne sont pas accessibles par une API identique, et ne sont donc pas testés dans les mêmes conditions : un moteur dont la collecte n'a pas fonctionné est déclaré « non testé », jamais présenté comme testé.":
+    "Every answer in the report states the environment that produced it. The seven Chinese engines are not reachable through one identical API, and are therefore not tested under the same conditions: an engine whose collection did not work is reported as not tested, never presented as tested.",
   // ── Formulaire de demande (§8, 11/11/2026) ──
   "Demander un audit, ou poser une question": "Request an audit, or ask a question",
   "Organisation": "Organisation",

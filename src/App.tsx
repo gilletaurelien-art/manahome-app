@@ -71,6 +71,20 @@ const CONSTATS = [
     quoi: "Ils sont déjà là. La seule question est ce qu'ils comprennent de vous." },
 ];
 
+// §6 — les trois environnements de collecte. ⛔ Ils ne se valent PAS, et le
+//    rapport doit dire lequel a produit chaque réponse : un résultat obtenu
+//    par API n'est pas ce que voit l'utilisateur de l'application publique.
+//    Les confondre serait vendre sept moteurs « testés dans les mêmes
+//    conditions » alors que les conditions diffèrent par nature.
+const COLLECTES = [
+  { cle: "A", titre: "L'API du modèle",
+    quoi: "On interroge le modèle directement. Reproductible, horodaté, rejouable — mais ce n'est pas l'écran que voit un utilisateur." },
+  { cle: "B", titre: "L'assistant public",
+    quoi: "Le produit tel qu'il est réellement utilisé, avec sa recherche et ses réglages. Plus proche du vrai, moins facile à rejouer à l'identique." },
+  { cle: "C", titre: "La recherche locale",
+    quoi: "Baidu et les plateformes éditoriales chinoises, selon le secteur : ce que l'écosystème rend accessible aux moteurs." },
+];
+
 const EXEMPLE_QUESTION = "Quels hébergements recommandez-vous pour un week-end en presqu'île de Crozon ?";
 const EXEMPLE_LIGNES = [
   { moteur: "ChatGPT", etat: "cite",
@@ -336,6 +350,23 @@ export default function App() {
                       </ul>
                       <p className="rapport-legende">
                         {t(L, "C'est ce qui sépare une mesure d'une impression : un audit qu'on ne peut pas rejouer ne prouve rien, et un score seul ne se vérifie pas.")}
+                      </p>
+                    </div>
+                  )}
+                  {s.num === "04" && (
+                    <div className="collectes">
+                      <h3 className="tarif-sous-titre">{t(L, "Trois environnements de collecte, jamais confondus")}</h3>
+                      <ul className="collectes-liste">
+                        {COLLECTES.map((c) => (
+                          <li key={c.cle}>
+                            <span className="collecte-cle">{c.cle}</span>
+                            <span className="collecte-titre">{t(L, c.titre)}</span>
+                            <span className="collecte-quoi">{t(L, c.quoi)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="rapport-legende">
+                        {t(L, "Chaque réponse du rapport indique l'environnement qui l'a produite. Les sept moteurs chinois ne sont pas accessibles par une API identique, et ne sont donc pas testés dans les mêmes conditions : un moteur dont la collecte n'a pas fonctionné est déclaré « non testé », jamais présenté comme testé.")}
                       </p>
                     </div>
                   )}

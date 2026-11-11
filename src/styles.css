@@ -1821,3 +1821,33 @@ tr.rapport-non-teste td { opacity: 0.68; font-style: italic; }
 }
 .contact-actions { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
 .contact-form button[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* §6 — les trois environnements de collecte. La lettre les distingue sans
+   les hiérarchiser : A n'est pas « mieux » que B, il est AUTRE. */
+.collectes { margin-top: var(--sp-4); text-align: left; }
+.collectes-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--sp-2); }
+.collectes-liste li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--sp-2);
+  align-items: baseline;
+}
+.collecte-cle {
+  grid-row: 1 / span 2;
+  font-family: var(--logo);
+  font-size: var(--t-m);
+  color: var(--primary);
+  line-height: 1;
+}
+.collecte-titre {
+  font-family: var(--sans);
+  font-size: var(--t-s);
+  font-weight: 700;
+  color: var(--ink);
+}
+.collecte-quoi {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  opacity: 0.86;
+}
