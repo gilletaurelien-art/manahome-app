@@ -2221,3 +2221,42 @@ body { overflow-x: hidden; }
   margin-top: 6px;
   font-weight: 700;
 }
+
+/* ───────────────────────────────────────────────────────────────────────
+   Respiration et relief des boutons — 11/11/2026 (Aurélien).
+   ⭐ Les deux valeurs vivent dans des JETONS, pas au point d'usage : un
+   espacement réglé carte par carte diverge au premier ajout, et c'est
+   exactement ce qui est arrivé aux largeurs ce soir.
+   ─────────────────────────────────────────────────────────────────────── */
+:root {
+  /* L'écart entre deux conteneurs — doublé. */
+  --entre-conteneurs: var(--sp-6);
+  /* ⚠️ Le relief des BOUTONS seulement. Les cartes gardent leur anneau noir :
+     c'est lui qui les détache du fond sombre. Un bouton, lui, vit DANS une
+     carte blanche — son ombre n'a pas à être aussi dure que celle qui
+     sépare la carte de l'image. */
+  --relief-bouton: #c7c7cc;
+}
+
+/* Respiration : le double de l'écart précédent, partout et de la même
+   façon — header → hero → sections → pied. */
+.landing-section + .landing-section { margin-top: var(--entre-conteneurs); }
+.site-header { padding-bottom: 0; }
+.hero { padding: var(--entre-conteneurs) 0 0; }
+main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); }
+.site-footer { padding-top: var(--entre-conteneurs); }
+.tarifs { gap: var(--sp-4); margin: var(--sp-4) 0 var(--sp-2); }
+.tarifs-famille + .tarifs-famille { margin-top: var(--entre-conteneurs); }
+.rapport { margin-top: var(--sp-4); }
+.collectes { margin-top: var(--entre-conteneurs); }
+@media (max-width: 520px) {
+  :root { --entre-conteneurs: var(--sp-4); }
+  .tarifs { gap: var(--sp-2); }
+}
+
+/* Le relief des boutons passe au gris clair. */
+.btn-clair,
+.btn-clair-ghost { box-shadow: 3px 3px 0 0 var(--relief-bouton); }
+.btn-clair:active,
+.btn-clair-ghost:active { box-shadow: 0 0 0 0 var(--relief-bouton); }
+.nav .nav-cta { box-shadow: 2px 2px 0 0 var(--relief-bouton); }
