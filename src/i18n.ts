@@ -119,6 +119,57 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── Corrections de défendabilité + comparaison (12/11/2026) ──
+  "Express ou Expert : ce qui change":
+    "Express or Expert: what changes",
+  "Critère":
+    "Criterion",
+  "Assistants interrogés":
+    "Assistants queried",
+  "Questions commerciales":
+    "Commercial questions",
+  "Panel standard":
+    "Standard panel",
+  "Panel personnalisé":
+    "Custom panel",
+  "Identification sommaire":
+    "Basic identification",
+  "Analyse détaillée":
+    "Detailed analysis",
+  "Principales":
+    "Main ones",
+  "Analyse approfondie":
+    "In-depth analysis",
+  "Technique du site":
+    "Site technicals",
+  "Contrôle initial":
+    "Initial check",
+  "Audit complet":
+    "Full audit",
+  "Plan d'action":
+    "Action plan",
+  "Premières pistes":
+    "First leads",
+  "Priorisé et détaillé":
+    "Prioritised and detailed",
+  "agents IA distincts identifiés":
+    "distinct AI agents identified",
+  "Applebot, ClaudeBot, GPTBot et dix autres, reconnus à leur signature dans nos journaux. Chacun lit des pages ; ce qu'il en retient nourrira ses réponses.":
+    "Applebot, ClaudeBot, GPTBot and ten others, recognised by their signature in our logs. Each one reads pages; what it retains will feed its answers.",
+  "visites automatisées identifiées comme provenant d'agents IA":
+    "automated visits identified as coming from AI agents",
+  "Ces chiffres mesurent l'activité des robots sur notre infrastructure, pas le nombre de questions posées par les utilisateurs aux assistants.":
+    "These figures measure robot activity on our infrastructure, not the number of questions users ask the assistants.",
+  "Les traitements internes, le stockage de vos rapports et leur analyse sont réalisés sur notre infrastructure française. Les questions de mesure, elles, sont transmises aux assistants interrogés — ChatGPT, Gemini, Claude, Perplexity — dont les services sont opérés par des entreprises étrangères : c'est leur réponse que vous achetez, et il n'y a pas d'autre moyen de l'obtenir. Aucune donnée confidentielle n'est jamais communiquée volontairement dans ces requêtes.":
+    "Internal processing, the storage of your reports and their analysis all run on our French infrastructure. The measurement questions, however, are sent to the assistants we query — ChatGPT, Gemini, Claude, Perplexity — whose services are operated by foreign companies: their answer is what you are buying, and there is no other way to obtain it. No confidential data is ever knowingly included in those requests.",
+  "Des délais constatés, pas promis":
+    "Timelines observed, not promised",
+  "Sur ce que nous avons observé, un contenu nouveau met quatre à douze semaines à être pris en compte, et un site déjà bien référencé voit ses premières citations plus tôt. Ce sont des tendances constatées, pas une règle : les rythmes d'indexation et d'actualisation varient d'un système à l'autre, et aucun éditeur ne les publie. Nous vous dirons où vous en êtes, avec les chiffres — jamais une date de citation garantie.":
+    "From what we have observed, new content takes four to twelve weeks to be taken into account, and an already well-ranked site sees its first citations sooner. These are observed tendencies, not a rule: indexing and refresh rhythms vary from one system to another, and no provider publishes them. We will tell you where you stand, with the numbers — never a guaranteed citation date.",
+  "La surveillance IA très peu chère":
+    "Very cheap AI monitoring",
+  "Elle existe, et elle peut très bien convenir. Nous n'avons pas d'étude comparative à vous opposer, donc nous ne dirons pas ce qu'elle vaut. Regardez vous-même la chaîne avant de signer, chez nous comme ailleurs : où les données sont-elles hébergées, quels sous-traitants interviennent, comment les réponses sont-elles collectées, et quelle part du rapport est écrite par un humain. Quatre questions, quatre réponses vérifiables.":
+    "It exists, and it may suit you perfectly well. We have no comparative study to set against it, so we will not tell you what it is worth. Look at the chain yourself before signing, with us as with anyone else: where is the data hosted, which subcontractors are involved, how are the answers collected, and how much of the report is written by a human. Four questions, four verifiable answers.",
   // ── Repris de GEO Expert (11/11/2026) ──
   "Ce que nous faisons autrement":
     "What we do differently",

@@ -88,10 +88,17 @@ export function CompteurAgentsIa() {
       <span className="constat-chiffre" aria-live="off">
         {affiche.toLocaleString(L === "en" ? "en-GB" : "fr-FR")}
       </span>
-      <span className="constat-unite">{t(L, "requêtes d'agents IA")}</span>
+      <span className="constat-unite">
+        {t(L, "visites automatisées identifiées comme provenant d'agents IA")}
+      </span>
       <span className="constat-quoi">
         {t(L, "sur l'ensemble de l'écosystème MANA, depuis")} {jours} {t(L, "jours")}.{" "}
-        {t(L, "Ils passent, qu'on le sache ou non.")}
+        {/* ⚠️ CETTE PRÉCISION N'EST PAS UNE PRUDENCE, C'EST LA MESURE EXACTE.
+            Un passage de GPTBot sur une page n'est PAS une question posée à
+            ChatGPT par un humain. Confondre les deux gonflerait le chiffre
+            d'un ordre de grandeur, sur le site qui facture la mesure
+            honnête — et un prospect technique le verrait. */}
+        {t(L, "Ces chiffres mesurent l'activité des robots sur notre infrastructure, pas le nombre de questions posées par les utilisateurs aux assistants.")}
       </span>
     </li>
   );

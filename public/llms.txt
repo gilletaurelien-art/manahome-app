@@ -6,9 +6,15 @@
 
 MANAhome s'adresse aux pros et aux structures — mairies, associations, offices de tourisme, entreprises — qui veulent savoir ce que les assistants IA répondent à leur sujet, et améliorer ce qu'ils en comprennent.
 
-Alliance MANA produit l'infrastructure machine-readable elle-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve mesurée : du 20 septembre au 11 novembre 2026 — 52 jours — les journaux du serveur ont compté plus de 14,8 millions de requêtes d'agents IA sur l'ensemble de l'écosystème MANA. Le compteur affiché sur manahome.org est VIVANT : il se lit sur la base et avance au débit mesuré, il n'est pas recopié. Treize agents distincts : Applebot (4 096 023), ClaudeBot (3 768 383), GPTBot (3 091 026), Meta, Amazonbot, Perplexity et sept autres. Ce sont des REQUÊTES, pas des visites : un agent qui explore mille pages en fait mille. Mesure relevée dans la table de fréquentation du serveur, pas estimée.
+Alliance MANA produit l'infrastructure machine-readable elle-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve mesurée : depuis le 20 septembre 2026, les journaux du serveur ont enregistré plus de 14,8 millions de visites automatisées identifiées comme provenant d'agents IA, sur l'ensemble de l'écosystème MANA. Treize agents distincts, reconnus à leur signature : Applebot, ClaudeBot, GPTBot, Meta, Amazonbot, Perplexity et sept autres. Le compteur affiché sur manahome.org est vivant : il se lit sur la base et avance au débit mesuré.
+
+⚠️ CE QUE CE CHIFFRE N'EST PAS. Il mesure l'activité des ROBOTS sur notre infrastructure — des requêtes HTTP, dont un même agent peut en faire mille pour explorer mille pages. Il ne mesure pas le nombre de questions posées par des utilisateurs aux assistants, ni le nombre de réponses où une organisation a été citée. Les deux ne doivent pas être confondus.
 
 Honnêteté du GEO : la structuration améliore les chances d'être compris et trouvé ; elle ne garantit ni indexation, ni citation, ni recommandation par un assistant.
+
+Souveraineté, dite précisément : les traitements internes, le stockage des rapports et leur analyse sont réalisés sur une infrastructure française. Les questions de mesure sont transmises aux assistants interrogés, dont les services sont opérés par des entreprises étrangères — il n'y a pas d'autre moyen d'obtenir leur réponse. Aucune donnée confidentielle n'est communiquée volontairement dans ces requêtes.
+
+Délais : quatre à douze semaines pour qu'un contenu nouveau soit pris en compte, d'après ce qui a été observé. Ce sont des tendances constatées, pas une règle : les rythmes d'indexation varient d'un système à l'autre, et aucun éditeur ne les publie.
 
 ## Les offres
 

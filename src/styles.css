@@ -2391,3 +2391,12 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
   background: var(--ink);
   image-rendering: pixelated;
 }
+
+/* Le tableau Express / Expert — 12/11/2026. Il réemploie le gabarit de la
+   maquette de rapport : même enveloppe à défilement, mêmes filets. Deux
+   tableaux qui se ressemblent sur une même page valent mieux que deux
+   qui diffèrent sans raison. */
+.comparaison { margin-top: var(--sp-4); text-align: left; }
+.comparaison-table { min-width: 420px; }
+.comparaison-table td { font-family: var(--sans); }
+.comparaison-table thead th:not(:first-child) { white-space: nowrap; }

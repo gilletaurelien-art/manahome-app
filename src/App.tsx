@@ -72,8 +72,8 @@ import { ILLUSTRATIONS } from "./illustrations";
 //    la mesure honnête. Les trois constats sortent de NOS journaux, sur NOS
 //    sites, et la fenêtre de mesure est écrite.
 const CONSTATS = [
-  { chiffre: "13", unite: "agents IA distincts",
-    quoi: "Applebot 4 096 023 · ClaudeBot 3 768 383 · GPTBot 3 091 026, et dix autres — chacun lit, retient, et répondra avec ce qu'il a retenu." },
+  { chiffre: "13", unite: "agents IA distincts identifiés",
+    quoi: "Applebot, ClaudeBot, GPTBot et dix autres, reconnus à leur signature dans nos journaux. Chacun lit des pages ; ce qu'il en retient nourrira ses réponses." },
   { chiffre: "0", unite: "démarche à faire pour qu'ils viennent",
     quoi: "Ils sont déjà là. La seule question est ce qu'ils comprennent de vous." },
 ];
@@ -139,7 +139,7 @@ const DIFFERENCES = [
   {
     titre: "Une chaîne souveraine, et ce qui ne l'est pas",
     texte:
-      "Nos audits, notre surveillance et nos rapports tournent sur une infrastructure française, avec des modèles d'analyse hébergés en France. Aucun contenu client ne part vers un outil de mesure américain. En revanche, les assistants que nous interrogeons — ChatGPT, Gemini, Claude, Perplexity — sont américains : c'est leur réponse que vous achetez, et nous ne pouvons pas l'obtenir autrement qu'en les interrogeant.",
+      "Les traitements internes, le stockage de vos rapports et leur analyse sont réalisés sur notre infrastructure française. Les questions de mesure, elles, sont transmises aux assistants interrogés — ChatGPT, Gemini, Claude, Perplexity — dont les services sont opérés par des entreprises étrangères : c'est leur réponse que vous achetez, et il n'y a pas d'autre moyen de l'obtenir. Aucune donnée confidentielle n'est jamais communiquée volontairement dans ces requêtes.",
   },
   {
     titre: "Un écosystème de sources, pas un site isolé",
@@ -152,9 +152,9 @@ const DIFFERENCES = [
       "La plupart des missions se terminent avec le document. L'abonnement de surveillance rejoue chaque mois le même panel de questions, suit vos concurrents, et vous alerte quand une réponse devient fausse ou qu'un nouveau nom apparaît à votre place.",
   },
   {
-    titre: "Des délais annoncés, pas promis",
+    titre: "Des délais constatés, pas promis",
     texte:
-      "Les moteurs absorbent un contenu nouveau sur quatre à douze semaines. Un site déjà bien référencé voit ses premières citations en trois à huit semaines ; un site récent doit d'abord construire ses fondations. Nous vous dirons dans quel cas vous êtes, avec les chiffres — jamais une date de citation garantie, parce que personne ne peut honnêtement en donner une.",
+      "Sur ce que nous avons observé, un contenu nouveau met quatre à douze semaines à être pris en compte, et un site déjà bien référencé voit ses premières citations plus tôt. Ce sont des tendances constatées, pas une règle : les rythmes d'indexation et d'actualisation varient d'un système à l'autre, et aucun éditeur ne les publie. Nous vous dirons où vous en êtes, avec les chiffres — jamais une date de citation garantie.",
   },
 ];
 
@@ -169,11 +169,33 @@ const FRANCHISE = [
       "Vous croiserez cette promesse, parfois avec un remboursement à la clé sur le même délai. Elle ne peut pas être tenue de bonne foi : les modèles absorbent les contenus sur des cycles de quatre à douze semaines. Nous préférons vous montrer des courbes mesurées, des captures datées et des délais réels. C'est plus lent à vendre, et c'est la seule chose qui tienne.",
   },
   {
-    titre: "La surveillance IA à moins de 100 € par mois",
+    titre: "La surveillance IA très peu chère",
     texte:
-      "Elle existe. Regardez la chaîne avant de signer : dans la plupart des cas, votre contenu et les réponses transitent par un outil américain, et le « rapport » est un document produit sans aucune intervention humaine. Posez toujours deux questions — où sont hébergées les données, et qui écrit le rapport.",
+      "Elle existe, et elle peut très bien convenir. Nous n'avons pas d'étude comparative à vous opposer, donc nous ne dirons pas ce qu'elle vaut. Regardez vous-même la chaîne avant de signer, chez nous comme ailleurs : où les données sont-elles hébergées, quels sous-traitants interviennent, comment les réponses sont-elles collectées, et quelle part du rapport est écrite par un humain. Quatre questions, quatre réponses vérifiables.",
   },
 ];
+
+// ⚠️ LA COMPARAISON EXPRESS / EXPERT — posée le 12/11/2026.
+//    À 149 €, l'Express annonçait déjà « exploration, panel de questions,
+//    vérification des réponses » : lu seul, il semble contenir l'essentiel de
+//    l'Expert à 390 €. Un écart qui ne se quantifie pas ne se vend pas — le
+//    client prend le moins cher en se disant qu'il verra plus tard.
+// ⛔ ET IL MANQUE DEUX NOMBRES, VOLONTAIREMENT LAISSÉS VIDES : combien de
+//    questions, et combien de répétitions par question, pour chacune des deux
+//    offres. Ce sont des décisions de PRODUCTION — elles fixent la charge
+//    réelle d'un audit à 149 €. Les inventer ici reviendrait à décider du
+//    coût de revient depuis une feuille de style. Demandé à Aurélien.
+const COMPARAISON = {
+  colonnes: ["GEO Express", "GEO Expert"],
+  lignes: [
+    { critere: "Assistants interrogés", express: "4", expert: "4" },
+    { critere: "Questions commerciales", express: "Panel standard", expert: "Panel personnalisé" },
+    { critere: "Concurrents", express: "Identification sommaire", expert: "Analyse détaillée" },
+    { critere: "Sources citées", express: "Principales", expert: "Analyse approfondie" },
+    { critere: "Technique du site", express: "Contrôle initial", expert: "Audit complet" },
+    { critere: "Plan d'action", express: "Premières pistes", expert: "Priorisé et détaillé" },
+  ],
+};
 
 const FAQ = [
   { q: "Sous combien de temps verrai-je un résultat ?",
@@ -543,6 +565,31 @@ export default function App() {
                       <p className="tarif-note">
                         {t(L, "Personne ne peut garantir qu'une IA vous recommandera. Nous vendons la mesure, pas la promesse : vous recevez ce que les assistants répondent vraiment, avec leurs sources. Et aucun achat ne peut modifier les conclusions d'un audit — c'est précisément ce qui les rend utilisables face à votre direction ou à votre conseil.")}
                       </p>
+                      {/* ⭐ Le tableau vient APRÈS les cartes et AVANT les
+                          notes : c'est là que se joue le choix entre deux
+                          prix qu'on vient de lire. */}
+                      <div className="comparaison">
+                        <h3 className="tarif-sous-titre">{t(L, "Express ou Expert : ce qui change")}</h3>
+                        <div className="rapport-table-enveloppe">
+                          <table className="rapport-table comparaison-table">
+                            <thead>
+                              <tr>
+                                <th>{t(L, "Critère")}</th>
+                                {COMPARAISON.colonnes.map((c) => (<th key={c}>{c}</th>))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {COMPARAISON.lignes.map((l) => (
+                                <tr key={l.critere}>
+                                  <th scope="row">{t(L, l.critere)}</th>
+                                  <td>{t(L, l.express)}</td>
+                                  <td>{t(L, l.expert)}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                       {/* ⭐ Après les prix, avant le départ : c'est le moment
                           où le lecteur se demande « et les autres ? ». On lui
                           répond nous-mêmes, en lui laissant deux questions à
