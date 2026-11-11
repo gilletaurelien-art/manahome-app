@@ -1,7 +1,7 @@
 import type { Annonce } from "./annonces";
 import { tarifsListe, LIBELLE_UNITE, type UniteTarif } from "./annonces";
 import { adresseLisible } from "./adresse";
-import { PAYS_DU_CATALOGUE } from "./apiHebergements";
+import { paysDeLaFiche } from "./apiHebergements";
 import type { HebergementImporte } from "./apiHebergements";
 import { baseUrl, langueCourante } from "./router";
 import { t } from "./i18n";
@@ -31,7 +31,7 @@ export function AnnonceCard({ annonce }: { annonce: Annonce }) {
   const tarifs = tarifsListe(annonce.tarifs);
   const importe = annonce as Partial<HebergementImporte>;
   const adresse = annonce.source === "import_pro"
-    ? adresseLisible(importe.adresseParts, PAYS_DU_CATALOGUE)
+    ? adresseLisible(importe.adresseParts, paysDeLaFiche(importe))
     : null;
   const L = langueCourante();
   return (

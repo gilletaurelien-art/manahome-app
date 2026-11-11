@@ -61,6 +61,8 @@ export interface LigneHebergement {
   couchages: number | null;
   chambres: number | null;
   capacite_connue: boolean;
+  /** Le code ISO 3166-1 alpha-2, ou `null` tant que la passe n'a pas repassé. */
+  pays: string | null;
   lat: number | null;
   lng: number | null;
   adresse: string | null;
@@ -76,8 +78,10 @@ export interface HebergementImporte extends Annonce {
   source: "import_pro";
   /** Les parties de l'adresse, jamais collées à la récolte. */
   adresseParts?: AdresseParts;
-  /** La clé de source, qui dit le pays donc l'ordre de l'adresse. */
+  /** La clé de source — pour l'ATTRIBUTION, jamais pour l'ordre de l'adresse. */
   sourceCle?: string;
+  /** Le pays de la fiche, qui décide de l'ordre de l'adresse. */
+  paysFiche?: string | null;
   attribution?: string | null;
   registrePublic?: string | null;
 }
@@ -102,6 +106,7 @@ export function enHebergementImporte(l: LigneHebergement): HebergementImporte {
     datePublication: "",
     source: "import_pro",
     sourceCle: l.source,
+    paysFiche: l.pays ?? null,
     attribution: l.attribution,
     registrePublic: l.registre_public,
     adresseParts: {
@@ -153,7 +158,27 @@ export const SAISIE_MINIMUM = 3;
  * mieux que deviner — et deviner par la SOURCE était pire, parce que
  * `osm-monde` couvre les deux conventions à lui seul.
  */
-export const PAYS_DU_CATALOGUE = "FR";
+/**
+ * ⛔ CETTE CONSTANTE A ÉTÉ RETIRÉE LE 11/11/2026, ET C'EST LE POINT.
+ *
+ * Elle valait « FR » parce que le catalogue ne stockait aucun pays et que les
+ * trois territoires du site portent un `codeInsee`. Elle serait devenue FAUSSE
+ * EN SILENCE au premier territoire étranger — une adresse allemande affichée
+ * « 12 Hauptstraße ».
+ *
+ * ⭐ Le correctif est allé là où était la cause : `hebergements_moisson` porte
+ * désormais une colonne `pays`, la moisson l'écrit (elle interrogeait déjà
+ * OpenStreetMap pays par pays et jetait l'information), et
+ * `chercher_un_hebergement` la rend. L'ordre de l'adresse se décide donc
+ * FICHE PAR FICHE.
+ *
+ * ⚠️ `null` reste possible tant que la passe mondiale n'a pas repassé sur les
+ * 828 287 fiches OpenStreetMap. `adresseLisible` sert alors l'ordre par
+ * défaut — voie puis numéro — qui est celui des pays où OSM porte vraiment
+ * des adresses. Un inconnu se dégrade, il ne ment pas.
+ */
+export const paysDeLaFiche = (h: { paysFiche?: string | null }): string | null =>
+  h.paysFiche ?? null;
 
 export async function chercherDesHebergements(
   lieu: string,

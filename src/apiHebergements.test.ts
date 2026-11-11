@@ -7,14 +7,14 @@
  * et surtout ce qu'il n'a pas le droit d'inventer.
  */
 import { describe, expect, it } from "vitest";
-import { enHebergementImporte, type LigneHebergement } from "./apiHebergements";
+import { enHebergementImporte, paysDeLaFiche, type LigneHebergement } from "./apiHebergements";
 import { tarifsListe } from "./annonces";
 import { adresseLisible } from "./adresse";
 
 const LIGNE: LigneHebergement = {
   rang: 1, pertinence: 0, titre: "Best Western Kregenn", commune: "Quimper",
   famille: "hotel", typologie: "hotel", couchages: null, chambres: 32,
-  capacite_connue: false, lat: 47.995, lng: -4.097,
+  capacite_connue: false, pays: "FR", lat: 47.995, lng: -4.097,
   adresse: null, adresse_voie: "Rue des Réguaires", adresse_numero: "13",
   adresse_code_postal: "29000", source: "osm-monde",
   attribution: "© les contributeurs d'OpenStreetMap", registre_public: "https://www.openstreetmap.org/",
@@ -52,12 +52,20 @@ describe("le mapping n'invente rien", () => {
     expect(h.sourceCle).toBe("osm-monde");
     // ⛔ La source est conservée pour l'attribution, PAS pour l'ordre :
     //    `osm-monde` couvre 211 pays, donc les deux conventions.
-    expect(adresseLisible(h.adresseParts, "FR")).toBe("13 Rue des Réguaires, 29000");
+    expect(adresseLisible(h.adresseParts, paysDeLaFiche(h))).toBe("13 Rue des Réguaires, 29000");
   });
 
   it("⭐ et la même fiche en Allemagne se lit dans l'ordre allemand", () => {
-    const h = enHebergementImporte(LIGNE);
-    expect(adresseLisible(h.adresseParts, "DE")).toBe("Rue des Réguaires 13, 29000");
+    const h = enHebergementImporte({ ...LIGNE, pays: "DE" });
+    expect(adresseLisible(h.adresseParts, paysDeLaFiche(h))).toBe("Rue des Réguaires 13, 29000");
+  });
+
+  it("⚠️ une fiche SANS pays ne casse rien — elle prend l'ordre par défaut", () => {
+    // `null` est l'état de 828 287 fiches OpenStreetMap tant que la passe
+    // mondiale n'a pas repassé. Un inconnu se dégrade, il ne ment pas.
+    const h = enHebergementImporte({ ...LIGNE, pays: null });
+    expect(paysDeLaFiche(h)).toBe(null);
+    expect(adresseLisible(h.adresseParts, paysDeLaFiche(h))).toBe("Rue des Réguaires 13, 29000");
   });
 
   it("une fiche sans adresse ne rend rien à afficher, pas une chaîne vide", () => {
