@@ -1740,3 +1740,54 @@ tr.rapport-non-teste td { opacity: 0.68; font-style: italic; }
   padding-left: 1.1em;
 }
 .rapport-protocole li { margin-bottom: 3px; }
+
+/* Le constat (§3) — trois faits mesurés, posés avant l'explication.
+   ⭐ Le chiffre porte la police du titre, l'unité le corps : un nombre en
+   pixel se lit comme une affiche, une phrase en pixel ne se lit pas. */
+.constats {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-2) auto var(--sp-2);
+  max-width: 60ch;
+  display: grid;
+  gap: var(--sp-2);
+  text-align: left;
+}
+.constats li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--sp-2);
+  align-items: baseline;
+  padding-bottom: var(--sp-1);
+  border-bottom: 1px solid var(--ecume);
+}
+.constats li:last-child { border-bottom: 0; }
+.constat-chiffre {
+  grid-row: 1 / span 2;
+  font-family: var(--titre);
+  font-size: var(--t-xl);
+  line-height: 1;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.constat-unite {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+}
+.constat-quoi {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink);
+  opacity: 0.88;
+}
+/* Sous 480 px le chiffre passe au-dessus : trois colonnes serrées
+   couperaient « 5 922 180 » en deux lignes, et un nombre coupé ment. */
+@media (max-width: 480px) {
+  .constats li { grid-template-columns: 1fr; row-gap: 2px; }
+  .constat-chiffre { grid-row: auto; }
+}

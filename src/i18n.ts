@@ -119,6 +119,18 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── §3 : le constat, en faits mesurés ──
+  "requêtes d'agents IA": "AI-agent requests",
+  "sur manafrance.org, du 20 septembre au 11 novembre 2026. Ils passent, qu'on le sache ou non.":
+    "on manafrance.org, from 20 September to 11 November 2026. They come through, whether you know it or not.",
+  "agents distincts": "distinct agents",
+  "ClaudeBot, Applebot, GPTBot, Perplexity et dix autres — chacun lit, retient, et répondra avec ce qu'il a retenu.":
+    "ClaudeBot, Applebot, GPTBot, Perplexity and ten others — each one reads, retains, and will answer with what it retained.",
+  "démarche à faire pour qu'ils viennent": "steps needed to make them come",
+  "Ils sont déjà là. La seule question est ce qu'ils comprennent de vous.":
+    "They are already here. The only question is what they understand about you.",
+  "Pourquoi nous croire ? Parce que nous ne vendons pas ce que nous mesurons. Le registre territorial de l'écosystème est non marchand : aucune mise en avant payante, aucun ordre achetable. L'audit reste indépendant de toute prestation d'optimisation — aucun achat ne peut en modifier les conclusions. Nous mesurons d'abord sur nos propres sites avant de le proposer aux vôtres. Et nous disons ce que nous ne savons pas faire : la structuration améliore les chances d'être compris et trouvé, elle ne garantit pas qu'un assistant indexera ou citera une page.":
+    "Why trust us? Because we do not sell what we measure. The ecosystem's territorial registry is non-commercial: no paid placement, no purchasable ranking. The audit stays independent of any optimisation service — no purchase can change its conclusions. We measure on our own sites first, before offering it for yours. And we say what we cannot do: structuring improves the odds of being understood and found, it does not guarantee that an assistant will index or cite a page.",
   // ── Maquette de rapport GEO (11/11/2026) ──
   "Exemple illustratif — aucune entreprise réelle, aucun résultat réel. Cette maquette montre la forme du livrable.":
     "Illustrative example — no real company, no real results. This mock-up shows the shape of the deliverable.",
@@ -187,10 +199,10 @@ const DICO_EN: Record<string, string> = {
   "Être trouvé par les assistants IA : l'infrastructure machine-readable, les audits, et les offres arrêtées de l'écosystème MANA.":
     "Be found by AI assistants: machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem.",
   "Être trouvé par les IA": "Be found by AIs",
-  "Le GEO : la visibilité qui se construit, pas celle qui s'achète.":
-    "GEO: visibility you build, not visibility you buy.",
-  "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve se mesure : du 20 septembre au 11 novembre 2026, nos journaux ont compté 5 922 180 requêtes d'agents IA sur manafrance.org — ClaudeBot, Applebot, GPTBot et dix autres. Des requêtes, pas des « visites » : un agent qui explore mille pages en fait mille.":
-    "llms.txt, Model Context Protocol, structured data: TEMPOsystem sells the machine-readable infrastructure itself — what neither content agencies nor measurement dashboards offer. The proof is measured: between 20 September and 11 November 2026 our logs counted 5,922,180 AI-agent requests on manafrance.org — ClaudeBot, Applebot, GPTBot and ten others. Requests, not \u00ab visits \u00bb: an agent crawling a thousand pages makes a thousand of them.",
+  "Vos clients ne cherchent plus seulement. Ils demandent.":
+    "Your customers no longer just search. They ask.",
+  "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. TEMPOsystem vend cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent.":
+    "When someone asks ChatGPT or Gemini for a professional like you, the assistant answers with what it has read and retained from the web. If it has not understood you, it cites someone else — and you will never know: there is no ranking to consult, no account to open. GEO means making an organisation understandable to these machines: llms.txt, Model Context Protocol, structured data. TEMPOsystem sells that infrastructure itself — what neither content agencies nor measurement dashboards offer.",
   "L'audit GEO de votre structure": "The GEO audit of your organisation",
   "Mairies, associations, offices de tourisme, entreprises.":
     "Town halls, associations, tourist offices, businesses.",
@@ -202,8 +214,6 @@ const DICO_EN: Record<string, string> = {
     "The assistant: €9/month per human, never per organisation. The pro page: €9. The antenna: €9. These prices are fixed — everything that is not remains on quote, and the site invents none.",
   "Les machines interrogent. MANA tient le registre honnête.":
     "Machines ask questions. MANA keeps the honest registry.",
-  "Caractéristiques organisées, données structurées, page publique en accès libre : le registre territorial est non marchand — aucune mise en avant payante, aucun ordre achetable. La structuration améliore les chances d'être compris et trouvé ; elle ne garantit pas qu'un assistant indexera ou citera une page.":
-    "Organised characteristics, structured data, public free-access pages: the territorial registry is non-commercial — no paid placement, no purchasable ranking. Structuring improves the odds of being understood and found; it guarantees no assistant will index or cite a page.",
   "Vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.":
     "Showcase of the GEO and the offers of the MANA ecosystem, operated by TEMPOsystem. Prices shown: fixed prices only — everything else is on quote. GEO improves the odds of being understood and found by AI assistants; it guarantees neither indexing, nor citation, nor recommendation.",
 

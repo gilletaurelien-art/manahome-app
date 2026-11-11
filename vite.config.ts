@@ -7,6 +7,7 @@ import {
   titreDeLaRoute,
 } from "./src/canonique";
 import { LOCALES } from "./src/i18n";
+import { OFFRES_GEO, OFFRES_MANA } from "./src/offres";
 
 // La cible décide du chemin de base ET de l'hôte — pas le code.
 //   • GitHub Pages sert sous /manahome-app/ → sans base, les bundles 404, page blanche.
@@ -82,14 +83,66 @@ function hreflangDe(racine: string, chemin: string): string {
   return `\n    <link rel="alternate" hreflang="fr" href="${url("fr")}" />\n    <link rel="alternate" hreflang="en" href="${url("en")}" />\n    <link rel="alternate" hreflang="x-default" href="${url("fr")}" />`;
 }
 
+/**
+ * Les données structurées de l'accueil (§12).
+ *
+ * ⛔ UNIQUEMENT SUR L'ACCUEIL, et uniquement ce qui y est VISIBLE. Poser le
+ *    catalogue d'offres sur /mentions-legales déclarerait aux machines des
+ *    prix que la page n'affiche pas — c'est exactement le défaut que MANA GEO
+ *    facture pour le détecter chez ses clients.
+ * ⭐ Les montants viennent de src/offres.ts, la même source que l'écran. Un
+ *    prix affiché 390 € et déclaré 490 € aux machines serait un mensonge
+ *    qu'aucun test d'affichage ne verrait.
+ */
+function donneesStructurees(langue: string, urlAccueil: string): string {
+  const offre = (o: { nom: string; montant: number; periode: string }) => ({
+    "@type": "Offer",
+    name: o.nom,
+    price: String(o.montant),
+    priceCurrency: "EUR",
+    valueAddedTaxIncluded: false,
+    ...(o.periode === "mois"
+      ? { priceSpecification: {
+            "@type": "UnitPriceSpecification",
+            price: o.montant, priceCurrency: "EUR",
+            billingDuration: 1, billingIncrement: 1,
+            unitCode: "MON",
+          } }
+      : {}),
+  });
+  const donnees = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "MANAhome",
+    url: urlAccueil,
+    inLanguage: langue,
+    description: langue === "en"
+      ? "GEO by TEMPOsystem: being found by AI assistants — machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem."
+      : "Le GEO par TEMPOsystem : être trouvé par les assistants IA — infrastructure machine-readable, audits, et les offres arrêtées de l'écosystème MANA.",
+    parentOrganization: { "@type": "Organization", name: "TEMPOsystem" },
+    makesOffer: [...OFFRES_GEO, ...OFFRES_MANA].map(offre),
+  };
+  return `\n    <script type="application/ld+json">${JSON.stringify(donnees)}</script>`;
+}
+
 function cible(): Plugin {
   let coquille = "";
   return {
     name: "valeurs-de-la-cible",
     transformIndexHtml(html) {
-      const sortie = injecterCanonique(html, `${racine}fr/`, hreflangDe(racine, "/"));
-      coquille = sortie;
-      return sortie;
+      // ⚠️ La coquille RACINE est l'accueil réellement servi sur https://…/
+      // (Caddy y sert site/index.html). Elle porte donc le JSON-LD, comme
+      // /fr/ et /en/ — sans lui, un robot qui lit « / » ne voit rien, même si
+      // la canonique renvoie vers /fr/.
+      // ⭐ Mais `coquille` — réemployée pour TOUTES les autres routes plates —
+      // est gardée SANS : /mentions-legales ne doit pas déclarer aux machines
+      // un catalogue de prix qu'elle n'affiche pas.
+      coquille = injecterCanonique(html, `${racine}fr/`, hreflangDe(racine, "/"));
+      return injecterCanonique(
+        html,
+        `${racine}fr/`,
+        hreflangDe(racine, "/") + donneesStructurees("fr", `${racine}fr/`),
+      );
     },
     generateBundle() {
       this.emitFile({
@@ -140,7 +193,11 @@ function cible(): Plugin {
           await writeFile(
             `${dir}/${l}/index.html`,
             injecterTitre(
-              injecterCanonique(coquilleLangue, `${racine}${l}/`, hreflangDe(racine, "/")),
+              injecterCanonique(
+                coquilleLangue,
+                `${racine}${l}/`,
+                hreflangDe(racine, "/") + donneesStructurees(l, `${racine}${l}/`),
+              ),
               titreDeLaRoute("/", l)!,
             ),
           );

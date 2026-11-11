@@ -29,6 +29,9 @@ import { MesAnnonces } from "./MesAnnonces";
 import { MentionsLegales } from "./MentionsLegales";
 import { ContactForm } from "./ContactForm";
 import { IconePixel } from "./IconePixel";
+// ⭐ Les prix ne vivent plus ici : ils sont dans src/offres.ts, lu AUSSI par
+//    vite.config.ts pour le JSON-LD. Deux lecteurs, une seule source.
+import { OFFRES_GEO, OFFRES_MANA, FAMILLES, prixAffiche } from "./offres";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -51,107 +54,23 @@ import { IconePixel } from "./IconePixel";
 //    restent SERVIES — leur retrait est un chantier séparé qui dépend de
 //    l'arbitrage « faut-il jamais déployer la stack applicative sur le
 //    KS-5 ». Elles ne sont simplement plus LIÉES depuis la vitrine.
-// ⭐ 11/11/2026 — les prix GEO sont ARRÊTÉS (décision d'Aurélien). La page
-// disait « aucun prix n'est arrêté à ce jour » : c'est devenu faux le jour
-// même, et une phrase pareille sur une page de vente est un faux témoin.
-// ⚠️ Les prix vivent ICI, en donnée, et NULLE PART ailleurs dans le gabarit :
-//    un prix recopié à deux endroits diverge au premier changement.
-const OFFRES_GEO = [
-  {
-    nom: "GEO Express",
-    famille: "ponctuel",
-    prix: "149 €",
-    unite: "HT · paiement unique",
-    pour: "Pour une photographie rapide de sa présence dans les IA.",
-    points: [
-      "Exploration automatisée du site",
-      "Identification de l'entreprise et de ses activités",
-      "Panel de questions commerciales",
-      "Vérification de la présence et de l'exactitude des réponses",
-      "Rapport synthétique et premières recommandations",
-    ] },
-  {
-    nom: "GEO Expert",
-    famille: "ponctuel",
-    prix: "390 €",
-    unite: "HT · paiement unique",
-    recommande: true,
-    pour: "Pour comprendre sa position réelle sur son marché.",
-    points: [
-      "Exploration technique et sémantique approfondie",
-      "Panel correspondant aux intentions réelles des acheteurs",
-      "Comparaison avec les concurrents",
-      "Analyse des sources citées par les assistants",
-      "Détection des informations absentes, erronées ou contradictoires",
-      "Analyse des données structurées et de la lisibilité machine",
-      "Plan d'amélioration hiérarchisé",
-    ] },
-  {
-    nom: "GEO International",
-    famille: "ponctuel",
-    depend: "Option sur GEO Expert",
-    prix: "+199 €",
-    unite: "HT · option sur GEO Expert",
-    pour: "Pour mesurer sa visibilité sur un marché étranger.",
-    points: [
-      "Audit complémentaire sur un marché étranger",
-      "Analyse dans une autre langue",
-      "Comparaison des concurrents locaux",
-      "Identification des sources et informations manquantes",
-    ] },
-  {
-    nom: "GEO Monitoring",
-    famille: "recurrent",
-    prix: "99 €",
-    unite: "HT par mois · abonnement",
-    pour: "Pour suivre son évolution, mois après mois.",
-    points: [
-      "Le même panel de questions rejoué chaque mois",
-      "Suivi des concurrents et des changements de position",
-      "Repérage des nouvelles sources citées",
-      "Détection des réponses erronées ou des disparitions",
-      "Rapport comparatif mensuel et historique conservé",
-    ] },
-  {
-    nom: "MANA GEO China",
-    famille: "ponctuel",
-    depend: "Audit complémentaire — se commande seul ou après un GEO Expert",
-    prix: "+490 €",
-    unite: "HT · audit complémentaire ponctuel",
-    pour: "Pour savoir ce que les IA chinoises disent de vous.",
-    points: [
-      "Sept moteurs chinois : DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM",
-      "Questions posées EN chinois simplifié, pas traduites du français",
-      "Réponses analysées en chinois avant d'être restituées en français",
-      "Concurrents chinois et internationaux cités",
-      "Sources locales identifiées",
-      "Recommandations pour améliorer sa visibilité en Chine",
-    ] },
-  {
-    nom: "GEO China Monitoring",
-    famille: "recurrent",
-    depend: "Complément de GEO Monitoring",
-    prix: "+149 €",
-    unite: "HT par mois · complément de GEO Monitoring",
-    pour: "Pour suivre la visibilité chinoise dans le temps.",
-    points: [
-      "Les mêmes sept moteurs, les mêmes questions, chaque mois",
-      "Évolution de la visibilité chinoise",
-      "Nouveaux concurrents et nouvelles sources",
-    ] },
+// ⭐ §3 — la page répondait à une question qu'elle ne posait jamais. Elle
+//    ouvrait sur « l'infrastructure machine-readable » : la solution, en
+//    jargon, avant que le lecteur sache de quel problème on parle.
+// ⛔ AUCUNE STATISTIQUE DE MARCHÉ ICI. La tentation était d'écrire « X % des
+//    recherches passent désormais par une IA » — un chiffre qu'on ne peut ni
+//    mesurer ni sourcer honnêtement, sur le site d'une entreprise qui facture
+//    la mesure honnête. Les trois constats sortent de NOS journaux, sur NOS
+//    sites, et la fenêtre de mesure est écrite.
+const CONSTATS = [
+  { chiffre: "5 922 180", unite: "requêtes d'agents IA",
+    quoi: "sur manafrance.org, du 20 septembre au 11 novembre 2026. Ils passent, qu'on le sache ou non." },
+  { chiffre: "13", unite: "agents distincts",
+    quoi: "ClaudeBot, Applebot, GPTBot, Perplexity et dix autres — chacun lit, retient, et répondra avec ce qu'il a retenu." },
+  { chiffre: "0", unite: "démarche à faire pour qu'ils viennent",
+    quoi: "Ils sont déjà là. La seule question est ce qu'ils comprennent de vous." },
 ];
 
-// Les prix déjà arrêtés de l'écosystème, inchangés.
-// ⛔ MAQUETTE ILLUSTRATIVE — aucun résultat réel, aucune entreprise réelle.
-//    Elle montre la FORME du livrable, rien d'autre. Trois règles tenues ici,
-//    et chacune pour une raison :
-//    1. Aucun nom d'entreprise, même inventé : un nom inventé finit par
-//       ressembler à quelqu'un, et un lecteur pressé le prend pour un client.
-//    2. Autant d'échecs que de succès. Une maquette où l'entreprise est
-//       toujours citée n'illustre pas un audit, elle PROMET un résultat — et
-//       MANA GEO ne vend aucune recommandation.
-//    3. Les deux moteurs non mesurables y figurent en « non testé » plutôt
-//       que d'être masqués : les retirer laisserait croire qu'on couvre tout.
 const EXEMPLE_QUESTION = "Quels hébergements recommandez-vous pour un week-end en presqu'île de Crozon ?";
 const EXEMPLE_LIGNES = [
   { moteur: "ChatGPT", etat: "cite",
@@ -182,24 +101,15 @@ const EXEMPLE_PROTOCOLE = [
   "Nombre de répétitions, car une réponse varie d'un essai à l'autre",
 ];
 
-const FAMILLES = [
-  { cle: "ponctuel", titre: "Les audits — une commande, un livrable" },
-  { cle: "recurrent", titre: "La surveillance — chaque mois, le même protocole" },
-] as const;
-
-const OFFRES_MANA = [
-  { nom: "L'assistant", prix: "9 €", unite: "HT par mois et PAR HUMAIN, jamais par structure" },
-  { nom: "La fiche pro", prix: "9 €", unite: "HT" },
-  { nom: "L'antenne", prix: "9 €", unite: "HT" },
-];
+// FAMILLES et OFFRES_MANA vivent désormais dans src/offres.ts (voir l'import).
 
 const SECTIONS = [
   {
     num: "01",
     titre: "Être trouvé par les IA",
-    accroche: "Le GEO : la visibilité qui se construit, pas celle qui s'achète.",
+    accroche: "Vos clients ne cherchent plus seulement. Ils demandent.",
     texte:
-      "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve se mesure : du 20 septembre au 11 novembre 2026, nos journaux ont compté 5 922 180 requêtes d'agents IA sur manafrance.org — ClaudeBot, Applebot, GPTBot et dix autres. Des requêtes, pas des « visites » : un agent qui explore mille pages en fait mille." },
+      "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. TEMPOsystem vend cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent." },
   {
     num: "02",
     titre: "L'audit GEO de votre structure",
@@ -222,7 +132,7 @@ const SECTIONS = [
     titre: "La maison des IA",
     accroche: "Les machines interrogent. MANA tient le registre honnête.",
     texte:
-      "Caractéristiques organisées, données structurées, page publique en accès libre : le registre territorial est non marchand — aucune mise en avant payante, aucun ordre achetable. La structuration améliore les chances d'être compris et trouvé ; elle ne garantit pas qu'un assistant indexera ou citera une page.",
+      "Pourquoi nous croire ? Parce que nous ne vendons pas ce que nous mesurons. Le registre territorial de l'écosystème est non marchand : aucune mise en avant payante, aucun ordre achetable. L'audit reste indépendant de toute prestation d'optimisation — aucun achat ne peut en modifier les conclusions. Nous mesurons d'abord sur nos propres sites avant de le proposer aux vôtres. Et nous disons ce que nous ne savons pas faire : la structuration améliore les chances d'être compris et trouvé, elle ne garantit pas qu'un assistant indexera ou citera une page.",
     cta: { label: "Comprendre notre approche", href: "/approche" } },
 ];
 
@@ -237,6 +147,12 @@ export default function App() {
   // déjà dans le HTML (vite.config.ts) ; ceci tient la navigation côté client.
   useEffect(() => {
     poserCanonique(path, L);
+    // ⚠️ 11/11/2026 — les coquilles LIVRÉES portent le bon `lang` (vite.config
+    // le réécrit par langue), mais la navigation côté client ne le mettait pas
+    // à jour : sur /en/ après un clic, document.documentElement.lang restait
+    // « fr ». Invisible à l'écran, décisif pour un lecteur d'écran et pour
+    // toute machine qui lit la page après exécution du JS.
+    document.documentElement.lang = L;
   }, [path, L]);
   // ⭐ Le moteur de recherche location a quitté l'accueil le 11/11/2026 :
   // la vitrine vend le GEO et les offres, elle ne cherche plus de séjours.
@@ -348,6 +264,17 @@ export default function App() {
               {/* ⭐ 11/11/2026 — l'encadré bleu (.sous-bulle) est retiré : le
                   contenu vit directement dans le conteneur clair. */}
               <p className="section-accroche">{t(L, SECTIONS[0].accroche)}</p>
+              {/* Le constat AVANT l'explication : trois faits mesurés chez
+                  nous, jamais une statistique de marché invérifiable. */}
+              <ul className="constats">
+                {CONSTATS.map((c) => (
+                  <li key={c.chiffre + c.unite}>
+                    <span className="constat-chiffre">{c.chiffre}</span>
+                    <span className="constat-unite">{t(L, c.unite)}</span>
+                    <span className="constat-quoi">{t(L, c.quoi)}</span>
+                  </li>
+                ))}
+              </ul>
               <p className="section-texte">{t(L, SECTIONS[0].texte)}</p>
               {SECTIONS[0].cta && (
                 <div className="est-actions">
@@ -432,7 +359,7 @@ export default function App() {
                               <p className="tarif-fanion">{t(L, "Offre recommandée")}</p>
                             )}
                             <h3 className="tarif-nom">{o.nom}</h3>
-                            <p className="tarif-prix">{o.prix}</p>
+                            <p className="tarif-prix">{prixAffiche(o)}</p>
                             <p className="tarif-unite">{t(L, o.unite)}</p>
                             {o.depend && <p className="tarif-depend">{t(L, o.depend)}</p>}
                             <p className="tarif-pour">{t(L, o.pour)}</p>
@@ -463,7 +390,7 @@ export default function App() {
                         {OFFRES_MANA.map((o) => (
                           <li key={o.nom}>
                             <strong>{t(L, o.nom)}</strong>
-                            <span className="tarif-prix-simple">{o.prix}</span>
+                            <span className="tarif-prix-simple">{prixAffiche(o)}</span>
                             <span className="tarif-unite">{t(L, o.unite)}</span>
                           </li>
                         ))}
