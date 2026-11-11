@@ -41,6 +41,9 @@ import { ContactForm } from "./ContactForm";
 // LOCATION DE VACANCES, entre propriétaires et vacanciers. Les sections 02
 // (ex-« Vendre ou louer ») et 05 (ex-« Pros & services de l'habitat »,
 // retirée) sont réécrites ou retirées en conséquence.
+// Repositionné le 12/11/2026 : MANAhome est LA MAISON DES IA — un registre
+// territorial non marchand que toutes les familles d'assistants peuvent
+// interroger. La section 03 porte cette position ; l'ordre n'est pas à vendre.
 const SECTIONS = [
   {
     glyphe: GlyphCompas,
@@ -60,10 +63,10 @@ const SECTIONS = [
   {
     glyphe: GlyphStructure,
     num: "03",
-    titre: "Annonces pour les IA",
-    accroche: "Votre logement mérite d'être trouvé, pas noyé.",
+    titre: "La maison des IA",
+    accroche: "Les machines interrogent. MANAhome tient le registre honnête.",
     texte:
-      "Caractéristiques organisées, informations utiles, page publique accessible aux moteurs et assistants compatibles.",
+      "Caractéristiques organisées, données structurées, page publique en accès libre : ce registre territorial est non marchand — aucune mise en avant payante, aucun ordre achetable, une annonce importée ne passe jamais devant une directe à adéquation égale. La structuration améliore les chances d'être compris et trouvé ; elle ne garantit pas qu'un assistant indexera ou citera une annonce.",
     cta: { label: "Comprendre notre approche", href: "/approche" } },
   {
     glyphe: GlyphTerritoire,
@@ -187,7 +190,7 @@ export default function App() {
           {/* Hero : le logo en grand, la promesse en dessous */}
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
-              <p className="hero-label">{t(L, "Les vacances, autrement")}</p>
+              <p className="hero-label">{t(L, "La maison des IA")}</p>
               <h1 className="brand-grand">
                 MANA<em>home</em>
               </h1>
@@ -281,7 +284,7 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "Portail de locations de vacances, entre propriétaires et vacanciers. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
+              {t(L, "La maison des IA : un registre territorial non marchand, lisible par toutes les familles d'assistants. Portail de locations de vacances, entre propriétaires et vacanciers. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
             </p>
             <ContactForm />
           </div>
