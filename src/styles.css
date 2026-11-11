@@ -81,17 +81,34 @@ body {
      Poser cette image sur l'ancienne charte aurait été illisible.
      ⭐ `fixed` : l'illustration reste en place pendant le défilement, donc
      elle ne se répète ni ne s'étire sur une page longue. */
-  background-color: #0e0e10;
-  background-image: url("./assets/hero.webp");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  /* ⚠️ `transparent`, et non la couleur sombre : un fond opaque sur `body`
+     RECOUVRE le calque `body::before` posé à z-index -1. Le calque existait,
+     il était simplement caché — et une capture d'écran le montrait comme
+     une absence d'image. La couleur de secours vit sur `html`. */
+  background-color: transparent;
   hyphens: auto;
 }
 html { background: #0e0e10; }
+/* ⭐ Le fond en PLEINE HAUTEUR, par un calque fixe plutôt que par
+   `background-attachment: fixed` sur le corps.
+   ⚠️ La raison n'est pas esthétique : `fixed` est cassé sur iOS Safari, qui
+   dimensionne alors l'image sur toute la HAUTEUR DU DOCUMENT — ici 10 400 px
+   — au lieu de la fenêtre. L'illustration y apparaît écrasée et décalée,
+   et rien ne le signale depuis un navigateur de bureau.
+   Un calque `position: fixed; inset: 0` tient partout. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("./assets/hero.webp") center / cover no-repeat;
+  z-index: -1;
+  pointer-events: none;
+}
 
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--sp-4); }
+/* ⚠️ 32 px de marge ici, 16 px pour le header : les sections démarraient
+   donc à x=32 et, à largeur égale, dépassaient de 16 px à droite. La barre
+   du header fait foi — c'est sa marge qui gagne. */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--sp-2); }
 
 /* ===== Header ===== */
 /* Header ovale flottant : pilule centrée, posée en lévitation */
@@ -297,14 +314,10 @@ html { background: #0e0e10; }
 }
 .promesse,
 .ia-bloc {
-  background: rgb(255 255 255 / 90%);
-  border: 1px solid var(--ecume);
-  border-radius: 36px 46px 32px 44px / 44px 34px 46px 38px;
-  box-shadow:
-    inset 0 2px 6px rgb(255 255 255 / 85%),
-    0 4px 12px rgb(27 42 74 / 10%),
-    0 0 0 4px rgb(201 162 39 / 14%),
-    0 36px 80px rgb(27 42 74 / 26%);
+  background: #ffffff;
+  border: 0;
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
   padding: var(--sp-4);
   text-align: center;
   max-width: none;
@@ -312,9 +325,14 @@ html { background: #0e0e10; }
   margin-right: 0;
 }
 @media (max-width: 720px) {
+  /* ⚠️ Cette règle reposait un rayon IRRÉGULIER sous 720 px : elle gagnait
+     sur `.bulle { border-radius: var(--rayon) }` par sa spécificité de
+     media query, et les bulles reprenaient leurs angles dessinés à la main
+     sur téléphone seulement. Mesuré : 28px 36px 24px 32px là où le header
+     affichait 6px. */
   .bulle, .bulle-xl, .bulle-sm, .promesse, .ia-bloc {
-    border-radius: 28px 36px 24px 32px / 32px 26px 36px 30px;
-    padding: var(--sp-4);
+    border-radius: var(--rayon);
+    padding: var(--sp-2);
   }
   /* Mobile : le header redevient l'element le plus large de la page.
      Les bulles (hero, footer, sections) restent plus etroites que lui. */
@@ -1998,3 +2016,88 @@ tr.rapport-non-teste td { opacity: 0.68; font-style: italic; }
 .constat-chiffre { font-size: var(--t-xl); font-weight: 700; }
 
 
+
+/* ───────────────────────────────────────────────────────────────────────
+   LA BARRE DU HEADER FAIT FOI — 11/11/2026 (Aurélien).
+   Mesuré avant : header 289 px à x=16 · bulle du hero 273 à x=24 ·
+   sections 257 à x=32 · pied 321 à x=0. Quatre conteneurs, quatre largeurs,
+   et deux familles de rayons.
+   ⭐ Une seule règle les tient désormais TOUS, le header compris. C'est le
+   point : tant qu'ils étaient réglés chacun de son côté, ils divergeaient
+   au premier ajout — et personne ne mesure des largeurs à l'œil.
+   ⚠️ Elle est en fin de fichier pour gagner sur les media queries posées
+   plus haut, qui redonnaient aux bulles leur largeur et leurs angles.
+   ─────────────────────────────────────────────────────────────────────── */
+/* ⚠️ DEUX CAS, et les confondre a produit le défaut inverse. Les bulles du
+   contenu vivent DANS `main.wrap`, qui porte déjà la marge de 16 px : elles
+   prennent donc 100 % de leur parent. Le header et le pied, eux, ne sont
+   imbriqués dans rien — une marge INTÉRIEURE ne les décale pas, il leur
+   faut leur propre retrait. Mesuré après la première passe : contenu à
+   x=16 largeur 289, header et pied à x=0 largeur 321.
+   ⭐ `calc(100% - 32px)` et non `100vw` : sur un bureau, `100vw` compte la
+   barre de défilement et redonne un débordement horizontal. */
+/* ⚠️ Le hero est ici, et non dans le groupe imbriqué : son conteneur EST le
+   `.wrap` (`class="wrap bulle-xl"`), donc il n'a pas de `.wrap` parent pour
+   lui donner sa marge. Mesuré avant : 1080@100 contre 1048@116 pour les
+   sections — un décalage de 16 px visible uniquement sur grand écran. */
+.site-header .wrap,
+.hero > .wrap,
+.site-footer > .wrap {
+  width: calc(100% - 2 * var(--sp-2));
+  /* ⭐ Le plafond doit valoir celui d'une bulle IMBRIQUÉE, pas 1080 px.
+     Une bulle vit dans `main.wrap` : plafonnée à 1080, moins les 16 px de
+     marge de part et d'autre, elle mesure 1048. Un header plafonné à 1080
+     dépassait donc de 32 px sur grand écran — mesuré 1080@100 contre
+     1048@116. La soustraction est écrite, pas recopiée en dur : si la
+     marge change, les deux suivent ensemble. */
+  max-width: calc(1080px - 2 * var(--sp-2));
+}
+/* ⚠️ Et le parent ne doit rien ajouter : `.site-header` portait une marge
+   intérieure au-delà de 720 px, qui rétrécissait la barre à 704 px sur
+   tablette quand tout le reste faisait 736. */
+.site-header,
+.site-footer { padding-left: 0; padding-right: 0; }
+.landing-section.bulle,
+.bulle,
+.bulle-xl,
+.bulle-sm {
+  width: 100%;
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
+  border: 0;
+  background: #ffffff;
+}
+/* Le header garde sa disposition en ligne ; seules sa largeur et ses angles
+   sont repris par la règle ci-dessus. */
+.site-header .wrap { padding: var(--sp-1) var(--sp-2); }
+.hero .bulle-xl,
+.landing-section.bulle,
+.site-footer > .wrap { padding: var(--sp-4); }
+@media (max-width: 520px) {
+  .hero .bulle-xl,
+  .landing-section.bulle,
+  .site-footer > .wrap { padding: var(--sp-2); }
+}
+/* Le hero n'est plus une bulle DANS une bulle. */
+.hero .wrap.bulle-xl { width: calc(100vw - 2 * var(--sp-2)); }
+
+/* Les encadrés INTÉRIEURS (cartes de prix, maquette) : même rayon, même
+   relief, mais ils vivent dans un conteneur — leur largeur suit la grille. */
+.tarif-carte,
+.rapport,
+.card {
+  border-radius: var(--rayon);
+  box-shadow: var(--relief);
+  border: 0;
+  background: #ffffff;
+}
+/* ⚠️ `.rapport` affichait `box-shadow: none` : sa règle d'origine posait un
+   `border: 2px dashed`, et la bordure pointillée avait remplacé le relief.
+   L'avertissement hachuré suffit à la distinguer. */
+.rapport { padding: var(--sp-2); }
+
+/* La page ne défile jamais de côté, quelle que soit la largeur. */
+body { overflow-x: hidden; }
