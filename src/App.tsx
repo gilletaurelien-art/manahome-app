@@ -455,9 +455,15 @@ export default function App() {
             <p className="footer-note">
               {t(L, "Vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.")}
             </p>
-            <div id="contact">
-              <ContactForm />
-            </div>
+            {/* ⚠️ /approche porte DÉJÀ le formulaire, en pleine page : l'y
+                répéter dans le pied donnait deux formulaires identiques
+                empilés, et deux ancres #contact sur la même page — un lien
+                « Contact » ne savait plus laquelle viser. */}
+            {path !== "/approche" && (
+              <div id="contact">
+                <ContactForm />
+              </div>
+            )}
           </div>
           <nav className="footer-nav" aria-label={t(L, "Pied de page")}>
             <a href={lien(`/#offres`)}>{t(L, "Offres & tarifs")}</a>

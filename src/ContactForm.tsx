@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { GlyphPersonne, GlyphEmail, GlyphDescription, GlyphValidation } from "./Glyphs";
 import { t } from "./i18n";
 import { langueCourante } from "./router";
@@ -43,6 +43,15 @@ const VIDE: Etat = {
 
 export function ContactForm() {
   const L = langueCourante();
+  // ⚠️ Le formulaire peut apparaître DEUX FOIS sur la même page : dans le
+  //    pied, et dans la section « Demander un audit » de /approche. Avec des
+  //    `id` codés en dur, les deux exemplaires portaient les mêmes, et chaque
+  //    <label> du second activait le champ du PREMIER — un visiteur cliquait
+  //    sur « Organisation » et voyait le curseur apparaître 2 000 px plus
+  //    haut. Aucune erreur, aucun avertissement : juste un formulaire qui
+  //    ne répond pas. `useId` donne un préfixe unique par exemplaire.
+  const n = useId();
+  const id = (cle: string) => `${n}-${cle}`;
   const [form, setForm] = useState<Etat>(VIDE);
   const [compose, setCompose] = useState<string | null>(null);
   const [copie, setCopie] = useState(false);
@@ -132,21 +141,21 @@ export function ContactForm() {
         {t(L, "Demander un audit, ou poser une question")}
       </p>
 
-      <label htmlFor="c-organisation" className="label-icone">
+      <label htmlFor={id("organisation")} className="label-icone">
         <GlyphPersonne size={15} />{t(L, "Organisation")} *
       </label>
-      <input id="c-organisation" type="text" autoComplete="organization" required {...champ("organisation")} />
+      <input id={id("organisation")} type="text" autoComplete="organization" required {...champ("organisation")} />
 
-      <label htmlFor="c-site">{t(L, "Site web")}</label>
-      <input id="c-site" type="url" inputMode="url" placeholder="https://" autoComplete="url" {...champ("site")} />
+      <label htmlFor={id("site")}>{t(L, "Site web")}</label>
+      <input id={id("site")} type="url" inputMode="url" placeholder="https://" autoComplete="url" {...champ("site")} />
 
-      <label htmlFor="c-courriel" className="label-icone">
+      <label htmlFor={id("courriel")} className="label-icone">
         <GlyphEmail size={15} />{t(L, "Courriel")} *
       </label>
-      <input id="c-courriel" type="email" autoComplete="email" required placeholder="vous@exemple.fr" {...champ("courriel")} />
+      <input id={id("courriel")} type="email" autoComplete="email" required placeholder="vous@exemple.fr" {...champ("courriel")} />
 
-      <label htmlFor="c-offre">{t(L, "Offre souhaitée")} *</label>
-      <select id="c-offre" required {...champ("offre")}>
+      <label htmlFor={id("offre")}>{t(L, "Offre souhaitée")} *</label>
+      <select id={id("offre")} required {...champ("offre")}>
         <option value="">{t(L, "— choisir —")}</option>
         {[...OFFRES_GEO, ...OFFRES_MANA].map((o) => (
           <option key={o.nom} value={o.nom}>{o.nom}</option>
@@ -156,17 +165,17 @@ export function ContactForm() {
 
       <div className="contact-duo">
         <div>
-          <label htmlFor="c-secteur">{t(L, "Secteur d'activité")}</label>
-          <input id="c-secteur" type="text" {...champ("secteur")} />
+          <label htmlFor={id("secteur")}>{t(L, "Secteur d'activité")}</label>
+          <input id={id("secteur")} type="text" {...champ("secteur")} />
         </div>
         <div>
-          <label htmlFor="c-territoire">{t(L, "Territoire ou marché visé")}</label>
-          <input id="c-territoire" type="text" {...champ("territoire")} />
+          <label htmlFor={id("territoire")}>{t(L, "Territoire ou marché visé")}</label>
+          <input id={id("territoire")} type="text" {...champ("territoire")} />
         </div>
       </div>
 
-      <label htmlFor="c-message">{t(L, "Votre message")}</label>
-      <textarea id="c-message" rows={3} {...champ("message")} />
+      <label htmlFor={id("message")}>{t(L, "Votre message")}</label>
+      <textarea id={id("message")} rows={3} {...champ("message")} />
 
       <button type="submit" className="btn btn-clair" disabled={!valide}>
         {t(L, "Préparer ma demande")}
