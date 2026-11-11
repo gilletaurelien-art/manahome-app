@@ -119,6 +119,61 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── /approche et /mentions-legales, refaites pour le GEO (11/11/2026) ──
+  "Mesurer ce que les IA répondent. Rien de plus, rien de moins.":
+    "Measuring what AIs answer. Nothing more, nothing less.",
+  "Le GEO, par TEMPOsystem — pour les pros et les structures.":
+    "GEO, by TEMPOsystem — for professionals and organisations.",
+  "Voici, noir sur blanc, ce que nous faisons et ce que nous ne ferons jamais. Si un point vous paraît trop prudent, c'est voulu : une promesse qu'on ne peut pas tenir se paie au premier client.":
+    "Here, in black and white, is what we do and what we will never do. If a point reads as over-cautious, that is deliberate: a promise you cannot keep is paid for with the first client.",
+  "Voir les offres et les prix": "See the offers and prices",
+  "Dites-nous qui vous êtes et ce que vous cherchez. Nous répondons avec un devis ou une commande, jamais avec une relance automatique.":
+    "Tell us who you are and what you are looking for. We reply with a quote or an order, never with an automated follow-up.",
+  "Nous mesurons, nous ne promettons pas": "We measure, we do not promise",
+  "Aucune agence ne peut garantir qu'un assistant IA vous recommandera : personne ne contrôle ce que répond ChatGPT. Nous mesurons ce qu'ils répondent vraiment, nous le documentons, et nous expliquons pourquoi.":
+    "No agency can guarantee that an AI assistant will recommend you: nobody controls what ChatGPT answers. We measure what they actually answer, we document it, and we explain why.",
+  "L'audit ne se vend pas lui-même": "The audit does not sell itself",
+  "Nous ne vendons pas ce que nous mesurons. Aucune prestation d'optimisation ne peut modifier les conclusions d'un audit — c'est la seule façon qu'un audit vaille quelque chose.":
+    "We do not sell what we measure. No optimisation service can change an audit's conclusions — that is the only way an audit is worth anything.",
+  "Vous recevez les réponses, pas un score": "You receive the answers, not a score",
+  "Les questions exactes, les réponses intégrales des assistants, les sources citées, les concurrents nommés à votre place. Un indice qu'on ne peut pas vérifier ne vaut rien ; une réponse qu'on peut relire se discute.":
+    "The exact questions, the assistants' full answers, the sources cited, the competitors named in your place. An index you cannot check is worth nothing; an answer you can re-read can be discussed.",
+  "Reproductible, ou ce n'est pas une mesure": "Reproducible, or it is not a measurement",
+  "Date, heure, langue, localisation, environnement de collecte, version du modèle, nombre de répétitions. Une réponse d'IA varie d'un essai à l'autre : sans protocole, une variation du hasard se vend comme un progrès.":
+    "Date, time, language, location, collection environment, model version, number of repetitions. An AI answer varies from one run to the next: without a protocol, random variation gets sold as progress.",
+  "Ce que nous ne savons pas faire, nous le disons": "What we cannot do, we say so",
+  "Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer sans gratter leur interface. Ils sont déclarés « non testés » dans nos rapports — jamais comptés comme une absence de votre entreprise.":
+    "Microsoft Copilot and Google AI Overviews expose no access that would let us measure them without scraping their interface. They are reported as not tested — never counted as your company being absent.",
+  "Nous mesurons d'abord chez nous": "We measure on our own sites first",
+  "Du 20 septembre au 11 novembre 2026, nos journaux ont compté 5 922 180 requêtes d'agents IA sur manafrance.org. Nous ne vous proposons rien que nous n'ayons posé sur nos propres sites d'abord.":
+    "Between 20 September and 11 November 2026, our logs counted 5,922,180 AI-agent requests on manafrance.org. We offer you nothing we have not put on our own sites first.",
+  // « Informations légales » existe déjà plus haut — ne pas la redéclarer (TS1117).
+  // « Mentions légales » existe déjà plus haut — ne pas la redéclarer (TS1117).
+  // « Éditeur » existe déjà plus haut — ne pas la redéclarer (TS1117).
+  "Numéro RNA": "French association register number",
+  "Siège social": "Registered office",
+  "Directeur de la publication": "Publication director",
+  // « Hébergement » existe déjà plus haut — ne pas la redéclarer (TS1117).
+  // « Nature du service » existe déjà plus haut — ne pas la redéclarer (TS1117).
+  "Prix et commandes": "Prices and orders",
+  // « Données personnelles » existe déjà plus haut — ne pas la redéclarer (TS1117).
+  // « Retour à l'accueil » existe déjà plus haut — ne pas la redéclarer (TS1117).
+  "Association déclarée, régie par la loi du 1er juillet 1901 et le décret du 16 août 1901":
+    "Declared association, governed by the French law of 1 July 1901 and the decree of 16 August 1901",
+  "Déclarée le 10 août 2026 auprès de la Sous-préfecture de Brest":
+    "Declared on 10 August 2026 with the Sub-prefecture of Brest",
+  "Serveur dédié situé en France. Le site, les interfaces et les données tiennent sur une seule machine.":
+    "Dedicated server located in France. The site, the interfaces and the data all run on one machine.",
+  "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.":
+    "MANAhome is the showcase of the GEO and the offers of the MANA ecosystem, operated by TEMPOsystem. GEO means measuring what AI assistants answer about an organisation, and making that organisation understandable to those machines.",
+  "MANAhome ne garantit ni indexation, ni citation, ni recommandation par un assistant IA : personne ne contrôle ce que répond un modèle. L'audit mesure et documente — il ne vend aucune position. Il reste indépendant de toute prestation d'optimisation.":
+    "MANAhome guarantees neither indexing, nor citation, nor recommendation by an AI assistant: nobody controls what a model answers. The audit measures and documents — it sells no position. It stays independent of any optimisation service.",
+  "Les prix affichés sont des prix arrêtés, hors taxes. Aucune commande n'est enregistrée depuis ce site : une demande ouvre votre logiciel de courriel, et rien n'est transmis avant que vous ne l'envoyiez vous-même. Toute prestation fait l'objet d'un devis ou d'une facture émise par la structure qui la réalise.":
+    "The prices shown are fixed prices, excluding tax. No order is recorded from this site: a request opens your email client, and nothing is sent until you send it yourself. Every service is covered by a quote or an invoice issued by the organisation that performs it.",
+  "Ce site ne dépose aucun traceur et ne collecte aucune donnée personnelle par lui-même : il n'a ni compte, ni formulaire enregistré côté serveur. Les informations que vous saisissez dans le formulaire de demande restent dans votre navigateur jusqu'à ce que vous les envoyiez par votre propre messagerie. Aucune donnée ni aucun contact n'est revendu.":
+    "This site sets no tracker and collects no personal data by itself: it has no account and no server-side form. What you type into the request form stays in your browser until you send it from your own email client. No data and no contact is ever resold.",
+  "Pour exercer vos droits d'accès, de rectification ou de suppression sur un échange déjà engagé, écrivez à":
+    "To exercise your rights of access, correction or deletion on an exchange already under way, write to",
   // ── §6 : les trois environnements de collecte ──
   "Trois environnements de collecte, jamais confondus": "Three collection environments, never conflated",
   "L'API du modèle": "The model's API",
