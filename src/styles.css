@@ -367,8 +367,16 @@ body::before {
 .bulle .section-num { margin-top: 0; }
 .bulle .est-actions,
 .bulle .hero-cta { justify-content: center; }
-.bulle.landing-section > *:not(.listings):not(.sous-bulle),
-.bulle.section-ia > * {
+/* ⚠️ `:not(img)` ajouté le 11/11/2026. Cette règle existe pour NEUTRALISER
+   LES CONTENEURS imbriqués dans une bulle — fond, bordure, ombre, largeur.
+   Appliquée à une <img>, elle lui rendait sa largeur native : la bannière de
+   /approche s'affichait à 1024 px dans un parent de 400, et la page débordait
+   de 624 px. La règle propre déclarait pourtant `width: 100%` — mais à (0,1,0)
+   contre (0,4,0), elle perdait en silence.
+   ⭐ Une image n'est pas un conteneur. L'exclure par son TYPE plutôt que par
+   une classe de plus évite que la liste s'allonge à chaque image ajoutée. */
+.bulle.landing-section > *:not(.listings):not(.sous-bulle):not(img),
+.bulle.section-ia > *:not(img) {
   background: none;
   border: none;
   box-shadow: none;
@@ -2354,6 +2362,28 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
   border: 1px solid var(--ink);
   border-radius: var(--rayon);
   margin: 0 0 var(--sp-1);
+  background: var(--ink);
+  image-rendering: pixelated;
+}
+
+/* La bannière de /approche — 11/11/2026.
+   ⛔ ELLE EST EN COULEUR À DESSEIN, ET C'EST LA SEULE DU SITE. Décision
+   d'Aurélien, posée après que la question lui a été signalée : tout le reste
+   est en noir et blanc, elle est l'unique accent, et c'est ce qui lui donne
+   sa force.
+   ⭐ Écrit ici parce qu'un état VOULU qui ressemble à un oubli se fait
+   réparer. Quelqu'un ouvrira ce fichier, verra une image colorée dans une
+   charte monochrome, et ajoutera `filter: grayscale(1)` en croyant corriger.
+   Ce n'est pas un oubli. Ne pas la désaturer. */
+.approche-banniere {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1024 / 572;
+  object-fit: cover;
+  border: 1px solid var(--ink);
+  border-radius: var(--rayon);
+  margin: var(--sp-2) 0;
   background: var(--ink);
   image-rendering: pixelated;
 }

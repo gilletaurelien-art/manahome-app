@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { lien, langueCourante } from "./router";
 import { t } from "./i18n";
 import { ContactForm } from "./ContactForm";
+// La bannière de /approche. Importée, pas écrite en CSS : Vite lui donne son
+// empreinte, et une image de page mérite ses attributs de dimension.
+import banniere from "./assets/approche-banniere.webp";
 import {
   GlyphCadeau, GlyphBouclier, GlyphCadenas,
   GlyphStructure, GlyphBalance, GlyphVieLocale,
@@ -79,6 +82,19 @@ export function Approche() {
         <h1 className="section-title">
           {t(L, "Ce que les IA disent de vous, mesuré et documenté.")}
         </h1>
+        {/* ⚠️ `alt=""` : l'image porte le mot MANAHOME, que le titre de la
+            page et la marque du header disent déjà. La décrire le ferait
+            entendre une troisième fois.
+            ⚠️ `width`/`height` + `aspect-ratio` : sans eux la page se replie
+            au chargement et tout ce qui suit saute d'un cran. */}
+        <img
+          className="approche-banniere"
+          src={banniere}
+          alt=""
+          width={1024}
+          height={572}
+          decoding="async"
+        />
         <p className="section-accroche">
           {t(L, "L'expertise GEO, par Alliance MANA — pour les pros et les structures.")}
         </p>
