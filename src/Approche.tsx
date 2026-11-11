@@ -80,7 +80,7 @@ export function Approche() {
           {t(L, "Ce que les IA disent de vous, mesuré et documenté.")}
         </h1>
         <p className="section-accroche">
-          {t(L, "Le GEO, par Alliance MANA — pour les pros et les structures.")}
+          {t(L, "L'expertise GEO, par Alliance MANA — pour les pros et les structures.")}
         </p>
         {/* ⭐ L'objet statutaire, cité tel qu'il est déclaré — pas reformulé.
             C'est ce qui explique pourquoi un service GEO est porté par une

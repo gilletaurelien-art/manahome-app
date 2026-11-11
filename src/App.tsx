@@ -255,7 +255,7 @@ export default function App() {
               de recherche depuis le 11/11/2026 : la vitrine vend le GEO. */}
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
-              <p className="hero-label">{t(L, "Le GEO, par Alliance MANA")}</p>
+              <p className="hero-label">{t(L, "L'expertise GEO, par Alliance MANA")}</p>
               {/* ⚠️ `alt=""` à dessein : le logo porte déjà le mot MANAHOME, et
                   le <h1> juste à côté le porte aussi. Le décrire ferait
                   entendre le nom deux fois à un lecteur d'écran. */}

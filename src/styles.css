@@ -2269,10 +2269,17 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
   align-items: center;
   gap: var(--sp-2);
   margin-bottom: var(--sp-1);
+  /* ⚠️ `wrap` depuis que le logo a triplé : à 180 px de large, lui et le mot
+     « MANAhome » ne tiennent plus côte à côte sous 520 px. Sans ce repli, le
+     titre se serait écrasé caractère par caractère au lieu de passer dessous. */
+  flex-wrap: wrap;
 }
 .hero-logo {
   flex: 0 0 auto;
-  width: clamp(48px, 14vw, 88px);
+  /* ⭐ Triplé le 11/11/2026 (Aurélien : « doit tripler de volume pour être
+     lisible »). Il portait clamp(48px, 14vw, 88px) et rendait 60 px — à cette
+     taille, le mot MANAHOME gravé dans l'image était illisible. */
+  width: clamp(144px, 42vw, 264px);
   height: auto;
   aspect-ratio: 1 / 1;
   border: 1px solid var(--ink);

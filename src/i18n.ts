@@ -179,8 +179,8 @@ const DICO_EN: Record<string, string> = {
   // ── /approche et /mentions-legales, refaites pour le GEO (11/11/2026) ──
   "Mesurer ce que les IA répondent. Rien de plus, rien de moins.":
     "Measuring what AIs answer. Nothing more, nothing less.",
-  "Le GEO, par Alliance MANA — pour les pros et les structures.":
-    "GEO, by Alliance MANA — for professionals and organisations.",
+  "L'expertise GEO, par Alliance MANA — pour les pros et les structures.":
+    "GEO expertise, by Alliance MANA — for professionals and organisations.",
   "Voici, noir sur blanc, ce que nous faisons et ce que nous ne ferons jamais. Si un point vous paraît trop prudent, c'est voulu : une promesse qu'on ne peut pas tenir se paie au premier client.":
     "Here, in black and white, is what we do and what we will never do. If a point reads as over-cautious, that is deliberate: a promise you cannot keep is paid for with the first client.",
   "Voir les offres et les prix": "See the offers and prices",
@@ -342,7 +342,7 @@ const DICO_EN: Record<string, string> = {
   "Demander un audit": "Request an audit",
   "Voir les offres": "See the offers",
   "Contact": "Contact",
-  "Le GEO, par Alliance MANA": "GEO, by Alliance MANA",
+  "L'expertise GEO, par Alliance MANA": "GEO expertise, by Alliance MANA",
   "Vos clients demandent à ChatGPT. Savez-vous ce qu'il répond sur vous ? Testez votre site en 30 secondes, gratuitement — puis mesurez votre visibilité réelle à partir de 149 €.":
     "Your customers ask ChatGPT. Do you know what it answers about you? Test your site in 30 seconds, free — then measure your real visibility from €149.",
   "Être trouvé par les IA": "Be found by AIs",
