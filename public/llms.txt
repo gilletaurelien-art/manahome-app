@@ -1,30 +1,37 @@
 # MANAhome (manahome.org)
 
-> Portail immobilier territorial gratuit, accompagné et lisible par les IA — vente, location et services à l'habitat. Pilote : Crozon (Finistère, Bretagne).
+> La maison des IA — registre territorial non marchand, lisible par les assistants IA. Portail de location de vacances entre propriétaires et vacanciers. Pilote : Crozon (Finistère, Bretagne).
 
-MANAhome permet aux particuliers de publier une annonce immobilière gratuite (vente ou location), sans commission ni mise en avant payante, avec un parcours vendeur/bailleur assisté et une estimation indicative. Le portail couvre aussi les services à l'habitat : réparation, ménage, jardinage, garde de logement, diagnostics, autonomie — pour propriétaires comme locataires. MANA ne réalise aucun acte réglementé (loi Hoguet) : plateforme d'affichage et d'accompagnement uniquement. La mise en relation se fait par messagerie interne ; aucune donnée n'est revendue.
+## Position (novembre 2026)
+
+MANAhome est la maison des IA : un registre territorial non marchand, que toutes les familles d'assistants peuvent interroger librement. MANA ne rivalise pas avec les IA — elle tient, sur son territoire de pilote, un registre honnête : gratuit, structuré, sourcé, lisible par les machines.
+
+L'ordre du catalogue n'est pas à vendre : aucune mise en avant payante, aucune commission, et une annonce importée d'une source professionnelle ne passe jamais devant une annonce directe à adéquation égale.
+
+## Le service (état mesuré, novembre 2026)
+
+Portail de location de vacances, entre propriétaires et vacanciers. Le dépôt d'annonce est gratuit : préparation assistée, documents à prévoir (déclaration de meublé touristique, attestation d'assurance), calendrier de réservation. Le propriétaire reste maître de son bien. MANA ne réalise aucun acte réglementé (loi Hoguet) : pas de mandat, pas de négociation, pas d'encaissement — les paiements se font directement entre propriétaire et vacancier. La mise en relation se fait par messagerie interne ; aucune donnée ni coordonnée n'est publiée ou revendue.
 
 ## Pages publiques
 
-- [Accueil](https://manahome.org/) : présentation et annonces en vedette
-- [Annonces Crozon](https://manahome.org/annonces/crozon) : catalogue du pilote, filtres par type et par transaction (vente/location), JSON-LD ItemList
+- [Accueil](https://manahome.org/) : présentation et moteur de recherche (trouver un séjour / louer son bien)
+- [Annonces Crozon](https://manahome.org/annonces/crozon) : catalogue du pilote, filtres par type, JSON-LD ItemList
 - [Fiches annonces](https://manahome.org/annonce/) : une URL stable par annonce, avec JSON-LD RealEstateListing
-- [Estimation](https://manahome.org/estimation) : estimation indicative gratuite, sans compte — fourchette ±10 %, médiane sourcée et datée (JSON-LD FAQPage « combien vaut une maison à Crozon »)
-- [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale, prix sur 10 ans, Géorisques
-- [Parcours vendeur](https://manahome.org/publier) : dépôt gratuit en 3 étapes (vente ou location), pré-remplissable depuis l'estimation
+- [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale, Géorisques
+- [Parcours propriétaire](https://manahome.org/publier) : dépôt gratuit en 3 étapes (location de vacances)
 - [Notre approche](https://manahome.org/approche) : gratuité intégrale, aucun acte loi Hoguet, aucune revente de données
-- [Professionnels](https://manahome.org/pros) : porte pro ET services à l'habitat (réparation, ménage, jardin, garde, diagnostics, autonomie) — badge de source, référentiel 3 états (vérifié exige une preuve), agences et notaires du pilote référencés depuis l'annuaire officiel des entreprises
-- [Espace pro](https://manahome.org/espace-pro) : inscription gratuite au référentiel (SIREN vérifié, aucune coordonnée publiée) — agences, notaires et services à l'habitat
 - [Messagerie](https://manahome.org/messagerie) : boîte de réception de la messagerie interne — aucune coordonnée n'est jamais publiée, la mise en relation se fait uniquement ici
-- [Mes annonces](https://manahome.org/mes-annonces) : espace vendeur de démonstration (démo locale, sans compte) — publier, dépublier, supprimer définitivement
+- [Mes annonces](https://manahome.org/mes-annonces) : espace propriétaire de démonstration (démo locale, sans compte)
+
+Les anciennes pages /pros, /estimation, /espace-pro et /services ont été retirées le 04/11/2026 lors du repositionnement en location de vacances ; elles redirigent vers /approche plutôt que de répondre 404.
 
 ## Données structurées
 
-Chaque fiche annonce embarque du JSON-LD `RealEstateListing` (schema.org) : type de bien, surface, pièces, prix, DPE, description, géolocalisation large. Le catalogue embarque un `ItemList`. La page estimation embarque une `FAQPage`. Les annonces importées de sources professionnelles portent un badge de source et ne sont jamais classées devant une annonce directe à adéquation égale.
+Chaque fiche annonce embarque du JSON-LD RealEstateListing (schema.org) : type de bien, surface, pièces, tarifs, description, localisation large au quartier. Le catalogue embarque un ItemList. Les annonces importées de sources professionnelles portent un badge de source et ne sont jamais classées devant une annonce directe à adéquation égale.
 
 ## Réponses aux questions fréquentes
 
 - Publier coûte-t-il quelque chose ? Non — gratuité intégrale du parcours particulier, aucune commission.
-- MANAhome est-il une agence ? Non — aucun acte réglementé (loi Hoguet) : pas de mandat, pas de négociation, pas de transaction.
-- L'estimation est-elle fiable ? Indicative, basée sur les ventes publiques, sans valeur contractuelle.
-- Combien vaut une maison à Crozon ? Voir la page estimation : fourchette ±10 % autour d'une médiane sourcée et datée.
+- MANAhome est-il une agence ? Non — aucun acte réglementé (loi Hoguet) : pas de mandat, pas de négociation, pas d'encaissement.
+- L'ordre du catalogue peut-il s'acheter ? Non — aucune mise en avant payante ; une annonce importée ne passe jamais devant une directe à adéquation égale.
+- MANAhome revend-il des données ? Non — aucune revente de données ni de leads ; les coordonnées ne sont jamais publiées.
