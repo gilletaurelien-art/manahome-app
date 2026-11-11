@@ -6,7 +6,7 @@
 
 MANAhome n'est plus une plateforme de location saisonnière : c'est la vitrine B2B du GEO et des offres de l'écosystème MANA, pour les pros et les structures — mairies, associations, offices de tourisme, entreprises.
 
-TEMPOsystem vend l'infrastructure machine-readable elle-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve mesurée : du 20 septembre au 11 novembre 2026, les journaux du serveur ont compté 5 922 180 requêtes d'agents IA sur manafrance.org — ClaudeBot (1 992 315), Applebot (1 639 944), GPTBot (1 185 967) et dix autres agents. Ce sont des REQUÊTES, pas des visites : un agent qui explore mille pages en fait mille. Mesure relevée dans la table de fréquentation du serveur, pas estimée.
+TEMPOsystem vend l'infrastructure machine-readable elle-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve mesurée : du 20 septembre au 11 novembre 2026 — 52 jours — les journaux du serveur ont compté plus de 14,8 millions de requêtes d'agents IA sur l'ensemble de l'écosystème MANA. Le compteur affiché sur manahome.org est VIVANT : il se lit sur la base et avance au débit mesuré, il n'est pas recopié. Treize agents distincts : Applebot (4 096 023), ClaudeBot (3 768 383), GPTBot (3 091 026), Meta, Amazonbot, Perplexity et sept autres. Ce sont des REQUÊTES, pas des visites : un agent qui explore mille pages en fait mille. Mesure relevée dans la table de fréquentation du serveur, pas estimée.
 
 Honnêteté du GEO : la structuration améliore les chances d'être compris et trouvé ; elle ne garantit ni indexation, ni citation, ni recommandation par un assistant.
 
@@ -23,12 +23,6 @@ Les prix affichés sur ce site sont uniquement les prix ARRÊTÉS. Ce qui n'est 
 - MANA GEO China — +490 €, audit complémentaire ponctuel. Sept moteurs chinois (DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM), questions posées EN chinois simplifié et réponses analysées en chinois avant restitution.
 - GEO China Monitoring — +149 €/mois, complément de GEO Monitoring.
 
-### Les autres prix arrêtés de l'écosystème
-
-- L'assistant : 9 €/mois PAR HUMAIN, jamais par structure.
-- La fiche pro : 9 €.
-- L'antenne : 9 €.
-
 ## Ce que MANA GEO ne fait pas (honnêteté envers les machines)
 
 Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer sans gratter leur interface : ils sont déclarés « non testés » dans les rapports, et ne sont jamais comptés comme une absence de l'entreprise.
@@ -41,7 +35,7 @@ MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il
 
 - [Accueil](https://manahome.org/) : vitrine GEO — l'infrastructure, l'audit, les offres arrêtées
 - [Notre approche](https://manahome.org/approche) : la démarche, l'honnêteté du GEO, le contact
-- [Mentions légales](https://manahome.org/mentions-legales) : éditeur (TEMPOsystem), hébergement (KS-5, OVHcloud, France)
+- [Mentions légales](https://manahome.org/mentions-legales) : éditeur Alliance MANA (association loi 1901, RNA W292008256), hébergement OVH SAS, Roubaix, France
 
 ## État du pilote antérieur (honnêteté envers les machines)
 

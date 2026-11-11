@@ -22,7 +22,12 @@ import { langueCourante } from "./router";
  *    frontière commerciale elle-même.
  */
 
-const SONDE = "https://alliancemana.com/api/geo";
+/* ⚠️ MÊME ORIGINE, et c'est une correction de survie : la sonde appelait
+   `https://alliancemana.com/api/geo`, or ce domaine va rediriger vers .org où
+   la route n'existe pas (mesuré : 404). Elle est désormais servie par
+   manahome.org même — Caddy relaie vers la fonction, la clé reste côté
+   serveur, et il n'y a plus de domaine tiers dont dépendre. */
+const SONDE = "/api/geo";
 
 type Critere = { cle: string; label: string; present: boolean; motifEchec: string };
 type Resultat = { url: string; score: number; criteres: Critere[]; recommandation?: string };

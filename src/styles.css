@@ -2194,3 +2194,30 @@ body { overflow-x: hidden; }
   color: var(--alerte);
   margin: var(--sp-1) 0 0;
 }
+
+/* Le piège à robots : hors écran, jamais `display:none` — certains robots
+   ignorent les champs masqués, et un humain au clavier ne l'atteint pas
+   (tabIndex -1). */
+.piege-robot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* L'objet statutaire cité dans /approche : un filet à gauche, pas une carte —
+   c'est une citation dans un texte, pas un bloc de plus. */
+.objet-association {
+  margin: var(--sp-2) 0;
+  padding: 0 0 0 var(--sp-2);
+  border-left: 3px solid var(--ink);
+  font-family: var(--sans);
+}
+.objet-association p { font-size: var(--t-xs); color: var(--ink); margin: 0; }
+.objet-association footer {
+  font-size: var(--t-xs);
+  color: var(--doux);
+  margin-top: 6px;
+  font-weight: 700;
+}

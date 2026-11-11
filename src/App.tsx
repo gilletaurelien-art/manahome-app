@@ -30,9 +30,13 @@ import { MentionsLegales } from "./MentionsLegales";
 import { ContactForm } from "./ContactForm";
 import { IconePixel } from "./IconePixel";
 import { SondeGeo } from "./SondeGeo";
+import { CompteurAgentsIa } from "./CompteurAgentsIa";
 // ⭐ Les prix ne vivent plus ici : ils sont dans src/offres.ts, lu AUSSI par
 //    vite.config.ts pour le JSON-LD. Deux lecteurs, une seule source.
-import { OFFRES_GEO, OFFRES_MANA, FAMILLES, prixAffiche } from "./offres";
+// ⛔ 11/11/2026 — OFFRES_MANA n'est plus importé ici : la section « Les autres
+//    prix arrêtés » (assistant, fiche pro, antenne) a été retirée de la page à
+//    la demande d'Aurélien. manahome.org ne porte plus que le GEO.
+import { OFFRES_GEO, FAMILLES, prixAffiche } from "./offres";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -64,10 +68,8 @@ import { OFFRES_GEO, OFFRES_MANA, FAMILLES, prixAffiche } from "./offres";
 //    la mesure honnête. Les trois constats sortent de NOS journaux, sur NOS
 //    sites, et la fenêtre de mesure est écrite.
 const CONSTATS = [
-  { chiffre: "5 922 180", unite: "requêtes d'agents IA",
-    quoi: "sur manafrance.org, du 20 septembre au 11 novembre 2026. Ils passent, qu'on le sache ou non." },
-  { chiffre: "13", unite: "agents distincts",
-    quoi: "ClaudeBot, Applebot, GPTBot, Perplexity et dix autres — chacun lit, retient, et répondra avec ce qu'il a retenu." },
+  { chiffre: "13", unite: "agents IA distincts",
+    quoi: "Applebot 4 096 023 · ClaudeBot 3 768 383 · GPTBot 3 091 026, et dix autres — chacun lit, retient, et répondra avec ce qu'il a retenu." },
   { chiffre: "0", unite: "démarche à faire pour qu'ils viennent",
     quoi: "Ils sont déjà là. La seule question est ce qu'ils comprennent de vous." },
 ];
@@ -289,6 +291,10 @@ export default function App() {
               {/* Le constat AVANT l'explication : trois faits mesurés chez
                   nous, jamais une statistique de marché invérifiable. */}
               <ul className="constats">
+                {/* ⭐ Le premier constat est VIVANT : il se lit sur le serveur
+                    et avance au débit mesuré. Il était écrit en dur, avec sa
+                    date — juste le jour de l'écriture, faux le lendemain. */}
+                <CompteurAgentsIa />
                 {CONSTATS.map((c) => (
                   <li key={c.chiffre + c.unite}>
                     <span className="constat-chiffre">{c.chiffre}</span>
@@ -424,16 +430,6 @@ export default function App() {
                       <p className="tarif-note">
                         {t(L, "MANA GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement — et aucune prestation d'optimisation ne peut en modifier les conclusions.")}
                       </p>
-                      <h3 className="tarif-sous-titre">{t(L, "Les autres prix arrêtés")}</h3>
-                      <ul className="tarifs-simples">
-                        {OFFRES_MANA.map((o) => (
-                          <li key={o.nom}>
-                            <strong>{t(L, o.nom)}</strong>
-                            <span className="tarif-prix-simple">{prixAffiche(o)}</span>
-                            <span className="tarif-unite">{t(L, o.unite)}</span>
-                          </li>
-                        ))}
-                      </ul>
                     </>
                   )}
                   <div className="est-actions">

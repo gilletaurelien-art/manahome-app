@@ -7,7 +7,11 @@ import {
   titreDeLaRoute,
 } from "./src/canonique";
 import { LOCALES } from "./src/i18n";
-import { OFFRES_GEO, OFFRES_MANA } from "./src/offres";
+// ⛔ OFFRES_MANA retiré : ces trois prix ne sont plus AFFICHÉS sur la page.
+//    Les laisser dans le JSON-LD déclarerait aux machines un catalogue que
+//    l'humain ne voit pas — exactement le défaut que MANA GEO facture pour le
+//    détecter chez ses clients.
+import { OFFRES_GEO } from "./src/offres";
 
 // La cible décide du chemin de base ET de l'hôte — pas le code.
 //   • GitHub Pages sert sous /manahome-app/ → sans base, les bundles 404, page blanche.
@@ -120,7 +124,7 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
       ? "GEO by TEMPOsystem: being found by AI assistants — machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem."
       : "Le GEO par TEMPOsystem : être trouvé par les assistants IA — infrastructure machine-readable, audits, et les offres arrêtées de l'écosystème MANA.",
     parentOrganization: { "@type": "Organization", name: "TEMPOsystem" },
-    makesOffer: [...OFFRES_GEO, ...OFFRES_MANA].map(offre),
+    makesOffer: OFFRES_GEO.map(offre),
   };
   return `\n    <script type="application/ld+json">${JSON.stringify(donnees)}</script>`;
 }

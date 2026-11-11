@@ -19,6 +19,10 @@ import { t } from "./i18n";
  *    CHAQUE DÉMÉNAGEMENT. On déplace des données, on ne relit pas la page qui
  *    dit où elles sont — c'est exactement ce qui s'est passé le 2/11.
  *
+ * ✅ RÉSERVE LEVÉE LE 11/11/2026 : le champ porte désormais Aurélien GILLET,
+ *    fondateur d'Alliance MANA. Ce qui suit est conservé parce que la raison
+ *    vaut pour la prochaine fois qu'une marque sera tentée d'y revenir.
+ *
  * ⚠️ RÉSERVE JURIDIQUE, reportée ici pour qu'elle ne se reperde pas. La LCEN
  *    (art. 6 III 1°) demande le DIRECTEUR DE LA PUBLICATION ; pour un éditeur
  *    personne morale, c'est son représentant légal — une personne PHYSIQUE,
@@ -41,7 +45,8 @@ const EDITEUR = {
   declaration: "Déclarée le 10 août 2026 auprès de la Sous-préfecture de Brest",
   email: "contact@manahome.org",
   site: "https://alliancemana.org",
-  directeur: "TEMPOsystem",
+  // ⭐ Donné par Aurélien le 11/11/2026. La réserve écrite plus haut est levée.
+  directeur: "Aurélien GILLET, fondateur d'Alliance MANA",
 };
 
 /** Vérifié au registre RIPE sur l'adresse de production réelle, le 07/11/2026. */

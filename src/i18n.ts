@@ -119,6 +119,29 @@ const DICO_EN: Record<string, string> = {
   "L'antenne": "The antenna",
   "Offre recommandée": "Recommended",
   "Les autres prix arrêtés": "The other fixed prices",
+  // ── Compteur vivant, objet statutaire, formulaire branché (11/11/2026) ──
+  "sur l'ensemble de l'écosystème MANA, depuis": "across the whole MANA ecosystem, for the past",
+  "jours": "days",
+  "Ils passent, qu'on le sache ou non.": "They come through, whether you know it or not.",
+  "Alliance MANA poursuit un but non lucratif et d'intérêt général. Elle a pour objet : rendre, depuis la Bretagne, les territoires et leurs acteurs lisibles et accessibles par tout moyen numérique, y compris l'intelligence artificielle ; concevoir, développer et exploiter tout outil, média, service ou assistant numérique, notamment conversationnel, au service des personnes, des familles et des territoires ; promouvoir une doctrine éthique du numérique et des données personnelles ; valoriser l'économie sociale et solidaire et la vie associative ; exercer, à titre accessoire, toute activité destinée à assurer son financement, en France et à l'international.":
+    "Alliance MANA pursues a non-profit purpose in the general interest. Its object is: to make, from Brittany, territories and their actors legible and accessible by any digital means, including artificial intelligence; to design, develop and operate any digital tool, medium, service or assistant, in particular conversational ones, serving people, families and territories; to promote an ethical doctrine of digital technology and personal data; to champion the social and solidarity economy and associative life; and, on an ancillary basis, to carry out any activity intended to secure its funding, in France and internationally.",
+  "Objet statutaire — association loi du 1er juillet 1901, RNA W292008256":
+    "Statutory object — association under the French law of 1 July 1901, register number W292008256",
+  "Votre nom": "Your name",
+  "Votre fonction": "Your role",
+  "Code postal": "Postal code",
+  "En une phrase : ce que vous aimeriez que les IA répondent à votre sujet":
+    "In one sentence: what you would like the AIs to answer about you",
+  "Ne pas remplir ce champ": "Do not fill this field",
+  "Envoyer ma demande": "Send my request",
+  "Envoi…": "Sending…",
+  "Votre demande est enregistrée. Vous recevez une confirmation par courriel, et une réponse sous deux jours ouvrés.":
+    "Your request is recorded. You will receive an email confirmation, and a reply within two business days.",
+  "Cette adresse de courriel ne semble pas valide.": "That email address does not look valid.",
+  "La demande n'a pas pu être envoyée. Réessayez dans un instant, ou écrivez-nous directement.":
+    "The request could not be sent. Try again in a moment, or write to us directly.",
+  "Réponse sous deux jours ouvrés. Vos données ne sont jamais revendues.":
+    "Reply within two business days. Your data is never resold.",
   // ── La sonde GEO du header (11/11/2026) ──
   "Testez la lisibilité machine de votre site": "Test how machine-readable your site is",
   "Tester — gratuit, 30 s": "Test it — free, 30 s",
@@ -155,8 +178,8 @@ const DICO_EN: Record<string, string> = {
   "Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer sans gratter leur interface. Ils sont déclarés « non testés » dans nos rapports — jamais comptés comme une absence de votre entreprise.":
     "Microsoft Copilot and Google AI Overviews expose no access that would let us measure them without scraping their interface. They are reported as not tested — never counted as your company being absent.",
   "Nous mesurons d'abord chez nous": "We measure on our own sites first",
-  "Du 20 septembre au 11 novembre 2026, nos journaux ont compté 5 922 180 requêtes d'agents IA sur manafrance.org. Nous ne vous proposons rien que nous n'ayons posé sur nos propres sites d'abord.":
-    "Between 20 September and 11 November 2026, our logs counted 5,922,180 AI-agent requests on manafrance.org. We offer you nothing we have not put on our own sites first.",
+  "Du 20 septembre au 11 novembre 2026 — 52 jours — nos journaux ont compté 14 853 183 requêtes d'agents IA sur mana.bzh et manafrance.org. Nous ne vous proposons rien que nous n'ayons posé sur nos propres sites d'abord.":
+    "Between 20 September and 11 November 2026 — 52 days — our logs counted 14,853,183 AI-agent requests on mana.bzh and manafrance.org. We offer you nothing we have not put on our own sites first.",
   // « Informations légales » existe déjà plus haut — ne pas la redéclarer (TS1117).
   // « Mentions légales » existe déjà plus haut — ne pas la redéclarer (TS1117).
   // « Éditeur » existe déjà plus haut — ne pas la redéclarer (TS1117).
@@ -221,11 +244,11 @@ const DICO_EN: Record<string, string> = {
   "Faire une autre demande": "Make another request",
   // ── §3 : le constat, en faits mesurés ──
   "requêtes d'agents IA": "AI-agent requests",
-  "sur manafrance.org, du 20 septembre au 11 novembre 2026. Ils passent, qu'on le sache ou non.":
-    "on manafrance.org, from 20 September to 11 November 2026. They come through, whether you know it or not.",
-  "agents distincts": "distinct agents",
-  "ClaudeBot, Applebot, GPTBot, Perplexity et dix autres — chacun lit, retient, et répondra avec ce qu'il a retenu.":
-    "ClaudeBot, Applebot, GPTBot, Perplexity and ten others — each one reads, retains, and will answer with what it retained.",
+  "sur mana.bzh et manafrance.org, du 20 septembre au 11 novembre 2026 — 52 jours. Ils passent, qu'on le sache ou non.":
+    "on mana.bzh and manafrance.org, from 20 September to 11 November 2026 — 52 days. They come through, whether you know it or not.",
+  "agents IA distincts": "distinct AI agents",
+  "Applebot 4 096 023 · ClaudeBot 3 768 383 · GPTBot 3 091 026, et dix autres — chacun lit, retient, et répondra avec ce qu'il a retenu.":
+    "Applebot 4,096,023 · ClaudeBot 3,768,383 · GPTBot 3,091,026, and ten others — each one reads, retains, and will answer with what it retained.",
   "démarche à faire pour qu'ils viennent": "steps needed to make them come",
   "Ils sont déjà là. La seule question est ce qu'ils comprennent de vous.":
     "They are already here. The only question is what they understand about you.",
@@ -360,7 +383,7 @@ const DICO_EN: Record<string, string> = {
   // ── Le séjour (cycle de vie) ──
   "Voyageurs": "Guests",
   "Demander une réservation": "Request a booking",
-  "Envoyer ma demande": "Send my request",
+  // « Envoyer ma demande » existe déjà plus haut — ne pas la redéclarer (TS1117).
   "La demande n'est pas un paiement : vous réglerez l'hôte directement, via son propre moyen de paiement. Aucun encaissement ne passe par MANAhome.":
     "A request is not a payment: you will pay the host directly, via their own payment method. No money ever goes through MANAhome.",
   "Vérifiez vos dates : arrivée avant départ, dates réelles.":
