@@ -49,9 +49,14 @@ export const PAGES_PRIVEES_T: readonly Page[] = [
   { slug: "mes-annonces", titre: "Mes annonces", titreEn: "My listings" },
 ];
 
-/** Le titre générique, dans les deux langues : l'accueil et les pages d'erreur. */
-export const TITRE_GENERIQUE = "MANAhome — La maison des IA. Gratuit. Accompagné. Lisible par les IA.";
-export const TITRE_GENERIQUE_EN = "MANAhome — The house of AIs. Free. Supported. AI-readable.";
+/**
+ * Le titre générique, dans les deux langues : l'accueil et les pages d'erreur.
+ * ⭐ 11/11/2026 — vitrine B2B du GEO et des offres (décision d'Aurélien) : ce
+ * n'est plus la plateforme de location saisonnière. Le titre porte la promesse
+ * GEO ; les prix affichés sur le site sont uniquement les prix ARRÊTÉS.
+ */
+export const TITRE_GENERIQUE = "MANAhome — Le GEO : être trouvé par les IA. Infrastructure, audits, offres arrêtées.";
+export const TITRE_GENERIQUE_EN = "MANAhome — GEO: being found by AIs. Infrastructure, audits, fixed offers.";
 
 /** Les pages publiques, indexables. Elles seules entrent au plan de site. */
 export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p.slug);

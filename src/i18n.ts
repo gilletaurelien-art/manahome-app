@@ -50,6 +50,36 @@ export function t(langue: Langue, texte: string): string {
  * sans toucher au reste de l'app.
  */
 const DICO_EN: Record<string, string> = {
+  // ── Vitrine GEO (11/11/2026) ── ⚠️ « Notre approche » existe DÉJÀ plus bas
+  // dans ce dictionnaire : le redéclarer ici fait refuser tsc (TS1117).
+  "Offres & tarifs": "Offers & pricing",
+  "Demander un audit": "Request an audit",
+  "Voir les offres": "See the offers",
+  "Contact": "Contact",
+  "Le GEO, par TEMPOsystem": "GEO, by TEMPOsystem",
+  "Être trouvé par les assistants IA : l'infrastructure machine-readable, les audits, et les offres arrêtées de l'écosystème MANA.":
+    "Be found by AI assistants: machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem.",
+  "Être trouvé par les IA": "Be found by AIs",
+  "Le GEO : la visibilité qui se construit, pas celle qui s'achète.":
+    "GEO: visibility you build, not visibility you buy.",
+  "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve vivante : manafrance.org, plus de 4,3 millions de visites d'agents IA mesurées.":
+    "llms.txt, Model Context Protocol, structured data: TEMPOsystem sells the machine-readable infrastructure itself — what neither content agencies nor measurement dashboards offer. The living proof: manafrance.org, over 4.3 million measured AI-agent visits.",
+  "L'audit GEO de votre structure": "The GEO audit of your organisation",
+  "Mairies, associations, offices de tourisme, entreprises.":
+    "Town halls, associations, tourist offices, businesses.",
+  "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit mesure l'état réel, puis la mise en œuvre suit : structuration, exposition, interrogeabilité. Sur devis — aucun prix n'est arrêté à ce jour, et nous n'en affichons pas.":
+    "Where do you stand in AI assistants? What stops you from being understood, found, cited? The audit measures the real state, then implementation follows: structuring, exposure, queryability. On quote — no price has been fixed to this day, and we display none.",
+  "Les offres arrêtées": "The fixed offers",
+  "Les prix tranchés, rien d'autre.": "Decided prices, nothing else.",
+  "L'assistant : 9 €/mois par humain, jamais par structure. La fiche pro : 9 €. L'antenne : 9 €. Ces prix sont arrêtés — tout ce qui ne l'est pas reste sur devis, et le site ne l'invente pas.":
+    "The assistant: €9/month per human, never per organisation. The pro page: €9. The antenna: €9. These prices are fixed — everything that is not remains on quote, and the site invents none.",
+  "Les machines interrogent. MANA tient le registre honnête.":
+    "Machines ask questions. MANA keeps the honest registry.",
+  "Caractéristiques organisées, données structurées, page publique en accès libre : le registre territorial est non marchand — aucune mise en avant payante, aucun ordre achetable. La structuration améliore les chances d'être compris et trouvé ; elle ne garantit pas qu'un assistant indexera ou citera une page.":
+    "Organised characteristics, structured data, public free-access pages: the territorial registry is non-commercial — no paid placement, no purchasable ranking. Structuring improves the odds of being understood and found; it guarantees no assistant will index or cite a page.",
+  "Vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.":
+    "Showcase of the GEO and the offers of the MANA ecosystem, operated by TEMPOsystem. Prices shown: fixed prices only — everything else is on quote. GEO improves the odds of being understood and found by AI assistants; it guarantees neither indexing, nor citation, nor recommendation.",
+
   // ── Barre de navigation ──
   "Vacances": "Stays",
   "Territoire": "Territory",

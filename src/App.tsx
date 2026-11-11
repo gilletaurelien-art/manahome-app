@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { poserCanonique } from "./canonique";
 import { annonceLocaleParId, enAnnonce } from "./annoncesLocales";
 import {
@@ -38,51 +38,57 @@ import { ContactForm } from "./ContactForm";
 
 // Repositionné le 04/11/2026 : MANAhome n'est plus un portail immobilier
 // généraliste (vente/achat/pros de l'habitat) — c'est un portail de
-// LOCATION DE VACANCES, entre propriétaires et vacanciers. Les sections 02
-// (ex-« Vendre ou louer ») et 05 (ex-« Pros & services de l'habitat »,
-// retirée) sont réécrites ou retirées en conséquence.
+// LOCATION DE VACANCES, entre propriétaires et vacanciers.
 // Repositionné le 12/11/2026 : MANAhome est LA MAISON DES IA — un registre
 // territorial non marchand que toutes les familles d'assistants peuvent
-// interroger. La section 03 porte cette position ; l'ordre n'est pas à vendre.
+// interroger.
+// ⭐ Repositionné le 11/11/2026 (décision d'Aurélien) : MANAhome devient la
+//    VITRINE B2B du GEO et des offres de l'écosystème, pour les PROS &
+//    STRUCTURES. Ce n'est plus une plateforme de location saisonnière : le
+//    moteur de recherche disparaît de l'accueil, les sections vendent le
+//    GEO (l'infrastructure machine-readable, par TEMPOsystem) et les offres
+//    ARRÊTÉES uniquement — la grille de référence de l'écosystème fait foi ;
+//    le GEO n'y a AUCUN prix, donc il s'affiche « sur devis », sans inventer
+//    de grille.
+//    Les routes du pilote location (/annonces, /publier, /territoire…)
+//    restent SERVIES — leur retrait est un chantier séparé qui dépend de
+//    l'arbitrage « faut-il jamais déployer la stack applicative sur le
+//    KS-5 ». Elles ne sont simplement plus LIÉES depuis la vitrine.
 const SECTIONS = [
   {
     glyphe: GlyphCompas,
     num: "01",
-    titre: "Découvrez les séjours",
-    accroche: "Des locations de vacances, près de chez vous",
+    titre: "Être trouvé par les IA",
+    accroche: "Le GEO : la visibilité qui se construit, pas celle qui s'achète.",
     texte:
-      "Un accès direct aux annonces, sans compte à créer. Le catalogue est volontairement restreint et soigné — chaque fiche est structurée, sourcée, honnête." },
-  {
-    glyphe: GlyphAccompagnement,
-    num: "02",
-    titre: "Louez votre logement avec MANA",
-    accroche: "Vous gardez la main. MANA vous accompagne.",
-    texte:
-      "Préparation de l'annonce, documents à prévoir (déclaration de meublé touristique, attestation d'assurance), calendrier de réservation : le propriétaire reste maître de son bien.",
-    cta: { label: "Publier mon annonce", href: "/publier" } },
+      "llms.txt, Model Context Protocol, données structurées : TEMPOsystem vend l'infrastructure machine-readable elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent. La preuve vivante : manafrance.org, plus de 4,3 millions de visites d'agents IA mesurées." },
   {
     glyphe: GlyphStructure,
-    num: "03",
-    titre: "La maison des IA",
-    accroche: "Les machines interrogent. MANAhome tient le registre honnête.",
+    num: "02",
+    titre: "L'audit GEO de votre structure",
+    accroche: "Mairies, associations, offices de tourisme, entreprises.",
     texte:
-      "Caractéristiques organisées, données structurées, page publique en accès libre : ce registre territorial est non marchand — aucune mise en avant payante, aucun ordre achetable, une annonce importée ne passe jamais devant une directe à adéquation égale. La structuration améliore les chances d'être compris et trouvé ; elle ne garantit pas qu'un assistant indexera ou citera une annonce.",
-    cta: { label: "Comprendre notre approche", href: "/approche" } },
+      "Où en êtes-vous dans les assistants ? Qu'est-ce qui vous empêche d'être compris, trouvé, cité ? L'audit mesure l'état réel, puis la mise en œuvre suit : structuration, exposition, interrogeabilité. Sur devis — aucun prix n'est arrêté à ce jour, et nous n'en affichons pas.",
+    cta: { label: "Demander un audit", href: "/approche" } },
+  {
+    glyphe: GlyphAccompagnement,
+    num: "03",
+    titre: "Les offres arrêtées",
+    accroche: "Les prix tranchés, rien d'autre.",
+    texte:
+      "L'assistant : 9 €/mois par humain, jamais par structure. La fiche pro : 9 €. L'antenne : 9 €. Ces prix sont arrêtés — tout ce qui ne l'est pas reste sur devis, et le site ne l'invente pas.",
+    // ⭐ Pas de `cta` ici, à dessein : cette section PORTE l'ancre #offres.
+    // Un bouton « Voir les offres » y pointant renverrait sur elle-même —
+    // le hero et la navigation l'utilisent pour DESCENDRE jusqu'ici.
+    },
   {
     glyphe: GlyphTerritoire,
     num: "04",
-    titre: "L'index des communes",
-    accroche: "Un lieu, une fiche : la vie autour du séjour.",
+    titre: "La maison des IA",
+    accroche: "Les machines interrogent. MANA tient le registre honnête.",
     texte:
-      "Transports, commerces, écoles, services, nature : chaque commune du territoire présentée honnêtement, avec des informations vérifiées lorsque c'est possible.",
-    cta: { label: "Découvrir le territoire", href: "/territoire/crozon" } },
-];
-
-// Le moteur n'a plus qu'une distinction : chercher un séjour, ou publier
-// le sien. Aucun choix vente/achat/services — un seul produit, deux côtés.
-const MOTEUR_CATEGORIES = [
-  { v: "chercher", l: "Trouver un séjour" },
-  { v: "louer", l: "Louer mon bien" },
+      "Caractéristiques organisées, données structurées, page publique en accès libre : le registre territorial est non marchand — aucune mise en avant payante, aucun ordre achetable. La structuration améliore les chances d'être compris et trouvé ; elle ne garantit pas qu'un assistant indexera ou citera une page.",
+    cta: { label: "Comprendre notre approche", href: "/approche" } },
 ];
 
 
@@ -97,22 +103,9 @@ export default function App() {
   useEffect(() => {
     poserCanonique(path, L);
   }, [path, L]);
-  const [moteurCategorie, setMoteurCategorie] = useState("chercher");
-  const [moteurLieu, setMoteurLieu] = useState("");
-
-  // Deux côtés, un seul produit : chercher un séjour, ou publier son bien —
-  // plus de distinction acheter/vendre/services (repositionné 04/11/2026).
-  const moteurRechercher = () => {
-    const params = new URLSearchParams();
-    if (moteurLieu.trim()) params.set("q", moteurLieu.trim());
-    if (moteurCategorie === "chercher") {
-      window.location.assign(lien(`/annonces/crozon?${params}`));
-    } else {
-      window.location.assign(
-        lien(`/publier${moteurLieu.trim() ? `?lieu=${encodeURIComponent(moteurLieu.trim())}` : ""}`),
-      );
-    }
-  };
+  // ⭐ Le moteur de recherche location a quitté l'accueil le 11/11/2026 :
+  // la vitrine vend le GEO et les offres, elle ne cherche plus de séjours.
+  // Les routes du pilote restent servies — voir le commentaire des SECTIONS.
   const annonce =
     annonceParId(routeAnnonce(path)) ??
     (() => {
@@ -130,17 +123,17 @@ export default function App() {
             <GlyphMaison size={28} />
           </a>
           <nav className="nav">
-            <a href={lien(`/annonces/crozon`)}>
-              <NavAnnonces />
-              <span>{t(L, "Vacances")}</span>
-            </a>
-            <a href={lien(`/territoire/crozon`)}>
+            <a href={lien(`/approche`)}>
               <NavTerritoire />
-              <span>{t(L, "Territoire")}</span>
+              <span>{t(L, "Notre approche")}</span>
             </a>
-            <a href={lien(`/publier`)} className="nav-cta">
+            <a href={lien(`/#offres`)}>
+              <NavAnnonces />
+              <span>{t(L, "Offres & tarifs")}</span>
+            </a>
+            <a href={lien(`/#contact`)} className="nav-cta">
               <NavPublier />
-              <span>{t(L, "Publier")}</span>
+              <span>{t(L, "Demander un audit")}</span>
             </a>
             {/* Sélecteur de langue : l'autre version de la MÊME page, jamais
                 un retour à l'accueil — perdre la route serait le défaut le
@@ -187,78 +180,57 @@ export default function App() {
         <TerritoireDetail territoire={territoire} />
       ) : (
         <>
-          {/* Hero : le logo en grand, la promesse en dessous */}
+          {/* Hero : le logo en grand, la promesse en dessous — plus de moteur
+              de recherche depuis le 11/11/2026 : la vitrine vend le GEO. */}
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
-              <p className="hero-label">{t(L, "La maison des IA")}</p>
+              <p className="hero-label">{t(L, "Le GEO, par TEMPOsystem")}</p>
               <h1 className="brand-grand">
                 MANA<em>home</em>
               </h1>
-              <div className="moteur">
-                <div className="moteur-categories" role="group" aria-label={t(L, "Je cherche")}>
-                  {MOTEUR_CATEGORIES.map((c) => (
-                    <button
-                      key={c.v}
-                      type="button"
-                      className={`moteur-categorie-btn ${moteurCategorie === c.v ? "on" : ""}`}
-                      aria-pressed={moteurCategorie === c.v}
-                      onClick={() => setMoteurCategorie(c.v)}
-                    >
-                      {t(L, c.l)}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="moteur-barre">
-                  <svg className="moteur-loupe" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="10.5" cy="10.5" r="6.5" />
-                    <path d="m15.5 15.5 4.5 4.5" />
-                  </svg>
-                  <input
-                    id="moteur-lieu"
-                    type="search"
-                    autoComplete="off"
-                    placeholder={t(L, "Commune ou code postal")}
-                    value={moteurLieu}
-                    onChange={(e) => setMoteurLieu(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && moteurRechercher()}
-                  />
-                  <button
-                    type="button"
-                    className="moteur-fleche"
-                    aria-label={t(L, "Rechercher")}
-                    onClick={moteurRechercher}
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M4 12h15" />
-                      <path d="m13 6 6 6-6 6" />
-                    </svg>
-                  </button>
-                </div>
-
+              <p className="section-accroche">
+                {t(L, "Être trouvé par les assistants IA : l'infrastructure machine-readable, les audits, et les offres arrêtées de l'écosystème MANA.")}
+              </p>
+              <div className="est-actions">
+                <a className="btn btn-clair" href={lien(`/approche`)}>
+                  {t(L, "Demander un audit")}
+                </a>
+                <a className="btn btn-clair" href={lien(`/#offres`)}>
+                  {t(L, "Voir les offres")}
+                </a>
               </div>
             </div>
           </section>
 
-
           <main className="wrap">
-            {/* 01 — Catalogue : bulle avec sous-bulle, résultats dans la recherche */}
+            {/* 01 — la section de tête. ⭐ 11/11/2026 : son bouton était
+                codé en dur vers /annonces/crozon — le dernier lien de la
+                vitrine vers le pilote location. Il est retiré, et la section
+                lit désormais son `cta` dans SECTIONS comme ses voisines :
+                un lien se change dans la DONNÉE, plus dans le gabarit. */}
             <section className="landing-section bulle">
               <h2 className="section-title">{t(L, SECTIONS[0].titre)}</h2>
               <div className="sous-bulle">
                 <p className="section-accroche">{t(L, SECTIONS[0].accroche)}</p>
                 <p className="section-texte">{t(L, SECTIONS[0].texte)}</p>
-                <div className="est-actions">
-                  <a className="btn btn-clair" href={lien(`/annonces/crozon`)}>
-                    {t(L, "Parcourir le catalogue")}
-                  </a>
-                </div>
+                {SECTIONS[0].cta && (
+                  <div className="est-actions">
+                    <a className="btn btn-clair" href={lien(`${SECTIONS[0].cta.href}`)}>
+                      {t(L, SECTIONS[0].cta.label)}
+                    </a>
+                  </div>
+                )}
               </div>
             </section>
 
-            {/* 02 → 05 */}
+            {/* 02 → 04 — la section Offres porte l'ancre #offres, citée par
+                la navigation et le hero. */}
             {SECTIONS.slice(1).map((s) => (
-                <section key={s.num} className="landing-section alt bulle">
+                <section
+                  key={s.num}
+                  id={s.num === "03" ? "offres" : undefined}
+                  className="landing-section alt bulle"
+                >
                   <h2 className="section-title">{t(L, s.titre)}</h2>
                   <div className="sous-bulle">
                     <p className="section-accroche">{t(L, s.accroche)}</p>
@@ -284,18 +256,16 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "La maison des IA : un registre territorial non marchand, lisible par toutes les familles d'assistants. Portail de locations de vacances, entre propriétaires et vacanciers. Gratuit, accompagné, lisible par les IA. La structuration améliore les chances de compréhension et de découverte ; elle ne garantit pas qu'un assistant IA indexera, recommandera ou citera une annonce.")}
+              {t(L, "Vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.")}
             </p>
-            <ContactForm />
+            <div id="contact">
+              <ContactForm />
+            </div>
           </div>
           <nav className="footer-nav" aria-label={t(L, "Pied de page")}>
-            <a href={lien(`/annonces/crozon`)}>{t(L, "Vacances")}</a>
-            <a href={lien(`/territoire/crozon`)}>{t(L, "Territoire")}</a>
-            <a href={lien(`/publier`)}>{t(L, "Publier — gratuit")}</a>
+            <a href={lien(`/#offres`)}>{t(L, "Offres & tarifs")}</a>
             <a href={lien(`/approche`)}>{t(L, "Notre approche")}</a>
-            <a href={lien(`/messagerie`)}>{t(L, "Ma messagerie")}</a>
-            <a href={lien(`/mes-annonces`)}>{t(L, "Mes annonces")}</a>
-            <a href={lien(`/approche`)}>{t(L, "À propos")}</a>
+            <a href={lien(`/#contact`)}>{t(L, "Contact")}</a>
             <a href={lien(`/mentions-legales`)}>{t(L, "Mentions légales")}</a>
           </nav>
         </div>

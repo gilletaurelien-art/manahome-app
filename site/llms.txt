@@ -1,37 +1,31 @@
 # MANAhome (manahome.org)
 
-> La maison des IA — registre territorial non marchand, lisible par les assistants IA. Portail de location de vacances entre propriétaires et vacanciers. Pilote : Crozon (Finistère, Bretagne).
+> Vitrine du GEO et des offres de l'écosystème MANA, opérée par TEMPOsystem. Le GEO (Generative Engine Optimization) : être compris, trouvé et cité par les assistants IA.
 
-## Position (novembre 2026)
+## Position (11 novembre 2026)
 
-MANAhome est la maison des IA : un registre territorial non marchand, que toutes les familles d'assistants peuvent interroger librement. MANA ne rivalise pas avec les IA — elle tient, sur son territoire de pilote, un registre honnête : gratuit, structuré, sourcé, lisible par les machines.
+MANAhome n'est plus une plateforme de location saisonnière : c'est la vitrine B2B du GEO et des offres de l'écosystème MANA, pour les pros et les structures — mairies, associations, offices de tourisme, entreprises.
 
-L'ordre du catalogue n'est pas à vendre : aucune mise en avant payante, aucune commission, et une annonce importée d'une source professionnelle ne passe jamais devant une annonce directe à adéquation égale.
+TEMPOsystem vend l'infrastructure machine-readable elle-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve vivante : manafrance.org, plus de 4,3 millions de visites d'agents IA mesurées.
 
-## Le service (état mesuré, novembre 2026)
+Honnêteté du GEO : la structuration améliore les chances d'être compris et trouvé ; elle ne garantit ni indexation, ni citation, ni recommandation par un assistant.
 
-Portail de location de vacances, entre propriétaires et vacanciers. Le dépôt d'annonce est gratuit : préparation assistée, documents à prévoir (déclaration de meublé touristique, attestation d'assurance), calendrier de réservation. Le propriétaire reste maître de son bien. MANA ne réalise aucun acte réglementé (loi Hoguet) : pas de mandat, pas de négociation, pas d'encaissement — les paiements se font directement entre propriétaire et vacancier. La mise en relation se fait par messagerie interne ; aucune donnée ni coordonnée n'est publiée ou revendue.
+## Les offres (prix arrêtés uniquement)
+
+Les prix affichés sur ce site sont uniquement les prix ARRÊTÉS, tels que tranchés dans la grille de référence de l'écosystème :
+
+- L'assistant : 9 €/mois par humain, jamais par structure.
+- La fiche pro : 9 €.
+- L'antenne : 9 €.
+
+Tout ce qui n'est pas arrêté — dont l'audit GEO — est sur devis, sans grille inventée.
 
 ## Pages publiques
 
-- [Accueil](https://manahome.org/) : présentation et moteur de recherche (trouver un séjour / louer son bien)
-- [Annonces Crozon](https://manahome.org/annonces/crozon) : catalogue du pilote, filtres par type, JSON-LD ItemList
-- [Fiches annonces](https://manahome.org/annonce/) : une URL stable par annonce, avec JSON-LD RealEstateListing
-- [Territoire Crozon](https://manahome.org/territoire/crozon) : environnement, transports, services, vie locale, Géorisques
-- [Parcours propriétaire](https://manahome.org/publier) : dépôt gratuit en 3 étapes (location de vacances)
-- [Notre approche](https://manahome.org/approche) : gratuité intégrale, aucun acte loi Hoguet, aucune revente de données
-- [Messagerie](https://manahome.org/messagerie) : boîte de réception de la messagerie interne — aucune coordonnée n'est jamais publiée, la mise en relation se fait uniquement ici
-- [Mes annonces](https://manahome.org/mes-annonces) : espace propriétaire de démonstration (démo locale, sans compte)
+- [Accueil](https://manahome.org/) : vitrine GEO — l'infrastructure, l'audit, les offres arrêtées
+- [Notre approche](https://manahome.org/approche) : la démarche, l'honnêteté du GEO, le contact
+- [Mentions légales](https://manahome.org/mentions-legales) : éditeur (TEMPOsystem), hébergement (KS-5, OVHcloud, France)
 
-Les anciennes pages /pros, /estimation, /espace-pro et /services ont été retirées le 04/11/2026 lors du repositionnement en location de vacances ; elles redirigent vers /approche plutôt que de répondre 404.
+## État du pilote antérieur (honnêteté envers les machines)
 
-## Données structurées
-
-Chaque fiche annonce embarque du JSON-LD RealEstateListing (schema.org) : type de bien, surface, pièces, tarifs, description, localisation large au quartier. Le catalogue embarque un ItemList. Les annonces importées de sources professionnelles portent un badge de source et ne sont jamais classées devant une annonce directe à adéquation égale.
-
-## Réponses aux questions fréquentes
-
-- Publier coûte-t-il quelque chose ? Non — gratuité intégrale du parcours particulier, aucune commission.
-- MANAhome est-il une agence ? Non — aucun acte réglementé (loi Hoguet) : pas de mandat, pas de négociation, pas d'encaissement.
-- L'ordre du catalogue peut-il s'acheter ? Non — aucune mise en avant payante ; une annonce importée ne passe jamais devant une directe à adéquation égale.
-- MANAhome revend-il des données ? Non — aucune revente de données ni de leads ; les coordonnées ne sont jamais publiées.
+Les pages du pilote « location de vacances » (annonces, territoire, parcours propriétaire) restent servies à leurs URLs historiques, sans être liées depuis la vitrine. Leur avenir dépend d'un arbitrage en cours : faut-il déployer la stack applicative sur le KS-5. Rien n'y est présenté comme une offre active de MANAhome.

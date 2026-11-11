@@ -22,4 +22,4 @@ Disallow: /
 User-agent: DotBot
 Disallow: /
 
-Sitemap: https://gilletaurelien-art.github.io/manahome-app/sitemap.xml
+Sitemap: https://manahome.org/sitemap.xml
