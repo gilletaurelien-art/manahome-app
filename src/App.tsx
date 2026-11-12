@@ -189,6 +189,23 @@ const COMPARAISON = {
   colonnes: ["GEO Express", "GEO Expert"],
   lignes: [
     { critere: "Assistants interrogés", express: "4", expert: "4" },
+    // ⭐ LES DEUX NOMBRES QUI MANQUAIENT, ARRÊTÉS LE 12/11/2026 PAR AURÉLIEN.
+    //    Ils ne sont pas décoratifs : ils FIXENT ce qu'on doit livrer, et la
+    //    durée du travail s'en déduit. Mesuré sur le KS-5 : 24 s pour
+    //    interroger un assistant, 150 s pour faire analyser sa réponse par
+    //    notre modèle — soit 174 s par interrogation.
+    //      Express : 5 × 4 assistants × 3 répétitions =  60  ≈ 2 h 54
+    //      Expert  : 15 × 4 assistants × 3 répétitions = 180 ≈ 8 h 42
+    //    L'Expert tient donc dans une nuit, et c'était la contrainte : l'usine
+    //    d'analyse sature les quatre cœurs de la machine et fait expirer les
+    //    requêtes du site quand elle tourne en journée (constaté le 12/11).
+    { critere: "Questions posées", express: "5", expert: "15" },
+    // ⚠️ LA RÉPÉTITION EST CE QUI FAIT LA MESURE, et elle doit être affichée.
+    //    Une réponse d'assistant varie d'un appel à l'autre : interroger une
+    //    fois donne une anecdote, interroger trois fois donne une fréquence
+    //    (« cité 2 fois sur 3 »). C'est la différence entre « on a regardé » et
+    //    « on a mesuré », et c'est elle qu'un concurrent instantané n'a pas.
+    { critere: "Répétitions par question", express: "3", expert: "3" },
     { critere: "Questions commerciales", express: "Panel standard", expert: "Panel personnalisé" },
     { critere: "Concurrents", express: "Identification sommaire", expert: "Analyse détaillée" },
     { critere: "Sources citées", express: "Principales", expert: "Analyse approfondie" },
@@ -203,7 +220,7 @@ const FAQ = [
   { q: "Le GEO remplace-t-il le référencement classique ?",
     r: "Non. Un site invisible pour Google l'est aussi pour les assistants, qui s'appuient largement sur le web indexé. Le GEO s'ajoute : il travaille la compréhension par les machines là où le SEO travaille le classement." },
   { q: "Où sont hébergées mes données ?",
-    r: "En France, sur un serveur dédié chez OVH, à Roubaix. Le site, les analyses et les rapports tiennent sur une seule machine. Les assistants interrogés, eux, sont américains : c'est leur réponse que nous mesurons, nous ne pouvons pas l'obtenir ailleurs." },
+    r: "En France, sur un serveur dédié OVH au centre de Gravelines, dans le Nord. Le site, les analyses, les rapports et nos propres modèles d'analyse tiennent sur cette seule machine. Les assistants que nous interrogeons, eux, sont opérés par leurs éditeurs : américains pour trois d'entre eux, français pour Mistral — qui ne garantit toutefois pas le lieu où il traite les requêtes. C'est leur réponse que nous mesurons, nous ne pouvons pas l'obtenir ailleurs." },
   { q: "Nous sommes une petite structure — est-ce pour nous ?",
     r: "Oui, et c'est là que l'écart se creuse le plus vite. Commencez par l'Express à 149 € : vous saurez si vous existez pour les assistants avant d'engager quoi que ce soit de plus." },
   { q: "Que se passe-t-il si une IA raconte quelque chose de faux sur nous ?",

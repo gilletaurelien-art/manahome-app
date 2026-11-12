@@ -211,8 +211,8 @@ const DICO_EN: Record<string, string> = {
     "No. A site invisible to Google is invisible to the assistants too, since they lean heavily on the indexed web. GEO is additive: it works on machine understanding where SEO works on ranking.",
   "Où sont hébergées mes données ?":
     "Where is my data hosted?",
-  "En France, sur un serveur dédié chez OVH, à Roubaix. Le site, les analyses et les rapports tiennent sur une seule machine. Les assistants interrogés, eux, sont américains : c'est leur réponse que nous mesurons, nous ne pouvons pas l'obtenir ailleurs.":
-    "In France, on a dedicated server at OVH in Roubaix. The site, the analyses and the reports all run on one machine. The assistants we query are American: their answer is what we measure, and it cannot be obtained anywhere else.",
+  "En France, sur un serveur dédié OVH au centre de Gravelines, dans le Nord. Le site, les analyses, les rapports et nos propres modèles d'analyse tiennent sur cette seule machine. Les assistants que nous interrogeons, eux, sont opérés par leurs éditeurs : américains pour trois d'entre eux, français pour Mistral — qui ne garantit toutefois pas le lieu où il traite les requêtes. C'est leur réponse que nous mesurons, nous ne pouvons pas l'obtenir ailleurs.":
+    "In France, on a dedicated OVH server at the Gravelines data centre, in the Nord département. The site, the analyses, the reports and our own analysis models all run on that one machine. The assistants we query are operated by their own publishers: American for three of them, French for Mistral — which does not, however, guarantee where it processes requests. Their answer is what we measure, and it cannot be obtained anywhere else.",
   "Nous sommes une petite structure — est-ce pour nous ?":
     "We are a small organisation — is this for us?",
   "Oui, et c'est là que l'écart se creuse le plus vite. Commencez par l'Express à 149 € : vous saurez si vous existez pour les assistants avant d'engager quoi que ce soit de plus.":
