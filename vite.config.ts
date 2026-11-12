@@ -121,9 +121,26 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
     url: urlAccueil,
     inLanguage: langue,
     description: langue === "en"
-      ? "GEO by TEMPOsystem: being found by AI assistants — machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem."
-      : "Le GEO par TEMPOsystem : être trouvé par les assistants IA — infrastructure machine-readable, audits, et les offres arrêtées de l'écosystème MANA.",
-    parentOrganization: { "@type": "Organization", name: "TEMPOsystem" },
+      ? "GEO expertise by Alliance MANA: being found by AI assistants — machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem."
+      : "L'expertise GEO par Alliance MANA : être trouvé par les assistants IA — infrastructure machine-readable, audits, et les offres arrêtées de l'écosystème MANA.",
+    // 🔴 « TEMPOsystem » A VÉCU ICI JUSQU'AU 12/11/2026, APRÈS AVOIR ÉTÉ
+    //    RETIRÉ DU TEXTE VISIBLE LE 11. Décision d'Aurélien : « ne cite pas
+    //    TEMPOsystem — la facturation, c'est Alliance MANA ». Le texte lu par
+    //    les humains a été corrigé ce jour-là ; CETTE COUCHE-CI ne l'a pas été,
+    //    et elle est restée en ligne vingt-quatre heures de plus.
+    //
+    // ⭐ C'EST LE DÉFAUT LE PLUS EMBARRASSANT QU'ON POUVAIT AVOIR : nous vendons
+    //    une prestation qui mesure ce que les assistants racontent sur nos
+    //    clients, et notre propre site racontait aux assistants que MANAhome
+    //    appartient à TEMPOsystem. Un `grep TEMPOsystem src/` ne trouvait rien :
+    //    la contradiction vivait ICI, hors du dossier où l'on cherche le contenu.
+    //
+    // ⚠️ LA LEÇON VAUT POUR TOUTES LES VITRINES : corriger un texte ne corrige
+    //    pas ce que les machines lisent. Le JSON-LD est une SECONDE RÉDACTION du
+    //    site, écrite ailleurs, et c'est celle que notre propre produit irait
+    //    chercher. Un arbitrage d'identité se vérifie SUR LA PAGE SERVIE :
+    //        curl -sS https://manahome.org/ | grep -o '"parentOrganization".*'
+    parentOrganization: { "@type": "Organization", name: "Alliance MANA" },
     makesOffer: OFFRES_GEO.map(offre),
   };
   return `\n    <script type="application/ld+json">${JSON.stringify(donnees)}</script>`;

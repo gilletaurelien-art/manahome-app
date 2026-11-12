@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "prerender": "node scripts/prerender.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "deploy": "bash scripts/deployer.sh"
   },
   "dependencies": {
     "react": "^18.3.1",
