@@ -39,7 +39,7 @@ import logo from "./assets/logo.webp";
 // ⛔ 11/11/2026 — OFFRES_MANA n'est plus importé ici : la section « Les autres
 //    prix arrêtés » (assistant, fiche pro, antenne) a été retirée de la page à
 //    la demande d'Aurélien. manahome.org ne porte plus que le GEO.
-import { OFFRES_GEO, FAMILLES, prixAffiche } from "./offres";
+import { OFFRES_GEO, FAMILLES, PORTES, prixAffiche } from "./offres";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -519,13 +519,50 @@ export default function App() {
                   )}
                   {s.num === "03" && (
                     <>
+                      {/* ⭐ LES PORTES D'ENTRÉE — 13/11/2026, document
+                          tarifaire v1.1 §8. La page présentait DIX offres
+                          d'un coup : un mur où le visiteur doit comparer
+                          avant d'avoir compris. Les portes nomment un BESOIN
+                          et désignent une offre ; le catalogue reste dessous,
+                          entier, pour qui cherche autre chose.
+                          ⛔ TROIS et non quatre : la porte « Améliorer » du
+                          document pointe sur un pack dont deux composants
+                          n'ont pas de prix arrêté. « Jamais un bouton vide ».
+                          ⚠️ Le prix n'est PAS recopié ici — il est lu dans
+                          OFFRES_GEO par le nom, source unique. */}
+                      <div className="portes">
+                        <h3 className="tarif-sous-titre">{t(L, "Par où commencer")}</h3>
+                        <div className="portes-grille">
+                          {PORTES.map((p) => {
+                            const o = OFFRES_GEO.find((x) => x.nom === p.offre);
+                            if (!o) return null;
+                            return (
+                              <a key={p.besoin} className="porte" href="#tarifs-catalogue">
+                                <p className="porte-besoin">{t(L, p.besoin)}</p>
+                                <p className="porte-offre">{o.nom}</p>
+                                <p className="porte-prix">
+                                  {prixAffiche(o)}
+                                  <span className="porte-unite">{t(L, o.unite)}</span>
+                                </p>
+                                <p className="porte-accroche">{t(L, p.accroche)}</p>
+                              </a>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div id="tarifs-catalogue" />
                       {/* ⭐ Deux familles, pas une grille de six. Un audit
                           qu'on paie une fois et un abonnement mensuel ne se
                           comparent pas : les aligner côte à côte oblige le
                           lecteur à faire ce tri lui-même, et c'est justement
                           le tri qui décide de l'achat. */}
-                      {FAMILLES.map((fam) => (
+                      {FAMILLES.map((fam, iFam) => (
                       <div key={fam.cle} className="tarifs-famille">
+                      {iFam === 0 && (
+                        <h3 className="tarif-sous-titre tarif-catalogue-titre">
+                          {t(L, "Le catalogue complet")}
+                        </h3>
+                      )}
                       <h3 className="tarif-sous-titre">{t(L, fam.titre)}</h3>
                       <div className="tarifs">
                         {OFFRES_GEO.filter((o) => o.famille === fam.cle).map((o) => (

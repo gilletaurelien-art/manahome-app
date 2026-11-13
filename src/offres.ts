@@ -226,3 +226,44 @@ export const FAMILLES = [
   { cle: "ponctuel", titre: "Les audits — une commande, un livrable" },
   { cle: "recurrent", titre: "La surveillance — chaque mois, le même protocole" },
 ] as const;
+
+/**
+ * LES PORTES D'ENTRÉE — posées le 13/11/2026 (document tarifaire v1.1, §8).
+ *
+ * ⭐ LA PAGE NE DOIT PAS PRÉSENTER TOUTES LES RÉFÉRENCES EN MÊME TEMPS. Elle
+ * en affichait DIX d'un coup, rangées en deux familles : un mur de cartes où
+ * le visiteur doit comparer avant d'avoir compris. Les portes nomment un
+ * BESOIN et désignent une offre ; le catalogue complet reste dessous.
+ *
+ * ⛔ TROIS PORTES, PAS QUATRE. Le document en prévoit une quatrième,
+ * « Améliorer », qui pointe sur un pack GEO Croissance dont deux composants
+ * (Fondations, Présence) n'ont pas de prix arrêté. ⭐ « Jamais un bouton
+ * vide » : une porte qui mène à une offre non commandable coûte plus cher que
+ * son absence. Elle s'ajoutera quand les prix seront posés — la structure
+ * l'attend.
+ *
+ * ⚠️ UNE PORTE DÉSIGNE UNE OFFRE PAR SON NOM, elle ne recopie NI son prix NI
+ * son contenu : `OFFRES_GEO` reste la source unique, et une porte qui
+ * désignerait une offre disparue est attrapée par `porteIntrouvable()`
+ * plutôt que de s'afficher vide.
+ */
+export type Porte = { besoin: string; offre: string; accroche: string };
+
+export const PORTES: Porte[] = [
+  { besoin: "Comprendre", offre: "GEO Expert",
+    accroche: "Ce que les assistants répondent vraiment sur vous, avec leurs sources et les organisations citées à votre place." },
+  { besoin: "Suivre", offre: "GEO Monitoring",
+    accroche: "Le même panel rejoué chaque mois, aux formulations exactes de votre audit — pour voir ce qui bouge." },
+  { besoin: "Aller à l'international", offre: "GEO Europe",
+    accroche: "Trois marchés étrangers, dix questions chacun, posées dans la langue du pays." },
+];
+
+/**
+ * ⭐ Le garde qui rend « jamais un bouton vide » exécutable : il rend les noms
+ * de portes qui ne correspondent à aucune offre. Un renommage d'offre casse
+ * alors bruyamment, au lieu d'afficher une carte sans prix.
+ */
+export function porteIntrouvable(): string[] {
+  const noms = new Set(OFFRES_GEO.map((o) => o.nom));
+  return PORTES.filter((p) => !noms.has(p.offre)).map((p) => p.offre);
+}

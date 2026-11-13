@@ -93,6 +93,22 @@ const DICO_EN: Record<string, string> = {
     "The same panel replayed every month, in your audit's exact wording",
   "Accès, conformité et qualification des fournisseurs chinois compris — c'est ce que couvre l'écart de prix avec le Diagnostic":
     "Access, compliance and vetting of the Chinese providers included — that is what the price gap with the Diagnostic covers",
+  "Par où commencer":
+    "Where to start",
+  "Le catalogue complet":
+    "The full catalogue",
+  "Comprendre":
+    "Understand",
+  "Suivre":
+    "Track",
+  "Aller à l'international":
+    "Go international",
+  "Ce que les assistants répondent vraiment sur vous, avec leurs sources et les organisations citées à votre place.":
+    "What the assistants actually answer about you, with their sources and the organisations cited in your place.",
+  "Le même panel rejoué chaque mois, aux formulations exactes de votre audit — pour voir ce qui bouge.":
+    "The same panel replayed every month, in your audit's exact wording — to see what moves.",
+  "Trois marchés étrangers, dix questions chacun, posées dans la langue du pays.":
+    "Three foreign markets, ten questions each, asked in the country's own language.",
   "paiement unique": "one-off payment",
   "option sur GEO Expert": "add-on to GEO Expert",
   "par mois · abonnement": "per month · subscription",

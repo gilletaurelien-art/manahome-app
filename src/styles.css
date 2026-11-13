@@ -2384,3 +2384,51 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
 .comparaison-table { min-width: 420px; }
 .comparaison-table td { font-family: var(--sans); }
 .comparaison-table thead th:not(:first-child) { white-space: nowrap; }
+
+/* Les portes d'entrée — 13/11/2026.
+   ⭐ Elles précèdent le catalogue et doivent se lire d'un coup d'œil : trois
+   blocs, un besoin en tête, le prix ensuite. ⚠️ `align-items: stretch` et une
+   grille à colonnes égales : trois accroches de longueurs différentes ne
+   doivent pas donner trois hauteurs différentes, sinon la comparaison que la
+   section existe pour permettre devient fausse à l'œil. */
+.portes { margin: 0 0 var(--sp-3); }
+/* ⚠️ FLEX ET NON GRID, et c'est une mesure. `repeat(auto-fit, minmax(230px,
+   1fr))` crée autant de pistes que la largeur en admet : avec TROIS portes
+   dans 1 280 px, la quatrième piste naît à 0 px — mais son INTERVALLE, lui,
+   existe. Relevé en ligne : « 322.656px 322.672px 322.656px 0px ». Les trois
+   portes se décalaient donc d'un demi-intervalle vers la gauche.
+   ⭐ `flex-wrap` n'a pas de piste fantôme : il n'y a que des éléments. */
+.portes-grille {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  align-items: stretch;
+}
+.portes-grille > .porte { flex: 1 1 230px; }
+.porte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  padding: var(--sp-1);
+  border: 1px solid var(--ink);
+  border-radius: var(--rayon);
+  text-decoration: none;
+  color: inherit;
+  background: none;
+}
+.porte:hover, .porte:focus-visible { background: var(--ink); color: var(--fond); }
+.porte-besoin {
+  font-family: var(--sans); font-size: var(--t-xs); font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; margin: 0; opacity: 0.7;
+}
+.porte-offre { font-family: var(--titre); font-size: var(--t-m); margin: 0; }
+.porte-prix { font-family: var(--sans); font-size: var(--t-m); font-weight: 600; margin: 0; }
+.porte-unite {
+  display: block; font-size: var(--t-xs); font-weight: 400; opacity: 0.7;
+}
+.porte-accroche {
+  font-family: var(--sans); font-size: var(--t-xs); line-height: 1.45;
+  margin: auto 0 0; opacity: 0.85;
+}
+/* ⚠️ Le catalogue n'est plus la première chose lue : son titre le dit. */
+.tarif-catalogue-titre { margin-top: var(--sp-3); }
