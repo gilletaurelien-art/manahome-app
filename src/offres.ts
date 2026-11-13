@@ -12,6 +12,20 @@
  *
  * ⚠️ Ces prix sont ARRÊTÉS (décision d'Aurélien, 11/11/2026). Aucun ne se
  *    change sans son autorisation explicite.
+ *
+ * 🔴 ILS NE SONT PLUS ANNONCÉS « HT » — corrigé le 13/11/2026. Alliance MANA
+ *    est une association loi 1901 (RNA W292008256) à gestion désintéressée
+ *    dont les activités lucratives restent accessoires : elle relève de la
+ *    franchise de l'**article 261, 7-1°-b du CGI**, pas de la franchise en
+ *    base de l'article 293 B, et ne collecte aucune TVA.
+ * ⭐ « 149 € HT » annonçait donc 178,80 € à payer alors que le prix réel est
+ *    149 €. Un prix affiché hors taxes par une structure qui ne facture pas de
+ *    taxe n'est pas une précaution : c'est une majoration fictive de 20 %
+ *    devant l'acheteur, et une mention inexacte sur la facture.
+ * ⚠️ Le seuil est de **81 051 €** de recettes lucratives encaissées en 2026,
+ *    et les activités non lucratives doivent rester significativement
+ *    prépondérantes. ⛔ Au-delà, ce n'est plus un libellé à changer mais une
+ *    sectorisation à décider.
  */
 
 export type Periode = "unique" | "mois";
@@ -39,7 +53,7 @@ export function prixAffiche(o: { montant: number; option: boolean }): string {
 export const OFFRES_GEO: Offre[] = [
   {
     nom: "GEO Express", montant: 149, option: false, periode: "unique",
-    unite: "HT · paiement unique", famille: "ponctuel",
+    unite: "paiement unique", famille: "ponctuel",
     pour: "Pour une photographie rapide de sa présence dans les IA.",
     points: [
       "Exploration automatisée du site",
@@ -50,7 +64,7 @@ export const OFFRES_GEO: Offre[] = [
     ] },
   {
     nom: "GEO Expert", montant: 390, option: false, periode: "unique",
-    unite: "HT · paiement unique", famille: "ponctuel", recommande: true,
+    unite: "paiement unique", famille: "ponctuel", recommande: true,
     pour: "Pour comprendre sa position réelle sur son marché.",
     points: [
       "Exploration technique et sémantique approfondie",
@@ -63,7 +77,7 @@ export const OFFRES_GEO: Offre[] = [
     ] },
   {
     nom: "GEO International", montant: 199, option: true, periode: "unique",
-    unite: "HT · option sur GEO Expert", famille: "ponctuel",
+    unite: "option sur GEO Expert", famille: "ponctuel",
     depend: "Option sur GEO Expert",
     pour: "Pour mesurer sa visibilité sur un marché étranger.",
     points: [
@@ -74,7 +88,7 @@ export const OFFRES_GEO: Offre[] = [
     ] },
   {
     nom: "MANA GEO China", montant: 490, option: true, periode: "unique",
-    unite: "HT · audit complémentaire ponctuel", famille: "ponctuel",
+    unite: "audit complémentaire ponctuel", famille: "ponctuel",
     depend: "Audit complémentaire — se commande seul ou après un GEO Expert",
     pour: "Pour savoir ce que les IA chinoises disent de vous.",
     points: [
@@ -87,7 +101,7 @@ export const OFFRES_GEO: Offre[] = [
     ] },
   {
     nom: "GEO Monitoring", montant: 99, option: false, periode: "mois",
-    unite: "HT par mois · abonnement", famille: "recurrent",
+    unite: "par mois · abonnement", famille: "recurrent",
     pour: "Pour suivre son évolution, mois après mois.",
     points: [
       "Le même panel de questions rejoué chaque mois",
@@ -98,7 +112,7 @@ export const OFFRES_GEO: Offre[] = [
     ] },
   {
     nom: "GEO China Monitoring", montant: 149, option: true, periode: "mois",
-    unite: "HT par mois · complément de GEO Monitoring", famille: "recurrent",
+    unite: "par mois · complément de GEO Monitoring", famille: "recurrent",
     depend: "Complément de GEO Monitoring",
     pour: "Pour suivre la visibilité chinoise dans le temps.",
     points: [
@@ -111,9 +125,9 @@ export const OFFRES_GEO: Offre[] = [
 /** Les prix déjà arrêtés de l'écosystème, inchangés. */
 export const OFFRES_MANA = [
   { nom: "L'assistant", montant: 9, option: false, periode: "mois" as Periode,
-    unite: "HT par mois et PAR HUMAIN, jamais par structure" },
-  { nom: "La fiche pro", montant: 9, option: false, periode: "unique" as Periode, unite: "HT" },
-  { nom: "L'antenne", montant: 9, option: false, periode: "unique" as Periode, unite: "HT" },
+    unite: "par mois et PAR HUMAIN, jamais par structure" },
+  { nom: "La fiche pro", montant: 9, option: false, periode: "unique" as Periode, unite: "prix net" },
+  { nom: "L'antenne", montant: 9, option: false, periode: "unique" as Periode, unite: "prix net" },
 ];
 
 export const FAMILLES = [

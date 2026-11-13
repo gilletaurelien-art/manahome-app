@@ -53,13 +53,17 @@ const DICO_EN: Record<string, string> = {
   // ── Grille tarifaire GEO (11/11/2026) ── ⚠️ Les NOMS de produits et les
   // PRIX ne sont pas ici : une marque ne se traduit pas, un montant non plus.
   // `t()` rend la clé quand elle manque — c'est le comportement voulu.
-  "HT · paiement unique": "excl. VAT · one-off payment",
-  "HT · option sur GEO Expert": "excl. VAT · add-on to GEO Expert",
-  "HT par mois · abonnement": "excl. VAT per month · subscription",
-  "HT · audit complémentaire ponctuel": "excl. VAT · one-off add-on audit",
-  "HT par mois · complément de GEO Monitoring": "excl. VAT per month · add-on to GEO Monitoring",
-  "HT par mois et PAR HUMAIN, jamais par structure": "excl. VAT per month and PER HUMAN, never per organisation",
-  "HT": "excl. VAT",
+  "Prix nets : il n'y a pas de TVA à ajouter. Alliance MANA est une association loi 1901 (RNA W292008256) à gestion désintéressée dont les activités lucratives restent accessoires ; les factures portent la mention « TVA non applicable, article 261-7 du CGI ».":
+    "Net prices: no VAT is added. Alliance MANA is a French non-profit association (loi 1901, RNA W292008256) with disinterested management whose trading activity remains ancillary; invoices carry the statutory mention « TVA non applicable, article 261-7 du CGI ».",
+  "Les prix affichés sont nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives restent accessoires — la facture porte la mention « TVA non applicable, article 261-7 du CGI ». Elle est émise par Alliance MANA, et vous l'acceptez avant tout travail.":
+    "Displayed prices are net: no VAT is added. Alliance MANA is a French non-profit association with disinterested management whose trading activity remains ancillary — invoices carry the statutory mention « TVA non applicable, article 261-7 du CGI ». The invoice is issued by Alliance MANA and you accept it before any work begins.",
+  "paiement unique": "one-off payment",
+  "option sur GEO Expert": "add-on to GEO Expert",
+  "par mois · abonnement": "per month · subscription",
+  "audit complémentaire ponctuel": "one-off add-on audit",
+  "par mois · complément de GEO Monitoring": "per month · add-on to GEO Monitoring",
+  "par mois et PAR HUMAIN, jamais par structure": "per month and PER HUMAN, never per organisation",
+  "prix net": "net price",
   "Pour une photographie rapide de sa présence dans les IA.":
     "For a quick snapshot of your presence inside AI assistants.",
   "Pour comprendre sa position réelle sur son marché.":

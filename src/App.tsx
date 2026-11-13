@@ -230,7 +230,7 @@ const FAQ = [
   { q: "Qui êtes-vous ?",
     r: "Alliance MANA, association déclarée loi 1901 (RNA W292008256), dont l'objet est de rendre les territoires et leurs acteurs lisibles par tout moyen numérique, y compris l'intelligence artificielle. Nous mesurons d'abord sur nos propres sites." },
   { q: "Facturation et TVA ?",
-    r: "Tous les prix affichés sont hors taxes. La facture est émise par Alliance MANA, et vous l'acceptez avant tout travail." },
+    r: "Les prix affichés sont nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives restent accessoires — la facture porte la mention « TVA non applicable, article 261-7 du CGI ». Elle est émise par Alliance MANA, et vous l'acceptez avant tout travail." },
 ];
 
 // FAMILLES et OFFRES_MANA vivent désormais dans src/offres.ts (voir l'import).
@@ -570,7 +570,20 @@ export default function App() {
                       </div>
                       </div>
                       ))}
-                      {/* ⚠️ Cette note n'est pas de la prudence juridique
+                      {/* 🔴 LA MENTION DE TVA, ET POURQUOI ELLE EST ICI.
+                          Jusqu'au 13/11/2026 cette page annonçait « 149 € HT »,
+                          c'est-à-dire 178,80 € à payer — alors qu'Alliance MANA
+                          ne collecte aucune TVA. ⭐ Un prix hors taxes affiché
+                          par une structure qui n'en facture pas n'est pas une
+                          prudence : c'est une majoration fictive de 20 % devant
+                          l'acheteur. Elle est placée AVANT les deux notes
+                          suivantes parce qu'elle porte sur les prix qu'on vient
+                          de lire — une mention légale ne se cherche pas en bas
+                          de page. */}
+                      <p className="tarif-note">
+                        {t(L, "Prix nets : il n'y a pas de TVA à ajouter. Alliance MANA est une association loi 1901 (RNA W292008256) à gestion désintéressée dont les activités lucratives restent accessoires ; les factures portent la mention « TVA non applicable, article 261-7 du CGI ».")}
+                      </p>
+                                            {/* ⚠️ Cette note n'est pas de la prudence juridique
                           décorative : elle dit ce que le produit ne PEUT
                           pas faire. Copilot et Google AI Overviews n'ont
                           pas d'accès permettant de les mesurer sans les

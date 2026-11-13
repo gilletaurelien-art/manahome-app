@@ -11,7 +11,18 @@
  *    lire. Une image, non.
  *
  * ⚠️ CES IMAGES PORTENT LE PRIX, GRAVÉ DEDANS (« 149 € HT · paiement
- *    unique »), ainsi que le nom et la liste des points. Le texte de la carte
+ *    unique »), ainsi que le nom et la liste des points.
+ *
+ * 🔴 ET DEPUIS LE 13/11/2026 ELLES DISENT « HT » ALORS QUE LE TEXTE NE LE DIT
+ *    PLUS. La mention a été corrigée partout — Alliance MANA ne collecte
+ *    aucune TVA (art. 261, 7-1°-b du CGI) — sauf dans les six images, qu'on
+ *    ne peut pas éditer depuis le code. ⭐ C'est exactement la divergence que
+ *    ce commentaire annonçait six lignes plus haut, arrivée pour de bon :
+ *    « si un prix change, les six images sont à refaire, et aucun test ne
+ *    peut le voir ». Elle est tolérable parce que les images sont
+ *    DÉCORATIVES (`alt=""`, le texte de la carte fait foi) — elle cesserait
+ *    de l'être si quelqu'un les rendait lisibles aux robots.
+ * ⏳ À REFAIRE : les six images, en retirant « HT » du libellé gravé. Le texte de la carte
  *    fait foi : l'image est décorative, `alt=""`. Un lecteur d'écran, un robot
  *    et le JSON-LD lisent `montant` dans offres.ts, jamais l'illustration.
  * ⛔ Si un prix change, les six images sont à refaire. Aucun test ne peut le
