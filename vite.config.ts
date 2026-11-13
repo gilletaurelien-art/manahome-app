@@ -11,7 +11,6 @@ import { LOCALES } from "./src/i18n";
 //    Les laisser dans le JSON-LD déclarerait aux machines un catalogue que
 //    l'humain ne voit pas — exactement le défaut que MANA GEO facture pour le
 //    détecter chez ses clients.
-import { OFFRES_GEO } from "./src/offres";
 
 // La cible décide du chemin de base ET de l'hôte — pas le code.
 //   • GitHub Pages sert sous /manahome-app/ → sans base, les bundles 404, page blanche.
@@ -99,33 +98,6 @@ function hreflangDe(racine: string, chemin: string): string {
  *    qu'aucun test d'affichage ne verrait.
  */
 function donneesStructurees(langue: string, urlAccueil: string): string {
-  const offre = (o: { nom: string; montant: number; periode: string }) => ({
-    "@type": "Offer",
-    name: o.nom,
-    price: String(o.montant),
-    priceCurrency: "EUR",
-    // 🔴 VALAIT `false` JUSQU'AU 13/11/2026, c'est-à-dire « ce prix n'inclut
-    // pas la TVA, ajoutez-la ». Or Alliance MANA ne collecte AUCUNE TVA
-    // (association loi 1901, franchise de l'art. 261, 7-1°-b du CGI) : le
-    // montant affiché EST le montant payé.
-    // ⭐ ET C'ÉTAIT LE PIRE ENDROIT POSSIBLE POUR CETTE ERREUR. Ce balisage
-    // est ce que les assistants IA LISENT pour répondre. Nous vendons de la
-    // visibilité dans les IA, et nous leur déclarions nous-mêmes des prix à
-    // majorer de 20 % — un assistant citant MANAhome aurait annoncé 178,80 €
-    // là où le prix est 149 €. Le produit retourné contre son auteur.
-    // ⚠️ `true` ne dit pas « il y a de la TVA dedans » : il dit « rien ne
-    // s'ajoute à ce montant », ce qui est exactement vrai quand aucune taxe
-    // n'est applicable.
-    valueAddedTaxIncluded: true,
-    ...(o.periode === "mois"
-      ? { priceSpecification: {
-            "@type": "UnitPriceSpecification",
-            price: o.montant, priceCurrency: "EUR",
-            billingDuration: 1, billingIncrement: 1,
-            unitCode: "MON",
-          } }
-      : {}),
-  });
   const donnees = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -153,7 +125,29 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
     //    chercher. Un arbitrage d'identité se vérifie SUR LA PAGE SERVIE :
     //        curl -sS https://manahome.org/ | grep -o '"parentOrganization".*'
     parentOrganization: { "@type": "Organization", name: "Alliance MANA" },
-    makesOffer: OFFRES_GEO.map(offre),
+    // 🔴 `makesOffer` A ÉTÉ RETIRÉ LE 13/11/2026 — DEMANDE D'AURÉLIEN.
+    //    Il déclarait HUIT OFFRES TARIFÉES (149, 390, 199 ×5, 99/mois…) au nom
+    //    d'Alliance MANA, dans la couche que lisent les moteurs et les
+    //    assistants — c'est-à-dire l'endroit le plus public possible.
+    //
+    // ⭐ LA RAISON N'EST PAS TECHNIQUE, ELLE EST FISCALE. L'association
+    //    s'apprête à déposer un rescrit mécénat : il se juge sur l'activité
+    //    RÉELLE ET DÉCLARÉE, pas sur l'intention. Une offre commerciale
+    //    tarifée publiée au nom de l'association, avant le dépôt, est une
+    //    pièce contre le dossier — et les paiements coupés n'y changent rien,
+    //    puisque c'est le PRIX qui était affiché, pas l'encaissement.
+    //
+    // ⚠️ LE COÛT EST RÉEL ET ASSUMÉ : nous vendons d'être lu par les
+    //    assistants, et `makesOffer` est précisément ce par quoi un assistant
+    //    apprend ce qui est vendu. On perd donc de la lisibilité machine sur
+    //    nos propres offres. L'arbitrage dit que le rescrit vaut plus que
+    //    cette lisibilité-là, tant que l'entité qui facture n'est pas tranchée.
+    //
+    // ⛔ NE PAS LE REMETTRE SANS LA DÉCISION « QUI FACTURE ». S'il revient, il
+    //    revient sous le nom de la SOCIÉTÉ, pas de l'association — et alors la
+    //    TVA change de régime (voir le commentaire de `offre()` ci-dessus :
+    //    `valueAddedTaxIncluded: true` n'est vrai que parce qu'Alliance MANA
+    //    ne collecte aucune TVA). Un garde le tient : `structure.test.ts`.
   };
   return `\n    <script type="application/ld+json">${JSON.stringify(donnees)}</script>`;
 }

@@ -86,6 +86,21 @@ export function prixAffiche(o: { montant: number; option: boolean }): string {
   return `${o.option ? "+" : ""}${o.montant} €`;
 }
 
+/**
+ * ⭐ POURQUOI LE MONTANT AFFICHÉ EST LE MONTANT PAYÉ — et pourquoi ça dépend
+ *    de QUI FACTURE. Alliance MANA ne collecte AUCUNE TVA (association loi
+ *    1901, franchise de l'art. 261, 7-1°-b du CGI) : rien ne s'ajoute à ces
+ *    nombres. C'est pourquoi le balisage machine portait
+ *    `valueAddedTaxIncluded: true` — il ne dit pas « TVA comprise », il dit
+ *    « rien ne s'ajoute », ce qui était exactement vrai.
+ * 🔴 Ce raisonnement vivait dans `vite.config.ts`, dans une fonction retirée
+ *    le 13/11/2026 avec le bloc `makesOffer`. Il est déplacé ici, à côté des
+ *    montants, parce qu'il les CONCERNE.
+ * ⛔ SI LA FACTURATION PASSE À LA SOCIÉTÉ, CES NOMBRES CHANGENT DE SENS :
+ *    la TVA devient applicable, donc soit le client paie 20 % de plus, soit
+ *    la recette baisse d'autant. Aucun des deux n'est chiffré à ce jour, et
+ *    aucun test ne le verra — c'est un arbitrage, pas un détail.
+ */
 export const OFFRES_GEO: Offre[] = [
   {
     nom: "GEO Express", montant: 149, option: false, periode: "unique",
