@@ -53,10 +53,26 @@ export const PAGES_PRIVEES_T: readonly Page[] = [
  * Le titre générique, dans les deux langues : l'accueil et les pages d'erreur.
  * ⭐ 11/11/2026 — vitrine B2B du GEO et des offres (décision d'Aurélien) : ce
  * n'est plus la plateforme de location saisonnière. Le titre porte la promesse
- * GEO ; les prix affichés sur le site sont uniquement les prix ARRÊTÉS.
+ * GEO.
+ *
+ * ⛔ SANS PRIX — retiré le 13/11/2026, demande d'Aurélien. Alliance MANA dépose
+ *    un rescrit mécénat, qui se juge sur l'activité réelle et DÉCLARÉE : un prix
+ *    dans un titre et dans og:title est une déclaration commerciale publique.
+ *    Les prix restent affichés DANS la page — c'est une vitrine d'offres, et
+ *    cette décision-là n'a pas été prise.
+ *
+ * 🔴 ET C'EST LA TROISIÈME RÉDACTION DU MÊME SITE QU'IL A FALLU CORRIGER, DANS
+ *    LA MÊME HEURE. D'abord `makesOffer` dans le JSON-LD (vite.config.ts), puis
+ *    les quatre balises de `index.html`, puis ces deux constantes — qui servent
+ *    `/fr/` et `/en/` et qui, elles, ont une version ANGLAISE que les deux
+ *    premiers nettoyages ne pouvaient pas voir.
+ *    ⭐ Après le deuxième déploiement, `/` était propre et `/fr/` et `/en/`
+ *       portaient encore le prix. Un site a plusieurs rédactions ; corriger
+ *       l'une ne corrige pas les autres, et c'est la PAGE SERVIE qui tranche.
+ *    Tenu par src/structure.test.ts, qui lit les trois fichiers.
  */
-export const TITRE_GENERIQUE = "MANAhome — Savoir ce que les IA répondent sur vous. Audits dès 149 €.";
-export const TITRE_GENERIQUE_EN = "MANAhome — Know what AIs answer about you. Audits from €149.";
+export const TITRE_GENERIQUE = "MANAhome — Savoir ce que les IA répondent sur vous.";
+export const TITRE_GENERIQUE_EN = "MANAhome — Know what AIs answer about you.";
 
 /** Les pages publiques, indexables. Elles seules entrent au plan de site. */
 export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p.slug);
