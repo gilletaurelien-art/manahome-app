@@ -34,8 +34,14 @@
  * ⚠️ Illustrer reste possible — mais alors sans prix, sans nom d'offre et sans
  *    aucune valeur qui vive aussi dans ce fichier.
  *
- * ⚠️ MANA GEO China : 490 € → 290 € → **590 €**, trois décisions le même
+ * ⚠️ L'offre chinoise : 490 € → 290 € → **590 €**, trois décisions le même
  *    jour (13/11/2026), toutes d'Aurélien, la dernière sur la grille v1.1.
+ * ⚠️ Et elle s'appelait « MANA GEO China » jusqu'au 13/11 au soir — renommée
+ *    **GEO Chine** par Aurélien. Elle était la SEULE des dix à porter le nom de
+ *    l'association, sur une vitrine passée à l'entreprise individuelle le jour
+ *    même : le nom disait l'inverse de l'éditeur. ⭐ Le renommage n'a rien coûté
+ *    parce qu'il a été pris tout de suite — la Chine n'a aucun produit Stripe,
+ *    donc aucune ligne de facturation à redresser. Attendre l'aurait rendu cher.
  *    ⭐ Les 290 € suivaient le VOLUME (135 interrogations contre 180 pour
  *    l'Expert à 390 € : moins de travail, moins cher). Les 590 € suivent la
  *    RARETÉ — accès aux moteurs chinois, conformité, qualification.
@@ -192,7 +198,7 @@ export const OFFRES_GEO: Offre[] = [
       "Nous interrogeons les quatre assistants occidentaux. Des assistants locaux peuvent compter autant dans cette zone : nous ne les mesurons pas, et nous l'écrivons.",
     ] },
   {
-    nom: "MANA GEO China", montant: 590, option: true, periode: "unique",
+    nom: "GEO Chine", montant: 590, option: true, periode: "unique",
     unite: "audit complémentaire ponctuel", famille: "ponctuel",
     depend: "Audit complémentaire — se commande seul ou après un GEO Expert",
     pour: "Pour savoir ce que les IA chinoises disent de vous.",
@@ -220,7 +226,7 @@ export const OFFRES_GEO: Offre[] = [
       "Rapport comparatif mensuel et historique conservé",
     ] },
   {
-    nom: "GEO China Monitoring", montant: 149, option: true, periode: "mois",
+    nom: "GEO Chine Monitoring", montant: 149, option: true, periode: "mois",
     unite: "par mois · complément de GEO Monitoring", famille: "recurrent",
     depend: "Complément de GEO Monitoring",
     pour: "Pour suivre la visibilité chinoise dans le temps.",
