@@ -23,18 +23,52 @@ SELECT extname, extversion FROM pg_extension;
 **pgRouting n'est pas installé** sur la base de production. Il n'y a donc aucun
 graphe routable, et rien qui sache calculer un chemin d'un point à un autre.
 
-## 2. 🔴 La « composition d'itinéraires » est un sélecteur de points
+## 2. ✅ LE COMPOSITEUR EXISTE — et je l'avais cherché au mauvais endroit
 
-Une seule fonction existe :
+🔴 **Cette section a affirmé le contraire pendant trois heures.** Elle disait :
+« une seule fonction existe, `proposer_balade(...)`, elle ne construit pas de
+tracé ; "composition d'itinéraires" décrivait une intention, pas un code qui
+tourne. » C'était faux, et l'erreur n'était pas dans la mesure : j'ai interrogé
+la BASE et deux dépôts, alors que le produit vit dans un troisième.
+
+Il est dans **`~/mana`** — le dépôt qui devient mana.bzh. 426 fichiers, dernier
+commit le 13/11 à 23 h 08 : il était en développement la veille de cette mesure.
+
+| | |
+|---|---|
+| `src/composition.ts` | `composer()`, `mesurer()`, `indexer()`, `noeudLePlusProche()`, `composanteAtteint()` |
+| dénivelé | `distanceRessentie(metres, montee)`, `COUT_MONTEE = 5` |
+| littoral et marées | `BORD_DE_MER_M = 60`, source SHOM |
+| forme du parcours | `formeDeLaBoucle()` → ample / boucle / aller-retour |
+| réglages mesurés | `AUTOUR_MIN_M 600`, `AUTOUR_MAX_M 4000`, `DETOUR_MAX 1,2`, `BOUCLE_PAR_ALLER 2,6` |
+
+Et il est **chiffré** : 95 % / 94 % de boucles trouvées le 2/11, contre 58 % la
+veille — même code, même graphe, un seul paramètre changé. La bande 600–4 000 m
+donne trois propositions à 84 % / 90 % des lieux praticables.
+
+### ⛔ Il n'utilise PAS la base de données
+
+Le graphe est un **fichier JSON précalculé**, servi en statique :
 
 ```
-proposer_balade(p_lat, p_lng, p_rayon_km, p_types text[], p_buffer_m, p_plafond_etapes)
+public/bretagne/g/presquile.json   2,9 Mo   78 363 coordonnées · 16 210 arêtes · 495 LIEUX
+public/bretagne/g/aulne.json       4,0 Mo
 ```
 
-Elle prend un point et un rayon, et rend des lieux. Son corps ne contient
-**aucune** ligne employant `pgr_*`, `ST_LineMerge`, `ST_Union` ni un `ORDER BY`
-d'assemblage : elle ne construit pas de tracé. ⭐ « Composition d'itinéraires »
-décrivait une intention, pas un code qui tourne.
+Construits par un pipeline documenté et rejouable (`docs/graphe-pipeline.md`) :
+extrait Geofabrik → `osmium extract` → `graphe.py` → `graphe-signaux.py` →
+`graphe_altitude.py`. Quatre-vingts secondes par territoire.
+
+⭐ **C'est pour ça que ma mesure en base n'a rien trouvé : il n'y a rien à y
+trouver.** Le compositeur est entièrement statique — pas de serveur, pas de
+requête, fonctionne hors ligne, coûte zéro. Ce n'est pas un manque, c'est un
+choix, et il est bon.
+
+⚠️ **Couverture : DEUX territoires**, la presqu'île de Crozon et l'Aulne. Tous
+deux bretons. C'est là qu'est l'écart avec « MANAhome, le monde à explorer » —
+pas dans le moteur, dans le nombre de graphes construits.
+
+⚠️ Et les graphes sont **hors git** : pousser le code ne déploie rien.
 
 ## 3. ⚠️ Les tracés ne sont pas un réseau praticable
 
