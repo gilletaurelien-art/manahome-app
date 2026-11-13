@@ -104,8 +104,9 @@ const DICO_EN: Record<string, string> = {
     "Detection of wrong answers or disappearances",
   "Rapport comparatif mensuel et historique conservé":
     "Monthly comparative report, with history kept",
-  "Sept moteurs chinois : DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM":
-    "Seven Chinese engines: DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM",
+  "Trois moteurs chinois : DeepSeek, Qwen (Alibaba) et Kimi (Moonshot)": "Three Chinese engines: DeepSeek, Qwen (Alibaba) and Kimi (Moonshot)",
+  "Doubao et ERNIE ne sont pas mesurés : leurs API exigent une entité en Chine. Doubao étant le plus utilisé là-bas, nous l'écrivons plutôt que de le taire.":
+    "Doubao and ERNIE are not measured: their APIs require a China-based entity. Doubao being the most used there, we write it down rather than leave it out.",
   "Questions posées EN chinois simplifié, pas traduites du français":
     "Questions asked IN simplified Chinese, not translated from French",
   "Réponses analysées en chinois avant d'être restituées en français":

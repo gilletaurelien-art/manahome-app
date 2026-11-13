@@ -105,7 +105,8 @@ export const OFFRES_GEO: Offre[] = [
     depend: "Audit complémentaire — se commande seul ou après un GEO Expert",
     pour: "Pour savoir ce que les IA chinoises disent de vous.",
     points: [
-      "Sept moteurs chinois : DeepSeek, Doubao, Qwen, Kimi, Yuanbao, ERNIE, GLM",
+      "Trois moteurs chinois : DeepSeek, Qwen (Alibaba) et Kimi (Moonshot)",
+      "Doubao et ERNIE ne sont pas mesurés : leurs API exigent une entité en Chine. Doubao étant le plus utilisé là-bas, nous l'écrivons plutôt que de le taire.",
       "Questions posées EN chinois simplifié, pas traduites du français",
       "Réponses analysées en chinois avant d'être restituées en français",
       "Concurrents chinois et internationaux cités",
