@@ -93,6 +93,22 @@ for (const fichier of pages(SITE)) {
     continue;
   }
 
+  // ⭐ LE GARDE QUI MANQUAIT, ET QUI AURAIT ÉVITÉ LE RESTE LE PLUS COÛTEUX.
+  //    Le 14/11/2026, apres le retrait du GEO, /fr/mentions-legales servait
+  //    encore « GEO Express », « GEO Expert » et les cinq zones — non pas dans
+  //    une phrase, mais dans le <select> « Offre souhaitée » du formulaire de
+  //    contact, present dans le PIED PARTAGE, donc sur chaque ecran restant.
+  //    ⭐ Un champ de formulaire ne se lit pas comme du contenu : on cherche les
+  //    phrases, pas les <option>. Ce garde lit le HTML BRUT, balises comprises.
+  for (const mot of ["GEO Express", "GEO Expert", "GEO Europe", "Demander un audit",
+                     "audit GEO", "Offre souhaitée"]) {
+    if (corps.includes(mot)) {
+      console.error(`🔴 ${chemin} : « ${mot} » est encore servi. Le GEO a quitté `
+        + `manahome le 14/11/2026 pour temposystem.eu et .fr.`);
+      process.exit(1);
+    }
+  }
+
   const texte = corps.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   if (texte.length < 200) { vides.push([chemin, texte.length]); }
 

@@ -54,6 +54,12 @@ npm run build
 #    argumentaire — n'executent pas JavaScript.
 #    ⚠️ Comme les pages pays, ca vit ENTRE la construction et l'envoi : le build
 #    reecrit site/ en entier.
+# ⭐ L'ACCUEIL ET LA MÉTHODE sont écrits ici, APRÈS le build qui vient de poser
+#    leurs coquilles React. Ils les écrasent : c'est ce qui retire le GEO de
+#    manahome — l'ancien accueil le vendait tout entier.
+echo "→ accueil, méthode et llms.txt …"
+node scripts/fabriquer-accueil.mjs
+
 echo "→ prérendu des pages React …"
 node scripts/prerendre.mjs
 

@@ -309,9 +309,9 @@ export default function App() {
               <IconePixel nom="structure" />
               <span>{t(L, "Notre approche")}</span>
             </a>
-            <a href={lien(`/#offres`)}>
+            <a href={lien(`/approche`)}>
               <IconePixel nom="grille" />
-              <span>{t(L, "Offres & tarifs")}</span>
+              <span>{t(L, "La méthode")}</span>
             </a>
             {/* ⭐ 13/11/2026 — 348 pages « pays » existaient, au plan de site,
                 et AUCUN chemin n'y menait depuis le site. Un plan de site est
@@ -325,10 +325,12 @@ export default function App() {
               <IconePixel nom="structure" />
               <span>{t(L, "Les pays")}</span>
             </a>
-            <a href={lien(`/#contact`)} className="nav-cta">
-              <IconePixel nom="etoile" />
-              <span>{t(L, "Demander un audit")}</span>
-            </a>
+            {/* ⛔ 14/11/2026 — « Demander un audit » est parti avec le GEO.
+                Cette barre ne sert plus que quatre écrans (mentions légales,
+                publier, messagerie, mes-annonces) : l'accueil et /approche sont
+                des pages écrites par scripts/fabriquer-accueil.mjs. Un appel à
+                l'action vers une offre qui n'est plus ici aurait survécu dans
+                le seul endroit que le nouveau générateur ne touche pas. */}
             {/* Sélecteur de langue : l'autre version de la MÊME page, jamais
                 un retour à l'accueil — perdre la route serait le défaut le
                 plus visible du bilingue. */}
@@ -705,22 +707,20 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par TEMPOsystem. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.")}
+              {t(L, "MANAhome publie un relevé ouvert des hébergements touristiques du monde, à partir de données ouvertes. Une page par pays, avec ses chiffres, leur date, leur source, et ce qu'elle ne dit pas. Rien n'y est à vendre : aucun classement, aucune mise en avant.")}
             </p>
-            {/* ⚠️ /approche porte DÉJÀ le formulaire, en pleine page : l'y
-                répéter dans le pied donnait deux formulaires identiques
-                empilés, et deux ancres #contact sur la même page — un lien
-                « Contact » ne savait plus laquelle viser. */}
-            {path !== "/approche" && (
-              <div id="contact">
-                <ContactForm />
-              </div>
-            )}
+            {/* ⛔ 14/11/2026 — LE FORMULAIRE EST PARTI AVEC LE GEO, et il était
+                le reste le plus coûteux : son menu « Offre souhaitée » listait
+                GEO Express, GEO Expert et les cinq zones, SUR CHAQUE PAGE, donc
+                encore sur les mentions légales après le retrait. ⭐ Un champ de
+                formulaire ne se lit pas comme du contenu — on cherche les
+                phrases, pas les <option>. Trouvé en relisant la page SERVIE,
+                pas le code. Demander un audit se fait désormais chez
+                temposystem.fr/geo.html. */}
           </div>
           <nav className="footer-nav" aria-label={t(L, "Pied de page")}>
-            <a href={lien(`/#offres`)}>{t(L, "Offres & tarifs")}</a>
-            <a href={lien(`/approche`)}>{t(L, "Notre approche")}</a>
-            <a href={lien(`/#contact`)}>{t(L, "Contact")}</a>
+            <a href={lien(`/pays`)}>{t(L, "Les pays")}</a>
+            <a href={lien(`/approche`)}>{t(L, "La méthode")}</a>
             <a href={lien(`/mentions-legales`)}>{t(L, "Mentions légales")}</a>
           </nav>
         </div>

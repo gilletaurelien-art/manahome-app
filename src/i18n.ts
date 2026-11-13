@@ -500,6 +500,8 @@ const DICO_EN: Record<string, string> = {
   "Offres & tarifs": "Offers & pricing",
   "Les pays":
     "Countries",
+  "La méthode":
+    "The method",
   "Demander un audit": "Request an audit",
   "Voir les offres": "See the offers",
   "Contact": "Contact",

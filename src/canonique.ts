@@ -70,9 +70,21 @@ export const PAGES_PRIVEES_T: readonly Page[] = [
  *       portaient encore le prix. Un site a plusieurs rédactions ; corriger
  *       l'une ne corrige pas les autres, et c'est la PAGE SERVIE qui tranche.
  *    Tenu par src/structure.test.ts, qui lit les trois fichiers.
+ *
+ * ⛔ 14/11/2026 — LE GEO A QUITTÉ CE SITE. Les deux titres annonçaient « Savoir
+ *    ce que les IA répondent sur vous » : c'est l'offre, et elle est vendue par
+ *    temposystem.eu et .fr depuis le 13/11 (« l'association prouve, la société
+ *    encaisse »). manahome est le relevé ouvert des hébergements du monde.
+ *    ⭐ Et c'est la QUATRIÈME rédaction du même site à corriger : après le
+ *       JSON-LD, les balises de index.html et les descriptions, ces titres-ci.
+ *       Un site a plusieurs rédactions ; corriger l'une ne corrige pas les
+ *       autres, et c'est la PAGE SERVIE qui tranche.
+ *    ⚠️ Ces deux constantes ne servent plus l'accueil — /, /fr/ et /en/ sont
+ *       écrits par scripts/fabriquer-accueil.mjs et portent leurs propres
+ *       titres. Elles servent les pages d'erreur et les coquilles restantes.
  */
-export const TITRE_GENERIQUE = "MANAhome — Savoir ce que les IA répondent sur vous.";
-export const TITRE_GENERIQUE_EN = "MANAhome — Know what AIs answer about you.";
+export const TITRE_GENERIQUE = "MANAhome — le territoire, relevé pays par pays";
+export const TITRE_GENERIQUE_EN = "MANAhome — the territory, surveyed country by country";
 
 /**
  * La description générique, dans les deux langues.
@@ -93,10 +105,14 @@ export const TITRE_GENERIQUE_EN = "MANAhome — Know what AIs answer about you."
  * ⛔ SANS PRIX, comme les titres : la couche lue par les machines ne déclare
  *    plus de montant tant que l'entité qui facture n'est pas tranchée.
  */
+// ⛔ 14/11/2026 — LE GEO A QUITTÉ manahome pour temposystem.eu et .fr. Ces deux
+//    phrases vendaient l'audit ; elles alimentent les coquilles des écrans
+//    restants (publier, messagerie, mentions légales) et le gabarit HTML.
+//    Les laisser aurait fait déclarer une offre à un site qui n'en a plus.
 export const DESCRIPTION_GENERIQUE =
-  "Vos clients demandent à ChatGPT, Gemini et Perplexity. MANAhome mesure ce qu'ils répondent sur votre organisation : leurs réponses intégrales, leurs sources, et les concurrents cités à votre place. Test gratuit en 30 secondes.";
+  "MANAhome publie un relevé ouvert des hébergements touristiques du monde — hôtels, campings, motels, refuges, fermes — à partir de données ouvertes. Une page par pays, avec ses chiffres, leur date, leur source, et ce qu'elle ne dit pas.";
 export const DESCRIPTION_GENERIQUE_EN =
-  "Your clients ask ChatGPT, Gemini and Perplexity. MANAhome measures what they answer about your organisation: their full answers, their sources, and the competitors cited in your place. Free test in 30 seconds.";
+  "MANAhome publishes an open survey of the world's tourist accommodation — hotels, campsites, motels, huts, farm stays — from open data. One page per country, with its figures, their date, their source, and what it does not say.";
 
 /** Les pages publiques, indexables. Elles seules entrent au plan de site. */
 export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p.slug);

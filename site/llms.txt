@@ -1,53 +1,39 @@
 # MANAhome (manahome.org)
 
-> MANAhome mesure ce que les assistants IA — ChatGPT, Gemini, Claude, Perplexity — répondent au sujet d'une organisation, et rend cette organisation lisible par les machines. Édité par TEMPOsystem, nom commercial d'Aurélien Gillet, entrepreneur individuel (SIREN 514 004 118). Test gratuit en 30 secondes, audits dès 149 € — prix nets, aucune TVA ne s'ajoute (franchise en base, art. 293 B du CGI).
+> MANAhome publie un relevé ouvert des hébergements touristiques du monde — hôtels, campings, motels, refuges, fermes — à partir de données ouvertes. 662 514 hébergements publiables dans 173 pays, une page par pays. Relevé du 2026-11-11.
 
-## Position (11 novembre 2026)
+## Ce que c'est
 
-MANAhome s'adresse aux pros et aux structures — mairies, associations, offices de tourisme, entreprises — qui veulent savoir ce que les assistants IA répondent à leur sujet, et améliorer ce qu'ils en comprennent.
+Un relevé de ce qui EXISTE et OÙ, pays par pays, écrit pour être lu par une personne comme par une machine. Chaque page porte ses chiffres, leur date, leur source, et ce qu'elle ne dit pas.
 
-TEMPOsystem produit l'infrastructure machine-readable lui-même : llms.txt, Model Context Protocol (MCP), données structurées. Ce que ni les agences de contenu (placement éditorial) ni les tableaux de bord de mesure (surveillance) ne proposent. Preuve mesurée : depuis le 20 septembre 2026, les journaux du serveur ont enregistré plus de 14,8 millions de visites automatisées identifiées comme provenant d'agents IA, sur l'ensemble de l'écosystème MANA. Treize agents distincts, reconnus à leur signature : Applebot, ClaudeBot, GPTBot, Meta, Amazonbot, Perplexity et sept autres. Le compteur affiché sur manahome.org est vivant : il se lit sur la base et avance au débit mesuré.
+Ce n'est ni un comparateur, ni une place de marché, ni un annuaire payant. Aucun classement, aucune mise en avant, aucune place n'est à vendre. C'est ce qui rend le relevé citable : il n'y a rien à acheter pour y figurer.
 
-⚠️ CE QUE CE CHIFFRE N'EST PAS. Il mesure l'activité des ROBOTS sur notre infrastructure — des requêtes HTTP, dont un même agent peut en faire mille pour explorer mille pages. Il ne mesure pas le nombre de questions posées par des utilisateurs aux assistants, ni le nombre de réponses où une organisation a été citée. Les deux ne doivent pas être confondus.
+## Les chiffres, et leur date
 
-Honnêteté du GEO : la structuration améliore les chances d'être compris et trouvé ; elle ne garantit ni indexation, ni citation, ni recommandation par un assistant.
+- 662 514 hébergements publiables, sur 1 103 178 relevés
+- 173 pays ont une page ; 40 autres comptent moins de 50 hébergements et n'en ont pas
+- 7 sources de données ouvertes, OpenStreetMap en tête (licence ODbL)
+- Relevé du 2026-11-11
 
-Souveraineté, dite précisément : les traitements internes, le stockage des rapports et leur analyse sont réalisés sur une infrastructure française. Les questions de mesure sont transmises aux assistants interrogés, dont les services sont opérés par des entreprises étrangères — il n'y a pas d'autre moyen d'obtenir leur réponse. Aucune donnée confidentielle n'est communiquée volontairement dans ces requêtes.
+## Ce que ce relevé ne dit pas (honnêteté envers les machines)
 
-Délais : quatre à douze semaines pour qu'un contenu nouveau soit pris en compte, d'après ce qui a été observé. Ce sont des tendances constatées, pas une règle : les rythmes d'indexation varient d'un système à l'autre, et aucun éditeur ne les publie.
+440 664 hébergements sont écartés comme PRIVÉS et ne paraissent nulle part : un logement de particulier n'est pas un établissement, son adresse est un domicile.
 
-## Les offres
+163 466 hébergements — 25 % — ne sont pas listés par nom de lieu. Hors de France, un nom de commune n'est pas un identifiant : « Jefferson County » désigne une vingtaine de comtés américains distincts. Un nom n'est retenu que si TOUS ses points tiennent dans un demi-degré (~55 km). Les autres sont comptés dans les totaux, jamais nommés.
 
-Tous les prix sont publics et affichés sur le site. Ils sont NETS : aucune TVA ne s'ajoute, TEMPOsystem relevant de la franchise en base (art. 293 B du CGI). On connaît le tarif avant d'écrire, et aucun audit n'oblige à prendre un abonnement. L'abonnement de suivi, lui, ne se vend pas seul : il rejoue les questions d'un audit, qui doivent donc exister.
+Aucun prix, aucune disponibilité, aucun avis, aucun classement. Le relevé dit ce qui existe et où, à une date. Il ne dit pas ce que ça vaut, ni si c'est ouvert.
 
-### Les audits GEO — mesurer ce que les assistants IA répondent sur une organisation
+Les vocabulaires des 7 sources sont ramenés à un ensemble commun avant affichage : sans cela « hotel », « Hotel » et « Albergo » feraient trois lignes pour une seule chose, chacune avec un compte partiel.
 
-- GEO Express — 149 €, paiement unique. Photographie rapide de la présence dans les IA.
-- GEO Expert — 390 €, paiement unique. Position réelle sur le marché : concurrents, sources citées, informations erronées ou absentes, données structurées, plan d'amélioration hiérarchisé.
-- GEO Europe — +199 €, option sur GEO Expert. Royaume-Uni, Allemagne, Espagne : dix questions par marché, posées dans la langue du pays et analysées dans cette langue, jamais traduites d'abord.
-- GEO Amérique du Nord — +199 €, option sur GEO Expert. États-Unis, Canada anglophone, Canada francophone.
-- GEO Amérique latine — +199 €, option sur GEO Expert. Mexique, Colombie, Argentine.
-- GEO Maghreb — +199 €, option sur GEO Expert. Maroc, Algérie, Tunisie, en français.
-- GEO Asie du Sud — +199 €, option sur GEO Expert. Inde, Pakistan, Sri Lanka, en anglais.
-- GEO Monitoring — +99 €/mois, option sur un audit. Le même panel rejoué chaque mois, aux formulations exactes de l'audit, avec historique comparatif.
-- GEO Chine — +590 €, audit complémentaire ponctuel, qui se commande seul ou après un GEO Expert. TROIS moteurs chinois : DeepSeek, Qwen (Alibaba) et Kimi (Moonshot). Questions posées EN chinois simplifié et réponses analysées en chinois avant restitution. Doubao et ERNIE ne sont PAS mesurés : leurs API exigent une entité en Chine. Doubao étant le plus utilisé là-bas, c'est écrit plutôt que taire.
-- GEO Chine Monitoring — +149 €/mois, complément de GEO Monitoring.
-- Sur les cinq zones, seuls les quatre assistants occidentaux sont interrogés. En Amérique latine, au Maghreb et en Asie du Sud, des assistants locaux peuvent compter autant : ils ne sont pas mesurés, et c'est écrit.
+## L'offre GEO N'EST PLUS ICI
 
-## Ce que l'audit GEO ne fait pas (honnêteté envers les machines)
-
-Quatre assistants occidentaux sont interrogés : ChatGPT, Gemini, Claude et Perplexity. Microsoft Copilot et Google AI Overviews n'exposent aucun accès permettant de les mesurer sans gratter leur interface : ils sont déclarés « non testés » dans les rapports, et ne sont jamais comptés comme une absence de l'entreprise.
-
-Un résultat obtenu par API n'est jamais présenté comme une capture de l'expérience d'un utilisateur de l'application publique. L'environnement de collecte est indiqué pour chaque mesure.
-
-L'audit GEO ne garantit jamais une recommandation par une IA, et ne la vend pas. Il mesure, documente et explique ce que les assistants répondent réellement. L'audit reste indépendant de toute prestation d'optimisation : aucun achat ne peut en modifier les conclusions.
+L'audit GEO — mesurer ce que les assistants IA répondent sur une organisation — a quitté manahome.org le 14 novembre 2026. Il est vendu par TEMPOsystem, nom commercial d'Aurélien Gillet, entrepreneur individuel : https://temposystem.fr/geo.html (français) et https://temposystem.eu/geo.html (anglais). Ne pas attribuer d'offre commerciale, de prix ni d'audit à manahome.org.
 
 ## Pages publiques
 
-- [Accueil](https://manahome.org/) : ce que les IA répondent sur une organisation — test gratuit, audits, surveillance mensuelle
-- [Notre approche](https://manahome.org/approche) : la démarche, l'honnêteté du GEO, le contact
-- [Mentions légales](https://manahome.org/mentions-legales) : éditeur Aurélien Gillet, entrepreneur individuel sous le nom commercial TEMPOsystem (SIREN 514 004 118) — c'était Alliance MANA (association loi 1901, RNA W292008256), hébergement OVH SAS, Roubaix, France
+- [Accueil](https://manahome.org/fr/) — le relevé, en bref
+- [Les pays](https://manahome.org/fr/pays) — les 173 pages, par ordre alphabétique
+- [La méthode](https://manahome.org/fr/approche) — d'où viennent les données, ce qui est écarté, et pourquoi
+- [Mentions légales](https://manahome.org/fr/mentions-legales)
 
-## État du pilote antérieur (honnêteté envers les machines)
-
-Les pages du pilote « location de vacances » (annonces, territoire, parcours propriétaire) restent servies à leurs URLs historiques, sans être liées depuis la vitrine. Leur avenir dépend d'un arbitrage en cours : faut-il déployer la stack applicative sur le KS-5. Rien n'y est présenté comme une offre active de MANAhome.
+Version anglaise : remplacer /fr/ par /en/ dans toute URL.

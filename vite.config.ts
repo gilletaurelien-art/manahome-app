@@ -121,9 +121,15 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
     name: "MANAhome",
     url: urlAccueil,
     inLanguage: langue,
+    // ⛔ 14/11/2026 — plus une ligne de GEO ici. Cette couche a déclaré
+    //    « L'expertise GEO par TEMPOsystem » aux assistants eux-mêmes ; l'offre
+    //    est partie chez temposystem.eu et .fr. ⚠️ Et ce bloc ne sert PLUS
+    //    l'accueil : /, /fr/ et /en/ sont désormais des pages écrites par
+    //    scripts/fabriquer-accueil.mjs, qui portent leur propre JSON-LD. Il
+    //    reste ici pour les coquilles qui l'appelleraient encore.
     description: langue === "en"
-      ? "GEO expertise by TEMPOsystem: being found by AI assistants — machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem."
-      : "L'expertise GEO par TEMPOsystem : être trouvé par les assistants IA — infrastructure machine-readable, audits, et les offres arrêtées de l'écosystème MANA.",
+      ? "MANAhome publishes an open survey of the world's tourist accommodation — hotels, campsites, motels, huts, farm stays — from open data. One page per country, with its figures, their date, their source, and what it does not say."
+      : "MANAhome publie un relevé ouvert des hébergements touristiques du monde — hôtels, campings, motels, refuges, fermes — à partir de données ouvertes. Une page par pays, avec ses chiffres, leur date, leur source, et ce qu'elle ne dit pas.",
     // 🔴 « TEMPOsystem » A VÉCU ICI JUSQU'AU 12/11/2026, APRÈS AVOIR ÉTÉ
     //    RETIRÉ DU TEXTE VISIBLE LE 11. Décision d'Aurélien : « ne cite pas
     //    TEMPOsystem — la facturation, c'est Alliance MANA ». Le texte lu par
