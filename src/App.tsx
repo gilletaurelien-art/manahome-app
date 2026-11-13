@@ -313,6 +313,18 @@ export default function App() {
               <IconePixel nom="grille" />
               <span>{t(L, "Offres & tarifs")}</span>
             </a>
+            {/* ⭐ 13/11/2026 — 348 pages « pays » existaient, au plan de site,
+                et AUCUN chemin n'y menait depuis le site. Un plan de site est
+                une déclaration aux machines, pas une navigation : un visiteur
+                arrivé sur l'accueil ne pouvait pas les atteindre.
+                ⚠️ C'est un lien NU, pas une route du routeur : ces pages sont
+                des fichiers HTML écrits après le build (voir
+                scripts/fabriquer-pays.mjs), servis par Caddy avant le repli
+                SPA. Le navigateur doit donc faire une navigation complète. */}
+            <a href={lien(`/pays`)}>
+              <IconePixel nom="structure" />
+              <span>{t(L, "Les pays")}</span>
+            </a>
             <a href={lien(`/#contact`)} className="nav-cta">
               <IconePixel nom="etoile" />
               <span>{t(L, "Demander un audit")}</span>

@@ -498,6 +498,8 @@ const DICO_EN: Record<string, string> = {
   // ── Vitrine GEO (11/11/2026) ── ⚠️ « Notre approche » existe DÉJÀ plus bas
   // dans ce dictionnaire : le redéclarer ici fait refuser tsc (TS1117).
   "Offres & tarifs": "Offers & pricing",
+  "Les pays":
+    "Countries",
   "Demander un audit": "Request an audit",
   "Voir les offres": "See the offers",
   "Contact": "Contact",
