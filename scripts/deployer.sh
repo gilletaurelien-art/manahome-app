@@ -46,6 +46,16 @@ npm run build
 #    prerender` plantait. Prouvé par mutation le 12/11 : `site/approche`
 #    effacé, `npm run build` seul le reconstruit.
 
+# ⭐ LES PAGES « PAYS » SONT ÉCRITES ICI, ENTRE LA CONSTRUCTION ET L'ENVOI, et
+#    cet emplacement est la seule chose qui compte. `npm run build` réécrit
+#    `site/` en entier : les générer avant, c'est les perdre. Les générer après
+#    le rsync, c'est ne jamais les expédier. ⚠️ Elles passent ensuite sous le
+#    garde « aucune URL de GitHub Pages », comme tout le reste — c'est voulu :
+#    un fichier qui échappe au garde parce qu'il n'est pas né de vite est
+#    exactement le genre d'exception qui finit en production.
+echo "→ pages pays …"
+SITE_URL="$SITE_URL" node scripts/fabriquer-pays.mjs
+
 echo "→ aucune URL de GitHub Pages ne survit ?"
 if grep -rl "gilletaurelien-art.github.io" site/ >/dev/null 2>&1; then
   echo "🔴 des URL de GitHub Pages sont dans le build — ne PAS expédier." >&2

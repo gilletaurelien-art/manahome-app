@@ -1,0 +1,145 @@
+{
+  "pays": [
+    {
+      "code": "US",
+      "slug": "etats-unis",
+      "nom": {
+        "fr": "États-Unis",
+        "en": "United States"
+      },
+      "moissonnes": 96730,
+      "publiables": 90867,
+      "prives": 5863,
+      "geolocalises": 90867,
+      "noms_distincts": 8522,
+      "moisson": {
+        "depuis": "2026-11-09",
+        "jusqu_a": "2026-11-11"
+      },
+      "seuil_degres": 0.5,
+      "noms_surs": 6768,
+      "noms_ambigus": 1754,
+      "sous_nom_sur": 37050,
+      "sous_nom_ambigu": 53817,
+      "sources": [
+        {
+          "cle": "osm-monde",
+          "n": 90867
+        }
+      ],
+      "typologies": [
+        {
+          "cle": "hotel",
+          "n": 43759
+        },
+        {
+          "cle": "camp_site",
+          "n": 25724
+        },
+        {
+          "cle": "motel",
+          "n": 14284
+        },
+        {
+          "cle": "caravan_site",
+          "n": 5764
+        },
+        {
+          "cle": "wilderness_hut",
+          "n": 562
+        },
+        {
+          "cle": "hostel",
+          "n": 482
+        },
+        {
+          "cle": "alpine_hut",
+          "n": 292
+        }
+      ],
+      "lieux": [
+        {
+          "nom": "San Francisco",
+          "n": 341
+        },
+        {
+          "nom": "New York",
+          "n": 335
+        },
+        {
+          "nom": "Miami Beach",
+          "n": 245
+        },
+        {
+          "nom": "Orlando",
+          "n": 237
+        },
+        {
+          "nom": "Tarrant County",
+          "n": 225
+        },
+        {
+          "nom": "San Diego",
+          "n": 216
+        },
+        {
+          "nom": "Chicago",
+          "n": 211
+        },
+        {
+          "nom": "Denton County",
+          "n": 168
+        },
+        {
+          "nom": "Indianapolis",
+          "n": 161
+        },
+        {
+          "nom": "Myrtle Beach",
+          "n": 148
+        },
+        {
+          "nom": "Cape May County",
+          "n": 144
+        },
+        {
+          "nom": "New York County",
+          "n": 135
+        },
+        {
+          "nom": "Oklahoma City",
+          "n": 133
+        },
+        {
+          "nom": "Tampa",
+          "n": 131
+        },
+        {
+          "nom": "Broward County",
+          "n": 130
+        },
+        {
+          "nom": "Tulsa",
+          "n": 124
+        },
+        {
+          "nom": "Albuquerque",
+          "n": 116
+        },
+        {
+          "nom": "Fort Worth",
+          "n": 110
+        },
+        {
+          "nom": "Kansas City",
+          "n": 110
+        },
+        {
+          "nom": "Seattle",
+          "n": 108
+        }
+      ]
+    }
+  ],
+  "mesure_le": "2026-11-13"
+}
