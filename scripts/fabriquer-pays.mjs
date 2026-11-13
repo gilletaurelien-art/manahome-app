@@ -39,30 +39,112 @@ const SITE = (process.env.SITE_URL ?? "https://manahome.org").replace(/\/$/, "")
 
 const donnees = JSON.parse(readFileSync(resolve(RACINE, "src", "donnees-pays.json"), "utf8"));
 
-// Les étiquettes OSM rencontrées. ⚠️ Une typologie INCONNUE s'affiche telle
-// quelle plutôt que d'être rangée dans « autres » : 92 typologies existent dans
-// la moisson mondiale, et une case « autres » masquerait précisément ce qu'on
-// n'a pas encore traduit.
-const TYPO = {
-  hotel: ["Hôtels", "Hotels"],
-  motel: ["Motels", "Motels"],
-  hostel: ["Auberges de jeunesse", "Hostels"],
-  guest_house: ["Chambres d'hôtes", "Guest houses"],
-  camp_site: ["Campings", "Campsites"],
-  caravan_site: ["Aires de camping-car", "Caravan sites"],
-  chalet: ["Chalets et gîtes", "Chalets"],
-  apartment: ["Appartements", "Apartments"],
-  wilderness_hut: ["Refuges non gardés", "Wilderness huts"],
-  alpine_hut: ["Refuges de montagne", "Alpine huts"],
+// ═══════════════════════════════════════════════════════════════════════════
+// LES TYPOLOGIES — normalisées, puis traduites.
+//
+// 🔴 LE DÉFAUT N'ÉTAIT PAS LA TRADUCTION, C'ÉTAIT LA DUPLICATION. Huit sources
+//    alimentent la moisson et chacune apporte son vocabulaire : `hotel` (OSM),
+//    `Hotel` (schema.org/DATAtourisme), `Albergo` et `Alberghi` (registres
+//    italiens) sont LA MÊME CHOSE. Sans normalisation, la page italienne
+//    afficherait quatre lignes pour un seul concept, chacune avec un compte
+//    partiel — quatre nombres justes qui mentent ensemble.
+//
+// ⭐ ON NE FUSIONNE QUE DES SYNONYMES. « Agriturismo » rejoint « Farm » parce que
+//    c'est le même objet ; « motel » ne rejoint PAS « hotel », et les refuges de
+//    montagne ne rejoignent pas les campings. Fusionner des catégories
+//    distinctes ferait disparaître l'information qu'on prétend publier.
+//
+// ⚠️ UNE CLÉ INCONNUE S'AFFICHE TELLE QUELLE, et il n'y a PAS de case « autres ».
+//    Une case fourre-tout cacherait exactement ce qu'on n'a pas encore traduit —
+//    et personne ne corrige ce qu'il ne voit pas. Au 13/11/2026 cette table
+//    couvre 56 des 57 clés rencontrées ; la 57ᵉ pèse deux hébergements et
+//    s'affiche en italien, visible, donc corrigible.
+const CONCEPTS = {
+  hotel:      ["Hôtels", "Hotels"],
+  motel:      ["Motels", "Motels"],
+  auberge:    ["Auberges de jeunesse", "Hostels"],
+  chambre:    ["Chambres d'hôtes", "Guest houses"],
+  camping:    ["Campings", "Campsites"],
+  camping_car:["Aires de camping-car", "Motorhome sites"],
+  refuge:     ["Refuges", "Mountain huts"],
+  ferme:      ["Fermes et agritourisme", "Farm stays"],
+  meuble:     ["Meublés et résidences", "Self-catering and residences"],
+  village:    ["Villages vacances", "Holiday villages"],
+  collectif:  ["Hébergements collectifs", "Group accommodation"],
 };
+
+/** Clé de source → concept. Les clés sont écrites EXACTEMENT comme la moisson
+ *  les porte, accents manquants compris : ce sont des chaînes reçues, pas des
+ *  chaînes choisies. */
+const NORMALISER = {
+  hotel: "hotel", Hotel: "hotel", Albergo: "hotel", Alberghi: "hotel",
+  HotelTrade: "hotel", HotelRestaurant: "hotel", HotelPension: "hotel",
+  "Residenze turistico alberghiere": "hotel",
+  "Residenza Turistico Alberghiera (R.T.A.)": "hotel",
+  "Villaggio-Albergo": "hotel", "Albergo diffuso": "hotel", "Albergo Rurale": "hotel",
+  "Residenza d'epoca": "hotel",
+
+  motel: "motel",
+
+  hostel: "auberge", Hostels: "auberge", Youth: "auberge",
+  YouthHostelAndInternationalCenter: "auberge", Jeugdverblijven: "auberge",
+  "Ostello della gioventu": "auberge",
+
+  guest_house: "chambre",
+
+  camp_site: "camping", Camping: "camping", CampingAndCaravanning: "camping",
+  Campeggi: "camping", Campeggio: "camping", "Camping village": "camping",
+  "Terreingebonden logies": "camping",
+
+  caravan_site: "camping_car", Camperterrein: "camping_car",
+
+  wilderness_hut: "refuge", alpine_hut: "refuge", Mountain: "refuge",
+  "Rifugio escursionistico": "refuge",
+
+  Farm: "ferme", Agriturismo: "ferme", "Alloggi agrituristici": "ferme",
+  "Country house": "ferme", "Fattoria didattica con pernottamento": "ferme",
+
+  chalet: "meuble", apartment: "meuble", Residence: "meuble",
+  "CAV imprenditoriale": "meuble",
+
+  HolidayResort: "village", ClubOrHolidayVillage: "village", HolidayCentre: "village",
+  "Villaggi turistici": "village", "Villaggio turistico": "village",
+  Vakantiepark: "village",
+
+  StopOverOrGroupLodge: "collectif", CollectiveAccommodation: "collectif",
+  GroupLodging: "collectif", "Case per ferie": "collectif",
+  "Casa per ferie": "collectif", "Casa per ferie e ospitalit religiosa": "collectif",
+  "Casa religiosa di ospitalita": "collectif", "Centro soggiorno studi": "collectif",
+  "Alloggio del Pellegrino": "collectif", Kinderheim: "collectif",
+};
+
+/** Regroupe les typologies d'un pays par concept et SOMME. ⭐ C'est ici que les
+ *  quatre « hôtels » redeviennent un seul nombre. */
+function typologies(p, lg) {
+  const par = new Map();
+  for (const t of p.typologies) {
+    const c = NORMALISER[t.cle] ?? null;
+    const lib = c ? CONCEPTS[c][lg === "fr" ? 0 : 1] : t.cle;
+    par.set(lib, (par.get(lib) ?? 0) + t.n);
+  }
+  return [...par.entries()].sort((a, b) => b[1] - a[1]).map(([lib, n]) => ({ lib, n }));
+}
 
 const M = {
   fr: {
     lang: "fr", autre: "en", autreNom: "English",
-    titre: (n) => `Hébergements aux ${n}`,
-    h1: (n) => `Les hébergements des ${n}`,
+    // 🔴 AUCUN ARTICLE DEVANT LE NOM DE PAYS, ET C'EST UNE RÈGLE, PAS UN STYLE.
+    //    La première version écrivait « Les hébergements des ${n} » — juste pour
+    //    « États-Unis », faux pour « Italie », « Japon », « Tchad ». Le français
+    //    n'a pas d'article régulier pour les pays : le Japon, l'Italie, les
+    //    États-Unis, Cuba, Madagascar. L'anglais non plus (« in the Italy »).
+    //    ⭐ Même piège que les gabarits de questions, résolu de la même façon :
+    //    l'accord se pose sur ce qu'on maîtrise, jamais sur ce qu'on reçoit. Ici
+    //    on n'en pose aucun — le nom suit un tiret ou ouvre la phrase.
+    titre: (n) => `${n} — hébergements`,
+    h1: (n) => `Hébergements — ${n}`,
     desc: (n, p, d) =>
-      `${p} hébergements touristiques recensés aux ${n} et lisibles par les machines : `
+      `${n} : ${p} hébergements touristiques recensés et lisibles par les machines — `
       + `hôtels, campings, motels, refuges. Relevé du ${d}, source OpenStreetMap.`,
     chapo: (p, m) =>
       `<strong>${p}</strong> hébergements publiables, sur ${m} recensés. Chaque ligne porte `
@@ -72,7 +154,7 @@ const M = {
     hLimites: "Ce que ce relevé ne dit pas",
     thType: "Type", thN: "Recensés", thLieu: "Lieu",
     introLieux: (surs, sous, seuil) =>
-      `Un nom de lieu n'est pas un identifiant. <strong>${surs}</strong> noms américains `
+      `Un nom de lieu n'est pas un identifiant. <strong>${surs}</strong> noms d'ici `
       + `désignent un seul endroit — tous leurs points tiennent dans ${seuil}° — et portent `
       + `${sous} hébergements. Les voici, les vingt premiers.`,
     retour: "← MANAhome", mesure: (d) => `Relevé du ${d}`,
@@ -80,10 +162,10 @@ const M = {
   },
   en: {
     lang: "en", autre: "fr", autreNom: "Français",
-    titre: (n) => `Accommodation in the ${n}`,
-    h1: (n) => `Accommodation across the ${n}`,
+    titre: (n) => `${n} — accommodation`,
+    h1: (n) => `Accommodation — ${n}`,
     desc: (n, p, d) =>
-      `${p} tourist accommodations recorded in the ${n} and readable by machines: `
+      `${n}: ${p} tourist accommodations recorded and readable by machines — `
       + `hotels, campsites, motels, huts. Survey of ${d}, source OpenStreetMap.`,
     chapo: (p, m) =>
       `<strong>${p}</strong> publishable accommodations, out of ${m} recorded. Every row carries `
@@ -93,7 +175,7 @@ const M = {
     hLimites: "What this survey does not say",
     thType: "Type", thN: "Recorded", thLieu: "Place",
     introLieux: (surs, sous, seuil) =>
-      `A place name is not an identifier. <strong>${surs}</strong> American names designate a `
+      `A place name is not an identifier. <strong>${surs}</strong> local names designate a `
       + `single place — all their points fit within ${seuil}° — and carry ${sous} `
       + `accommodations. Here are the first twenty.`,
     retour: "← MANAhome", mesure: (d) => `Survey of ${d}`,
@@ -110,31 +192,45 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
  *  qui a été écarté ne sait pas ce qu'elle lit. */
 function limites(p, lg) {
   const seuil = String(p.seuil_degres).replace(".", lg === "fr" ? "," : ".");
-  return lg === "fr" ? [
-    `<strong>${n(p.sous_nom_ambigu, lg)} hébergements — ${Math.round(100 * p.sous_nom_ambigu / p.geolocalises)} % — ne sont pas listés par nom.</strong> `
-    + `${n(p.noms_ambigus, lg)} noms désignent plusieurs endroits distincts : « Jefferson County » `
-    + `s'étend sur ${seuil === "0,5" ? "48 degrés" : "plusieurs degrés"} de longitude, d'un océan à l'autre. `
-    + `Les additionner sous un seul nom fabriquerait un chiffre faux. Ils sont comptés dans le total, jamais nommés.`,
-    `<strong>Un même endroit peut apparaître deux fois.</strong> « New York » et « New York County », `
-    + `« Fort Worth » et « Tarrant County » sont le même lieu sous deux résolutions administratives `
-    + `d'OpenStreetMap. Ce n'est pas corrigé : il faudrait inventer une hiérarchie que la donnée ne porte pas.`,
-    `<strong>${n(p.prives, lg)} hébergements sont écartés comme privés</strong> et ne figurent nulle part `
-    + `sur cette page. Un logement de particulier n'est pas un établissement : son adresse est un domicile.`,
-    `<strong>Aucun prix, aucune disponibilité, aucun avis.</strong> Ce relevé dit ce qui existe et où. `
-    + `Il ne dit pas ce que ça vaut, ni si c'est ouvert.`,
-  ] : [
-    `<strong>${n(p.sous_nom_ambigu, lg)} accommodations — ${Math.round(100 * p.sous_nom_ambigu / p.geolocalises)}% — are not listed by name.</strong> `
-    + `${n(p.noms_ambigus, lg)} names designate several distinct places: "Jefferson County" spans `
-    + `48 degrees of longitude, from one ocean to the other. Adding them under one name would `
-    + `manufacture a false figure. They are counted in the total, never named.`,
-    `<strong>One place can appear twice.</strong> "New York" and "New York County", "Fort Worth" `
-    + `and "Tarrant County" are the same place under two OpenStreetMap administrative resolutions. `
-    + `This is not corrected: doing so would invent a hierarchy the data does not carry.`,
-    `<strong>${n(p.prives, lg)} accommodations are set aside as private</strong> and appear nowhere on `
-    + `this page. A private home is not an establishment: its address is a residence.`,
-    `<strong>No prices, no availability, no reviews.</strong> This survey says what exists and where. `
-    + `It does not say what it is worth, or whether it is open.`,
-  ];
+  const part = Math.round(100 * p.sous_nom_ambigu / Math.max(p.geolocalises, 1));
+  const pire = p.pire_nom;
+  // ⭐ L'exemple vient du PAYS, jamais d'un autre. Un « Jefferson County »
+  //    recopié sur 173 pages serait faux sur 172.
+  const exemple = pire
+    ? (lg === "fr"
+      ? ` Ici, « ${esc(pire.nom)} » rassemble ${n(pire.n, lg)} hébergements répartis sur `
+        + `${String(pire.degres).replace(".", ",")} degrés — plusieurs endroits distincts sous un seul nom.`
+      : ` Here, "${esc(pire.nom)}" gathers ${n(pire.n, lg)} accommodations spread over `
+        + `${pire.degres} degrees — several distinct places under one name.`)
+    : "";
+  const L = [];
+  if (p.sous_nom_ambigu > 0) L.push(lg === "fr"
+    ? `<strong>${n(p.sous_nom_ambigu, lg)} hébergements — ${part} % — ne sont pas listés par nom.</strong> `
+      + `${n(p.noms_ambigus, lg)} noms désignent plusieurs endroits distincts : leurs points ne tiennent `
+      + `pas dans ${seuil}°.${exemple} Les additionner fabriquerait un chiffre faux. Ils sont comptés `
+      + `dans le total, jamais nommés.`
+    : `<strong>${n(p.sous_nom_ambigu, lg)} accommodations — ${part}% — are not listed by name.</strong> `
+      + `${n(p.noms_ambigus, lg)} names designate several distinct places: their points do not fit `
+      + `within ${seuil}°.${exemple} Adding them up would manufacture a false figure. They are counted `
+      + `in the total, never named.`);
+  L.push(lg === "fr"
+    ? `<strong>Un même endroit peut apparaître deux fois.</strong> Une localité est parfois enregistrée `
+      + `sous son nom de ville ET sous celui de sa division administrative. Ce n'est pas corrigé : il `
+      + `faudrait inventer une hiérarchie que la donnée ne porte pas.`
+    : `<strong>One place can appear twice.</strong> A locality is sometimes recorded under its town name `
+      + `AND under that of its administrative division. This is not corrected: doing so would invent a `
+      + `hierarchy the data does not carry.`);
+  if (p.prives > 0) L.push(lg === "fr"
+    ? `<strong>${n(p.prives, lg)} hébergements sont écartés comme privés</strong> et ne figurent nulle part `
+      + `sur cette page. Un logement de particulier n'est pas un établissement : son adresse est un domicile.`
+    : `<strong>${n(p.prives, lg)} accommodations are set aside as private</strong> and appear nowhere on this `
+      + `page. A private home is not an establishment: its address is a residence.`);
+  L.push(lg === "fr"
+    ? `<strong>Aucun prix, aucune disponibilité, aucun avis.</strong> Ce relevé dit ce qui existe et où. `
+      + `Il ne dit pas ce que ça vaut, ni si c'est ouvert.`
+    : `<strong>No prices, no availability, no reviews.</strong> This survey says what exists and where. `
+      + `It does not say what it is worth, or whether it is open.`);
+  return L;
 }
 
 function page(p, lg) {
@@ -142,10 +238,8 @@ function page(p, lg) {
   const nom = p.nom[lg];
   const url = `${SITE}/${lg}/pays/${p.slug}`;
   const desc = w.desc(nom, n(p.publiables, lg), p.moisson.jusqu_a);
-  const typos = p.typologies.map((t) => {
-    const lib = TYPO[t.cle] ? TYPO[t.cle][lg === "fr" ? 0 : 1] : t.cle;
-    return `<tr><td>${esc(lib)}</td><td class="n">${n(t.n, lg)}</td></tr>`;
-  }).join("");
+  const typos = typologies(p, lg)
+    .map((t) => `<tr><td>${esc(t.lib)}</td><td class="n">${n(t.n, lg)}</td></tr>`).join("");
   const lieux = p.lieux.map((l) =>
     `<tr><td>${esc(l.nom)}</td><td class="n">${n(l.n, lg)}</td></tr>`).join("");
 
@@ -162,10 +256,9 @@ function page(p, lg) {
     creator: { "@type": "Organization", name: "MANAhome", url: SITE + "/" },
     spatialCoverage: { "@type": "Place", name: nom },
     temporalCoverage: `${p.moisson.depuis}/${p.moisson.jusqu_a}`,
-    variableMeasured: p.typologies.map((t) => ({
-      "@type": "PropertyValue",
-      name: TYPO[t.cle] ? TYPO[t.cle][lg === "fr" ? 0 : 1] : t.cle,
-      value: t.n,
+    // ⭐ Les mêmes nombres que le tableau affiché — jamais une seconde saisie.
+    variableMeasured: typologies(p, lg).map((t) => ({
+      "@type": "PropertyValue", name: t.lib, value: t.n,
     })),
   };
 
@@ -276,6 +369,22 @@ for (const p of donnees.pays) {
       .replace(/\s+/g, " ").trim();
     // ⭐ LE GARDE QUI COMPTE : la page doit PORTER son texte. C'est toute la
     //    raison d'être de ce générateur — une coquille passerait inaperçue.
+    // ⭐ LE GARDE QUI MANQUAIT : un article devant un nom de pays ne casse rien,
+    //    il publie une faute — sur 173 pages à la fois.
+    // 🔴 ET SA PREMIÈRE VERSION ÉTAIT INERTE. Elle portait `${"[A-ZÀ-Þ]"}` dans
+    //    un LITTÉRAL de regex, où rien ne s'interpole : elle cherchait la chaîne
+    //    `${…}` elle-même, donc jamais rien. Éprouvée par mutation, elle a laissé
+    //    passer « Les hébergements des Italie » en rendant 0.
+    //    ⭐ Un garde qu'on n'a jamais vu REFUSER n'a jamais été vu. Celui-ci a
+    //    été remis à l'épreuve après correction, et il refuse.
+    const nu = html.replace(/<[^>]+>/g, " ");
+    const nomEchappe = p.nom[lg].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    if (new RegExp(`\\b(?:des|du|de\\s+la|aux|au|the)\\s+${nomEchappe}\\b`, "i").test(nu)) {
+      console.error(`🔴 ${lg}/${p.slug} : un article précède « ${p.nom[lg]} ». `
+        + `Ni le français ni l'anglais n'en ont de régulier pour les pays `
+        + `(le Japon, l'Italie, les États-Unis, Cuba) : n'en poser aucun.`);
+      process.exit(1);
+    }
     if (texte.length < 1200) {
       console.error(`🔴 ${lg}/${p.slug} : ${texte.length} caractères de texte — c'est une coquille.`);
       process.exit(1);
