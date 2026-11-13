@@ -10,6 +10,19 @@
  *    DÉRIVE de `montant` et de `option` : un libellé ne peut plus contredire
  *    la valeur déclarée, parce qu'il n'y a plus qu'une valeur.
  *
+ * ⛔ NE PAS GRAVER UN PRIX DANS UNE IMAGE. Six illustrations portaient
+ *    « 149 € HT · paiement unique » dessiné dedans ; elles sont supprimées le
+ *    13/11/2026, deux jours après leur arrivée. ⭐ Le jour où la mention de TVA
+ *    a changé, le texte a suivi partout — la FAQ, les libellés, les mentions
+ *    légales, les deux balises meta, le JSON-LD — et les images sont restées
+ *    fausses, sans qu'aucun test puisse le voir : personne ne lit un prix dans
+ *    une image en intégration continue. Le module qui les portait l'avait
+ *    d'ailleurs ANNONCÉ (« si un prix change, les six images sont à refaire »),
+ *    ce qui n'a rien empêché : une description fidèle occupe la place d'un
+ *    garde sans en faire le travail.
+ * ⚠️ Illustrer reste possible — mais alors sans prix, sans nom d'offre et sans
+ *    aucune valeur qui vive aussi dans ce fichier.
+ *
  * ⚠️ Ces prix sont ARRÊTÉS (décision d'Aurélien, 11/11/2026). Aucun ne se
  *    change sans son autorisation explicite.
  *

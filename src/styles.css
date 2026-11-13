@@ -2350,22 +2350,6 @@ main.wrap > .landing-section:first-child { margin-top: var(--entre-conteneurs); 
 .faq-item[open] summary::before { content: "− "; }
 .faq-item p { font-family: var(--sans); font-size: var(--t-xs); color: var(--doux); margin: 0 0 var(--sp-1); padding-left: 1.1em; }
 
-/* L'illustration de chaque offre — 11/11/2026.
-   ⚠️ `aspect-ratio` ET les attributs width/height sur la balise : sans eux
-   la carte se replie au chargement paresseux et toute la grille saute. */
-.tarif-illustration {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border: 1px solid var(--ink);
-  border-radius: var(--rayon);
-  margin: 0 0 var(--sp-1);
-  background: var(--ink);
-  image-rendering: pixelated;
-}
-
 /* Les bannières de /approche — 11/11/2026.
    ⛔ ELLES SONT EN COULEUR À DESSEIN, dans une charte par ailleurs
    entièrement noir et blanc. Décision d'Aurélien, posée après que la

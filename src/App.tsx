@@ -40,7 +40,6 @@ import logo from "./assets/logo.webp";
 //    prix arrêtés » (assistant, fiche pro, antenne) a été retirée de la page à
 //    la demande d'Aurélien. manahome.org ne porte plus que le GEO.
 import { OFFRES_GEO, FAMILLES, prixAffiche } from "./offres";
-import { ILLUSTRATIONS } from "./illustrations";
 
 // Tri SQL reflété côté front : une annonce importée ne passe jamais
 // devant une directe à adéquation égale.
@@ -536,24 +535,6 @@ export default function App() {
                           >
                             {o.recommande && (
                               <p className="tarif-fanion">{t(L, "Offre recommandée")}</p>
-                            )}
-                            {ILLUSTRATIONS[o.nom] && (
-                              /* ⚠️ `alt=""` et `loading="lazy"` : l'image
-                                 répète le nom, le prix et les points déjà
-                                 écrits en dessous — la décrire ferait tout
-                                 entendre deux fois. Et six images de 1024 px
-                                 pèsent 1 Mo : hors de l'écran au chargement,
-                                 elles ne doivent pas retarder le premier
-                                 rendu. */
-                              <img
-                                className="tarif-illustration"
-                                src={ILLUSTRATIONS[o.nom]}
-                                alt=""
-                                width={1024}
-                                height={1024}
-                                loading="lazy"
-                                decoding="async"
-                              />
                             )}
                             <h3 className="tarif-nom">{o.nom}</h3>
                             <p className="tarif-prix">{prixAffiche(o)}</p>
