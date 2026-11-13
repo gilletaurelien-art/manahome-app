@@ -5,6 +5,8 @@ import {
   ROUTES_PLATES,
   canonique,
   titreDeLaRoute,
+  DESCRIPTION_GENERIQUE,
+  DESCRIPTION_GENERIQUE_EN,
 } from "./src/canonique";
 import { LOCALES } from "./src/i18n";
 // ⛔ OFFRES_MANA retiré : ces trois prix ne sont plus AFFICHÉS sur la page.
@@ -50,15 +52,30 @@ const MOTIF_CANONIQUE =
  * une conversation.
  * ⚠️ Chaque motif est TESTÉ avant d'être appliqué : « le remplacement n'a rien
  * changé » n'est pas « il n'y avait rien à remplacer ».
- * ⛔ La `description` n'est PAS touchée : il n'en existe aucune par page dans
- * ce dépôt, pas même en JS. En écrire serait inventer.
+ * ⛔ CETTE CONSIGNE DISAIT « la description n'est PAS touchée : il n'en existe
+ *    aucune par page, en écrire serait inventer » — juste, et dépassée le
+ *    13/11/2026. Elle parlait des descriptions PAR PAGE ; il en existe
+ *    désormais une PAR LANGUE, et /en/ servait la française sous un titre
+ *    anglais. ⭐ Une consigne juste peut couvrir un cas qu'elle n'a pas prévu.
+ *    Il n'y a toujours AUCUNE description par page, et en écrire serait
+ *    toujours inventer : seule la langue est traitée.
  */
-function injecterTitre(html: string, titre: string): string {
+function injecterTitre(html: string, titre: string, langue: string): string {
+  const description =
+    langue === "en" ? DESCRIPTION_GENERIQUE_EN : DESCRIPTION_GENERIQUE;
   const motifs: [RegExp, string][] = [
     [/<title>[^<]*<\/title>/, `<title>${titre}</title>`],
     [
       /<meta property="og:title" content="[^"]*"\s*\/?>/,
       `<meta property="og:title" content="${titre}" />`,
+    ],
+    [
+      /<meta name="description" content="[^"]*"\s*\/?>/,
+      `<meta name="description" content="${description}" />`,
+    ],
+    [
+      /<meta property="og:description" content="[^"]*"\s*\/?>/,
+      `<meta property="og:description" content="${description}" />`,
     ],
   ];
   let sortie = html;
@@ -212,6 +229,7 @@ function cible(): Plugin {
               injecterTitre(
                 injecterCanonique(coquilleLangue, url, hreflangDe(racine, `/${slug}`)),
                 titre,
+                l,
               ),
             );
           }
@@ -226,6 +244,7 @@ function cible(): Plugin {
                 hreflangDe(racine, "/") + donneesStructurees(l, `${racine}${l}/`),
               ),
               titreDeLaRoute("/", l)!,
+              l,
             ),
           );
         }
@@ -236,6 +255,7 @@ function cible(): Plugin {
             injecterTitre(
               injecterCanonique(coquille, canonique(`/${slug}`, siteUrl, base, "fr")!),
               titreDeLaRoute(`/${slug}`, "fr")!,
+              "fr",
             ),
           );
         }

@@ -74,6 +74,30 @@ export const PAGES_PRIVEES_T: readonly Page[] = [
 export const TITRE_GENERIQUE = "MANAhome — Savoir ce que les IA répondent sur vous.";
 export const TITRE_GENERIQUE_EN = "MANAhome — Know what AIs answer about you.";
 
+/**
+ * La description générique, dans les deux langues.
+ *
+ * 🔴 POSÉE LE 13/11/2026 PARCE QUE /en/ SERVAIT UNE DESCRIPTION FRANÇAISE.
+ *    Le titre était traduit, `og:description` non : un aperçu de lien partagé
+ *    depuis la page anglaise affichait un titre anglais et deux phrases de
+ *    français. Personne ne le voit en relisant le dépôt — ça se constate en
+ *    collant le lien dans une conversation, ou en lisant la PAGE SERVIE.
+ *
+ * ⚠️ `vite.config.ts` portait la consigne « la description n'est PAS touchée :
+ *    il n'en existe aucune par page, en écrire serait inventer ». Elle était
+ *    juste, et elle parlait des descriptions PAR PAGE. Celle-ci est par
+ *    LANGUE, et l'anglaise n'est pas inventée : c'est la traduction fidèle de
+ *    la française, qui était déjà servie. ⭐ Une consigne juste peut couvrir un
+ *    cas qu'elle n'a pas prévu — et c'est là qu'elle devient un faux témoin.
+ *
+ * ⛔ SANS PRIX, comme les titres : la couche lue par les machines ne déclare
+ *    plus de montant tant que l'entité qui facture n'est pas tranchée.
+ */
+export const DESCRIPTION_GENERIQUE =
+  "Vos clients demandent à ChatGPT, Gemini et Perplexity. MANAhome mesure ce qu'ils répondent sur votre organisation : leurs réponses intégrales, leurs sources, et les concurrents cités à votre place. Test gratuit en 30 secondes.";
+export const DESCRIPTION_GENERIQUE_EN =
+  "Your clients ask ChatGPT, Gemini and Perplexity. MANAhome measures what they answer about your organisation: their full answers, their sources, and the competitors cited in your place. Free test in 30 seconds.";
+
 /** Les pages publiques, indexables. Elles seules entrent au plan de site. */
 export const PAGES_PUBLIQUES: readonly string[] = PAGES_PUBLIQUES_T.map((p) => p.slug);
 

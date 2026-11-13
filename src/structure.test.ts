@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { OFFRES_GEO } from "./offres";
+import {
+  TITRE_GENERIQUE, TITRE_GENERIQUE_EN,
+  DESCRIPTION_GENERIQUE, DESCRIPTION_GENERIQUE_EN,
+} from "./canonique";
 
 /* ⚠️ LES COMMENTAIRES SONT RETIRÉS AVANT TOUTE LECTURE DE RÈGLE. Le bloc qui
    explique le retrait de `makesOffer` CITE le mot pour dire pourquoi on ne
@@ -85,6 +89,36 @@ describe("les données structurées ne déclarent aucun prix", () => {
        la constante anglaise a disparu ne garde plus rien. */
     expect(titres).toMatch(/TITRE_GENERIQUE\s*=/);
     expect(titres).toMatch(/TITRE_GENERIQUE_EN\s*=/);
+  });
+
+  it("sert une description ANGLAISE sur les pages anglaises", () => {
+    /* 🔴 POURQUOI — 13/11/2026. Le titre de /en/ était traduit, `og:description`
+       non : un lien partagé depuis la page anglaise affichait un titre anglais
+       et deux phrases de français. ⭐ Invisible en relisant le dépôt — ça se
+       voit en collant le lien dans une conversation, ou en lisant la PAGE
+       SERVIE. C'est le même angle mort que les titres par langue, une heure
+       plus tôt : la couche machine a plus de rédactions qu'on ne croit. */
+    expect(DESCRIPTION_GENERIQUE_EN, "les deux langues servent le même texte")
+      .not.toBe(DESCRIPTION_GENERIQUE);
+    for (const mot of ["Vos clients", "secondes", "répondent", "concurrents cités"]) {
+      expect(DESCRIPTION_GENERIQUE_EN, `« ${mot} » est resté dans la version anglaise`)
+        .not.toContain(mot);
+    }
+    /* ⛔ Et le garde refuse une anglaise vide ou bâclée : un champ effacé
+       passerait toutes les vérifications ci-dessus. */
+    expect(DESCRIPTION_GENERIQUE_EN.length).toBeGreaterThan(80);
+    expect(DESCRIPTION_GENERIQUE_EN).toContain("MANAhome");
+    /* Et les deux titres restent distincts, pour la même raison. */
+    expect(TITRE_GENERIQUE_EN).not.toBe(TITRE_GENERIQUE);
+  });
+
+  it("injecte bien la description dans les deux balises", () => {
+    /* ⚠️ Une description traduite mais jamais injectée serait un progrès
+       invisible : la constante serait juste et la page servie, fausse. */
+    expect(config, "og:description n'est plus réécrite par langue")
+      .toMatch(/og:description" content="\$\{description\}/);
+    expect(config, 'la meta "description" n\'est plus réécrite par langue')
+      .toMatch(/name="description" content="\$\{description\}/);
   });
 
   it("garde l'organisation et son rattachement — ce n'est pas eux qu'on retire", () => {
