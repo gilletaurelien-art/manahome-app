@@ -23,6 +23,12 @@
  * ⚠️ Illustrer reste possible — mais alors sans prix, sans nom d'offre et sans
  *    aucune valeur qui vive aussi dans ce fichier.
  *
+ * ⚠️ MANA GEO China est passée de 490 € à 290 € le 13/11/2026, sur
+ *    autorisation explicite d'Aurélien, après la redéfinition de l'offre sur
+ *    TROIS moteurs atteignables au lieu de sept annoncés. ⭐ Le prix suit le
+ *    périmètre : il avait été arrêté pour une couverture qu'on ne pouvait pas
+ *    livrer.
+ *
  * ⚠️ Ces prix sont ARRÊTÉS (décision d'Aurélien, 11/11/2026). Aucun ne se
  *    change sans son autorisation explicite.
  *
@@ -100,7 +106,7 @@ export const OFFRES_GEO: Offre[] = [
       "Identification des sources et informations manquantes",
     ] },
   {
-    nom: "MANA GEO China", montant: 490, option: true, periode: "unique",
+    nom: "MANA GEO China", montant: 290, option: true, periode: "unique",
     unite: "audit complémentaire ponctuel", famille: "ponctuel",
     depend: "Audit complémentaire — se commande seul ou après un GEO Expert",
     pour: "Pour savoir ce que les IA chinoises disent de vous.",
