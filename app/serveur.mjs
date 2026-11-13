@@ -25,6 +25,13 @@ import {
 import { inscrire, connecter, validerIdentifiants } from "./auth.mjs";
 import { trierNuits, delta } from "./indispos.mjs";
 import { validerDemande, traduireErreurSejour, traduireTransition, sqlDuGeste } from "./sejours.mjs";
+import {
+  validerEvenement,
+  sqlInsererEvenement,
+  sqlListerEvenements,
+  traduireInsertionEvenement,
+  traduireErreurEvenement,
+} from "./evenements.mjs";
 import { nuiteesDepuisIcs, urlValide, telechargerIcs, deltaImport } from "./ical.mjs";
 import { validerMessage, sqlOuvrirConversation, sqlListeConversations } from "./messagerieApi.mjs";
 import { validerDepot, validerJustificatif, phraseRefusPublication } from "./depot.mjs";
@@ -416,6 +423,60 @@ export function creerServeur() {
           return json(res, 200, { sejours: r.rows });
         } catch (e) {
           await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      // ===== Événements de preuve du séjour (chantier 4 — documents horodatés) =====
+      // doit vivre AVANT le matcher mSejour, dont le geste capturerait
+      // « evenements » comme un mot de cycle et répondrait 404 route inconnue
+      const mEvenements = url.pathname.match(/^\/api\/sejours\/([\w-]+)\/evenements$/);
+      if (mEvenements) {
+        if (!UUID.test(mEvenements[1])) {
+          return json(res, 404, { erreur: "route inconnue" });
+        }
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const c = await transactionAuth(uid);
+        try {
+          if (req.method === "POST") {
+            const corpsRequ = await corps(req);
+            const v = validerEvenement({
+              type: corpsRequ.type,
+              payload: corpsRequ.payload,
+            });
+            if (!v.ok) {
+              await c.query("ROLLBACK");
+              return json(res, 400, { erreur: v.erreur });
+            }
+            // le payload validé repart sérialisé : le $3::jsonb de la
+            // requête n'accepte jamais de texte client brut
+            const r = await c.query(sqlInsererEvenement(), [
+              mEvenements[1],
+              corpsRequ.type,
+              JSON.stringify(v.payload),
+            ]);
+            const traduit = traduireInsertionEvenement(r.rowCount);
+            if (traduit) {
+              await c.query("ROLLBACK");
+              return json(res, traduit.statut, { erreur: traduit.erreur });
+            }
+            await c.query("COMMIT");
+            return json(res, 201, r.rows[0]);
+          }
+          if (req.method === "GET") {
+            const r = await c.query(sqlListerEvenements(), [mEvenements[1]]);
+            await c.query("COMMIT");
+            return json(res, 200, { evenements: r.rows });
+          }
+          await c.query("ROLLBACK");
+          return json(res, 404, { erreur: "route inconnue" });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          const traduit = traduireErreurEvenement(e);
+          if (traduit) return json(res, traduit.statut, { erreur: traduit.erreur });
           throw e;
         } finally {
           c.release();
