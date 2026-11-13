@@ -57,6 +57,14 @@ const DICO_EN: Record<string, string> = {
     "Net prices: no VAT is added. Alliance MANA is a French non-profit association (loi 1901, RNA W292008256) with disinterested management whose trading activity remains ancillary; invoices carry the statutory mention « TVA non applicable, article 261-7 du CGI ».",
   "Les prix affichés sont nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives restent accessoires — la facture porte la mention « TVA non applicable, article 261-7 du CGI ». Elle est émise par Alliance MANA, et vous l'acceptez avant tout travail.":
     "Displayed prices are net: no VAT is added. Alliance MANA is a French non-profit association with disinterested management whose trading activity remains ancillary — invoices carry the statutory mention « TVA non applicable, article 261-7 du CGI ». The invoice is issued by Alliance MANA and you accept it before any work begins.",
+  "Pour mesurer sa visibilité sur les marchés britannique, allemand et espagnol.":
+    "To measure your visibility in the UK, German and Spanish markets.",
+  "Trois marchés : Royaume-Uni, Allemagne, Espagne":
+    "Three markets: United Kingdom, Germany, Spain",
+  "Dix questions par marché, posées dans la langue du pays":
+    "Ten questions per market, asked in the country's own language",
+  "Réponses analysées dans la langue d'origine, jamais traduites d'abord":
+    "Answers analysed in their original language, never translated first",
   "paiement unique": "one-off payment",
   "option sur GEO Expert": "add-on to GEO Expert",
   "par mois · abonnement": "per month · subscription",
@@ -68,8 +76,6 @@ const DICO_EN: Record<string, string> = {
     "For a quick snapshot of your presence inside AI assistants.",
   "Pour comprendre sa position réelle sur son marché.":
     "To understand your real position in your market.",
-  "Pour mesurer sa visibilité sur un marché étranger.":
-    "To measure your visibility in a foreign market.",
   "Pour suivre son évolution, mois après mois.": "To track your progress, month after month.",
   "Pour savoir ce que les IA chinoises disent de vous.":
     "To find out what Chinese AIs say about you.",
@@ -91,8 +97,6 @@ const DICO_EN: Record<string, string> = {
   "Analyse des données structurées et de la lisibilité machine":
     "Analysis of structured data and machine readability",
   "Plan d'amélioration hiérarchisé": "A prioritised improvement plan",
-  "Audit complémentaire sur un marché étranger": "Additional audit on a foreign market",
-  "Analyse dans une autre langue": "Analysis in another language",
   "Comparaison des concurrents locaux": "Comparison of local competitors",
   "Identification des sources et informations manquantes":
     "Identification of missing sources and information",
