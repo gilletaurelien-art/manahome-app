@@ -9,3 +9,6 @@ data/
 .DS_Store
 tsconfig.tsbuildinfo
 __pycache__/
+
+# Bundle de rendu serveur, jetable : ecrit et efface par scripts/prerendre.mjs
+.ssr/

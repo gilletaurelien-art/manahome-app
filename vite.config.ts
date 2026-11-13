@@ -176,8 +176,16 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
 
 function cible(): Plugin {
   let coquille = "";
+  // Vrai pendant `vite build --ssr` : le greffon ne doit alors rien écrire.
+  let estSSR = false;
   return {
     name: "valeurs-de-la-cible",
+    // ⛔ CE GREFFON ÉCRIT LES COQUILLES HTML : il n'a rien à faire dans un build
+    //    SSR, qui ne produit aucune page. Sans ce garde, `vite build --ssr`
+    //    échoue sur « coquille HTML jamais capturée » — un message exact, mais
+    //    qui accuse la cible au lieu du greffon. Le rendu serveur
+    //    (scripts/prerendre.mjs) en a besoin pour construire son bundle.
+    configResolved(c) { estSSR = !!c.build.ssr; },
     transformIndexHtml(html) {
       // ⚠️ La coquille RACINE est l'accueil réellement servi sur https://…/
       // (Caddy y sert site/index.html). Elle porte donc le JSON-LD, comme
@@ -203,6 +211,9 @@ function cible(): Plugin {
     writeBundle: {
       sequential: true,
       async handler(options) {
+        // ⛔ Un build SSR ne produit aucune page : sortir AVANT le contrôle de
+        //    la coquille, sinon il accuse la cible d'un défaut qui n'existe pas.
+        if (estSSR) return;
         const { readFile, writeFile, mkdir, readdir, stat } = await import("node:fs/promises");
         const dir = options.dir!;
 

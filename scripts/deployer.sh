@@ -46,6 +46,17 @@ npm run build
 #    prerender` plantait. Prouvé par mutation le 12/11 : `site/approche`
 #    effacé, `npm run build` seul le reconstruit.
 
+# ⭐ LE PRÉRENDU DES COQUILLES REACT — le defaut le plus grave du site, corrige
+#    le 13/11/2026. `npm run build` ecrivait une coquille par route (titre,
+#    canonique, hreflang) et le CONTENU n'existait qu'apres execution du
+#    JavaScript : /fr/approche servait 2 910 octets et ZERO caractere de texte.
+#    Or GPTBot, ClaudeBot et PerplexityBot — que ce site NOMME dans son propre
+#    argumentaire — n'executent pas JavaScript.
+#    ⚠️ Comme les pages pays, ca vit ENTRE la construction et l'envoi : le build
+#    reecrit site/ en entier.
+echo "→ prérendu des pages React …"
+node scripts/prerendre.mjs
+
 # ⭐ LES PAGES « PAYS » SONT ÉCRITES ICI, ENTRE LA CONSTRUCTION ET L'ENVOI, et
 #    cet emplacement est la seule chose qui compte. `npm run build` réécrit
 #    `site/` en entier : les générer avant, c'est les perdre. Les générer après
