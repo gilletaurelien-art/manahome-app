@@ -61,6 +61,31 @@ points il n'y a rien.
 ⭐ C'est le défaut déjà enregistré sous « `sentiers_traces` : 95 % recollés dans
 le désordre ». Il n'était pas réparé ; il est maintenant chiffré.
 
+### 🔴 CORRECTION DU MÊME JOUR — cette section concluait trop vite
+
+Deux heures plus tard, la mesure suivante a renversé la conclusion. **Les trous
+étaient DANS la séquence de points de chaque tracé, pas entre les tracés.** Leur
+union, une fois nœudée, est un réseau propre :
+
+```
+ST_Dump(ST_Node(ST_Union(geom)))   -- rayon 8 km autour de Crozon
+→ 12 716 arêtes · 10 224 nœuds · 962 km · longueur médiane 15 m
+→ pgr_connectedComponents : UNE SEULE composante, 100 % des nœuds
+```
+
+Et un itinéraire réel se calcule : **Crozon bourg → pointe de Dinan, 228 arêtes,
+13 927 m**, soit ~3 h à 4,5 km/h — plausible pour 8 km à vol d'oiseau sur un
+réseau côtier.
+
+⭐ **Une mesure juste peut porter une conclusion fausse.** « Médiane 14,7 km,
+max 509 km, sauts de 602 m » était exact ; « on ne route pas là-dessus » ne
+l'était pas. Je regardais les tracés comme des objets à suivre un par un, alors
+que ce qui compte est leur UNION. Le défaut du recollement reste réel pour qui
+veut afficher « le sentier n° 9 » ; il est sans effet pour qui veut router.
+
+**Conséquence : aucun ré-import OSM n'est nécessaire pour composer.** La matière
+est là, et elle tient.
+
 ## 4. 🔴 La base que le cahier vise n'existe pas
 
 Le cahier demande `db/schema/013_balades.sql`, « même grammaire que les
@@ -101,16 +126,24 @@ ensuite, composer en dernier. »* La mesure est faite — **il ne tient pas**. L
 réparation précède donc tout le reste, et elle n'est pas dans la séquence
 actuelle :
 
-1. **Décider où vit le produit.** Une base à soi (jouer 001-012 + 013, monter le
-   service) ou la base commune de l'écosystème. Ce choix commande tout le reste
-   et il n'est pas technique : c'est le cloisonnement des données.
-2. **Rendre les tracés routables.** Découper les assemblages, combler ou
-   constater les trous, construire la topologie. Sans pgRouting ou équivalent,
-   il n'y a pas de compositeur — et ce n'est pas un détail d'implémentation,
-   c'est l'avantage concurrentiel que le cahier désigne lui-même.
-3. **Re-mesurer sur deux zones** : Crozon (bien couverte) et une zone pauvre,
-   pour éprouver le refus honnête avant d'écrire la première ligne du
-   compositeur.
+1. ✅ **Où vit le produit — tranché le 14/11 par Aurélien : la base de
+   l'écosystème.** Les douze migrations de `db/schema/` et `app/serveur.mjs` ne
+   seront donc jamais jouées : à marquer comme morts, pas à laisser paraître
+   vivants.
+2. ✅ **pgRouting est installé**, dans son propre schéma `routage`, migration
+   `20261114003459`. Il était déjà dans l'image : aucun changement d'image,
+   aucune interruption. 321 fonctions, aucune dans `public`, aucun droit à
+   `anon`.
+3. ✅ **Le réseau tient** — voir la correction ci-dessus. Un itinéraire se
+   calcule aujourd'hui sur la donnée existante.
+4. ⏳ **Ce qui reste avant le compositeur** : la table d'arêtes doit devenir
+   PERMANENTE et se maintenir (le nœudage coûte quelques secondes sur 8 km ;
+   il ne peut pas se refaire à chaque requête), la praticabilité doit être
+   pondérée (un tracé n'est pas une route), et les fermetures doivent exclure
+   des arêtes.
+5. ⏳ **Re-mesurer sur une zone PAUVRE**, pour éprouver le refus honnête — c'est
+   la promesse du cahier (« je ne peux pas composer ici, voici pourquoi ») et
+   elle n'a encore jamais été vérifiée.
 
 ⛔ Les étapes 2 à 7 du cahier (migration 013, compositeur, carte, souvenirs,
 signalements, partage, llms.txt) restent valables **telles qu'écrites** — elles
