@@ -65,6 +65,24 @@ const DICO_EN: Record<string, string> = {
     "Ten questions per market, asked in the country's own language",
   "Réponses analysées dans la langue d'origine, jamais traduites d'abord":
     "Answers analysed in their original language, never translated first",
+  "Pour mesurer sa visibilité sur les marchés nord-américains.":
+    "To measure your visibility in North American markets.",
+  "Trois marchés : États-Unis, Canada anglophone, Canada francophone":
+    "Three markets: United States, English-speaking Canada, French-speaking Canada",
+  "Pour mesurer sa visibilité sur les grands marchés hispanophones.":
+    "To measure your visibility in the major Spanish-speaking markets.",
+  "Trois marchés : Mexique, Colombie, Argentine":
+    "Three markets: Mexico, Colombia, Argentina",
+  "Pour mesurer sa visibilité au Maroc, en Algérie et en Tunisie.":
+    "To measure your visibility in Morocco, Algeria and Tunisia.",
+  "Trois marchés : Maroc, Algérie, Tunisie — en français, langue des affaires":
+    "Three markets: Morocco, Algeria, Tunisia — in French, the language of business there",
+  "Pour mesurer sa visibilité en Inde, au Pakistan et au Sri Lanka.":
+    "To measure your visibility in India, Pakistan and Sri Lanka.",
+  "Trois marchés : Inde, Pakistan, Sri Lanka — en anglais":
+    "Three markets: India, Pakistan, Sri Lanka — in English",
+  "Nous interrogeons les quatre assistants occidentaux. Des assistants locaux peuvent compter autant dans cette zone : nous ne les mesurons pas, et nous l'écrivons.":
+    "We query the four Western assistants. Local assistants may matter just as much in this region: we do not measure them, and we say so.",
   "paiement unique": "one-off payment",
   "option sur GEO Expert": "add-on to GEO Expert",
   "par mois · abonnement": "per month · subscription",
