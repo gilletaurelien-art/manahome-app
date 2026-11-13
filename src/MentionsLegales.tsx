@@ -57,16 +57,47 @@ import { t } from "./i18n";
 //    marque, pas une personne ; la mention ne désigne donc personne au sens de
 //    l'art. 6 III 1° ». L'éditeur est désormais une PERSONNE PHYSIQUE nommée,
 //    exerçant sous ce nom commercial — la loi est satisfaite sans détour.
+// 🔴 L'ÉDITEUR REVIENT À L'ASSOCIATION — 14/11/2026, décision d'Aurélien, et
+//    c'est la SECONDE bascule en vingt-quatre heures. Elle n'est pas une
+//    hésitation : chacune suivait l'activité réelle du site.
+//      13/11 — manahome VENDAIT le GEO → l'entreprise individuelle.
+//      14/11 — le GEO est parti chez temposystem.eu et .fr → le site ne vend
+//              plus rien, et « rendre les territoires et leurs acteurs lisibles
+//              et accessibles par tout moyen numérique, y compris
+//              l'intelligence artificielle » est MOT POUR MOT l'objet d'Alliance
+//              MANA, refondu en AGE le 15/10/2026.
+//    ⭐ Ce qui détermine l'éditeur, c'est ce que le site FAIT, pas ce qu'on
+//       préfère. Un relevé ouvert que personne ne paie n'est pas une activité
+//       commerciale — et le déclarer tel serait une pièce contre le rescrit
+//       mécénat que l'association dépose.
+//
+// ⚠️ DIRECTEUR DE LA PUBLICATION — le point est signalé, pas enterré. Pour une
+//    personne morale, la loi du 29/07/1982 (art. 93-2) désigne le REPRÉSENTANT
+//    LÉGAL, et l'article 119 des statuts dit que « le président représente
+//    l'Association dans tous les actes de la vie civile » — soit Bruno GILLET
+//    depuis l'AGE du 15/10. Les statuts ne portent AUCUNE clause désignant un
+//    directeur de la publication : vérifié dans les 21 articles, l'unique
+//    mention voisine (« toute personne dûment mandatée ») vise les formalités
+//    de déclaration en préfecture, pas la direction de publication.
+//    ⛔ Aurélien GILLET est inscrit ici sur sa décision. Ce qui rendrait la
+//    mention inattaquable tient en une ligne de procès-verbal du bureau le
+//    mandatant à ce titre. Tant qu'elle n'existe pas, cette note la remplace.
 const EDITEUR = {
-  nom: "Aurélien GILLET",
-  forme: "Entrepreneur individuel, exerçant sous le nom commercial TEMPOsystem",
-  siren: "514 004 118",
-  siret: "514 004 118 00030",
-  ape: "8690F",
+  nom: "Alliance MANA",
+  forme: "Association déclarée, régie par la loi du 1er juillet 1901 et le décret du 16 août 1901",
+  rna: "W292008256",
+  siren: "130 121 866",
+  siret: "130 121 866 00011",
+  ape: "94.99Z",
   siege: "4 Lostmarc'h, 29160 Crozon",
-  tva: "TVA non applicable, article 293 B du Code général des impôts (franchise en base). Pas de numéro de TVA intracommunautaire, pas d'immatriculation au registre du commerce et des sociétés.",
+  // ⚠️ Ce site ne vend RIEN : le relevé est publié en données ouvertes. On
+  //    n'écrit donc aucune mention de franchise — l'art. 293 B est le régime
+  //    d'une entreprise, et l'invoquer ici décrirait une activité qui n'existe
+  //    pas sur ce domaine.
+  tva: "Aucune vente sur ce site : le relevé est publié en données ouvertes, sous licence ODbL. L'association ne dispose pas de numéro de TVA intracommunautaire.",
   email: "contact@manahome.org",
   directeur: "Aurélien GILLET",
+  qualiteDirecteur: "fondateur",
 };
 
 /** Vérifié au registre RIPE sur l'adresse de production réelle, le 07/11/2026. */
@@ -88,13 +119,18 @@ export function MentionsLegales() {
         <ul className="mentions-liste">
           <li><strong>{EDITEUR.nom}</strong></li>
           <li>{t(L, EDITEUR.forme)}</li>
+          {/* ⭐ Le RNA D'ABORD : une association déclarée s'identifie par lui,
+              et c'est le numéro à rappeler dans toute correspondance
+              préfectorale. Le SIREN et le SIRET existent depuis le 18/08/2026
+              et se donnent aussi — ils servent aux financeurs publics. */}
+          <li>{t(L, "Numéro RNA")} : {EDITEUR.rna}</li>
           <li>{t(L, "Numéro SIREN")} : {EDITEUR.siren}</li>
           <li>{t(L, "Numéro SIRET")} : {EDITEUR.siret}</li>
           <li>{t(L, "Code APE")} : {EDITEUR.ape}</li>
           <li>{t(L, "Adresse")} : {EDITEUR.siege}</li>
           <li>{t(L, EDITEUR.tva)}</li>
           <li>{t(L, "Courriel")} : <a href={`mailto:${EDITEUR.email}`}>{EDITEUR.email}</a></li>
-          <li>{t(L, "Directeur de la publication")} : {EDITEUR.directeur}</li>
+          <li>{t(L, "Directeur de la publication")} : {EDITEUR.directeur}, {t(L, EDITEUR.qualiteDirecteur)}</li>
         </ul>
 
         <h2 className="tarif-sous-titre">{t(L, "Hébergement")}</h2>
@@ -104,16 +140,23 @@ export function MentionsLegales() {
         </ul>
 
         <h2 className="tarif-sous-titre">{t(L, "Nature du service")}</h2>
+        {/* ⛔ 14/11/2026 — CE BLOC DÉCRIVAIT ENCORE LE GEO, et c'est le dernier
+            reste trouvé : « MANAhome est la vitrine du GEO […] éditée par
+            TEMPOsystem », puis une section « Prix et commandes » annonçant la
+            franchise de l'art. 293 B. ⭐ Les mentions légales sont la page
+            qu'on relit le moins et qui engage le plus — on y cherche l'éditeur,
+            jamais la description du service. Trouvé en relisant la page
+            SERVIE, après que l'accueil et /approche étaient déjà propres. */}
         <p className="section-texte">
-          {t(L, "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, éditée par TEMPOsystem. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.")}
+          {t(L, "MANAhome publie un relevé ouvert des hébergements touristiques du monde, construit à partir de données ouvertes : une page par pays, avec les types recensés, les lieux que l'on peut nommer sans se tromper, et la part que l'on ne peut pas.")}
         </p>
         <p className="section-texte">
-          {t(L, "MANAhome ne garantit ni indexation, ni citation, ni recommandation par un assistant IA : personne ne contrôle ce que répond un modèle. L'audit mesure et documente — il ne vend aucune position. Il reste indépendant de toute prestation d'optimisation.")}
+          {t(L, "Rien n'est vendu sur ce site : aucun classement, aucune mise en avant, aucune place. Le relevé dit ce qui existe et où, à une date, avec sa source. Il ne dit ni ce que ça vaut, ni si c'est ouvert, et ne garantit ni exhaustivité ni exactitude des données reprises de ses sources.")}
         </p>
 
-        <h2 className="tarif-sous-titre">{t(L, "Prix et commandes")}</h2>
+        <h2 className="tarif-sous-titre">{t(L, "Données et licence")}</h2>
         <p className="section-texte">
-          {t(L, "Les prix affichés sont des prix publics et nets : aucune TVA ne s'ajoute. TEMPOsystem relève de la franchise en base de TVA ; ses factures portent la mention « TVA non applicable, article 293 B du CGI ». Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par TEMPOsystem, que vous acceptez avant tout travail.")}
+          {t(L, "Les données proviennent d'OpenStreetMap et de registres publics ouverts. Elles sont republiées sous licence ODbL, qui en autorise la réutilisation à condition d'en citer la source et de partager les éventuelles modifications aux mêmes conditions.")}
         </p>
 
         <h2 className="tarif-sous-titre">{t(L, "Le test gratuit")}</h2>

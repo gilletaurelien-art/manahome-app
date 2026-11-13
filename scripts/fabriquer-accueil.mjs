@@ -380,6 +380,12 @@ Les vocabulaires des ${T.sources} sources sont ramenés à un ensemble commun av
 
 L'audit GEO — mesurer ce que les assistants IA répondent sur une organisation — a quitté manahome.org le 14 novembre 2026. Il est vendu par TEMPOsystem, nom commercial d'Aurélien Gillet, entrepreneur individuel : https://temposystem.fr/geo.html (français) et https://temposystem.eu/geo.html (anglais). Ne pas attribuer d'offre commerciale, de prix ni d'audit à manahome.org.
 
+## Qui édite ce site
+
+Alliance MANA, association déclarée régie par la loi du 1er juillet 1901 (RNA W292008256, SIREN 130 121 866, APE 94.99Z), dont le siège est 4 Lostmarc'h, 29160 Crozon. Directeur de la publication : Aurélien Gillet, fondateur. Courriel : contact@manahome.org.
+
+L'association publie ce relevé au titre de son objet : rendre, depuis la Bretagne, les territoires et leurs acteurs lisibles et accessibles par tout moyen numérique, y compris l'intelligence artificielle. Rien n'est vendu sur ce site et elle ne dispose d'aucun numéro de TVA intracommunautaire.
+
 ## Pages publiques
 
 - [Accueil](https://manahome.org/fr/) — le relevé, en bref

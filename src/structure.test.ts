@@ -49,36 +49,79 @@ describe("les mentions légales nomment la bonne entité", () => {
      `toContain("Aurélien GILLET")` passait avec un directeur remplacé, parce
      que le même nom vit dans `nom:`. La bonne chaîne au mauvais endroit — le
      même défaut que le compteur de tracés le matin du même jour. */
+  /* ⭐ LE BLOC DE VALEURS, SANS LA PROSE AUTOUR — et c'est la leçon que ce
+     fichier prêchait sans l'appliquer partout. Deux des quatre tests lisaient
+     `mentions`, c'est-à-dire le FICHIER ENTIER : commentaires compris. Le
+     14/11/2026 ils ont refusé le passage à l'association parce que le
+     commentaire qui EXPLIQUAIT la bascule citait « TEMPOsystem », « 293 B » et
+     le SIREN de l'entreprise — des mots justes, à un endroit qui ne déclare
+     rien. ⛔ Un garde qui lit la prose force à édulcorer la prose : il fait
+     disparaître l'explication pour satisfaire le test. On lit donc l'objet. */
+  const bloc = (): string => {
+    const m = mentions.match(/const EDITEUR = \{[\s\S]*?\n\};/);
+    if (!m) throw new Error("objet EDITEUR introuvable dans les mentions légales");
+    return m[0];
+  };
+
   const champ = (nom: string): string => {
     const m = mentions.match(new RegExp(`\\b${nom}:\\s*"([^"]*)"`));
     if (!m) throw new Error(`champ ${nom} absent des mentions légales`);
     return m[1];
   };
 
-  it("affiche l'immatriculation de l'entreprise individuelle", () => {
-    expect(champ("siren")).toBe("514 004 118");
-    expect(champ("siret")).toBe("514 004 118 00030");
-    expect(champ("ape")).toBe("8690F");
+  /* 🔄 CES QUATRE TESTS SONT RETOURNÉS, PAS RÉÉCRITS — 14/11/2026.
+     Ils exigeaient l'entreprise individuelle et INTERDISAIENT l'association ;
+     ils exigent maintenant l'inverse. ⭐ Ce qu'ils protègent n'a pas changé
+     d'un mot : les deux jeux de mentions sont exactement opposés, et écrire
+     l'un sur le site de l'autre reste une fausse déclaration. Seule la bonne
+     réponse a changé, parce que l'ACTIVITÉ du site a changé — le GEO est parti
+     chez temposystem.eu et .fr, manahome ne vend plus rien.
+     ⛔ Les supprimer aurait laissé le site sans garde une semaine avant que
+     quelqu'un remette « Alliance MANA » sur une vitrine commerciale. */
+
+  it("affiche l'immatriculation de l'association", () => {
+    expect(champ("rna"), "le RNA est l'identifiant d'une association déclarée")
+      .toBe("W292008256");
+    expect(champ("siren")).toBe("130 121 866");
+    expect(champ("siret")).toBe("130 121 866 00011");
+    expect(champ("ape")).toBe("94.99Z");
   });
 
-  it("fonde la TVA sur la franchise en base, pas sur le régime associatif", () => {
-    expect(mentions, "le fondement 293 B n'est pas écrit").toContain("293 B");
-    expect(mentions, "l'article 261-7, propre aux associations, est resté")
+  it("ne déclare AUCUN régime de TVA d'entreprise", () => {
+    /* ⭐ Ni 293 B ni 261-7 : ce site ne vend RIEN. L'article 293 B est le
+       régime d'une entreprise, l'article 261-7 celui d'une association qui a
+       des recettes lucratives. Invoquer l'un ou l'autre décrirait une activité
+       qui n'existe pas sur ce domaine — et pour l'association, qui dépose un
+       rescrit mécénat, ce serait une pièce contre son propre dossier. */
+    expect(bloc(), "l'art. 293 B, propre aux entreprises, est resté")
+      .not.toMatch(/293\s*B/);
+    expect(bloc(), "l'art. 261-7 décrirait des recettes lucratives")
       .not.toMatch(/261[-\s,]*7/);
+    expect(bloc(), "il faut dire que rien n'est vendu").toContain("Aucune vente");
   });
 
-  it("ne porte AUCUNE marque de l'association", () => {
-    for (const interdit of ["W292008256", "RNA", "loi du 1er juillet 1901", "Alliance MANA"]) {
-      expect(mentions, `« ${interdit} » est revenu dans les mentions de MANAhome`)
+  it("ne porte AUCUNE marque de l'entreprise individuelle", () => {
+    for (const interdit of ["514 004 118", "8690F", "TEMPOsystem",
+                            "Entrepreneur individuel", "293 B"]) {
+      expect(bloc(), `« ${interdit} » est revenu dans les mentions de MANAhome`)
         .not.toContain(interdit);
     }
   });
 
   it("nomme une PERSONNE comme directeur de la publication", () => {
-    /* ⭐ La réserve LCEN d'avant tombe ici : l'art. 6 III 1° veut une personne
-       physique nommée, et « TEMPOsystem » est un nom commercial. */
+    /* ⭐ L'art. 6 III 1° de la LCEN veut une personne physique NOMMÉE. C'est
+       le seul des quatre tests qui n'a pas eu à être retourné : il exigeait
+       une personne quand l'éditeur était une personne, il l'exige encore
+       maintenant que l'éditeur est une personne morale.
+       ⚠️ CE QU'IL NE VÉRIFIE PAS, et qu'aucun test ne peut vérifier : que
+       cette personne soit la BONNE. Pour une personne morale, la loi du
+       29/07/1982 (art. 93-2) désigne le représentant légal — le président,
+       selon l'article 119 des statuts. Aurélien GILLET est inscrit sur sa
+       décision, et les statuts ne portent aucune clause le désignant : c'est
+       une ligne de PV du bureau qui réglerait le point, pas une assertion. */
     expect(champ("directeur")).toBe("Aurélien GILLET");
-    expect(champ("nom")).toBe("Aurélien GILLET");
+    expect(champ("nom"), "l'éditeur est la personne MORALE, pas la personne physique")
+      .toBe("Alliance MANA");
     expect(mentions).toContain("Directeur de la publication");
   });
 });

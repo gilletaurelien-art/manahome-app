@@ -502,6 +502,18 @@ const DICO_EN: Record<string, string> = {
     "Countries",
   "La méthode":
     "The method",
+  "Données et licence":
+    "Data and licence",
+  "MANAhome publie un relevé ouvert des hébergements touristiques du monde, construit à partir de données ouvertes : une page par pays, avec les types recensés, les lieux que l'on peut nommer sans se tromper, et la part que l'on ne peut pas.":
+    "MANAhome publishes an open survey of the world's tourist accommodation, built from open data: one page per country, with the types recorded, the places that can be named without error, and the share that cannot.",
+  "Rien n'est vendu sur ce site : aucun classement, aucune mise en avant, aucune place. Le relevé dit ce qui existe et où, à une date, avec sa source. Il ne dit ni ce que ça vaut, ni si c'est ouvert, et ne garantit ni exhaustivité ni exactitude des données reprises de ses sources.":
+    "Nothing is sold on this site: no ranking, no promotion, no placement. The survey says what exists and where, at a date, with its source. It says neither what it is worth nor whether it is open, and guarantees neither completeness nor accuracy of the data taken from its sources.",
+  "Les données proviennent d'OpenStreetMap et de registres publics ouverts. Elles sont republiées sous licence ODbL, qui en autorise la réutilisation à condition d'en citer la source et de partager les éventuelles modifications aux mêmes conditions.":
+    "The data comes from OpenStreetMap and open public registers. It is republished under the ODbL licence, which allows reuse provided the source is cited and any changes are shared under the same terms.",
+  "fondateur":
+    "founder",
+  "Aucune vente sur ce site : le relevé est publié en données ouvertes, sous licence ODbL. L'association ne dispose pas de numéro de TVA intracommunautaire.":
+    "Nothing is sold on this site: the survey is published as open data, under the ODbL licence. The association holds no EU VAT number.",
   "Demander un audit": "Request an audit",
   "Voir les offres": "See the offers",
   "Contact": "Contact",
