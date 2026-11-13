@@ -10,6 +10,17 @@
  *    DÉRIVE de `montant` et de `option` : un libellé ne peut plus contredire
  *    la valeur déclarée, parce qu'il n'y a plus qu'une valeur.
  *
+ * ⛔ GEO MONITORING NE SE VEND PAS SEUL — arbitrage d'Aurélien, 13/11/2026.
+ *    La carte l'affichait en offre autonome à 99 €/mois alors que la fabrique
+ *    l'a TOUJOURS refusé : `geo_abonnements_monitoring.audit_prolonge` est
+ *    `not null`, et le composeur lève « un suivi sans panel de départ ne
+ *    compare rien ». ⭐ Un client aurait pu l'acheter sans qu'on puisse le
+ *    livrer — la vitrine vendait ce que l'usine ne sait pas produire.
+ * ⭐ Et ce n'est pas une limite technique qu'on pourrait lever : la valeur
+ *    d'un suivi est la COMPARAISON, et une comparaison n'existe qu'à partir
+ *    du deuxième point. Vendre un suivi seul, c'est vendre un graphique à un
+ *    point.
+ *
  * ⛔ NE PAS GRAVER UN PRIX DANS UNE IMAGE. Six illustrations portaient
  *    « 149 € HT · paiement unique » dessiné dedans ; elles sont supprimées le
  *    13/11/2026, deux jours après leur arrivée. ⭐ Le jour où la mention de TVA
@@ -172,11 +183,13 @@ export const OFFRES_GEO: Offre[] = [
       "Recommandations pour améliorer sa visibilité en Chine",
     ] },
   {
-    nom: "GEO Monitoring", montant: 99, option: false, periode: "mois",
-    unite: "par mois · abonnement", famille: "recurrent",
+    nom: "GEO Monitoring", montant: 99, option: true, periode: "mois",
+    unite: "par mois · option sur un audit", famille: "recurrent",
+    depend: "Option sur GEO Express ou GEO Expert",
     pour: "Pour suivre son évolution, mois après mois.",
     points: [
-      "Le même panel de questions rejoué chaque mois",
+      "Prolonge un audit déjà réalisé : il ne le remplace pas",
+      "Le même panel de questions rejoué chaque mois, aux formulations exactes de votre audit",
       "Suivi des concurrents et des changements de position",
       "Repérage des nouvelles sources citées",
       "Détection des réponses erronées ou des disparitions",

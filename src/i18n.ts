@@ -83,6 +83,14 @@ const DICO_EN: Record<string, string> = {
     "Three markets: India, Pakistan, Sri Lanka — in English",
   "Nous interrogeons les quatre assistants occidentaux. Des assistants locaux peuvent compter autant dans cette zone : nous ne les mesurons pas, et nous l'écrivons.":
     "We query the four Western assistants. Local assistants may matter just as much in this region: we do not measure them, and we say so.",
+  "par mois · option sur un audit":
+    "per month · add-on to an audit",
+  "Option sur GEO Express ou GEO Expert":
+    "Add-on to GEO Express or GEO Expert",
+  "Prolonge un audit déjà réalisé : il ne le remplace pas":
+    "Extends an audit you already had: it does not replace one",
+  "Le même panel de questions rejoué chaque mois, aux formulations exactes de votre audit":
+    "The same panel replayed every month, in your audit's exact wording",
   "paiement unique": "one-off payment",
   "option sur GEO Expert": "add-on to GEO Expert",
   "par mois · abonnement": "per month · subscription",
