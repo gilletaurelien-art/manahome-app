@@ -104,7 +104,19 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
     name: o.nom,
     price: String(o.montant),
     priceCurrency: "EUR",
-    valueAddedTaxIncluded: false,
+    // 🔴 VALAIT `false` JUSQU'AU 13/11/2026, c'est-à-dire « ce prix n'inclut
+    // pas la TVA, ajoutez-la ». Or Alliance MANA ne collecte AUCUNE TVA
+    // (association loi 1901, franchise de l'art. 261, 7-1°-b du CGI) : le
+    // montant affiché EST le montant payé.
+    // ⭐ ET C'ÉTAIT LE PIRE ENDROIT POSSIBLE POUR CETTE ERREUR. Ce balisage
+    // est ce que les assistants IA LISENT pour répondre. Nous vendons de la
+    // visibilité dans les IA, et nous leur déclarions nous-mêmes des prix à
+    // majorer de 20 % — un assistant citant MANAhome aurait annoncé 178,80 €
+    // là où le prix est 149 €. Le produit retourné contre son auteur.
+    // ⚠️ `true` ne dit pas « il y a de la TVA dedans » : il dit « rien ne
+    // s'ajoute à ce montant », ce qui est exactement vrai quand aucune taxe
+    // n'est applicable.
+    valueAddedTaxIncluded: true,
     ...(o.periode === "mois"
       ? { priceSpecification: {
             "@type": "UnitPriceSpecification",

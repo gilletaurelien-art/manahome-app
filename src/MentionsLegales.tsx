@@ -91,7 +91,7 @@ export function MentionsLegales() {
 
         <h2 className="tarif-sous-titre">{t(L, "Prix et commandes")}</h2>
         <p className="section-texte">
-          {t(L, "Les prix affichés sont des prix publics, hors taxes. Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par Alliance MANA, que vous acceptez avant tout travail.")}
+          {t(L, "Les prix affichés sont des prix publics et nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives demeurent accessoires ; ses factures portent la mention « TVA non applicable, article 261-7 du CGI ». Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par Alliance MANA, que vous acceptez avant tout travail.")}
         </p>
 
         <h2 className="tarif-sous-titre">{t(L, "Le test gratuit")}</h2>
