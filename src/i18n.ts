@@ -91,6 +91,8 @@ const DICO_EN: Record<string, string> = {
     "Extends an audit you already had: it does not replace one",
   "Le même panel de questions rejoué chaque mois, aux formulations exactes de votre audit":
     "The same panel replayed every month, in your audit's exact wording",
+  "Accès, conformité et qualification des fournisseurs chinois compris — c'est ce que couvre l'écart de prix avec le Diagnostic":
+    "Access, compliance and vetting of the Chinese providers included — that is what the price gap with the Diagnostic covers",
   "paiement unique": "one-off payment",
   "option sur GEO Expert": "add-on to GEO Expert",
   "par mois · abonnement": "per month · subscription",

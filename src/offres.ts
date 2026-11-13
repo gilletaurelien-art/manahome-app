@@ -34,11 +34,17 @@
  * ⚠️ Illustrer reste possible — mais alors sans prix, sans nom d'offre et sans
  *    aucune valeur qui vive aussi dans ce fichier.
  *
- * ⚠️ MANA GEO China est passée de 490 € à 290 € le 13/11/2026, sur
- *    autorisation explicite d'Aurélien, après la redéfinition de l'offre sur
- *    TROIS moteurs atteignables au lieu de sept annoncés. ⭐ Le prix suit le
- *    périmètre : il avait été arrêté pour une couverture qu'on ne pouvait pas
- *    livrer.
+ * ⚠️ MANA GEO China : 490 € → 290 € → **590 €**, trois décisions le même
+ *    jour (13/11/2026), toutes d'Aurélien, la dernière sur la grille v1.1.
+ *    ⭐ Les 290 € suivaient le VOLUME (135 interrogations contre 180 pour
+ *    l'Expert à 390 € : moins de travail, moins cher). Les 590 € suivent la
+ *    RARETÉ — accès aux moteurs chinois, conformité, qualification.
+ * ⚠️ L'argument du volume a été posé et écarté en connaissance de cause. Il
+ *    reste vrai, et il demande donc une justification ÉCRITE sur la carte :
+ *    un client qui lit « Chine 590 € » et « Expert 390 € » côte à côte verra
+ *    l'écart, et sans motif affiché il le lira comme une erreur.
+ * ⛔ Et c'est 590 € FIXE, pas « à partir de » : le site promet des prix
+ *    publics sans devis, et la grille v1.1 écrivait « à partir de ».
  *
  * ⚠️ Ces prix sont ARRÊTÉS (décision d'Aurélien, 11/11/2026). Aucun ne se
  *    change sans son autorisation explicite.
@@ -169,12 +175,13 @@ export const OFFRES_GEO: Offre[] = [
       "Nous interrogeons les quatre assistants occidentaux. Des assistants locaux peuvent compter autant dans cette zone : nous ne les mesurons pas, et nous l'écrivons.",
     ] },
   {
-    nom: "MANA GEO China", montant: 290, option: true, periode: "unique",
+    nom: "MANA GEO China", montant: 590, option: true, periode: "unique",
     unite: "audit complémentaire ponctuel", famille: "ponctuel",
     depend: "Audit complémentaire — se commande seul ou après un GEO Expert",
     pour: "Pour savoir ce que les IA chinoises disent de vous.",
     points: [
       "Trois moteurs chinois : DeepSeek, Qwen (Alibaba) et Kimi (Moonshot)",
+      "Accès, conformité et qualification des fournisseurs chinois compris — c'est ce que couvre l'écart de prix avec le Diagnostic",
       "Doubao et ERNIE ne sont pas mesurés : leurs API exigent une entité en Chine. Doubao étant le plus utilisé là-bas, nous l'écrivons plutôt que de le taire.",
       "Questions posées EN chinois simplifié, pas traduites du français",
       "Réponses analysées en chinois avant d'être restituées en français",

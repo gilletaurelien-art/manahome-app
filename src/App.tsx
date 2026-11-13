@@ -198,7 +198,7 @@ const COMPARAISON = {
     //    L'Expert tient donc dans une nuit, et c'était la contrainte : l'usine
     //    d'analyse sature les quatre cœurs de la machine et fait expirer les
     //    requêtes du site quand elle tourne en journée (constaté le 12/11).
-    { critere: "Questions posées", express: "5", expert: "15" },
+    { critere: "Questions posées", express: "4", expert: "15" },
     // ⚠️ LA RÉPÉTITION EST CE QUI FAIT LA MESURE, et elle doit être affichée.
     //    Une réponse d'assistant varie d'un appel à l'autre : interroger une
     //    fois donne une anecdote, interroger trois fois donne une fréquence
