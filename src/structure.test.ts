@@ -27,6 +27,62 @@ const titres = readFileSync(new URL("./canonique.ts", import.meta.url), "utf8")
   .replace(/\/\*[\s\S]*?\*\//g, "")
   .replace(/^\s*\/\/.*$/gm, "");
 
+/* ⚠️ Commentaires retirés : le bloc qui explique la bascule NOMME le RNA et
+   l'association pour dire qu'ils n'ont plus rien à faire ici. */
+const mentions = readFileSync(new URL("./MentionsLegales.tsx", import.meta.url), "utf8")
+  .replace(/\/\*[\s\S]*?\*\//g, "")
+  .replace(/^\s*\/\/.*$/gm, "");
+
+describe("les mentions légales nomment la bonne entité", () => {
+  /* 🔴 POURQUOI — 13/11/2026, arbitrage « l'asso prouve, la société encaisse ».
+     Les deux jeux de mentions sont EXACTEMENT inverses : une association
+     s'identifie par son RNA et jamais par un SIRET ; une entreprise
+     individuelle doit afficher SIREN, SIRET et code APE, et n'a ni RNA, ni RCS,
+     ni numéro de TVA. ⛔ Écrire l'un sur le site de l'autre est une fausse
+     déclaration — et un nom d'entité se recopie sans y penser d'un site de
+     l'écosystème à l'autre. C'est pour ça que ce garde est un test et pas une
+     note : il y a huit sites et un seul rédacteur. */
+
+  /* ⛔ LE GARDE LIT LES CHAMPS, PAS LE FICHIER — et il a fallu deux mutations
+     pour l'apprendre. Un premier jet vérifiait `toContain("514 004 118")` :
+     vider le SIREN passait au vert, parce que le SIRET contient le SIREN. Et
+     `toContain("Aurélien GILLET")` passait avec un directeur remplacé, parce
+     que le même nom vit dans `nom:`. La bonne chaîne au mauvais endroit — le
+     même défaut que le compteur de tracés le matin du même jour. */
+  const champ = (nom: string): string => {
+    const m = mentions.match(new RegExp(`\\b${nom}:\\s*"([^"]*)"`));
+    if (!m) throw new Error(`champ ${nom} absent des mentions légales`);
+    return m[1];
+  };
+
+  it("affiche l'immatriculation de l'entreprise individuelle", () => {
+    expect(champ("siren")).toBe("514 004 118");
+    expect(champ("siret")).toBe("514 004 118 00030");
+    expect(champ("ape")).toBe("8690F");
+  });
+
+  it("fonde la TVA sur la franchise en base, pas sur le régime associatif", () => {
+    expect(mentions, "le fondement 293 B n'est pas écrit").toContain("293 B");
+    expect(mentions, "l'article 261-7, propre aux associations, est resté")
+      .not.toMatch(/261[-\s,]*7/);
+  });
+
+  it("ne porte AUCUNE marque de l'association", () => {
+    for (const interdit of ["W292008256", "RNA", "loi du 1er juillet 1901", "Alliance MANA"]) {
+      expect(mentions, `« ${interdit} » est revenu dans les mentions de MANAhome`)
+        .not.toContain(interdit);
+    }
+  });
+
+  it("nomme une PERSONNE comme directeur de la publication", () => {
+    /* ⭐ La réserve LCEN d'avant tombe ici : l'art. 6 III 1° veut une personne
+       physique nommée, et « TEMPOsystem » est un nom commercial. */
+    expect(champ("directeur")).toBe("Aurélien GILLET");
+    expect(champ("nom")).toBe("Aurélien GILLET");
+    expect(mentions).toContain("Directeur de la publication");
+  });
+});
+
 describe("les données structurées ne déclarent aucun prix", () => {
   /* 🔴 POURQUOI CE GARDE EXISTE — 13/11/2026. Le JSON-LD de l'accueil
      déclarait huit offres tarifées au nom d'Alliance MANA, dans la couche que

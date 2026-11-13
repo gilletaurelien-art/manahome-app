@@ -49,8 +49,8 @@
  * ⚠️ Ces prix sont ARRÊTÉS (décision d'Aurélien, 11/11/2026). Aucun ne se
  *    change sans son autorisation explicite.
  *
- * 🔴 ILS NE SONT PLUS ANNONCÉS « HT » — corrigé le 13/11/2026. Alliance MANA
- *    est une association loi 1901 (RNA W292008256) à gestion désintéressée
+ * 🔴 ILS NE SONT PLUS ANNONCÉS « HT » — corrigé le 13/11/2026. L'éditeur
+ *    relève de la franchise en base de TVA (art. 293 B du CGI)
  *    dont les activités lucratives restent accessoires : elle relève de la
  *    franchise de l'**article 261, 7-1°-b du CGI**, pas de la franchise en
  *    base de l'article 293 B, et ne collecte aucune TVA.
@@ -88,9 +88,11 @@ export function prixAffiche(o: { montant: number; option: boolean }): string {
 
 /**
  * ⭐ POURQUOI LE MONTANT AFFICHÉ EST LE MONTANT PAYÉ — et pourquoi ça dépend
- *    de QUI FACTURE. Alliance MANA ne collecte AUCUNE TVA (association loi
- *    1901, franchise de l'art. 261, 7-1°-b du CGI) : rien ne s'ajoute à ces
- *    nombres. C'est pourquoi le balisage machine portait
+ *    de QUI FACTURE. ⭐ 13/11/2026 au soir : l'éditeur est passé à l'entreprise
+ *    individuelle, et « rien ne s'ajoute » RESTE VRAI — mais par un autre
+ *    fondement. Ce n'est plus l'art. 261, 7-1°-b (associations) : c'est la
+ *    FRANCHISE EN BASE, art. 293 B du CGI. Même phrase à l'écran, autre loi
+ *    derrière : vérifier le fondement, pas la phrase. C'est pourquoi le balisage machine portait
  *    `valueAddedTaxIncluded: true` — il ne dit pas « TVA comprise », il dit
  *    « rien ne s'ajoute », ce qui était exactement vrai.
  * 🔴 Ce raisonnement vivait dans `vite.config.ts`, dans une fonction retirée

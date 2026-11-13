@@ -97,16 +97,18 @@ export function Approche() {
           decoding="async"
         />
         <p className="section-accroche">
-          {t(L, "L'expertise GEO, par Alliance MANA — pour les pros et les structures.")}
+          {t(L, "L'expertise GEO, par TEMPOsystem — pour les pros et les structures.")}
         </p>
-        {/* ⭐ L'objet statutaire, cité tel qu'il est déclaré — pas reformulé.
-            C'est ce qui explique pourquoi un service GEO est porté par une
-            association : le but non lucratif n'est pas un argument de vente,
-            c'est l'objet même, et il est opposable. */}
-        <blockquote className="objet-association">
-          <p>{t(L, "Alliance MANA poursuit un but non lucratif et d'intérêt général. Elle a pour objet : rendre, depuis la Bretagne, les territoires et leurs acteurs lisibles et accessibles par tout moyen numérique, y compris l'intelligence artificielle ; concevoir, développer et exploiter tout outil, média, service ou assistant numérique, notamment conversationnel, au service des personnes, des familles et des territoires ; promouvoir une doctrine éthique du numérique et des données personnelles ; valoriser l'économie sociale et solidaire et la vie associative ; exercer, à titre accessoire, toute activité destinée à assurer son financement, en France et à l'international.")}</p>
-          <footer>{t(L, "Objet statutaire — association loi du 1er juillet 1901, RNA W292008256")}</footer>
-        </blockquote>
+        {/* 🔴 LE BLOC « OBJET STATUTAIRE » A ÉTÉ RETIRÉ LE 13/11/2026, et il
+            fallait le retirer plutôt que le réécrire. Il citait l'objet déclaré
+            d'Alliance MANA pour expliquer « pourquoi un service GEO est porté
+            par une association » — argument qui meurt avec l'arbitrage du jour
+            (« l'asso prouve, la société encaisse ») : l'éditeur est désormais
+            une entreprise individuelle, qui n'a ni objet statutaire, ni but non
+            lucratif, ni intérêt général à opposer.
+            ⭐ Reformuler l'aurait rendu faux ; le garder l'aurait rendu
+               contradictoire avec les mentions légales de la même page suivante.
+               Un argument qui perd sa cause se retire, il ne se repeint pas. */}
         <p className="section-texte">
           {t(L, "Voici, noir sur blanc, ce que nous faisons et ce que nous ne ferons jamais. Si un point vous paraît trop prudent, c'est voulu : une promesse qu'on ne peut pas tenir se paie au premier client.")}
         </p>

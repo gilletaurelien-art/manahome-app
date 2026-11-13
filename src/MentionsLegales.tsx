@@ -31,22 +31,42 @@ import { t } from "./i18n";
  *    décision maintenue par le responsable. S'il la revoit, il suffit de
  *    mettre ici le nom du représentant légal d'Alliance MANA.
  *
- * Les valeurs ci-dessous viennent de `src/lib/editeur.ts` du dépôt
- * manafrance-app, où elles sont tenues à jour et documentées — elles sont
- * recopiées ici parce que les deux dépôts sont séparés. ⚠️ Toute correction
- * se fait DANS LES DEUX.
+ * ⚠️ CE BLOC NE SUIT PLUS `src/lib/editeur.ts` du dépôt manafrance-app : celui-ci
+ * porte l'ASSOCIATION, qui édite mana.bzh, manafrance.org et manatimebank.org.
+ * MANAhome a changé de camp le 13/11/2026 ; les valeurs de l'entreprise
+ * individuelle viennent de la table `billing_issuers`. Ne plus synchroniser les
+ * deux — ce serait reconduire la fausse déclaration qu'on vient de retirer.
  */
 
+// 🔴 BASCULÉ LE 13/11/2026 — L'ÉDITEUR N'EST PLUS L'ASSOCIATION.
+//    Arbitrage d'Aurélien : « l'asso prouve, la société encaisse ». Alliance
+//    MANA ne facture plus rien ; MANAhome est la vitrine commerciale, donc son
+//    éditeur est l'entreprise. Cela ANNULE la décision du 11/11 (« facturation
+//    = Alliance MANA »), et ce n'est pas une dérive : les deux dates sont
+//    écrites pour qu'une session future ne « répare » pas celle-ci.
+//
+// ⛔ ÉCRIRE L'UN SUR LE SITE DE L'AUTRE EST UNE FAUSSE DÉCLARATION, et les deux
+//    jeux de mentions sont EXACTEMENT inverses :
+//      · l'association s'identifie par son RNA, et JAMAIS par un SIRET ;
+//      · l'entreprise individuelle DOIT afficher SIREN, SIRET et code APE, et
+//        n'a ni RNA, ni RCS, ni numéro de TVA intracommunautaire.
+//    Un garde le tient (`src/structure.test.ts`), parce qu'un nom d'entité se
+//    recopie sans y penser d'un site à l'autre.
+//
+// ⭐ ET LA RÉSERVE LCEN TOMBE D'ELLE-MÊME. Elle disait : « TEMPOsystem est une
+//    marque, pas une personne ; la mention ne désigne donc personne au sens de
+//    l'art. 6 III 1° ». L'éditeur est désormais une PERSONNE PHYSIQUE nommée,
+//    exerçant sous ce nom commercial — la loi est satisfaite sans détour.
 const EDITEUR = {
-  nom: "Alliance MANA",
-  forme: "Association déclarée, régie par la loi du 1er juillet 1901 et le décret du 16 août 1901",
-  rna: "W292008256",
+  nom: "Aurélien GILLET",
+  forme: "Entrepreneur individuel, exerçant sous le nom commercial TEMPOsystem",
+  siren: "514 004 118",
+  siret: "514 004 118 00030",
+  ape: "8690F",
   siege: "4 Lostmarc'h, 29160 Crozon",
-  declaration: "Déclarée le 10 août 2026 auprès de la Sous-préfecture de Brest",
+  tva: "TVA non applicable, article 293 B du Code général des impôts (franchise en base). Pas de numéro de TVA intracommunautaire, pas d'immatriculation au registre du commerce et des sociétés.",
   email: "contact@manahome.org",
-  site: "https://alliancemana.org",
-  // ⭐ Donné par Aurélien le 11/11/2026. La réserve écrite plus haut est levée.
-  directeur: "Aurélien GILLET, fondateur d'Alliance MANA",
+  directeur: "Aurélien GILLET",
 };
 
 /** Vérifié au registre RIPE sur l'adresse de production réelle, le 07/11/2026. */
@@ -68,9 +88,11 @@ export function MentionsLegales() {
         <ul className="mentions-liste">
           <li><strong>{EDITEUR.nom}</strong></li>
           <li>{t(L, EDITEUR.forme)}</li>
-          <li>{t(L, "Numéro RNA")} : {EDITEUR.rna}</li>
-          <li>{t(L, "Siège social")} : {EDITEUR.siege}</li>
-          <li>{t(L, EDITEUR.declaration)}</li>
+          <li>{t(L, "Numéro SIREN")} : {EDITEUR.siren}</li>
+          <li>{t(L, "Numéro SIRET")} : {EDITEUR.siret}</li>
+          <li>{t(L, "Code APE")} : {EDITEUR.ape}</li>
+          <li>{t(L, "Adresse")} : {EDITEUR.siege}</li>
+          <li>{t(L, EDITEUR.tva)}</li>
           <li>{t(L, "Courriel")} : <a href={`mailto:${EDITEUR.email}`}>{EDITEUR.email}</a></li>
           <li>{t(L, "Directeur de la publication")} : {EDITEUR.directeur}</li>
         </ul>
@@ -83,7 +105,7 @@ export function MentionsLegales() {
 
         <h2 className="tarif-sous-titre">{t(L, "Nature du service")}</h2>
         <p className="section-texte">
-          {t(L, "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.")}
+          {t(L, "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, éditée par TEMPOsystem. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.")}
         </p>
         <p className="section-texte">
           {t(L, "MANAhome ne garantit ni indexation, ni citation, ni recommandation par un assistant IA : personne ne contrôle ce que répond un modèle. L'audit mesure et documente — il ne vend aucune position. Il reste indépendant de toute prestation d'optimisation.")}
@@ -91,7 +113,7 @@ export function MentionsLegales() {
 
         <h2 className="tarif-sous-titre">{t(L, "Prix et commandes")}</h2>
         <p className="section-texte">
-          {t(L, "Les prix affichés sont des prix publics et nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives demeurent accessoires ; ses factures portent la mention « TVA non applicable, article 261-7 du CGI ». Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par Alliance MANA, que vous acceptez avant tout travail.")}
+          {t(L, "Les prix affichés sont des prix publics et nets : aucune TVA ne s'ajoute. TEMPOsystem relève de la franchise en base de TVA ; ses factures portent la mention « TVA non applicable, article 293 B du CGI ». Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par TEMPOsystem, que vous acceptez avant tout travail.")}
         </p>
 
         <h2 className="tarif-sous-titre">{t(L, "Le test gratuit")}</h2>

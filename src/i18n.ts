@@ -53,10 +53,10 @@ const DICO_EN: Record<string, string> = {
   // ── Grille tarifaire GEO (11/11/2026) ── ⚠️ Les NOMS de produits et les
   // PRIX ne sont pas ici : une marque ne se traduit pas, un montant non plus.
   // `t()` rend la clé quand elle manque — c'est le comportement voulu.
-  "Prix nets : il n'y a pas de TVA à ajouter. Alliance MANA est une association loi 1901 (RNA W292008256) à gestion désintéressée dont les activités lucratives restent accessoires ; les factures portent la mention « TVA non applicable, article 261-7 du CGI ».":
-    "Net prices: no VAT is added. Alliance MANA is a French non-profit association (loi 1901, RNA W292008256) with disinterested management whose trading activity remains ancillary; invoices carry the statutory mention « TVA non applicable, article 261-7 du CGI ».",
-  "Les prix affichés sont nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives restent accessoires — la facture porte la mention « TVA non applicable, article 261-7 du CGI ». Elle est émise par Alliance MANA, et vous l'acceptez avant tout travail.":
-    "Displayed prices are net: no VAT is added. Alliance MANA is a French non-profit association with disinterested management whose trading activity remains ancillary — invoices carry the statutory mention « TVA non applicable, article 261-7 du CGI ». The invoice is issued by Alliance MANA and you accept it before any work begins.",
+  "Prix nets : il n'y a pas de TVA à ajouter. TEMPOsystem (Aurélien Gillet, entrepreneur individuel, SIREN 514 004 118) relève de la franchise en base ; les factures portent la mention « TVA non applicable, article 293 B du CGI ».":
+    "Net prices: no VAT is added. TEMPOsystem (Aurélien Gillet, sole trader, SIREN 514 004 118) is under the French small-business VAT exemption; invoices carry the statutory mention « TVA non applicable, article 293 B du CGI ».",
+  "Les prix affichés sont nets : aucune TVA ne s'ajoute. TEMPOsystem relève de la franchise en base de TVA — la facture porte la mention « TVA non applicable, article 293 B du CGI ». Elle est émise par TEMPOsystem, et vous l'acceptez avant tout travail.":
+    "Displayed prices are net: no VAT is added. TEMPOsystem is under the French small-business VAT exemption — invoices carry the statutory mention « TVA non applicable, article 293 B du CGI ». The invoice is issued by TEMPOsystem and you accept it before any work begins.",
   "Pour mesurer sa visibilité sur les marchés britannique, allemand et espagnol.":
     "To measure your visibility in the UK, German and Spanish markets.",
   "Trois marchés : Royaume-Uni, Allemagne, Espagne":
@@ -280,13 +280,13 @@ const DICO_EN: Record<string, string> = {
     "Yes, with no notice period and no minimum term. The history of your measurements stays yours.",
   "Qui êtes-vous ?":
     "Who are you?",
-  "Alliance MANA, association déclarée loi 1901 (RNA W292008256), dont l'objet est de rendre les territoires et leurs acteurs lisibles par tout moyen numérique, y compris l'intelligence artificielle. Nous mesurons d'abord sur nos propres sites.":
-    "Alliance MANA, a declared French association under the 1901 law (register number W292008256), whose object is to make territories and their actors legible by any digital means, including artificial intelligence. We measure on our own sites first.",
+  "TEMPOsystem, nom commercial d'Aurélien Gillet, entrepreneur individuel (SIREN 514 004 118). Son métier : rendre les territoires et leurs acteurs lisibles par tout moyen numérique, y compris l'intelligence artificielle. Nous mesurons d'abord sur nos propres sites.":
+    "TEMPOsystem, the trading name of Aurélien Gillet, sole trader (SIREN 514 004 118). Its business: making territories and their actors legible by any digital means, including artificial intelligence. We measure on our own sites first.",
   "Facturation et TVA ?":
     "Invoicing and VAT?",
   // ── Relecture commerciale du 11/11/2026 ──
-  "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par Alliance MANA, association loi 1901. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.":
-    "MANAhome measures what AI assistants answer about organisations: one-off audits, monthly monitoring, machine-readable infrastructure. Published by Alliance MANA, a French non-profit association. Being better understood improves your odds of being cited; no AI can be made to cite you.",
+  "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par TEMPOsystem. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.":
+    "MANAhome measures what AI assistants answer about organisations: one-off audits, monthly monitoring, machine-readable infrastructure. Published by TEMPOsystem. Being better understood improves your odds of being cited; no AI can be made to cite you.",
   "Vous repartez avec une mesure que vous pouvez défendre : les réponses brutes, leurs sources, la date et le protocole. Personne ne peut l'acheter — ni vous, ni vos concurrents : le registre territorial de l'écosystème est non marchand, sans mise en avant payante ni ordre négociable. C'est ce qui rend le résultat opposable le jour où votre conseil, votre direction ou votre financeur vous demandera d'où il sort.":
     "You leave with a measurement you can defend: the raw answers, their sources, the date and the protocol. Nobody can buy it — neither you nor your competitors: the ecosystem's territorial registry is non-commercial, with no paid placement and no negotiable ranking. That is what makes the result hold up the day your board, your management or your funder asks where it came from.",
   "Ce que les IA disent de vous, mesuré et documenté.": "What AIs say about you, measured and documented.",
@@ -301,8 +301,8 @@ const DICO_EN: Record<string, string> = {
   "Chaque réponse du rapport porte son moteur, sa date et son mode de collecte. Copilot et Google AI Overviews n'offrent aucun accès mesurable : ils apparaissent en « non testé », et ne pèsent jamais contre vous dans le résultat.":
     "Every answer in the report carries its engine, its date and its collection mode. Copilot and Google AI Overviews offer no measurable access: they appear as not tested, and never count against you in the result.",
   "Une méthode déjà éprouvée en vrai": "A method already proven in the field",
-  "Les prix affichés sont des prix publics et nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives demeurent accessoires ; ses factures portent la mention « TVA non applicable, article 261-7 du CGI ». Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par Alliance MANA, que vous acceptez avant tout travail.":
-    "Displayed prices are public and net: no VAT is added. Alliance MANA is a French non-profit association (loi 1901) with disinterested management whose trading activity remains ancillary; its invoices carry the statutory mention « TVA non applicable, article 261-7 du CGI ». A request sent from this site is recorded on our servers and confirmed to you by email. It is not an order: any work is subject to a quote or an invoice issued by Alliance MANA, which you accept before work begins.",
+  "Les prix affichés sont des prix publics et nets : aucune TVA ne s'ajoute. TEMPOsystem relève de la franchise en base de TVA ; ses factures portent la mention « TVA non applicable, article 293 B du CGI ». Une demande envoyée depuis ce site est enregistrée sur nos serveurs, et vous en recevez confirmation par courriel. Elle ne vaut pas commande : toute prestation fait l'objet d'un devis ou d'une facture émise par TEMPOsystem, que vous acceptez avant tout travail.":
+    "Displayed prices are public and net: no VAT is added. TEMPOsystem is under the French small-business VAT exemption; its invoices carry the statutory mention « TVA non applicable, article 293 B du CGI ». A request sent from this site is recorded on our servers and confirmed to you by email. It is not an order: any work is subject to a quote or an invoice issued by TEMPOsystem, which you accept before work begins.",
   "Le test gratuit": "The free test",
   "L'adresse que vous saisissez dans le test de lisibilité est envoyée à notre serveur, qui consulte la page publique correspondante comme le ferait un moteur de recherche. Aucun compte, aucune adresse de courriel, aucun suivi : le test ne conserve rien de vous.":
     "The address you type into the readability test is sent to our server, which fetches the matching public page the way a search engine would. No account, no email address, no tracking: the test keeps nothing about you.",
@@ -312,10 +312,6 @@ const DICO_EN: Record<string, string> = {
   "sur l'ensemble de l'écosystème MANA, depuis": "across the whole MANA ecosystem, for the past",
   "jours": "days",
   "Ils passent, qu'on le sache ou non.": "They come through, whether you know it or not.",
-  "Alliance MANA poursuit un but non lucratif et d'intérêt général. Elle a pour objet : rendre, depuis la Bretagne, les territoires et leurs acteurs lisibles et accessibles par tout moyen numérique, y compris l'intelligence artificielle ; concevoir, développer et exploiter tout outil, média, service ou assistant numérique, notamment conversationnel, au service des personnes, des familles et des territoires ; promouvoir une doctrine éthique du numérique et des données personnelles ; valoriser l'économie sociale et solidaire et la vie associative ; exercer, à titre accessoire, toute activité destinée à assurer son financement, en France et à l'international.":
-    "Alliance MANA pursues a non-profit purpose in the general interest. Its object is: to make, from Brittany, territories and their actors legible and accessible by any digital means, including artificial intelligence; to design, develop and operate any digital tool, medium, service or assistant, in particular conversational ones, serving people, families and territories; to promote an ethical doctrine of digital technology and personal data; to champion the social and solidarity economy and associative life; and, on an ancillary basis, to carry out any activity intended to secure its funding, in France and internationally.",
-  "Objet statutaire — association loi du 1er juillet 1901, RNA W292008256":
-    "Statutory object — association under the French law of 1 July 1901, register number W292008256",
   "Votre nom": "Your name",
   "Votre fonction": "Your role",
   "Code postal": "Postal code",
@@ -344,8 +340,8 @@ const DICO_EN: Record<string, string> = {
   // ── /approche et /mentions-legales, refaites pour le GEO (11/11/2026) ──
   "Mesurer ce que les IA répondent. Rien de plus, rien de moins.":
     "Measuring what AIs answer. Nothing more, nothing less.",
-  "L'expertise GEO, par Alliance MANA — pour les pros et les structures.":
-    "GEO expertise, by Alliance MANA — for professionals and organisations.",
+  "L'expertise GEO, par TEMPOsystem — pour les pros et les structures.":
+    "GEO expertise, by TEMPOsystem — for professionals and organisations.",
   "Voici, noir sur blanc, ce que nous faisons et ce que nous ne ferons jamais. Si un point vous paraît trop prudent, c'est voulu : une promesse qu'on ne peut pas tenir se paie au premier client.":
     "Here, in black and white, is what we do and what we will never do. If a point reads as over-cautious, that is deliberate: a promise you cannot keep is paid for with the first client.",
   "Voir les offres et les prix": "See the offers and prices",
@@ -386,8 +382,8 @@ const DICO_EN: Record<string, string> = {
     "Declared on 10 August 2026 with the Sub-prefecture of Brest",
   "Serveur dédié situé en France. Le site, les interfaces et les données tiennent sur une seule machine.":
     "Dedicated server located in France. The site, the interfaces and the data all run on one machine.",
-  "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.":
-    "MANAhome is the showcase of the GEO and the offers of the MANA ecosystem, published by Alliance MANA. GEO means measuring what AI assistants answer about an organisation, and making that organisation understandable to those machines.",
+  "MANAhome est la vitrine du GEO et des offres de l'écosystème MANA, éditée par TEMPOsystem. Le GEO consiste à mesurer ce que les assistants IA répondent au sujet d'une organisation, et à rendre cette organisation compréhensible par ces machines.":
+    "MANAhome is the showcase of the GEO and the offers of the MANA ecosystem, published by TEMPOsystem. GEO means measuring what AI assistants answer about an organisation, and making that organisation understandable to those machines.",
   "MANAhome ne garantit ni indexation, ni citation, ni recommandation par un assistant IA : personne ne contrôle ce que répond un modèle. L'audit mesure et documente — il ne vend aucune position. Il reste indépendant de toute prestation d'optimisation.":
     "MANAhome guarantees neither indexing, nor citation, nor recommendation by an AI assistant: nobody controls what a model answers. The audit measures and documents — it sells no position. It stays independent of any optimisation service.",
   "Ce site ne dépose aucun traceur et ne collecte aucune donnée personnelle par lui-même : il n'a ni compte, ni formulaire enregistré côté serveur. Les informations que vous saisissez dans le formulaire de demande restent dans votre navigateur jusqu'à ce que vous les envoyiez par votre propre messagerie. Aucune donnée ni aucun contact n'est revendu.":
@@ -505,14 +501,14 @@ const DICO_EN: Record<string, string> = {
   "Demander un audit": "Request an audit",
   "Voir les offres": "See the offers",
   "Contact": "Contact",
-  "L'expertise GEO, par Alliance MANA": "GEO expertise, by Alliance MANA",
+  "L'expertise GEO, par TEMPOsystem": "GEO expertise, by TEMPOsystem",
   "Vos clients demandent à ChatGPT. Savez-vous ce qu'il répond sur vous ? Testez votre site en 30 secondes, gratuitement — puis mesurez votre visibilité réelle à partir de 149 €.":
     "Your customers ask ChatGPT. Do you know what it answers about you? Test your site in 30 seconds, free — then measure your real visibility from €149.",
   "Être trouvé par les IA": "Be found by AIs",
   "Vos clients ne cherchent plus seulement. Ils demandent.":
     "Your customers no longer just search. They ask.",
-  "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. Alliance MANA produit cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent.":
-    "When someone asks ChatGPT or Gemini for a professional like you, the assistant answers with what it has read and retained from the web. If it has not understood you, it cites someone else — and you will never know: there is no ranking to consult, no account to open. GEO means making an organisation understandable to these machines: llms.txt, Model Context Protocol, structured data. Alliance MANA builds that infrastructure itself — what neither content agencies nor measurement dashboards offer.",
+  "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. TEMPOsystem produit cette infrastructure lui-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent.":
+    "When someone asks ChatGPT or Gemini for a professional like you, the assistant answers with what it has read and retained from the web. If it has not understood you, it cites someone else — and you will never know: there is no ranking to consult, no account to open. GEO means making an organisation understandable to these machines: llms.txt, Model Context Protocol, structured data. TEMPOsystem builds that infrastructure itself — what neither content agencies nor measurement dashboards offer.",
   "L'audit GEO de votre structure": "The GEO audit of your organisation",
   "Mairies, associations, offices de tourisme, entreprises.":
     "Town halls, associations, tourist offices, businesses.",
@@ -525,8 +521,8 @@ const DICO_EN: Record<string, string> = {
     "The assistant: €9/month per human, never per organisation. The pro page: €9. The antenna: €9. These prices are fixed — everything that is not remains on quote, and the site invents none.",
   "Les machines interrogent. MANA tient le registre honnête.":
     "Machines ask questions. MANA keeps the honest registry.",
-  "Vitrine du GEO et des offres de l'écosystème MANA, éditée par Alliance MANA. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.":
-    "Showcase of the GEO and the offers of the MANA ecosystem, published by Alliance MANA. Prices shown: fixed prices only — everything else is on quote. GEO improves the odds of being understood and found by AI assistants; it guarantees neither indexing, nor citation, nor recommendation.",
+  "Vitrine du GEO et des offres de l'écosystème MANA, éditée par TEMPOsystem. Prix affichés : uniquement les prix arrêtés — tout le reste est sur devis. Le GEO améliore les chances d'être compris et trouvé par les assistants IA ; il ne garantit ni indexation, ni citation, ni recommandation.":
+    "Showcase of the GEO and the offers of the MANA ecosystem, published by TEMPOsystem. Prices shown: fixed prices only — everything else is on quote. GEO improves the odds of being understood and found by AI assistants; it guarantees neither indexing, nor citation, nor recommendation.",
 
   // ── Barre de navigation ──
   "Vacances": "Stays",

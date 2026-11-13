@@ -122,8 +122,8 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
     url: urlAccueil,
     inLanguage: langue,
     description: langue === "en"
-      ? "GEO expertise by Alliance MANA: being found by AI assistants — machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem."
-      : "L'expertise GEO par Alliance MANA : être trouvé par les assistants IA — infrastructure machine-readable, audits, et les offres arrêtées de l'écosystème MANA.",
+      ? "GEO expertise by TEMPOsystem: being found by AI assistants — machine-readable infrastructure, audits, and the fixed offers of the MANA ecosystem."
+      : "L'expertise GEO par TEMPOsystem : être trouvé par les assistants IA — infrastructure machine-readable, audits, et les offres arrêtées de l'écosystème MANA.",
     // 🔴 « TEMPOsystem » A VÉCU ICI JUSQU'AU 12/11/2026, APRÈS AVOIR ÉTÉ
     //    RETIRÉ DU TEXTE VISIBLE LE 11. Décision d'Aurélien : « ne cite pas
     //    TEMPOsystem — la facturation, c'est Alliance MANA ». Le texte lu par
@@ -141,7 +141,11 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
     //    site, écrite ailleurs, et c'est celle que notre propre produit irait
     //    chercher. Un arbitrage d'identité se vérifie SUR LA PAGE SERVIE :
     //        curl -sS https://manahome.org/ | grep -o '"parentOrganization".*'
-    parentOrganization: { "@type": "Organization", name: "Alliance MANA" },
+    // 🔴 BASCULÉ LE 13/11/2026 : l'éditeur de MANAhome est l'entreprise, plus
+    //    l'association (arbitrage « l'asso prouve, la société encaisse »). La
+    //    leçon d'il y a deux jours vaut dans l'autre sens : le 11/11 le texte
+    //    visible avait changé et CETTE couche était restée 24 h en arrière.
+    parentOrganization: { "@type": "Organization", name: "TEMPOsystem" },
     // 🔴 `makesOffer` A ÉTÉ RETIRÉ LE 13/11/2026 — DEMANDE D'AURÉLIEN.
     //    Il déclarait HUIT OFFRES TARIFÉES (149, 390, 199 ×5, 99/mois…) au nom
     //    d'Alliance MANA, dans la couche que lisent les moteurs et les
@@ -163,8 +167,9 @@ function donneesStructurees(langue: string, urlAccueil: string): string {
     // ⛔ NE PAS LE REMETTRE SANS LA DÉCISION « QUI FACTURE ». S'il revient, il
     //    revient sous le nom de la SOCIÉTÉ, pas de l'association — et alors la
     //    TVA change de régime (voir le commentaire de `offre()` ci-dessus :
-    //    `valueAddedTaxIncluded: true` n'est vrai que parce qu'Alliance MANA
-    //    ne collecte aucune TVA). Un garde le tient : `structure.test.ts`.
+    //    `valueAddedTaxIncluded: true` n'est vrai que parce que l'éditeur ne
+    //    collecte aucune TVA — désormais par la franchise en base, art. 293 B,
+    //    et non plus par l'art. 261-7 propre aux associations). Un garde le tient : `structure.test.ts`.
   };
   return `\n    <script type="application/ld+json">${JSON.stringify(donnees)}</script>`;
 }

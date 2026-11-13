@@ -227,9 +227,9 @@ const FAQ = [
   { q: "Puis-je arrêter la surveillance ?",
     r: "Oui, sans préavis ni engagement de durée. L'historique de vos mesures vous reste." },
   { q: "Qui êtes-vous ?",
-    r: "Alliance MANA, association déclarée loi 1901 (RNA W292008256), dont l'objet est de rendre les territoires et leurs acteurs lisibles par tout moyen numérique, y compris l'intelligence artificielle. Nous mesurons d'abord sur nos propres sites." },
+    r: "TEMPOsystem, nom commercial d'Aurélien Gillet, entrepreneur individuel (SIREN 514 004 118). Son métier : rendre les territoires et leurs acteurs lisibles par tout moyen numérique, y compris l'intelligence artificielle. Nous mesurons d'abord sur nos propres sites." },
   { q: "Facturation et TVA ?",
-    r: "Les prix affichés sont nets : aucune TVA ne s'ajoute. Alliance MANA est une association loi 1901 à gestion désintéressée dont les activités lucratives restent accessoires — la facture porte la mention « TVA non applicable, article 261-7 du CGI ». Elle est émise par Alliance MANA, et vous l'acceptez avant tout travail." },
+    r: "Les prix affichés sont nets : aucune TVA ne s'ajoute. TEMPOsystem relève de la franchise en base de TVA — la facture porte la mention « TVA non applicable, article 293 B du CGI ». Elle est émise par TEMPOsystem, et vous l'acceptez avant tout travail." },
 ];
 
 // FAMILLES et OFFRES_MANA vivent désormais dans src/offres.ts (voir l'import).
@@ -240,7 +240,7 @@ const SECTIONS = [
     titre: "Être trouvé par les IA",
     accroche: "Vos clients ne cherchent plus seulement. Ils demandent.",
     texte:
-      "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. Alliance MANA produit cette infrastructure elle-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent." },
+      "Quand quelqu'un demande à ChatGPT ou à Gemini un professionnel comme vous, l'assistant répond avec ce qu'il a lu et retenu du web. S'il ne vous a pas compris, il cite quelqu'un d'autre — et vous ne le saurez jamais : il n'y a ni classement à consulter, ni compte à ouvrir. Le GEO, c'est rendre une organisation compréhensible par ces machines : llms.txt, Model Context Protocol, données structurées. TEMPOsystem produit cette infrastructure lui-même — ce que ni les agences de contenu, ni les tableaux de bord de mesure ne proposent." },
   {
     num: "02",
     titre: "L'audit GEO de votre structure",
@@ -366,7 +366,7 @@ export default function App() {
               de recherche depuis le 11/11/2026 : la vitrine vend le GEO. */}
           <section className="hero">
             <div className="wrap bulle-xl hero-moteur">
-              <p className="hero-label">{t(L, "L'expertise GEO, par Alliance MANA")}</p>
+              <p className="hero-label">{t(L, "L'expertise GEO, par TEMPOsystem")}</p>
               {/* ⚠️ `alt=""` à dessein : le logo porte déjà le mot MANAHOME, et
                   le <h1> juste à côté le porte aussi. Le décrire ferait
                   entendre le nom deux fois à un lecteur d'écran. */}
@@ -590,8 +590,9 @@ export default function App() {
                       ))}
                       {/* 🔴 LA MENTION DE TVA, ET POURQUOI ELLE EST ICI.
                           Jusqu'au 13/11/2026 cette page annonçait « 149 € HT »,
-                          c'est-à-dire 178,80 € à payer — alors qu'Alliance MANA
-                          ne collecte aucune TVA. ⭐ Un prix hors taxes affiché
+                          c'est-à-dire 178,80 € à payer — alors que
+                          l'éditeur ne collecte aucune TVA (franchise en base,
+                          art. 293 B depuis la bascule du 13/11 au soir). ⭐ Un prix hors taxes affiché
                           par une structure qui n'en facture pas n'est pas une
                           prudence : c'est une majoration fictive de 20 % devant
                           l'acheteur. Elle est placée AVANT les deux notes
@@ -599,7 +600,7 @@ export default function App() {
                           de lire — une mention légale ne se cherche pas en bas
                           de page. */}
                       <p className="tarif-note">
-                        {t(L, "Prix nets : il n'y a pas de TVA à ajouter. Alliance MANA est une association loi 1901 (RNA W292008256) à gestion désintéressée dont les activités lucratives restent accessoires ; les factures portent la mention « TVA non applicable, article 261-7 du CGI ».")}
+                        {t(L, "Prix nets : il n'y a pas de TVA à ajouter. TEMPOsystem (Aurélien Gillet, entrepreneur individuel, SIREN 514 004 118) relève de la franchise en base ; les factures portent la mention « TVA non applicable, article 293 B du CGI ».")}
                       </p>
                                             {/* ⚠️ Cette note n'est pas de la prudence juridique
                           décorative : elle dit ce que le produit ne PEUT
@@ -692,7 +693,7 @@ export default function App() {
               MANA<em>home</em>
             </p>
             <p className="footer-note">
-              {t(L, "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par Alliance MANA, association loi 1901. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.")}
+              {t(L, "MANAhome mesure ce que les assistants IA répondent sur les organisations : audits ponctuels, surveillance mensuelle, infrastructure lisible par les machines. Édité par TEMPOsystem. Être mieux compris améliore vos chances d'être cité ; aucune IA ne peut être obligée de le faire.")}
             </p>
             {/* ⚠️ /approche porte DÉJÀ le formulaire, en pleine page : l'y
                 répéter dans le pied donnait deux formulaires identiques
