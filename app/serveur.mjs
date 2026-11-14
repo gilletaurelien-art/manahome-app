@@ -29,6 +29,8 @@ import { nuiteesDepuisIcs, urlValide, telechargerIcs, deltaImport } from "./ical
 import { validerMessage, sqlOuvrirConversation, sqlListeConversations } from "./messagerieApi.mjs";
 import { validerDepot, validerJustificatif, phraseRefusPublication } from "./depot.mjs";
 import { plageValide as plageValideRequete } from "./requetes.mjs";
+import { validerGeste, frapperDon } from "./sondeMint.mjs";
+import { dureeVeilleS } from "./sondeVeille.mjs";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const AUTH_SECRET = process.env.AUTH_SECRET ?? "";
@@ -765,6 +767,223 @@ export function creerServeur() {
         }
 
         return json(res, 405, { erreur: "méthode non permise" });
+      }
+
+      // ===== La sonde MANAtimebank (cahier v0.3) =====
+      // ⭐ FRAPPE DOUBLE DANS LA MÊME TRANSACTION : un geste crée la face
+      // 'don' ET la face 'reception', jamais l'une sans l'autre, jamais un
+      // UPDATE. La base refuse déjà toute autre mécanique (013 : aucune
+      // policy UPDATE sur temoins_temps) — ceci n'est qu'un second garant.
+
+      if (url.pathname === "/api/sonde/dons" && req.method === "POST") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const corpsRequ = await corps(req);
+        const v = validerGeste({
+          dureeS: corpsRequ.duree_s,
+          dimension: corpsRequ.dimension,
+          motLibre: corpsRequ.mot_libre,
+        });
+        if (!v.ok) return json(res, 400, { erreur: v.erreur });
+        const aRecu = corpsRequ.a_recu ?? null;
+        if (aRecu && !UUID.test(aRecu)) return json(res, 400, { erreur: "destinataire invalide" });
+        const jour = corpsRequ.jour ?? new Date().toISOString().slice(0, 10);
+        const { faceDon, faceReception, empreinteFait } = frapperDon({
+          aDonne: uid, aRecu, dureeS: v.valeurs.dureeS, jour,
+          dimension: v.valeurs.dimension, motLibre: v.valeurs.motLibre,
+          declarePar: uid,
+        });
+        const c = await transactionAuth(uid);
+        try {
+          for (const face of [faceDon, faceReception]) {
+            await c.query(
+              `INSERT INTO temoins_temps
+                 (empreinte_fait, face, a_donne, a_recu, duree_s, jour,
+                  dimension, mot_libre, declare_par)
+               VALUES ($1, $2, $3, $4, $5, $6::date, $7, $8, auth.uid()::uuid)`,
+              [face.empreinteFait, face.face, face.aDonne, face.aRecu,
+               face.dureeS, face.jour, face.dimension, face.motLibre]
+            );
+          }
+          await c.query("COMMIT");
+          // I8 : jamais de statut d'attestation rendu ici — seulement la
+          // preuve que SA propre frappe a réussi, rien sur la réception.
+          return json(res, 201, { empreinte_fait: empreinteFait });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      if (url.pathname === "/api/sonde/veilles" && req.method === "POST") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const corpsRequ = await corps(req);
+        if (corpsRequ.dimension != null) {
+          const v = validerGeste({ dureeS: 60, dimension: corpsRequ.dimension });
+          if (!v.ok) return json(res, 400, { erreur: v.erreur });
+        }
+        const c = await transactionAuth(uid);
+        try {
+          const r = await c.query(
+            `INSERT INTO veilles (auteur, dimension, mot_libre, code_insee)
+             VALUES (auth.uid()::uuid, $1, $2, $3)
+             RETURNING id, ouverte_le`,
+            [corpsRequ.dimension ?? null, corpsRequ.mot_libre ?? null, corpsRequ.code_insee ?? null]
+          );
+          await c.query("COMMIT");
+          return json(res, 201, r.rows[0]);
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      const mFermerVeille = url.pathname.match(/^\/api\/sonde\/veilles\/([\w-]+)\/fermer$/);
+      if (mFermerVeille && req.method === "POST") {
+        if (!UUID.test(mFermerVeille[1])) return json(res, 404, { erreur: "route inconnue" });
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const c = await transactionAuth(uid);
+        try {
+          // la propriété ET l'état « encore ouverte » sont dans le SQL —
+          // zéro ligne = déjà fermée ou pas la mienne, le même 404
+          const ouverte = await c.query(
+            `SELECT ouverte_le FROM veilles
+             WHERE id = $1 AND auteur = auth.uid() AND fermee_le IS NULL`,
+            [mFermerVeille[1]]
+          );
+          if (ouverte.rows.length === 0) {
+            await c.query("ROLLBACK");
+            return json(res, 404, { erreur: "veille inconnue ou déjà fermée" });
+          }
+          const fermeeLe = new Date();
+          const dureeS = dureeVeilleS(ouverte.rows[0].ouverte_le, fermeeLe);
+          let temoinId = null;
+          if (dureeS > 0) {
+            const jour = fermeeLe.toISOString().slice(0, 10);
+            const { faceDon, faceReception, empreinteFait } = frapperDon({
+              aDonne: uid, aRecu: null, dureeS, jour, declarePar: uid,
+            });
+            let idDon = null;
+            for (const face of [faceDon, faceReception]) {
+              const r = await c.query(
+                `INSERT INTO temoins_temps
+                   (empreinte_fait, face, a_donne, a_recu, duree_s, jour, declare_par)
+                 VALUES ($1, $2, $3, $4, $5, $6::date, auth.uid()::uuid)
+                 RETURNING id`,
+                [face.empreinteFait, face.face, face.aDonne, face.aRecu, face.dureeS, face.jour]
+              );
+              if (face.face === "don") idDon = r.rows[0].id;
+            }
+            temoinId = idDon;
+            void empreinteFait;
+          }
+          await c.query(
+            `UPDATE veilles SET fermee_le = $2, temoin_id = $3
+             WHERE id = $1 AND auteur = auth.uid() AND fermee_le IS NULL`,
+            [mFermerVeille[1], fermeeLe.toISOString(), temoinId]
+          );
+          await c.query("COMMIT");
+          return json(res, 200, { duree_s: dureeS });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      if (url.pathname === "/api/sonde/merci" && req.method === "POST") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const corpsRequ = await corps(req);
+        const texte = String(corpsRequ.texte ?? "").trim();
+        if (!texte || texte.length > 2000) return json(res, 400, { erreur: "texte invalide" });
+        if (!UUID.test(corpsRequ.destinataire ?? "")) return json(res, 400, { erreur: "destinataire invalide" });
+        const c = await transactionAuth(uid);
+        try {
+          // I2 : aucune valeur de retour n'agrège quoi que ce soit — un
+          // merci de plus, jamais un merci compté
+          await c.query(
+            `INSERT INTO merci (auteur, destinataire, texte)
+             VALUES (auth.uid()::uuid, $1, $2)`,
+            [corpsRequ.destinataire, texte]
+          );
+          await c.query("COMMIT");
+          return json(res, 201, { envoye: true });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      if (url.pathname === "/api/sonde/reserve-hebdo" && req.method === "POST") {
+        const uid = uidCourant(req);
+        if (!uid) return json(res, 401, { erreur: "non connecté" });
+        const corpsRequ = await corps(req);
+        const semaine = String(corpsRequ.semaine ?? "");
+        const reponse = String(corpsRequ.reponse ?? "").trim();
+        if (!/^\d{4}-W\d{2}$/.test(semaine)) return json(res, 400, { erreur: "semaine invalide (ISO, ex. 2026-W47)" });
+        if (!reponse || reponse.length > 500) return json(res, 400, { erreur: "réponse invalide" });
+        const c = await transactionAuth(uid);
+        try {
+          // une semaine, une réponse — la première gagne, jamais d'UPDATE
+          const r = await c.query(
+            `INSERT INTO reserve_hebdo (membre, semaine, reponse)
+             VALUES (auth.uid()::uuid, $1, $2)
+             ON CONFLICT (membre, semaine) DO NOTHING
+             RETURNING id`,
+            [semaine, reponse]
+          );
+          await c.query("COMMIT");
+          return json(res, r.rows.length ? 201 : 200, { enregistre: r.rows.length > 0 });
+        } catch (e) {
+          await c.query("ROLLBACK").catch(() => {});
+          throw e;
+        } finally {
+          c.release();
+        }
+      }
+
+      // Lecture publique — ces trois routes ne nomment jamais personne
+      // (I5/I8) : v_invariant_public et les fonctions d'agrégat tournent
+      // avec les privilèges du propriétaire de la base (013 §5), au-dessus
+      // des policies qui cloisonnent la lecture directe par membre.
+      if (url.pathname === "/api/sonde/invariant" && req.method === "GET") {
+        const c = await (await db()).connect();
+        try {
+          const r = await c.query("SELECT empreinte_fait, emis_s, recu_s FROM v_invariant_public LIMIT 1000");
+          return json(res, 200, { invariant: r.rows });
+        } finally {
+          c.release();
+        }
+      }
+
+      if (url.pathname === "/api/sonde/agregats-territoire" && req.method === "GET") {
+        const c = await (await db()).connect();
+        try {
+          const r = await c.query("SELECT * FROM v_agregats_territoire() LIMIT 1000");
+          return json(res, 200, { agregats: r.rows });
+        } finally {
+          c.release();
+        }
+      }
+
+      if (url.pathname === "/api/sonde/export-integral" && req.method === "GET") {
+        const c = await (await db()).connect();
+        try {
+          const r = await c.query("SELECT * FROM export_integral()");
+          return json(res, 200, { registre: r.rows });
+        } finally {
+          c.release();
+        }
       }
 
       // ===== Authentification =====
