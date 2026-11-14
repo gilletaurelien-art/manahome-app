@@ -43,7 +43,15 @@ import { fileURLToPath } from "node:url";
 
 const ICI = dirname(fileURLToPath(import.meta.url));
 const SORTIE = resolve(ICI, "..", "src", "donnees-pays.json");
-const HOTE = process.env.MANA_HOTE_DEPLOIEMENT ?? "debian@147.135.254.25";
+// ⛔ AUCUNE VALEUR PAR DÉFAUT : ce dépôt est public, et une adresse de
+//    serveur avec son compte distant n'a rien à y faire. Voir
+//    scripts/cible.local.exemple.sh — le `??` qui vivait ici la publiait.
+const HOTE = process.env.MANA_HOTE_DEPLOIEMENT ?? process.env.MANA_HOTE;
+if (!HOTE) {
+  console.error("🔴 MANA_HOTE_DEPLOIEMENT (ou MANA_HOTE) est absente.");
+  console.error("   Voir scripts/cible.local.exemple.sh ; ce script lit la base par SSH.");
+  process.exit(1);
+}
 
 /** Un demi-degré ≈ 55 km : au-delà, deux points sous le même nom ne sont pas le
  *  même endroit. Cité sur la page — le lecteur doit savoir ce qui a été écarté. */

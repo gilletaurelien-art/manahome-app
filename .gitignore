@@ -12,3 +12,7 @@ __pycache__/
 
 # Bundle de rendu serveur, jetable : ecrit et efface par scripts/prerendre.mjs
 .ssr/
+
+# ⛔ La cible de deploiement : adresse, compte et chemins de production. Ce
+#    depot est PUBLIC — voir scripts/cible.local.exemple.sh.
+scripts/cible.local.sh

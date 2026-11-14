@@ -18,10 +18,34 @@
 # viennent pas de ce dépôt ; les emporter se verrait en 404, trop tard.
 set -euo pipefail
 
-HOTE="${MANA_HOTE:-debian@147.135.254.25}"
-CIBLE="${MANA_CIBLE:-/srv/www-manahome/}"
 ICI="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ICI"
+
+# ══ OÙ L'ON DÉPOSE — HORS DE CE FICHIER, PARCE QUE CE DÉPÔT EST PUBLIC ═════
+#
+# 🔴 CES DEUX LIGNES ÉTAIENT DES VALEURS PAR DÉFAUT JUSQU'AU 14/11/2026 :
+#    `HOTE="${MANA_HOTE:-debian@…}"` et `CIBLE="${MANA_CIBLE:-/srv/…}"`.
+#    Aucun secret — l'accès est par clé, le mot de passe est refusé — mais
+#    l'adresse du serveur, le compte distant et l'arborescence de production
+#    inscrits dans un dépôt PUBLIC sur GitHub.
+# ⭐ ET LA VALEUR PAR DÉFAUT EST LE PIÈGE, pas l'adresse. Un `${VAR:-valeur}`
+#    a l'air paramétrable et publie quand même : il rend la variable
+#    FACULTATIVE, donc personne ne la pose, donc c'est la valeur écrite qui
+#    sert. Exigées, elles sont vraiment des paramètres.
+# ⚠️ Même parade que `~/mana/deploiement/cible.local.sh` — et même ordre : le
+#    fichier local est un DÉFAUT, pas un écrasement. Ce qui est déjà dans
+#    l'environnement gagne, sinon « posez-les dans votre environnement OU dans
+#    le fichier » serait faux pour la première branche.
+if [ -f "$ICI/scripts/cible.local.sh" ]; then
+  _h="${MANA_HOTE-}"; _c="${MANA_CIBLE-}"
+  . "$ICI/scripts/cible.local.sh"
+  [ -n "$_h" ] && MANA_HOTE="$_h"
+  [ -n "$_c" ] && MANA_CIBLE="$_c"
+fi
+: "${MANA_HOTE:?MANA_HOTE est absente — voir scripts/cible.local.exemple.sh}"
+: "${MANA_CIBLE:?MANA_CIBLE est absente — voir scripts/cible.local.exemple.sh}"
+HOTE="$MANA_HOTE"
+CIBLE="$MANA_CIBLE"
 
 # 🔴 LES DEUX VARIABLES NE SONT PAS UN DÉTAIL : SANS ELLES ON EXPÉDIE UN SITE
 #    QUI SE DÉCLARE SUR GITHUB PAGES. `vite.config.ts` retombe par défaut sur
