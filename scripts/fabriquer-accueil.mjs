@@ -23,7 +23,7 @@
 //    ⚠️ Du code mort NON DOCUMENTÉ est un piège ; documenté, c'est une dette
 //    datée. Elle est écrite ici, dans le commit, et à retirer en une passe.
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CSS_SOCLE, esc, nombre as n, entete, pied, exigerDuTexte, SITE_DEFAUT }
@@ -313,9 +313,16 @@ for (const lg of ["fr", "en"]) {
   aEcrire.push([resolve(RACINE, "site", lg, "index.html"), accueil(lg), `accueil ${lg}`]);
   aEcrire.push([resolve(RACINE, "site", lg, "approche", "index.html"), methode(lg), `méthode ${lg}`]);
 }
-// ⚠️ Les chemins NUS restent servis — ce sont les URL indexées avant le
-//    bilingue. Ils portent le français, et leur canonique pointe sur /fr/.
-aEcrire.push([resolve(RACINE, "site", "index.html"), accueil("fr"), "accueil (nu)"]);
+// 🔴 LA RACINE N'EST PLUS À NOUS — 14/11/2026. L'app de promenades y est
+//    promue (décision d'Aurélien) : `/` sert désormais « explorer, composer,
+//    marcher », et le relevé garde `/fr/` et `/en/`, qui sont ses canoniques —
+//    le plan de site n'a JAMAIS listé `/` nu, donc rien n'y perd son adresse.
+//    ⛔ Ce script écrivait `site/index.html`. Comme le déploiement de ce dépôt
+//    rsync sans `--delete`, il aurait ÉCRASÉ l'app à chaque passage, sans
+//    erreur et sans que personne ne s'en aperçoive avant d'ouvrir manahome.org.
+//    ⭐ Deux chaînes de déploiement qui écrivent le même fichier : la seconde
+//    gagne toujours, et c'est celle qui tourne le plus souvent.
+// ⚠️ `/approche` nu reste écrit : l'app ne revendique pas ce chemin.
 aEcrire.push([resolve(RACINE, "site", "approche", "index.html"), methode("fr"), "méthode (nue)"]);
 
 for (const [chemin, html, quoi] of aEcrire) {
@@ -397,5 +404,16 @@ Version anglaise : remplacer /fr/ par /en/ dans toute URL.
 `;
 writeFileSync(resolve(RACINE, "site", "llms.txt"), llms, "utf8");
 console.log(`✓ llms.txt          ${llms.length} octets, fabriqué depuis la donnée`);
+
+// ⛔ ET ON RETIRE LA COQUILLE DE LA RACINE, parce que `vite build` l'écrit.
+//    Ne pas l'écrire soi-même ne suffit pas : le build en produit une, et le
+//    rsync (sans `--delete`) l'enverrait écraser l'app de promenades promue à
+//    `/` le 14/11/2026. ⭐ Un fichier qu'on n'écrit plus n'est pas un fichier
+//    qui n'existe plus — c'est la nuance qui aurait coûté une page d'accueil.
+const racineHtml = resolve(RACINE, "site", "index.html");
+if (existsSync(racineHtml)) {
+  rmSync(racineHtml);
+  console.log("✓ site/index.html retiré — la racine appartient à l'app de promenades");
+}
 
 console.log(`\n${aEcrire.length} page(s) écrite(s), aucune mention du GEO.`);

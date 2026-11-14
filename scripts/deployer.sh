@@ -85,8 +85,17 @@ echo "   ✓ aucune"
 #    vieux qu'un fichier source. C'est l'erreur vécue le 09/08/2026 sur l'autre
 #    dépôt — un déploiement lancé seul expédie le build précédent, donc du code
 #    périmé, sans que rien ne le signale.
-if [ -n "$(find src public -newer site/index.html -type f -print -quit 2>/dev/null)" ]; then
-  echo "🔴 des sources sont plus récentes que site/index.html — la construction n'a pas pris." >&2
+# 🔴 LE TÉMOIN A CHANGÉ, ET SON ABSENCE DÉSARMAIT LE GARDE EN SILENCE.
+#    Il comparait à `site/index.html`. Depuis le 14/11/2026 ce fichier est
+#    RETIRÉ à dessein — la racine appartient à l'app de promenades. `find
+#    -newer` sur un fichier absent échoue, `2>/dev/null` avalait l'erreur, et
+#    le test rendait vide : le garde disait « c'est bon » sans rien comparer.
+#    ⭐ Un garde désarmé ne laisse pas un trou, il laisse une BONNE NOUVELLE —
+#    et personne n'ouvre d'enquête sur une bonne nouvelle.
+TEMOIN=site/fr/index.html
+[ -f "$TEMOIN" ] || { echo "🔴 $TEMOIN absent : la construction n'a pas produit de page." >&2; exit 1; }
+if [ -n "$(find src public -newer "$TEMOIN" -type f -print -quit 2>/dev/null)" ]; then
+  echo "🔴 des sources sont plus récentes que $TEMOIN — la construction n'a pas pris." >&2
   exit 1
 fi
 

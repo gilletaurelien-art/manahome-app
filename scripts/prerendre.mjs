@@ -129,6 +129,14 @@ if (vides.length) {
   for (const [c, n] of vides) console.error(`   ${c} — ${n} caractères`);
   process.exit(1);
 }
-if (!remplies) { console.error("🔴 aucune coquille trouvée — le build a-t-il tourné ?"); process.exit(1); }
+// ⚠️ « Zéro coquille remplie » n'est PAS « le build n'a pas tourné » : relancer
+//    ce script sur un site déjà prérendu rend légitimement zéro. Ce qui prouve
+//    qu'un build a eu lieu, c'est qu'il existe des PAGES — remplies, redirigées
+//    ou déjà pleines. Le garde comptait la mauvaise chose et refusait un cas
+//    normal.
+if (!remplies && !redirections && !ignorees) {
+  console.error("🔴 aucune page trouvée dans site/ — le build a-t-il tourné ?");
+  process.exit(1);
+}
 console.log(`\n${remplies} coquille(s) remplie(s), ${redirections} redirection(s) laissée(s) vide(s), `
   + `${ignorees} page(s) déjà pleine(s) ignorée(s).`);
