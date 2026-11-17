@@ -63,7 +63,21 @@ if (!g.window) {
   };
   g.localStorage = stockage;
   g.sessionStorage = stockage;
-  g.navigator = (g.window as Faux).navigator;
+  // ⚠️ `g.navigator = …` ÉCHOUE SUR Node 21+ : depuis cette version, Node pose
+  //    lui-même un `navigator` global en LECTURE SEULE (compatibilité fetch),
+  //    et une affectation directe en module ESM (toujours en mode strict) lève
+  //    « Cannot set property navigator of #<Object> which has only a getter ».
+  //    Invisible en local sur Node 20, trouvé le 17/11/2026 sur le runner de
+  //    CI (Node 22.23.4) — reproduit en isolation avant correction en posant
+  //    un accesseur getter-only sur `globalThis.navigator` et en vérifiant que
+  //    `Object.defineProperty` le remplace sans lever, là où `g.navigator = …`
+  //    lève bien. `configurable: true` pour ne pas figer la propriété si un
+  //    autre module la repose ensuite.
+  Object.defineProperty(g, "navigator", {
+    value: (g.window as Faux).navigator,
+    writable: true,
+    configurable: true,
+  });
   // ⚠️ `document` reste MINIMAL à dessein. Un composant qui en a vraiment besoin
   //    au rendu doit échouer bruyamment ici plutôt que de rendre du vide en
   //    silence — c'est exactement le défaut qu'on est en train de corriger.
