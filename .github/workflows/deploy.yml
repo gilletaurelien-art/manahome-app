@@ -3,22 +3,15 @@ name: Deploy live
 on:
   push:
     branches: [main]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  workflow_dispatch: {}
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: deploy-live
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -29,22 +22,37 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
+      # ═══════════════════════════════════════════════════════════════════
+      #  🔴 REMPLACE LE DÉPLOIEMENT GitHub Pages.
+      #
+      #  manahome.org résout sur le KS-5 (147.135.254.25, root
+      #  /srv/www-manahome), pas sur Pages. L'ancien job de ce workflow
+      #  déployait sur Pages à chaque push — même défaut que manatimebank.org,
+      #  trouvé le même jour : un pipeline vert qui vise la mauvaise cible.
+      #
+      #  ⭐ ICI, PAS DE NOUVEAU SCRIPT : `scripts/deployer.sh` existait déjà
+      #  (posé le 12/11/2026), construit pour CE site précisément — le prérendu
+      #  des pages pays, le garde anti-github.io, le témoin de fraîcheur. Ce
+      #  job l'appelle, il ne le duplique pas. Seul ajout, dans le script
+      #  lui-même : une vérification route par route contre le domaine réel,
+      #  en plus du simple code 200 déjà présent.
+      #
+      #  ⚠️ `MANA_HOTE` et `MANA_CIBLE` sont des SECRETS, jamais en dur ici —
+      #  le script l'exige lui-même (`cible.local.exemple.sh`) : ce dépôt est
+      #  PUBLIC, et l'adresse du serveur de production n'y a pas sa place.
+      - name: Déployer sur le KS-5 (le domaine réel)
+        env:
+          MANA_HOTE: ${{ secrets.MANA_KS5_HOTE }}
+          MANA_CIBLE: ${{ secrets.MANA_KS5_CIBLE }}
+        run: |
+          install -m 600 /dev/null /tmp/mana_deploy_key
+          printf '%s\n' "${{ secrets.MANA_KS5_DEPLOY_KEY }}" > /tmp/mana_deploy_key
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.MANA_KS5_HOST_KEY }}" >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add /tmp/mana_deploy_key
+          bash scripts/deployer.sh
 
-      # Pages attend un dossier unique ; on pousse le build Vite complet
-      - run: mv site _page
-
-      # Hack liens profonds : 404.html = copie d'index ; le JS lit l'URL
-      # et rend la bonne page (fiche annonce etc.)
-      - run: cp _page/index.html _page/404.html
-
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _page
-
-      - uses: actions/deploy-pages@v4
-        id: deployment
+      - name: Retirer la clé privée du disque du runner
+        if: always()
+        run: shred -u /tmp/mana_deploy_key 2>/dev/null || rm -f /tmp/mana_deploy_key

@@ -138,4 +138,51 @@ echo "→ contrôle en ligne …"
 CODE=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 https://manahome.org/)
 echo "   manahome.org : $CODE"
 [ "$CODE" = "200" ] || { echo "🔴 le site ne rend pas 200." >&2; exit 1; }
-echo "✓ déployé."
+
+# ⭐ CE QUI MANQUAIT : LE 200 CI-DESSUS NE PROUVE RIEN SUR CE DÉPLOI. Posé le
+#    17/11/2026, après avoir mesuré ailleurs (manatimebank.org) qu'un pipeline
+#    PEUT réussir — code 0, 200 — sans que le contenu envoyé soit celui qui a
+#    été construit. La racine répond déjà 200 avant même que ce script ne
+#    tourne (elle appartient à l'app de promenades) : ce contrôle-là teste le
+#    SERVEUR, pas ce que CE dépôt vient d'y poser.
+# ⚠️ ON COMPARE DES ROUTES QUE CE DÉPÔT POSSÈDE VRAIMENT, jamais « / » — pour
+#    la même raison que le TÉMOIN plus haut (la racine appartient à l'app de
+#    promenades, et sans --delete, un ancien fichier qui y traînerait
+#    répondrait 200 sans rien dire sur ce déploi).
+echo "→ vérification route par route, contre le site RÉEL …"
+ECART=0
+for route in fr en approche espace-pro estimation mentions-legales mes-annonces messagerie pros publier services; do
+  f="site/$route/index.html"
+  [ -f "$f" ] || continue
+  local_empreinte="$(shasum -a 256 "$f" | cut -d' ' -f1)"
+  distant_empreinte="$(curl -sf --max-time 15 "https://manahome.org/$route/" | shasum -a 256 | cut -d' ' -f1)"
+  if [ "$local_empreinte" = "$distant_empreinte" ]; then
+    echo "   ✓ /$route/"
+  else
+    echo "   🔴 /$route/ : build=$local_empreinte  public=$distant_empreinte" >&2
+    ECART=1
+  fi
+done
+# Un échantillon des pages pays, plutôt que les 173 : assez pour détecter un
+# envoi tronqué, pas assez pour ralentir chaque déploiement.
+for pays in brunei guernesey tchad; do
+  for langue in fr en; do
+    f="site/$langue/pays/$pays/index.html"
+    [ -f "$f" ] || continue
+    local_empreinte="$(shasum -a 256 "$f" | cut -d' ' -f1)"
+    distant_empreinte="$(curl -sf --max-time 15 "https://manahome.org/$langue/pays/$pays/" | shasum -a 256 | cut -d' ' -f1)"
+    if [ "$local_empreinte" = "$distant_empreinte" ]; then
+      echo "   ✓ /$langue/pays/$pays/"
+    else
+      echo "   🔴 /$langue/pays/$pays/ : build=$local_empreinte  public=$distant_empreinte" >&2
+      ECART=1
+    fi
+  done
+done
+
+if [ "$ECART" -ne 0 ]; then
+  echo "🔴 LE DÉPLOIEMENT A ÉTÉ ENVOYÉ MAIS NE SE VÉRIFIE PAS SUR CES ROUTES." >&2
+  exit 1
+fi
+
+echo "✓ déployé et vérifié."
