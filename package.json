@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest run",
-    "deploy": "bash scripts/deployer.sh"
+    "deploy": "bash scripts/deployer.sh",
+    "hebergement-29": "node scripts/fabriquer-hebergement-29.mjs",
+    "hebergement-29:exemples": "node scripts/fabriquer-hebergement-29.mjs --fixture scripts/exemples-hebergement-29.json"
   },
   "dependencies": {
     "react": "^18.3.1",
