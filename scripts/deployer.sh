@@ -97,6 +97,14 @@ node scripts/prerendre.mjs
 echo "→ pages pays …"
 SITE_URL="$SITE_URL" node scripts/fabriquer-pays.mjs
 
+# ⛔ PILOTE « OÙ DORMIR EN FINISTÈRE » — les pages hébergement sont
+#    reconstituées depuis la base à CHAQUE envoi (RPC publique chercher_le_pays,
+#    clé anon, lecture seule). Si la RPC est injoignable, le script échoue et
+#    le déploiement REFUSE (set -e) : expédier un site sans ces pages serait
+#    un envoi tronqué, invisible à la sonde qui ne teste que des routes fixes.
+echo "→ pages hébergement Finistère (pilote) …"
+SITE_URL="$SITE_URL" BASE_PATH="$BASE_PATH" node scripts/fabriquer-hebergement-29.mjs
+
 echo "→ aucune URL de GitHub Pages ne survit ?"
 if grep -rl "gilletaurelien-art.github.io" site/ >/dev/null 2>&1; then
   echo "🔴 des URL de GitHub Pages sont dans le build — ne PAS expédier." >&2

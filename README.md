@@ -24,6 +24,15 @@ MANAhome est la maison des IA : un registre territorial non marchand, que toutes
 - Jamais de photo dans ce repo — les médias vivent dans l'Object Storage S3.
 - Vidéos / visites 3D : URL uniquement (contrainte CHECK en base).
 
+## Note datée — 19 novembre 2026
+
+Les règles ci-dessus tiennent pour le parcours particulier et pour le pilote
+« hébergement en Finistère » en cours de construction (pages générées à partir
+de la moisson DATAtourisme + relais de contact **gratuit**, sans aucun
+encaissement ni espace pro). Une étape ultérieure à commission est envisagée
+séparément — elle n'est **pas** construite ici et devra d'abord mettre à jour
+cette charte explicitement.
+
 ## Stack
 
 | Brique | Décision |
