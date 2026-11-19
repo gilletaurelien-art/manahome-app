@@ -268,6 +268,31 @@ describe("la fixture d'exemple", () => {
   });
 });
 
+describe("aucun total de périmètre en dur", () => {
+  it("l'index affiche le nombre de fiches REÇUES, pas un chiffre fixe", () => {
+    const deux = pageIndex(
+      [base(), base({ id: "22222222-2222-4222-8222-222222222222", titre: "Gîte Ty An Ero" })],
+      { site: SITE, date: DATE, stats: { brutes: 2, creuses: 0 } },
+    );
+    const cinq = pageIndex(
+      [1, 2, 3, 4, 5].map((i) => base({ id: `33333333-3333-4333-8333-3333333333${i}${i}`, titre: `Fiche ${i}` })),
+      { site: SITE, date: DATE, stats: { brutes: 6, creuses: 1 } },
+    );
+    expect(deux).toContain("2 hébergements");
+    expect(cinq).toContain("5 hébergements");
+    expect(deux).toContain("2 fiches lues");
+    expect(cinq).toContain("6 fiches lues");
+  });
+
+  it("les sources du pilote ne contiennent aucun littéral de total (11201, 2184…)", () => {
+    const src =
+      readFileSync(resolve(ICI, "hebergement-29.mjs"), "utf8") +
+      readFileSync(resolve(ICI, "fabriquer-hebergement-29.mjs"), "utf8") +
+      readFileSync(resolve(ICI, "..", "public", "assets", "relais-contact.js"), "utf8");
+    expect(src).not.toMatch(/11[ .\u202f]?201|2[ .\u202f]?184/);
+  });
+});
+
 describe("les tuiles", () => {
   it("couvrent l'enveloppe du département sans trou", () => {
     const t = tuiles(BBOX_29, TAILLE_TUILE);

@@ -188,6 +188,28 @@ for pays in brunei guernesey tchad; do
   done
 done
 
+# ⛔ VÉRIFICATION PROPRE AU PILOTE, et à elle seule : la vérification générale
+#    ci-dessus existait déjà sur main avant cette PR — ce bloc n'ajoute RIEN au
+#    site général. On compare seulement l'empreinte des pages que CE pilote
+#    vient de générer (index + un échantillon de fiches), comme pour les pays.
+H29=site/fr/hebergement-29
+if [ ! -f "$H29/index.html" ]; then
+  echo "🔴 $H29/index.html absent : la génération du pilote n'a produit aucune page." >&2
+  exit 1
+fi
+for f in "$H29/index.html" $(find "$H29" -mindepth 2 -name index.html | sort | head -3); do
+  route="${f#site/}"
+  route="${route%/index.html}"
+  local_empreinte="$(shasum -a 256 "$f" | cut -d' ' -f1)"
+  distant_empreinte="$(curl -sf --max-time 15 "https://manahome.org/$route/" | shasum -a 256 | cut -d' ' -f1)"
+  if [ "$local_empreinte" = "$distant_empreinte" ]; then
+    echo "   ✓ /$route/"
+  else
+    echo "🔴 /$route/ : build=$local_empreinte  public=$distant_empreinte" >&2
+    ECART=1
+  fi
+done
+
 if [ "$ECART" -ne 0 ]; then
   echo "🔴 LE DÉPLOIEMENT A ÉTÉ ENVOYÉ MAIS NE SE VÉRIFIE PAS SUR CES ROUTES." >&2
   exit 1
